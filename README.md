@@ -1,2 +1,0 @@
-# ClusterDuck
-Automatic Ensemble Clustering
