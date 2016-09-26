@@ -1,0 +1,19 @@
+#' Title function to check if a number is a positive integer
+#'
+#' @param x : a number
+#'
+#' @return TRUE if x is a positive integer and FALSE otherwise
+#' @export
+#'
+#' @examples
+checkPosInt<-function(x){
+  if(x<0){
+    return(FALSE)
+  } else{
+    if(ceiling(x)==floor(x)){
+      return(TRUE)
+    }else{
+      return(FALSE)
+    }
+  }
+}
