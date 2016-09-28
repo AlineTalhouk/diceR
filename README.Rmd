@@ -29,9 +29,12 @@ You can install ClusterDuck from github with:
 
 This is a basic example which shows you how to use the main workhouse function of the package, `ConClust()`:
 
-```{r}
+```{r, results='hide'}
 library(ClusterDuck)
 data(hgsc)
 x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+```
+
+```{r}
 head(x[, , 1])
 ```
