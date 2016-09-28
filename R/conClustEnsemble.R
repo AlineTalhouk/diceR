@@ -7,8 +7,6 @@
 #'
 #' @return E: matrix of cluster ensemble
 #' @export
-#'
-#' @examples
 conClustEnsemble <- function(X, k, reps = 1000) {
   assertthat::assert_that(is.matrix(X))
   E <- NULL
