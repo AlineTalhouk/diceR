@@ -22,9 +22,8 @@ You can install ClusterDuck from github with:
 
 ```{r}
 # install.packages("devtools")
-devtools::install_github("AlineTalhouk/ClusterDuck")
+# devtools::install_github("AlineTalhouk/ClusterDuck")
 ```
-
 
 ## Example
 
@@ -34,5 +33,5 @@ This is a basic example which shows you how to use the main workhouse function o
 library(ClusterDuck)
 data(hgsc)
 x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
-str(x)
+head(x[, , 1])
 ```
