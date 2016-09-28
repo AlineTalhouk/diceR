@@ -1,17 +1,40 @@
 Package: ClusterDuck
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Type: Package
+Title: Consensus Clustering Analysis
+Version: 0.0.0.9001
+Date: 2016-09-28
+Authors@R: c(
+    person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")),
+    person("Aline", "Talhouk", , "atalhouk@bccrc.ca", "aut"),
+    person("Johnson", "Liu", , "gliu@bccrc.ca", "aut"))
+Description: Cluster analysis using ensemble/consensus clustering concepts.
+    Results from different algorithms are pooled using methods such as majority
+    vote, LinkCluE, etc.
 Depends:
-  LinkCluE,
-  biostatUtil,
-  ConClust,
-  magrittr,
-  tidyr,
-  reshape2,
-  tcgaHGSC,
-  R (>= 3.2.4)
-License: What license is it under?
+    R (>= 3.2.4)
+Imports:
+    plyr,
+    dplyr,
+    readr,
+    magrittr,
+    cluster,
+    bioDist,
+    NMF,
+    apcluster,
+    kernlab,
+    mclust,
+    infotheo,
+    blockcluster,
+    ConsensusClusterPlus,
+    clusterSim,
+    clue,
+    class,
+    biostatUtil,
+    tidyr,
+    reshape2
+Suggests:
+    testthat
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 5.0.1.9000

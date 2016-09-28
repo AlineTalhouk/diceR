@@ -1,0 +1,38 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# ClusterDuck
+
+The goal of `ClusterDuck` is to provide a automated pipeline for ensemble clustering.
+
+## Installation
+
+You can install ClusterDuck from github with:
+
+```{r}
+# install.packages("devtools")
+devtools::install_github("AlineTalhouk/ClusterDuck")
+```
+
+
+## Example
+
+This is a basic example which shows you how to use the main workhouse function of the package, `ConClust()`:
+
+```{r}
+library(ClusterDuck)
+data(hgsc)
+x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+str(x)
+```
