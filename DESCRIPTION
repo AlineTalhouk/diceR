@@ -9,15 +9,17 @@ Authors@R: c(
     person("Johnson", "Liu", , "gliu@bccrc.ca", "aut"))
 Description: Cluster analysis using ensemble/consensus clustering concepts.
     Results from different algorithms are pooled using methods such as majority
-    vote, LinkCluE, etc.
+    voting, K modes, LinkCluE, etc.
 Depends:
     R (>= 3.2.4)
 Imports:
     assertthat,
     plyr,
     dplyr,
+    tidyr,
     readr,
     magrittr,
+    reshape2,
     cluster,
     bioDist,
     NMF,
@@ -26,12 +28,9 @@ Imports:
     mclust,
     infotheo,
     blockcluster,
-    ConsensusClusterPlus,
     clusterSim,
     clue,
     class,
-    tidyr,
-    reshape2,
     klaR
 Suggests:
     testthat

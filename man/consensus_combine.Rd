@@ -5,10 +5,9 @@
 \alias{consensus_combine}
 \alias{consensus_compare}
 \alias{consensus_weigh}
-\title{Combine and compare consensus results}
+\title{Combine, compare, and weigh algorithms}
 \usage{
-consensus_combine(..., res.CCP, k, element = c("matrix", "class"),
-  alg.names = NULL)
+consensus_combine(..., k, element = c("matrix", "class"), alg.names = NULL)
 
 consensus_compare(data, cl.mat, cons.mat, alg.names = NULL)
 
@@ -17,8 +16,6 @@ consensus_weigh(data.index, top = 5)
 \arguments{
 \item{...}{any number of objects outputted from
 \code{\link{consensus_summary}}}
-
-\item{res.CCP}{an object outputted from \code{\link{ConClustPlus}}}
 
 \item{k}{desired number of clusters}
 
@@ -36,8 +33,8 @@ different algorithm. Use \code{element = "class"} in
 \item{cons.mat}{A list of consensus matrices, one for each algorithm. Use
 \code{element = "matrix"} in \code{consensus_combine}.}
 
-\item{data.index}{matrix of indices for each algorthim outputted
-from \code{consensus_compare}.}
+\item{data.index}{matrix of indices for each algorthim outputted from
+\code{consensus_compare}.}
 
 \item{top}{how many top algorithms to include for weighting. Defaults to 5.}
 }
@@ -51,10 +48,18 @@ from \code{consensus_compare}.}
 \code{consensus_weigh} returns a matrix of weighted algorithms.
 }
 \description{
-Combine results from ConClust and ConClustPlus and output either the
-consensus matrices or consensus classes for all algorithms from both objects.
-Compare algorithms on validation indices PAC and CHI and weigh algorithms
-based on these two measures.
+\code{consensus_combine} combines results for multiple objects from
+\code{consensus_summary(ConClust())} and outputs either the consensus
+matrices or consensus classes for all algorithms. \code{consensus_compare}
+compares algorithms on validation indices \code{\link{PAC}} and CHI.
+\code{consensus_weigh} weighs clustering algorithms based on these two
+indices.
+}
+\details{
+\code{consensus_combine} is useful for generating summaries because the
+results have been combined into a single object. For example, if
+\code{element = "class"}, then the resulting object can be used to create a
+consensus matrix across algorithms, which can be visualized as a heatmap.
 }
 \examples{
 # Consensus clustering for multiple algorithms
@@ -62,17 +67,16 @@ set.seed(911)
 x <- matrix(rnorm(1000), nrow = 10)
 CC1 <- ConClust(x, k = 4, reps = 10, method = "apEucl", save = FALSE)
 CC2 <- ConClust(x, k = 4, reps = 10, method = "gmmBIC", save = FALSE)
-CCP <- ConClustPlus(x, k = 4, reps = 10, save = FALSE)
 
 # Get summary for ConClust
 CC1.summ <- consensus_summary(CC1, k = 4)
 CC2.summ <- consensus_summary(CC2, k = 4)
 
-# Combine with CCP and return either matrices or classes
-y1 <- consensus_combine(CC1.summ, CC2.summ, res.CCP = CCP, k = 4,
+# Combine and return either matrices or classes
+y1 <- consensus_combine(CC1.summ, CC2.summ, k = 4,
 element = "matrix")
 str(y1)
-y2 <- consensus_combine(CC1.summ, CC2.summ, res.CCP = CCP, k = 4,
+y2 <- consensus_combine(CC1.summ, CC2.summ, k = 4,
 element = "class")
 str(y2)
 
