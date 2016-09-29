@@ -1,18 +1,18 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-ClusterDuck
-===========
+diceR
+=====
 
-The goal of `ClusterDuck` is to provide a automated pipeline for ensemble clustering.
+The goal of `diceR` is to provide pipelines for generating diverse cluster ensembles in R.
 
 Installation
 ------------
 
-You can install ClusterDuck from github with:
+You can install `diceR` from github with:
 
 ``` r
 # install.packages("devtools")
-# devtools::install_github("AlineTalhouk/ClusterDuck")
+# devtools::install_github("AlineTalhouk/diceR")
 ```
 
 Example
@@ -21,7 +21,7 @@ Example
 This is a basic example which shows you how to use the main workhouse function of the package, `ConClust()`:
 
 ``` r
-library(ClusterDuck)
+library(diceR)
 data(hgsc)
 x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
 ```

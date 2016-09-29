@@ -1,4 +1,4 @@
 library(testthat)
-library(ClusterDuck)
+library(diceR)
 
-test_check("ClusterDuck")
+test_check("diceR")
