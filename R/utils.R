@@ -49,7 +49,7 @@ prepare_data <- function(data, min.sd = 1) {
 relabel_class <- function(cl.pred, cl.ref) {
   perm <- table(cl.pred, cl.ref) %>%
     min_fnorm() %>%
-    magrittr::use_series(perm)
+    use_series(perm)
   res <- factor(cl.pred, levels = perm, labels = levels(factor(cl.ref)))
   return(res)
 }

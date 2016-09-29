@@ -48,7 +48,6 @@
 #'   row for each sample, and a column for each subsample. Each entry represents
 #'   a class membership.
 #' @author Derek Chiu, Aline Talhouk
-#' @importFrom magrittr extract
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom stats dist hclust kmeans setNames
 #' @import apcluster kernlab mclust blockcluster

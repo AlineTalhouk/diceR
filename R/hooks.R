@@ -11,7 +11,7 @@
 #' @return clustering assignment from \code{agnes} or \code{diana}
 #' @name hooks
 #' @author Derek Chiu
-#' @import cluster bioDist
+#' @import cluster
 #' @export
 #' @examples
 #' library(cluster)
