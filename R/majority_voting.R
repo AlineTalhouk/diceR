@@ -21,6 +21,6 @@ if(is.relabelled==FALSE){
   }
 #majority vote
 maj.vote <- as.vector(apply(flat_E, 1, function(x) names(which.max(table(x)))))
-table(maj.vote)
+
 return(maj.vote)
 }
