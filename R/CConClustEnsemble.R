@@ -55,7 +55,7 @@ ConClustEnsemble <- function(X, k, reps = 1000) {
   E_imputed_relabelled_voted <- array(dim = dim(E_imputed_relabelled))
   #If there are still NAs after imputing with KNN, then do majority vote
   if (!(sum(!complete.cases(E_imputed_relabelled)) == 0)) {
-    E_imputed_relabelled_voted <- majVote(E_imputed_relabelled)
+    E_imputed_relabelled_voted <- majority_voting(E_imputed_relabelled)
   } else{
     E_imputed_relabelled_voted <-
       apply(E_imputed_relabelled_voted, c(1, 2, 3), as.numeric)
