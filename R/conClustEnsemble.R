@@ -45,20 +45,27 @@ ConClustEnsemble <- function(X, k, reps = 1000) {
   }
   E_cs <- consensus_summary(E_imputed, k = k)
   for(i in 2:length(E_cs)){
-    E_cs[[i]]$consensusClass<-relabel_class(E_cs[[1]]$consensusClass,E_cs[[i]]$consensusClass)
+    E_cs[[i]]$consensus_class<-relabel_class(E_cs[[1]]$consensus_class,E_cs[[i]]$consensus_class)
   }
   for (i in 1:length(E_cs)) {
     E_imputed[, , i] <-
-      apply(E_imputed[, , i], 2, relabel_class, cl.ref = E_cs[[i]]$consensusClass)
+      apply(E_imputed[, , i], 2, relabel_class, cl.ref = E_cs[[i]]$consensus_class)
   }
-  E_imputed_relabelled <- E_imputed
-  E_imputed_relabelled_voted <- array(dim = dim(E_imputed_relabelled))
-  #If there are still NAs after imputing with KNN, then do majority vote
-  if (!(sum(!complete.cases(E_imputed_relabelled)) == 0)) {
-    E_imputed_relabelled_voted <- majVote(E_imputed_relabelled)
-  } else{
-    E_imputed_relabelled_voted <-
-      apply(E_imputed_relabelled_voted, c(1, 2, 3), as.numeric)
+  E_imputed_relabelled<-E_imputed
+  flat_E <- E_imputed_relabelled
+  # E_imputed_relabelled_voted <- array(dim = dim(E_imputed_relabelled))
+  # #If there are still NAs after imputing with KNN, then do majority vote
+  # if (!(sum(!complete.cases(E_imputed_relabelled)) == 0)) {
+  #   E_imputed_relabelled_voted <- majVote(E_imputed_relabelled)
+  # } else{
+  #   E_imputed_relabelled_voted <-
+  #     apply(E_imputed_relabelled_voted, c(1, 2, 3), as.numeric)
+  # }
+  dim(flat_E) <- c(dim(E_imputed_relabelled)[1],dim(E_imputed_relabelled)[2]*dim(E_imputed_relabelled)[3])
+  if(anyNA(flat_E)){
+    flat_E <- t(apply(flat_E,1,
+                      function(x){x[which(is.na(x))] <- names(which.max(table(x)));x}))
   }
-  return(E_imputed_relabelled_voted)
+  class(flat_E)<-"numeric"
+  return(flat_E)
 }
