@@ -8,8 +8,7 @@
 #' @export
 #' @examples
 #' data(E_imputed)
-#' E <- E_imputed[complete.cases(E_imputed),,]
-#' table(kmodes(E_imputed, is.relabelled=FALSE))
+#' table(k_modes(E_imputed, is.relabelled=FALSE))
 
 k_modes <- function(E, is.relabelled=TRUE){
 #take E imputed and reshape into a flat matrix
