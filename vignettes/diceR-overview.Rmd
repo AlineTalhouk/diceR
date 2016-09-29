@@ -1,0 +1,95 @@
+---
+title: "Cluster Analysis using `diceR`"
+author: "Derek Chiu"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cluster Analysis using `diceR`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE,
+                      comment = "#>")
+```
+
+## Introduction
+
+Cluster analysis is a way of "slicing and dicing" data such that we group together similar entities and separate dissimilar ones. The trouble is that there is a diverse list of clustering algorithms, each with different user inputs. Thus an automated cluster analysis pipeline is not feasible. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels are obtained after considering a variety of methods. We currently implement about 15 clustering algorithms. Although the results are relatively dependent on the subset chosen for the ensemble, the intent is that the subset cuts the data up in diverse ways.
+
+## Setup
+
+`diceR` is currently only available on GitHub (the second line will be uncommented once the repository becomes public).
+
+```{r}
+# install.packages("devtools")
+# devtools::install_github("AlineTalhouk/diceR")
+library(diceR)
+data(hgsc)
+```
+
+We load an example data set of `r ncol(hgsc) - 1` high grade serous carcinoma samples measured on `r nrow(hgsc)` genes.
+
+## Consensus Clustering
+
+When Monti et al. (2003) first introduced consensus clustering, the idea was to use one clustering algorithm on bootstrapped subsamples of the data. We implement some extensions where a consensus is reached across subsamples *and* across algorithms. The final cluster assignment is then computed using some statistical transformations on the ensemble cluster.
+
+The main function of this package is `ConClust()`, which outputs cluster assignments across subsamples and algorithms. For example, let's say we were interested in clustering the `hgsc` data into 4 clusters, using 80% resampling on 10 replicates, for these clustering algorithms: K-Means (Spearman distance), PAM (Spearman distance), Spectral Clustering using Radial-Basis kernel function, and Biclustering using a latent block model.
+
+```{r, results='hide'}
+dat <- hgsc[, -1]
+CC <- ConClust(dat, k = 4, reps = 10, pItem = 0.8,
+               method = c("hcAEucl", "kmSpear", "pamSpear", "biclust"), save = FALSE)
+```
+
+The output is a 3-dimensional array: rows are samples, columns are different bootstrap subsample replicates, and slices are algorithms. Below are the first few cluster assignments for each replicate in the biclustering algorithm.
+
+```{r}
+str(CC)
+knitr::kable(head(CC[, , "biclust"]))
+```
+
+Note the unavoidable presence of `NA`s because we used 80% subsampling. This can be problematic in some downstream ensemble methods, so we can impute as many of the missing values as we can using K-Nearest Neighbours beforehand. There might still be `NA`s after kNN because of how the decision threshold was set.
+
+```{r}
+CC.impute <- apply(CC, 2:3, knn_impute, t(dat))
+sum(is.na(CC))
+sum(is.na(CC.impute))
+```
+
+We can carry on the analysis using either `CC` or `CC.impute`.
+
+## Consensus Functions
+
+`diceR` provides functions for retrieving useful summaries and other results for consensus clustering.
+
+- [`consensus_matrix()`](#compute-consensus-matrix-with-consensus_matrix)
+- [`consensus_class()`](#get-consensus-class-with-consensus_class)
+- [`consensus_summary()`](#organize-consensus-classes-and-matrices-with-consensus_summary)
+- [`consensus_combine()`](#combine-consensus-summaries-with-consensus_combine)
+- [`consensus_compare()`](#compare-algortihms-with-consensus_compare)
+- [`consensus_weigh()`](#rank-and-weigh-algorithms-with-consensus_weigh)
+
+### Compute consensus matrix with `consensus_matrix()`
+
+The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one's.
+
+```{r}
+library(gplots)
+
+# Consensus matrix for PAM only
+cm <- consensus_matrix(CC[, , "pamSpear"])
+heatmap.2(cm, dendrogram = "none", Rowv = TRUE, Colv = TRUE,
+          trace = "none", labRow = NA, labCol = NA, key = FALSE)
+```
+
+### Get consensus class with `consensus_class()`
+
+### Organize consensus classes and matrices with `consensus_summary()`
+
+### Combine consensus summaries with `consensus_combine()`
+
+### Compare algortihms with `consensus_compare()`
+
+### Rank and weigh algorithms with `consensus_weigh()`
