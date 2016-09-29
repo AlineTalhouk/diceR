@@ -1,14 +1,30 @@
 #' Generate a cluster ensemble using the K-means algorithm
 #'
+#' Function to perform clustering using ConClust::ConClust with default methods nmfDiv,nmfEucl,hcAEucl,hcDianaEucl, kmEucl,kmSpear,pamEucl,apEucl,
+#' apEucl, scRbf, gmmBIC, and biclust with user-sepcified number of clusters and number of repetitions
+#'
 #' @param X a data set, rows are observations, columns are variables
 #' @param M number of base clusterings in the ensemble
 #' @param k number of clusters in the base clusterings
-#' @param scheme cluster ensemble generating scheme (1=fixed k, 2=random k)
 #'
 #' @return matrix of cluster ensemble
 #' @author Johnson Liu
 #' @importFrom stats complete.cases
 #' @export
+#' @examples 
+#' library(magrittr)
+#' library(tidyr)
+#' library(reshape2)
+#' library(biostatUtil)
+#' library(ConClust)
+#' data("hgsc")
+#' dat <- hgsc[,-1]
+#' rownames(dat) <- hgsc[,1]
+#' tdat <- t(dat)
+#' mdat <- melt(tdat) %>%
+#'  set_colnames(c("patientID","Gene","Expr"))
+#' E<-ConClustEnsemble(X=tdat,k=4,reps=10) 
+#' The example will generate a 489 by 120 clustering ensemble using the default 12 algorithms in ConClust
 ConClustEnsemble <- function(X, k, reps = 1000) {
   assertthat::assert_that(is.matrix(X))
   E <- NULL
