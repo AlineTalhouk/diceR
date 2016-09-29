@@ -1,4 +1,4 @@
 library(testthat)
-library(ConClust)
+library(ClusterDuck)
 
-test_check("ConClust")
+test_check("ClusterDuck")
