@@ -7,20 +7,26 @@
 k_modes(E, is.relabelled = TRUE)
 }
 \arguments{
-\item{E}{a matrix of clusterings with number of rows equal to the number of cases to be clustered, number of columns equal to the clustering obtained by different resampling of the data, and the third dimension is the different algorithms. Needs complete cases: No NAs. If the matrix contains NAs those are imputed by majority voting (after class relabeling).}
+\item{E}{a matrix of clusterings with number of rows equal to the number of
+cases to be clustered, number of columns equal to the clustering obtained
+by different resampling of the data, and the third dimension is the
+different algorithms. Needs complete cases: No NAs. If the matrix contains
+NAs those are imputed by majority voting (after class relabeling).}
 
-\item{is.relabelled}{TRUE/FALSE defaults to TRUE, but if FALSE the data will be relabelled}
+\item{is.relabelled}{logical; defaults to TRUE, but if FALSE the data will
+be relabelled}
 }
 \value{
 a vector of cluster assignment based on kmodes
 }
 \description{
-Combine clustering results generated using different algorithms and different data perturbations
+Combine clustering results generated using different algorithms and different
+data perturbations
 }
 \examples{
+# Calculate for a fraction of first algorithm
 data(E_imputed)
-E <- E_imputed[complete.cases(E_imputed),,]
-table(kmodes(E_imputed, is.relabelled=FALSE))
+table(k_modes(E_imputed[1:100, , 1, drop = FALSE], is.relabelled = FALSE))
 }
 \author{
 Aline Talhouk
