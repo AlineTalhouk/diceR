@@ -4,36 +4,33 @@
 \alias{ConClustEnsemble}
 \title{Generate a cluster ensemble using the K-means algorithm}
 \usage{
-ConClustEnsemble(X, k, reps = 1000)
+ConClustEnsemble(X, k, reps = 1000, method = NULL)
 }
 \arguments{
-\item{X}{a data set, rows are observations, columns are variables}
+\item{X}{data set with rows as samples, columns as genes}
 
 \item{k}{number of clusters in the base clusterings}
 
-\item{M}{number of base clusterings in the ensemble}
+\item{reps}{number of repetitions}
+
+\item{method}{vector of clustering algorithms for performing consensus 
+clustering. Must be any number of the following: "nmfDiv", "nmfEucl", 
+"hcAEucl", "hcDianaEucl", "kmEucl", "kmSpear", "pamEucl", "pamSpear", 
+"apEucl", "scRbf", "gmmBIC", "biclust".}
 }
 \value{
 matrix of cluster ensemble
 }
 \description{
-Function to perform clustering using ConClust::ConClust with default methods nmfDiv,nmfEucl,hcAEucl,hcDianaEucl, kmEucl,kmSpear,pamEucl,apEucl,
-apEucl, scRbf, gmmBIC, and biclust with user-sepcified number of clusters and number of repetitions
+Function to perform clustering using \code{\link{ConClust}} with all default 
+methods using user-sepcified number of clusters and number of repetitions.
 }
 \examples{
-library(magrittr)
-library(tidyr)
-library(reshape2)
-library(biostatUtil)
-library(ConClust)
-data("hgsc")
-dat <- hgsc[,-1]
-rownames(dat) <- hgsc[,1]
-tdat <- t(dat)
-mdat <- melt(tdat) \%>\%
- set_colnames(c("patientID","Gene","Expr"))
-E<-ConClustEnsemble(X=tdat,k=4,reps=10) 
-The example will generate a 489 by 120 clustering ensemble using the default 12 algorithms in ConClust
+# Generate a 489 by 20 clustering ensemble using 2 algorithms in ConClust
+data(hgsc)
+dat <- hgsc[, -1]
+rownames(dat) <- hgsc[, 1]
+E <- ConClustEnsemble(X = t(dat), k = 4, reps = 10, method = c("hcAEucl", "kmEucl"))
 }
 \author{
 Johnson Liu
