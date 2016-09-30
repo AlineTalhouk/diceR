@@ -14,7 +14,6 @@
 #'
 #' @param ... any number of objects outputted from
 #'   \code{\link{consensus_summary}}
-#' @param k desired number of clusters
 #' @param element either "matrix" or "class" to extract the consensus matrix or
 #'   consensus class, respectively.
 #' @param alg.names optional. Supply a vector of names for the algorithms.
@@ -35,11 +34,9 @@
 #' CC2.summ <- consensus_summary(CC2, k = 4)
 #'
 #' # Combine and return either matrices or classes
-#' y1 <- consensus_combine(CC1.summ, CC2.summ, k = 4,
-#' element = "matrix")
+#' y1 <- consensus_combine(CC1.summ, CC2.summ, element = "matrix")
 #' str(y1)
-#' y2 <- consensus_combine(CC1.summ, CC2.summ, k = 4,
-#' element = "class")
+#' y2 <- consensus_combine(CC1.summ, CC2.summ, element = "class")
 #' str(y2)
 #'
 #' # Compare algorithms on PAC and CHI
@@ -47,7 +44,7 @@
 #'
 #' # Weigh algorithms
 #' consensus_weigh(z)
-consensus_combine <- function(..., k, element = c("matrix", "class"),
+consensus_combine <- function(..., element = c("matrix", "class"),
                               alg.names = NULL) {
   obj <- unlist(list(...), recursive = FALSE)
   switch(match.arg(element),

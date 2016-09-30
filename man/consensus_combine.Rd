@@ -7,7 +7,7 @@
 \alias{consensus_weigh}
 \title{Combine, compare, and weigh algorithms}
 \usage{
-consensus_combine(..., k, element = c("matrix", "class"), alg.names = NULL)
+consensus_combine(..., element = c("matrix", "class"), alg.names = NULL)
 
 consensus_compare(data, cl.mat, cons.mat, alg.names = NULL)
 
@@ -17,14 +17,12 @@ consensus_weigh(data.index, top = 5)
 \item{...}{any number of objects outputted from
 \code{\link{consensus_summary}}}
 
-\item{k}{desired number of clusters}
-
 \item{element}{either "matrix" or "class" to extract the consensus matrix or
 consensus class, respectively.}
 
 \item{alg.names}{optional. Supply a vector of names for the algorithms.}
 
-\item{data}{data matrix with samples as rows, genes as columns}
+\item{data}{data matrix with genes as rows, samples as columns}
 
 \item{cl.mat}{matrix of cluster assignments. Each row is an assignment for a
 different algorithm. Use \code{element = "class"} in
@@ -73,11 +71,9 @@ CC1.summ <- consensus_summary(CC1, k = 4)
 CC2.summ <- consensus_summary(CC2, k = 4)
 
 # Combine and return either matrices or classes
-y1 <- consensus_combine(CC1.summ, CC2.summ, k = 4,
-element = "matrix")
+y1 <- consensus_combine(CC1.summ, CC2.summ, element = "matrix")
 str(y1)
-y2 <- consensus_combine(CC1.summ, CC2.summ, k = 4,
-element = "class")
+y2 <- consensus_combine(CC1.summ, CC2.summ, element = "class")
 str(y2)
 
 # Compare algorithms on PAC and CHI

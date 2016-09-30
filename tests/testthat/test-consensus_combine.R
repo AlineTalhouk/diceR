@@ -8,18 +8,14 @@ CC2 <- ConClust(x, k = 4, reps = 5, method = "gmmBIC", save = FALSE)
 CC1.summ <- consensus_summary(CC1, k = 4)
 CC2.summ <- consensus_summary(CC2, k = 4)
 
-y1 <- consensus_combine(CC1.summ, CC2.summ, k = 4,
-                        element = "matrix")
-y2 <- consensus_combine(CC1.summ, CC2.summ, k = 4,
-                        element = "class")
-y3 <- consensus_combine(CC1.summ, CC2.summ, k = 4,
-                        element = "matrix", alg.names = c("A1", "A2"))
-y4 <- consensus_combine(CC1.summ, CC2.summ,  k = 4,
-                        element = "class", alg.names = c("A1", "A2"))
+an <- c("A1", "A2")
+y1 <- consensus_combine(CC1.summ, CC2.summ, element = "matrix")
+y2 <- consensus_combine(CC1.summ, CC2.summ, element = "class")
+y3 <- consensus_combine(CC1.summ, CC2.summ, element = "matrix", alg.names = an)
+y4 <- consensus_combine(CC1.summ, CC2.summ, element = "class", alg.names = an)
 
 z1 <- consensus_compare(x, cl.mat = y2, cons.mat = y1)
-z2 <- consensus_compare(x, cl.mat = y2, cons.mat = y1,
-                        alg.names =  c("A1", "A2"))
+z2 <- consensus_compare(x, cl.mat = y2, cons.mat = y1, alg.names =  an)
 
 test_that("combining results has expected lengths", {
   expect_length(y1, dim(CC1)[3] + dim(CC2)[3])
@@ -27,8 +23,8 @@ test_that("combining results has expected lengths", {
 })
 
 test_that("names can be overwritten", {
-  expect_identical(names(y3), c("A1", "A2"))
-  expect_identical(colnames(y4), c("A1", "A2"))
+  expect_identical(names(y3), an)
+  expect_identical(colnames(y4), an)
 })
 
 test_that("comparing results works", {
