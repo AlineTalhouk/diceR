@@ -1,8 +1,8 @@
 Package: diceR
 Type: Package
 Title: Diverse Cluster Ensemble in R
-Version: 0.0.0.9002
-Date: 2016-09-29
+Version: 0.0.0.9003
+Date: 2016-09-30
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")),
     person("Aline", "Talhouk", , "atalhouk@bccrc.ca", "aut"),
@@ -19,7 +19,6 @@ Imports:
     tidyr,
     readr,
     magrittr,
-    reshape2,
     cluster,
     bioDist,
     NMF,
@@ -35,7 +34,10 @@ Imports:
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    reshape2,
+    gplots,
+    ggplot2
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
