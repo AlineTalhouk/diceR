@@ -9,23 +9,31 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, echo=FALSE}
-knitr::opts_chunk$set(collapse = TRUE,
-                      comment = "#>")
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(
+	message = FALSE,
+	warning = FALSE,
+	collapse = TRUE,
+	comment = "#>",
+	fig.align = "center",
+	fig.width = 6,
+	fig.height = 4.5
+)
 ```
 
 ## Introduction
 
 Cluster analysis is a way of "slicing and dicing" data such that we group together similar entities and separate dissimilar ones. The trouble is that there is a diverse list of clustering algorithms, each with different user inputs. Thus an automated cluster analysis pipeline is not feasible. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels are obtained after considering a variety of methods. We currently implement about 15 clustering algorithms. Although the results are relatively dependent on the subset chosen for the ensemble, the intent is that the subset cuts the data up in diverse ways.
 
-## Setup
-
 `diceR` is currently only available on GitHub (the second line will be uncommented once the repository becomes public).
 
-```{r}
+```{r load}
 # install.packages("devtools")
 # devtools::install_github("AlineTalhouk/diceR")
 library(diceR)
+library(dplyr)
+library(ggplot2)
+library(knitr)
 data(hgsc)
 ```
 
@@ -37,7 +45,7 @@ When Monti et al. (2003) first introduced consensus clustering, the idea was to 
 
 The main function of this package is `ConClust()`, which outputs cluster assignments across subsamples and algorithms. For example, let's say we were interested in clustering the `hgsc` data into 4 clusters, using 80% resampling on 10 replicates, for these clustering algorithms: K-Means (Spearman distance), PAM (Spearman distance), Spectral Clustering using Radial-Basis kernel function, and Biclustering using a latent block model.
 
-```{r, results='hide'}
+```{r ConClust, results='hide'}
 dat <- hgsc[, -1]
 CC <- ConClust(dat, k = 4, reps = 10, pItem = 0.8,
                method = c("hcAEucl", "kmSpear", "pamSpear", "biclust"), save = FALSE)
@@ -45,14 +53,14 @@ CC <- ConClust(dat, k = 4, reps = 10, pItem = 0.8,
 
 The output is a 3-dimensional array: rows are samples, columns are different bootstrap subsample replicates, and slices are algorithms. Below are the first few cluster assignments for each replicate in the biclustering algorithm.
 
-```{r}
+```{r ConClust_biclust}
 str(CC)
-knitr::kable(head(CC[, , "biclust"]))
+kable(head(CC[, , "biclust"]))
 ```
 
 Note the unavoidable presence of `NA`s because we used 80% subsampling. This can be problematic in some downstream ensemble methods, so we can impute as many of the missing values as we can using K-Nearest Neighbours beforehand. There might still be `NA`s after kNN because of how the decision threshold was set.
 
-```{r}
+```{r knn_impute}
 CC.impute <- apply(CC, 2:3, knn_impute, t(dat))
 sum(is.na(CC))
 sum(is.na(CC.impute))
@@ -70,26 +78,120 @@ We can carry on the analysis using either `CC` or `CC.impute`.
 - [`consensus_combine()`](#combine-consensus-summaries-with-consensus_combine)
 - [`consensus_compare()`](#compare-algortihms-with-consensus_compare)
 - [`consensus_weigh()`](#rank-and-weigh-algorithms-with-consensus_weigh)
+- [`consensus_confmat()`](#compare-to-true-class-with-consensus_confmat)
 
 ### Compute consensus matrix with `consensus_matrix()`
 
-The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one's.
+The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one's. Suppose we wanted to compute the consensus matrix for PAM only, and visualize using a heatmap.
 
-```{r}
-library(gplots)
-
-# Consensus matrix for PAM only
+```{r consensus_matrix}
 cm <- consensus_matrix(CC[, , "pamSpear"])
-heatmap.2(cm, dendrogram = "none", Rowv = TRUE, Colv = TRUE,
-          trace = "none", labRow = NA, labCol = NA, key = FALSE)
+gplots::heatmap.2(cm, dendrogram = "none", Rowv = TRUE, Colv = TRUE,
+                  trace = "none", labRow = NA, labCol = NA)
 ```
 
 ### Get consensus class with `consensus_class()`
 
+The consensus class is the final cluster assignment obtained by performing hierarchical clustering on a consensus matrix.
+
+```{r consensus_class}
+cclass <- consensus_class(cm, k = 4)
+kable(as.data.frame(table(cclass)))
+```
+
 ### Organize consensus classes and matrices with `consensus_summary()`
+
+To quickly return the `consensus_matrix()` and `consensus_class()` for every clustering algorithm used, we can use `consensus_summary()` as a wrapper for generating these two outputs. The result is a list of lists: each element is an algorithm, and each algorithm has two elements: a `consensus_matrix` and a `consensus_class`.
+
+```{r consensus_summary, results='hide'}
+cs <- consensus_summary(CC, k = 4)
+```
+
+```{r consensus_summary_str}
+str(cs, max.level = 2)
+```
 
 ### Combine consensus summaries with `consensus_combine()`
 
+The return value of `consensus_summary()` has `consensus_matrix` and `consensus_class` objects as sublists. If we wish to extract these separately for every algorithm, `consensus_combine()` is a convenient wrapper to do so. Setting `element = "matrix"` returns a list of consensus matrices. On the other hand, setting `element = "class"` returns a matrix with rows as samples, and columns as clustering assignments for each algorithm.
+
+```{r consensus_combine}
+ccomb_matrix <- consensus_combine(cs, element = "matrix")
+ccomb_class <- consensus_combine(cs, element = "class")
+```
+
+```{r consensus_combine_str}
+str(ccomb_matrix, max.level = 2)
+kable(head(ccomb_class))
+```
+
+One can feed in `ccomb_class` into `consensus_matrix()` to obtain a consensus matrix across both subsamples **and** algorithms.
+
+A situation might also arise where we initially decided on using 4 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. `consensus_combine()` takes in any number of `consensus_summary()` objects and combines the results.
+
+```{r consensus_combine_2, results='hide'}
+CC2 <- ConClust(dat, k = 4, reps = 10, pItem = 0.8,
+                method = c("hcDianaEucl", "pamEucl"), save = FALSE)
+cs2 <- consensus_summary(CC2, k = 4)
+ccomb_class2 <- consensus_combine(cs, cs2, element = "class")
+```
+
+```{r consensus_combine_2_str}
+kable(head(ccomb_class2))
+```
+
 ### Compare algortihms with `consensus_compare()`
 
+Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose two indices on which to compare the ensemble of clustering algorithms. The first index is PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between `lower` (defaults to 0) and `upper` (defaults to 1). PAC gives a sense of cluster stability. The second index is CHI (Calinski-Harabasz Index) or pseudo F-statistic. It measures the ratio of between cluster distances to within cluster distances, and was observed in our simulations to be one of the more robust indices to different data structures.
+
+```{r consensus_compare}
+ccomp <- consensus_compare(dat, cl.mat = ccomb_class, cons.mat = ccomb_matrix)
+kable(head(ccomp))
+```
+
+We see that the biclustering algorithm is the least ambiguous and also most well-clustered (high compactness and separability).
+
 ### Rank and weigh algorithms with `consensus_weigh()`
+
+Suppose we want a ranking of the algorithms from the previous table, and supply weights according to cluster performance. The idea is that we want to put higher weights in the final cluster ensemble to well-performing algorithms (such as bicluster in the last example), and vice versa.
+
+```{r consensus_weigh}
+cweigh <- consensus_weigh(ccomp)
+kable(head(cweigh))
+```
+
+The final column takes an equal weighting from PAC and CHI.
+
+Consider the following example of how these weights can be used. We use `ccomb_class` as the input. Recall these are the consensus classes within an algorithm. Then we apply `consensus_matrix()` to get the consensus matrix across algorithms **and** subsamples, which can optionally be weighed using `cweigh$Weight`. The user needs to ensure that the algorithms match, however.
+
+```{r consensus_weigh_example}
+# Generate both consensus matrices
+cm_algs <- consensus_matrix(ccomb_class)
+cm_algs_w <- consensus_matrix(ccomb_class,
+                              weights = cweigh$Weight[match(colnames(ccomb_class), cweigh$Algorithms)])
+
+# Calculate range of PAC from 0 to Upper Limit
+pac_dat <- data.frame(Upper = seq(0, 1, 0.01)) %>% 
+  mutate(Unweighted = sapply(Upper, PAC, cm = cm_algs, lower = 0),
+         Weighted = sapply(Upper, PAC, cm = cm_algs_w, lower = 0)) %>% 
+  tidyr::gather(key = Type, value = PAC, 2:3)
+
+# Show distribution of PAC for both Types of consensus matrices
+ggplot(pac_dat, aes(Upper, PAC)) + 
+  geom_line(aes(colour = Type)) + 
+  labs(x = "Upper Limit",
+       title = "Distribution of PAC from 0 to Upper Limit")
+```
+
+### Compare to true class with `consensus_confmat()`
+
+Finally, we have a wrapper for comparing a predicted cluster assignment to some true class label or reference cluster assignment as a confusion matrix. The purpose of using `consensus_confmat()` is because the cluster labels do not consistently represent the same group in different runs of a clustering algorithm. For instance, cluster "1" may refer to different groups in K-means for different runs. We use `min_fnorm()` to reorder the confusion matrix such that the diagonal is maximized.
+
+```{r consensus_confmat}
+set.seed(10)
+cclass.true <- sample(1:4, size = length(cclass), replace = TRUE)
+table(cclass, cclass.true)
+consensus_confmat(cclass, cclass.true)
+```
+
+Notice the reordering of the rows when using `consensus_confmat()`.
