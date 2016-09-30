@@ -117,7 +117,8 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
       if (i %% 10 == 0) {
         if (save) {
           if (time.saved) {
-            path <- paste0(file.name, "_", Sys.time(), ".rds")
+            path <- paste0(file.name, "_",
+                           format(Sys.time(), "%Y-%m-%d_%H-%M-%S") , ".rds")
           } else {
             path <- paste0(file.name, ".rds")
           }
@@ -128,7 +129,8 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
   }
   if (save) {
     if (time.saved) {
-      path <- paste0(file.name, "_", Sys.time(), ".rds")
+      path <- paste0(file.name, "_",
+                     format(Sys.time(), "%Y-%m-%d_%H-%M-%S") , ".rds")
     } else {
       path <- paste0(file.name, ".rds")
     }
