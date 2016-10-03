@@ -6,6 +6,7 @@ test_that("majority voting works", {
   expect_equal(majority_voting(dt, is.relabelled = TRUE), c("2", "3"))
 })
 
+<<<<<<< Updated upstream
 test_that("k modes works", {
   set.seed(1)
   x <- rbind(matrix(rbinom(250, 2, 0.25), ncol = 5),
@@ -19,3 +20,8 @@ test_that("k modes works", {
   kmo.new <- k_modes(xp, is.relabelled = TRUE)
   expect_equal(kmo.old, kmo.new)
 })
+=======
+test_that("k modes", {
+  
+  })
+>>>>>>> Stashed changes

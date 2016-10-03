@@ -16,6 +16,7 @@
 #' @examples
 #' # Calculate for a fraction of first algorithm
 #' data(E_imputed)
+<<<<<<< Updated upstream
 #' table(k_modes(E_imputed[1:100, , 1, drop = FALSE], is.relabelled = FALSE))
 k_modes <- function(E, is.relabelled = TRUE) {
   # take E imputed and reshape into a flat matrix
@@ -40,4 +41,28 @@ k_modes <- function(E, is.relabelled = TRUE) {
       as.numeric(names(table(x))))))
   )
   return(k_modes$cluster)
+=======
+#' table(k_modes(E_imputed, is.relabelled=FALSE))
+
+k_modes <- function(E, is.relabelled=TRUE, modes=k){
+#take E imputed and reshape into a flat matrix
+flat_E <- E
+dim(flat_E) <- c(dim(E)[1],dim(E)[2]*dim(E)[3])
+
+if(is.relabelled==FALSE){
+  E_f <- apply(flat_E[,-1],2,function(x){relabel_class(x,flat_E[,1])})
+  flat_E <- cbind(flat_E[,1],E_f)
+  }
+
+
+# Fill in missing values if any using majority voting
+if(anyNA(flat_E)){
+  flat_E <- t(apply(flat_E,1,
+                  function(x){x[which(is.na(x))] <- names(which.max(table(x)));x}))
+}
+
+dim(flat_E)
+k_modes <- klaR::kmodes(flat_E, modes = k)
+return(k_modes$cluster)
+>>>>>>> Stashed changes
 }
