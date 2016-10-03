@@ -6,22 +6,14 @@ test_that("majority voting works", {
   expect_equal(majority_voting(dt, is.relabelled = TRUE), c("2", "3"))
 })
 
-<<<<<<< Updated upstream
 test_that("k modes works", {
+  x <- array(rep(c(rep(1, 10), rep(2, 10), rep(3, 10)), times=5), c(30,6,5))
+  xf <- x
+  dim(xf) <- c(30,30)
   set.seed(1)
-  x <- rbind(matrix(rbinom(250, 2, 0.25), ncol = 5),
-             matrix(rbinom(250, 2, 0.75), ncol = 5))
-  colnames(x) <- c("a", "b", "c", "d", "e")
-  xp <- x
-  dim(xp) <- c(10, 5, 10)
-  set.seed(1)
-  kmo.old <- klaR::kmodes(xp, 2)$cluster
-  set.seed(1)
-  kmo.new <- k_modes(xp, is.relabelled = TRUE)
+  kmo.old <- klaR::kmodes(xf, 3)$cluster
+  kmo.new <- k_modes(x, is.relabelled = TRUE, seed=1)
   expect_equal(kmo.old, kmo.new)
 })
-=======
-test_that("k modes", {
-  
-  })
->>>>>>> Stashed changes
+
+
