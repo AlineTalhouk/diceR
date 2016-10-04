@@ -37,7 +37,8 @@ Suggests:
     rmarkdown,
     reshape2,
     gplots,
-    ggplot2
+    ggplot2,
+    covr
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
