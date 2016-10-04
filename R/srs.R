@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' data("E_LCE")
-#' SRS<-srs(LCE,0.8,5)
+#' SRS<-srs(E_LCE,0.8,5)
 srs<-function(E,dc,R){
   assertthat::assert_that(is.matrix(E))
   assertthat::assert_that(dc>=0 && dc<=1)
@@ -44,13 +44,13 @@ srs<-function(E,dc,R){
     }
     C1<-diag(x=1,nrow=no_allcl,ncol=no_allcl)
     for(i in 1:(no_allcl-1)){
-      Ni<-getRowColNumbers(E,i)$rows
-      col<-getRowColNumbers(E,i)$cols
+      Ni<-coord(E,i)$rows
+      col<-coord(E,i)$cols
       nki<-length(Ni)
       for(ii in (i+1):no_allcl){
         sum_sim<-0
-        Nii<-getRowColNumbers(E,ii)$rows
-        col<-getRowColNumbers(E,ii)$cols
+        Nii<-coord(E,ii)$rows
+        col<-coord(E,ii)$cols
         nkii<-length(Nii)
         for(k in 1:nki){
           for(kk in 1:nkii){

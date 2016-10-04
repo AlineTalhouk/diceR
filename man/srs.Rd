@@ -21,6 +21,6 @@ Title function for computing simrank based similarity matrix
 }
 \examples{
 data("E_LCE")
-SRS<-srs(LCE,0.8,5)
+SRS<-srs(E_LCE,0.8,5)
 }
 
