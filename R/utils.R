@@ -53,3 +53,32 @@ relabel_class <- function(cl.pred, cl.ref) {
   res <- factor(cl.pred, levels = perm, labels = levels(factor(cl.ref)))
   return(res)
 }
+
+#' Form Row and Column Extremes
+#' 
+#' Form row and column maxs and mins for matrices
+#' 
+#' @param x a matrix
+#' @param na.rm logical; Should missing values be omitted from consideration?
+#'   
+#' @return a vector containing the maximums or minimums for each column in
+#'   \code{x}
+#' @export
+#' 
+#' @examples
+#' a <- matrix(1:9, ncol = 3)
+#' colMax(a)
+#' colMin(a)
+colMax <- function(x, na.rm = TRUE) {
+  assertthat::assert_that(is.matrix(x))
+  assertthat::assert_that(is.numeric(x))
+  return(apply(x, 2, max, na.rm = na.rm))
+}
+
+#' @rdname colMax
+#' @export
+colMin <- function(x, na.rm = TRUE) {
+  assertthat::assert_that(is.matrix(x))
+  assertthat::assert_that(is.numeric(x))
+  return(apply(x, 2, min, na.rm = na.rm))
+}
