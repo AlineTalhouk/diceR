@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # diceR
 
-[![Travis-CI Build Status](https://travis-ci.com/AlineTalhouk/diceR.svg?branch=master)](https://travis-ci.com/AlineTalhouk/diceR)
+[![Travis-CI Build Status](https://travis-ci.com/AlineTalhouk/diceR.svg?token=R9saDTyWyg3zsFXfoa1H&branch=master)](https://travis-ci.com/AlineTalhouk/diceR)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?branch=master&svg=true)](https://ci.appveyor.com/project/dchiu911/diceR)
 [![Coverage Status](https://img.shields.io/codecov/c/github/AlineTalhouk/diceR/master.svg)](https://codecov.io/github/AlineTalhouk/diceR?branch=master)
 

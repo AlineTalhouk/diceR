@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-#' data("LCE")
+#' data("E_LCE")
 #' SRS<-srs(LCE,0.8,5)
 srs<-function(E,dc,R){
   assertthat::assert_that(is.matrix(E))
