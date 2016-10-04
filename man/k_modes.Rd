@@ -4,7 +4,7 @@
 \alias{k_modes}
 \title{Combine clustering results using K modes}
 \usage{
-k_modes(E, is.relabelled = TRUE)
+k_modes(E, is.relabelled = TRUE, seed = 1)
 }
 \arguments{
 \item{E}{a matrix of clusterings with number of rows equal to the number of
