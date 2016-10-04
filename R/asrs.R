@@ -1,13 +1,13 @@
 #' Title A function for computing approximated simrank based similarity matrix
 #'
-#' @param E : matrix of cluster ensemble
+#' @param E : N by M matrix of cluster ensemble
 #' @param dc :decay factor, range 0 to 1, inclusive
 #'
-#' @return S: ASRS matrix
+#' @return S: N by N ASRS matrix
 #' @export
 #'
 #' @examples 
-#' data(E_LCE)
+#' data(E_LCE) 
 #' ASRS<-asrs(E_LCE, 0.8)
 asrs<-function(E,dc){
   assertthat::assert_that(is.matrix(E))

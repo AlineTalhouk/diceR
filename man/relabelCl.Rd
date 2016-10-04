@@ -15,4 +15,8 @@ newE: N by M matrix of relabelled ensemble, no_allcl: total number of clusters i
 \description{
 Title function used for relabelling clusters in the ensemble 'E'
 }
+\examples{
+data("E_LCE")
+E_LCE_relabelled<-relabelCl(E_LCE)
+}
 

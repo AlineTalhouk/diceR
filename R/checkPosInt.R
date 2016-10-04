@@ -6,9 +6,11 @@
 #' @export
 #'
 #' @examples
+#' checkPosInt(5)
+#' checkPosInt(-3.2)
 checkPosInt<-function(x){
-  assert_that(is.numeric(x))
-  assert_that(length(x)==1)
+  assertthat::assert_that(is.numeric(x))
+  assertthat::assert_that(length(x)==1)
   if(x<0){
     return(FALSE)
   } else{

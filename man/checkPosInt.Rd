@@ -15,4 +15,8 @@ TRUE if x is a positive integer and FALSE otherwise
 \description{
 Title function to check if a number is a positive integer
 }
+\examples{
+checkPosInt(5)
+checkPosInt(-3.2)
+}
 

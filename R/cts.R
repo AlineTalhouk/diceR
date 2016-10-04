@@ -6,10 +6,12 @@
 #' @return S: CTS matrix
 #' @export
 #'
-#' @examples
+#' @examples 
+#' data("E_LCE")
+#' CTS<-cts(E_LCE,0.8)
 cts<-function(E,dc){
-  assert_that(is.matrix(E))
-  assert_that(dc>=0 && dc<=1)
+  assertthat::assert_that(is.matrix(E))
+  assertthat::assert_that(dc>=0 && dc<=1)
   n=nrow(E)
   M=ncol(E)
   E.new<-relabelCl(E)

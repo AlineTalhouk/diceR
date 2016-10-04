@@ -1,18 +1,20 @@
 #' Title function for computing simrank based similarity matrix
 #'
-#' @param E : matrix of cluster ensemble
+#' @param E : N by M matrix of cluster ensemble
 #' @param dc : decay factor, [0,1]
 #' @param R : number of iterations for simrank algorithm
 #'
-#' @return
+#' @return N by N SRS matrix
 #' @export
 #'
 #' @examples
+#' data("LCE")
+#' SRS<-srs(LCE,0.8,5)
 srs<-function(E,dc,R){
-  assert_that(is.matrix(E))
-  assert_that(dc>=0 && dc<=1)
-  assert_that(is.numeric(R))
-  assert_that(checkPosInt(R)==TRUE)
+  assertthat::assert_that(is.matrix(E))
+  assertthat::assert_that(dc>=0 && dc<=1)
+  assertthat::assert_that(is.numeric(R))
+  assertthat::assert_that(checkPosInt(R)==TRUE)
   n<-nrow(E)
   M<-ncol(E)
   E.new<-relabelCl(E)

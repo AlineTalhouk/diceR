@@ -7,13 +7,20 @@
 srs(E, dc, R)
 }
 \arguments{
-\item{E}{: matrix of cluster ensemble}
+\item{E}{: N by M matrix of cluster ensemble}
 
 \item{dc}{: decay factor, [0,1]}
 
 \item{R}{: number of iterations for simrank algorithm}
 }
+\value{
+N by N SRS matrix
+}
 \description{
 Title function for computing simrank based similarity matrix
+}
+\examples{
+data("LCE")
+SRS<-srs(LCE,0.8,5)
 }
 

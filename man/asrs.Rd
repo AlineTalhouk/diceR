@@ -7,18 +7,18 @@
 asrs(E, dc)
 }
 \arguments{
-\item{E}{: matrix of cluster ensemble}
+\item{E}{: N by M matrix of cluster ensemble}
 
 \item{dc}{:decay factor, range 0 to 1, inclusive}
 }
 \value{
-S: ASRS matrix
+S: N by N ASRS matrix
 }
 \description{
 Title A function for computing approximated simrank based similarity matrix
 }
 \examples{
-data(E_LCE)
+data(E_LCE) 
 ASRS<-asrs(E_LCE, 0.8)
 }
 

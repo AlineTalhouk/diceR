@@ -17,4 +17,8 @@ S: CTS matrix
 \description{
 Title : fucntion for computing connected triple based similarity matrix
 }
+\examples{
+data("E_LCE")
+CTS<-cts(E_LCE,0.8)
+}
 

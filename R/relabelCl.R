@@ -6,6 +6,8 @@
 #' @export
 #'
 #' @examples
+#' data("E_LCE")
+#' E_LCE_relabelled<-relabelCl(E_LCE)
 relabelCl<-function(E){
   assertthat::assert_that(is.matrix(E))
   assertthat::assert_that(is.numeric(E))
