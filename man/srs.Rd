@@ -20,7 +20,7 @@ N by N SRS matrix
 Title function for computing simrank based similarity matrix
 }
 \examples{
-data("LCE")
+data("E_LCE")
 SRS<-srs(LCE,0.8,5)
 }
 
