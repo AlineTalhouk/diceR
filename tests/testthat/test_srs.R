@@ -1,3 +1,5 @@
+context("SRS, simrank based similarity matrix")
+
 test_that("Check srs",{
   data("E_LCE")
   SRS<-srs(E_LCE,0.8,5)

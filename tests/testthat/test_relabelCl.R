@@ -1,3 +1,5 @@
+context("Relabel class")
+
 test_that("Check LinkCluE::relabelCl",{
   expect_error(relabelCl(3))
   expect_error(relabelCl(c(1,2)))

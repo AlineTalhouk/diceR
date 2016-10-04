@@ -1,3 +1,5 @@
+context("weight for each pair of clusters using their shared members (Jaccard coefficient)")
+
 test_that("Check weightCl",{
   data(E_LCE)
   expect_equal(sum(!weightCl(E_LCE)==t(weightCl(E_LCE))),0)

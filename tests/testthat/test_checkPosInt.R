@@ -1,3 +1,5 @@
+context("Check positive integer")
+
 test_that("checkPosInt",{
   expect_true(checkPosInt(3))
   expect_false(checkPosInt(-3))

@@ -1,3 +1,5 @@
+context("Connected triple based similarity matrix")
+
 test_that("Check cts",{
   data("E_LCE")
   CTS<-cts(E_LCE,0.8)

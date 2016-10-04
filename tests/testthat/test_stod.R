@@ -1,7 +1,9 @@
+context("stod, distance vector")
+
 test_that("Check stod",{
   data(E_LCE)
   S<-cts(E_LCE,dc=0.8)
-  s<-LinkCluE::stod(S)
+  s<-stod(S)
   expect_true(sum(!s[1:24]==0)==0)
   expect_true(abs(s[25]-0.5979)<=0.0001)
   expect_true(abs(sum(s)-2962)<1)

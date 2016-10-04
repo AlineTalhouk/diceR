@@ -1,3 +1,5 @@
+context("Check asrs")
+
 test_that("Check asrs",{
   data("E_LCE")
   ASRS<-asrs(E_LCE,0.8)

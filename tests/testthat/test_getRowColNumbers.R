@@ -1,3 +1,5 @@
+context("Get row column numbers of a number in a matrix")
+
 test_that("Check getRowColNumbers",{
 
   mat<-matrix(c(60,17,58,62,81,11,32,7,28,85,80,15,19,50,45,40,88,31,84,30,99,94,61,55,27),ncol=5)

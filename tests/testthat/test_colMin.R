@@ -1,3 +1,5 @@
+context("Column mininums")
+
 test_that("Check colMin",{
   expect_error(colMin(data.frame(names=c("a","b","c"),vals=c(17,18,19))))
   expect_error(colMin(data.frame(states=c("CALI","TEXS","NEWY"),cities=c("san fran","houston","new york"))))

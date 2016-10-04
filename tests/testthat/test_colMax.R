@@ -1,3 +1,5 @@
+context("Column maximums")
+
 test_that("Check colMax",{
   expect_error(colMax(data.frame(names=c("a","b","c"),vals=c(17,18,19))))
   expect_error(colMax(data.frame(states=c("CALI","TEXS","NEWY"),cities=c("san fran","houston","new york"))))
