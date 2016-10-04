@@ -7,8 +7,8 @@
 #'
 #' @examples
 relabelCl<-function(E){
-  assert_that(is.matrix(E))
-  assert_that(is.numeric(E))
+  assertthat::assert_that(is.matrix(E))
+  assertthat::assert_that(is.numeric(E))
   N<-nrow(E)
   M<-ncol(E)
   for(i in 1:N){

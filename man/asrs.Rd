@@ -17,4 +17,8 @@ S: ASRS matrix
 \description{
 Title A function for computing approximated simrank based similarity matrix
 }
+\examples{
+data(E_LCE)
+ASRS<-asrs(E_LCE, 0.8)
+}
 

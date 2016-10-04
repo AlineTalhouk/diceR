@@ -6,10 +6,12 @@
 #' @return S: ASRS matrix
 #' @export
 #'
-#' @examples
+#' @examples 
+#' data(E_LCE)
+#' ASRS<-asrs(E_LCE, 0.8)
 asrs<-function(E,dc){
   assertthat::assert_that(is.matrix(E))
-  assert_that(is.numeric(E))
+  assertthat::assert_that(is.numeric(E))
   assertthat::assert_that(dc>=0 && dc<=1)
   n<-nrow(E)
   M<-ncol(E)
