@@ -23,7 +23,7 @@ srs <- function(E, dc, R) {
                           is_pos_int(R) == TRUE)
   n <- nrow(E)
   M <- ncol(E)
-  E.new <- relabelCl(E)
+  E.new <- relabel_clusters(E)
   E <- E.new$newE
   no_allcl <- E.new$no_allcl
   S <- diag(x = 1, nrow = n, ncol = n)
@@ -84,10 +84,10 @@ asrs <- function(E, dc) {
   assertthat::assert_that(is.matrix(E), is.numeric(E), dc >= 0 && dc <= 1)
   n <- nrow(E)
   M <- ncol(E)
-  E.new <- relabelCl(E)
+  E.new <- relabel_clusters(E)
   E <- E.new$newE
   no_allcl <- E.new$no_allcl
-  wcl <- weightCl(E)
+  wcl <- weigh_clusters(E)
   CS <- matrix(rep(0, no_allcl * no_allcl), nrow = no_allcl)
   for (i in 1:(no_allcl - 1)) {
     Ni <- wcl[i, ]
@@ -135,10 +135,10 @@ cts <- function(E, dc) {
   assertthat::assert_that(is.matrix(E), dc >= 0 && dc <= 1)
   n = nrow(E)
   M = ncol(E)
-  E.new <- relabelCl(E)
+  E.new <- relabel_clusters(E)
   E <- E.new$newE
   no_allcl <- E.new$no_allcl
-  wcl <- weightCl(E)
+  wcl <- weigh_clusters(E)
   
   wCT <- matrix(rep(0, no_allcl * no_allcl), nrow = no_allcl)
   
