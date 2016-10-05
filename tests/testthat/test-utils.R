@@ -82,3 +82,20 @@ test_that("Check getRowColNumbers throw error with wrong type of input",{
   expect_error(coord(matrix(letters[1:25], ncol = 5), "a"))
   expect_error(coord(matrix(letters[1:25], ncol = 5), 1))
 })
+
+test_that("Check is_pos_int works", {
+  expect_true(is_pos_int(3))
+  expect_false(is_pos_int(-3))
+  expect_true(is_pos_int(1e6))
+  expect_false(is_pos_int(3.6))
+  expect_false(is_pos_int(3.21e1))
+  expect_false(is_pos_int(-3.7))
+  expect_false(is_pos_int(-3.21e1))
+  expect_false(is_pos_int(0))
+})
+
+test_that("Error if input is not a number or more than one element", {
+  expect_error(is_pos_int(c(1, 2, 3)))
+  expect_error(is_pos_int("a"))
+  expect_error(is_pos_int(matrix(c(1, 2, 3), nrow = 1)))
+})

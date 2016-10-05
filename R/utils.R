@@ -90,3 +90,18 @@ coord <- function(x, n) {
   return(setNames(unlist(apply(res, 2, list), recursive = FALSE),
                   c("rows", "cols")))
 }
+
+#' Check if a single number is a positive integer
+#' @noRd
+is_pos_int <- function(x) {
+  assertthat::assert_that(length(x) == 1)
+  if (x <= 0) {
+    return(FALSE)
+  } else {
+    if (x %% 1 == 0) {
+      return(TRUE)
+    } else{
+      return(FALSE)
+    }
+  }
+}
