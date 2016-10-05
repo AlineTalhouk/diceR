@@ -16,11 +16,11 @@
 #' @importFrom stats complete.cases
 #' @export
 #' @examples 
-#' # Generate a 489 by 20 clustering ensemble using 2 algorithms in ConClust
+#' # Generate a 489 by 10 clustering ensemble using 2 algorithms in ConClust
 #' data(hgsc)
 #' dat <- hgsc[, -1]
 #' rownames(dat) <- hgsc[, 1]
-#' E <- ConClustEnsemble(X = t(dat), k = 4, reps = 10, method = c("hcAEucl", "kmEucl"))
+#' E <- ConClustEnsemble(X = t(dat), k = 4, reps = 5, method = c("hcAEucl", "kmEucl"))
 ConClustEnsemble <- function(X, k, reps = 1000, method = NULL) {
   assertthat::assert_that(is.matrix(X))
   assertthat::assert_that(reps > 1)  # can't compute consensus matrix on one rep

@@ -26,11 +26,11 @@ Function to perform clustering using \code{\link{ConClust}} with all default
 methods using user-sepcified number of clusters and number of repetitions.
 }
 \examples{
-# Generate a 489 by 20 clustering ensemble using 2 algorithms in ConClust
+# Generate a 489 by 10 clustering ensemble using 2 algorithms in ConClust
 data(hgsc)
 dat <- hgsc[, -1]
 rownames(dat) <- hgsc[, 1]
-E <- ConClustEnsemble(X = t(dat), k = 4, reps = 10, method = c("hcAEucl", "kmEucl"))
+E <- ConClustEnsemble(X = t(dat), k = 4, reps = 5, method = c("hcAEucl", "kmEucl"))
 }
 \author{
 Johnson Liu
