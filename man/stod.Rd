@@ -2,22 +2,26 @@
 % Please edit documentation in R/stod.R
 \name{stod}
 \alias{stod}
-\title{Title converts similarity values to distance values and change matrix's format from square to vector (input format for linkage function)}
+\title{Similarity to Distance}
 \usage{
 stod(S)
 }
 \arguments{
-\item{S}{: N by N similarity matrix}
+\item{S}{N by N similarity matrix}
 }
 \value{
-d: distance vector
+distance vector
 }
 \description{
-Title converts similarity values to distance values and change matrix's format from square to vector (input format for linkage function)
+Converts similarity values to distance values and change matrixs format from
+square to vector (input format for linkage function)
 }
 \examples{
 data("E_LCE")
-ASRS<-asrs(E_LCE,0.8)
-d<-stod(ASRS)
+ASRS <- asrs(E_LCE,0.8)
+d <- stod(ASRS)
+}
+\author{
+Johnson Liu
 }
 
