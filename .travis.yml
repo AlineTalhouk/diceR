@@ -7,8 +7,12 @@ r:
  - release
  - devel
 
-before_install:
- - Rscript -e 'source("https://bioconductor.org/biocLite.R"); biocLite("bioDist")'
+bioc_packages:
+ - bioDist
+
+env:
+ global:
+   - RGL_USE_NULL=TRUE
 
 after_success:
  - Rscript -e 'covr::codecov()'
