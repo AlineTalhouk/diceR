@@ -11,7 +11,7 @@
 #' 
 #' @examples
 #' data("E_LCE")
-#' ASRS <- asrs(E_LCE,0.8)
+#' ASRS <- asrs(E_LCE, 0.8)
 #' d <- stod(ASRS)
 stod <- function(S) {
   assertthat::assert_that(is.numeric(S), is.matrix(S))

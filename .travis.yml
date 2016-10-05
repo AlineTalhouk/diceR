@@ -15,4 +15,4 @@ env:
    - RGL_USE_NULL=TRUE
 
 after_success:
- - Rscript -e 'covr::codecov()'
+ - Rscript -e 'covr::codecov(token = "2472ece65a3d48c18ea054a4c8497174")'
