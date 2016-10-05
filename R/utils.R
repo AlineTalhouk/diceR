@@ -70,15 +70,23 @@ relabel_class <- function(cl.pred, cl.ref) {
 #' colMax(a)
 #' colMin(a)
 colMax <- function(x, na.rm = TRUE) {
-  assertthat::assert_that(is.matrix(x))
-  assertthat::assert_that(is.numeric(x))
+  assertthat::assert_that(is.matrix(x), is.numeric(x))
   return(apply(x, 2, max, na.rm = na.rm))
 }
 
 #' @rdname colMax
 #' @export
 colMin <- function(x, na.rm = TRUE) {
-  assertthat::assert_that(is.matrix(x))
-  assertthat::assert_that(is.numeric(x))
+  assertthat::assert_that(is.matrix(x), is.numeric(x))
   return(apply(x, 2, min, na.rm = na.rm))
+}
+
+#' Find coordinates of matrix x that give element n
+#' @noRd
+coord <- function(x, n) {
+  assertthat::assert_that(is.matrix(x), is.numeric(x), is.numeric(n),
+                          n %in% x, length(n) == 1)
+  res <- which(x == n, arr.ind = TRUE)
+  return(setNames(unlist(apply(res, 2, list), recursive = FALSE),
+                  c("rows", "cols")))
 }
