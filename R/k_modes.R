@@ -10,6 +10,7 @@
 #'   NAs those are imputed by majority voting (after class relabeling).
 #' @param is.relabelled logical; defaults to TRUE, but if FALSE the data will
 #'   be relabelled
+#' @param seed random seed for reproducibility
 #' @return a vector of cluster assignment based on kmodes
 #' @author Aline Talhouk
 #' @export
@@ -17,7 +18,7 @@
 #' # Calculate for a fraction of first algorithm
 #' data(E_imputed)
 #' table(k_modes(E_imputed[1:100, , 1, drop = FALSE], is.relabelled = FALSE))
-k_modes <- function(E, is.relabelled = TRUE, seed=1) {
+k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
   set.seed(seed)
   # take E imputed and reshape into a flat matrix
   flat_E <- E

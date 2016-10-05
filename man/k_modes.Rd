@@ -15,6 +15,8 @@ NAs those are imputed by majority voting (after class relabeling).}
 
 \item{is.relabelled}{logical; defaults to TRUE, but if FALSE the data will
 be relabelled}
+
+\item{seed}{random seed for reproducibility}
 }
 \value{
 a vector of cluster assignment based on kmodes
