@@ -3,7 +3,7 @@ context("Weigh each pair of clusters using their shared members (Jaccard coeffic
 
 data(E_LCE)
 mat <- matrix(c(1, 4, 3, 2, 2, 2, 1, 3, 3, 1, 4, 4, 4, 3, 2, 1), nrow = 4)
-mat.weightCl <- matrix(c(0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0),
+mat.wcl <- matrix(c(0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0),
                        nrow = 4)
 
 test_that("Check weigh_clusters works with LCE", {
@@ -14,9 +14,9 @@ test_that("Check weigh_clusters works with LCE", {
 })
 
 test_that("It works with another matrix", {
-  mat.weightCl <- matrix(c(0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0),
+  mat.wcl <- matrix(c(0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0),
                          nrow = 4)
-  expect_equal(sum(!weigh_clusters(mat) == mat.weightCl), 0)
+  expect_equal(sum(!weigh_clusters(mat) == mat.wcl), 0)
 })
 
 test_that("Error with wrong inputs", {

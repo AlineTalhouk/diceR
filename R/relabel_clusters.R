@@ -21,7 +21,7 @@ relabel_clusters <- function(E) {
   for (i in 1:N) {
     for (j in 1:M) {
       if (!is_pos_int(E[i, j])) {
-        stop("Error in relabelCl: one of the entries in the input matrix is not a positive integer.")
+        stop("Error: one of the entries in the input matrix is not a positive integer.")
       }
     }
   }
