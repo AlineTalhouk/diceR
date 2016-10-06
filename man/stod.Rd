@@ -18,7 +18,7 @@ square to vector (input format for linkage function)
 }
 \examples{
 data("E_LCE")
-ASRS <- asrs(E_LCE,0.8)
+ASRS <- asrs(E_LCE, 0.8)
 d <- stod(ASRS)
 }
 \author{
