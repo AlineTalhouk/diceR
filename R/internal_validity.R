@@ -1,18 +1,26 @@
-#' Title function for computing compactness validity index for a clustering result
+#' Internal validity indices
+#' 
+#' \strong{I}nternal \strong{v}alidity indices are agnostic to any reference
+#' clustering results. They calculate cluster performance on the basis of 
+#' compactness and separability.
+#' 
+#' \code{iv_compactness} computes the compactness validity index for a
+#' clustering result
 #'
-#' @param X : a dataset, rows are observations, columns are variables
-#' @param labels : cluster labels from a clustering result(a vector)
+#' @param x a dataset with rows as observations, columns sariables
+#' @param labels a vector of cluster labels from a clustering result
 #'
-#' @return compactness score
+#' @return \code{iv_compactness} returns the compactness score
+#' @name internal_validity
 #' @export
 #'
 #' @examples
-#' data("FGD")
-#' data("E")
-#' labels<-E[,1]
-#' valid_compactness(FGD,labels)
-valid_compactness <- function(X, labels) {
-  assertthat::assert_that(is.data.frame(X), length(labels) == nrow(X))
+#' data("FGD", "E", "FGT", "FGD")
+#' iv_compactness(FGD, E[, 1])
+#' iv_db_dunn(FGD, FGT)
+#' iv_sumsq(data = FGD, labels = FGT, k = 4)
+iv_compactness <- function(x, labels) {
+  assertthat::assert_that(is.data.frame(x), length(labels) == nrow(x))
   n <- length(labels)
   C <- sort(unique(labels))
   k <- length(C)
@@ -24,40 +32,34 @@ valid_compactness <- function(X, labels) {
       cp <- cp + 0
     } else{
       sum_d <- 0
-      sum_d <- sum(dist(X[ind, ], method = "euclidean"))
+      sum_d <- sum(dist(x[ind, ], method = "euclidean"))
       cp <- cp + (nk * (sum_d / (nk * (nk - 1) / 2)))
     }
   }
   return(cp / n)
 }
 
-#' Title function for computing Davies-Bouldin index and Dunn index
-#'
-#' @param X : a data set whose rows are observations, columns are variables
-#' @param labels : cluster labels from a clustering result(a vector)
-#'
-#' @return DB: Davies-Bouldin score, Dunn: Dunn score
+#' \code{iv_db_dunn} computes the Davies-Bouldin index and Dunn index
+#' @return \code{iv_db_dunn} returns a list with elements
+#'   \item{DB}{Davies-Bouldin score}
+#'   \item{Dunn}{Dunn score}
+#' @rdname external_validity
 #' @export
-#'
-#' @examples
-#' data("FGT")
-#' data("FGD")
-#' valid_DbDunn(FGD,FGT)
-valid_DbDunn <- function(X, labels) {
+iv_db_dunn <- function(x, labels) {
   if (is.data.frame(labels)) {
-    assertthat::assert_that(nrow(X) == nrow(labels))
+    assertthat::assert_that(nrow(x) == nrow(labels))
   } else if (is.vector(labels)) {
-    assertthat::assert_that(nrow(X) == length(labels))
+    assertthat::assert_that(nrow(x) == length(labels))
   } else{
     stop(
       "labels is neither a vector nor a data frame with length equal to number of observations in the data set."
     )
   }
-  assertthat::assert_that(is.data.frame(X))
-  nrow <- nrow(X)
-  nc <- ncol(X)
+  assertthat::assert_that(is.data.frame(x))
+  nrow <- nrow(x)
+  nc <- ncol(x)
   k <- max(labels)
-  temp <- valid_sumsqures(X, labels, k)
+  temp <- iv_sumsq(x, labels, k)
   st <- temp$Tot
   sw <- temp$W
   sb <- temp$B
@@ -87,21 +89,19 @@ valid_DbDunn <- function(X, labels) {
   return(list(DB = DB, Dunn = min(dbs)))
 }
 
-#' Title function to compute within group, between group, and total sum of squares and cross-products
+#' @details \code{iv_sumsq} computes the within group, between group, and total
+#'   sum of squares and cross-products
+#' @param k number of clusters
 #'
-#' @param data : a matrix with each column representing a variable
-#' @param labels : a vector indicating class labels
-#' @param k : number of clusters
-#'
-#' @return W: within group sum of squares and cross-products; B: between group sum of squares and cross-products;T: total sum of squares and cross-products;
-#'          Sintra & Sinter: centroid diameter and linkage distance
+#' @return \code{iv_sumsq} returns a list with elements 
+#'   \item{W}{within group sum of squares and cross-products}
+#'   \item{B}{between group sum of squares and cross-products}
+#'   \item{T}{total sum of squares and cross-products}
+#'   \item{Sintra}{centroid diameter}
+#'   \item{Sinter}{linkage distance}          
+#' @rdname external_validity
 #' @export
-#'
-#' @examples
-#' data("FGT")
-#' data("FGD")
-#' valid_sumsqures(data=FGD,labels=FGT,k=4)
-valid_sumsqures <- function(data, labels, k) {
+iv_sumsq <- function(data, labels, k) {
   assertthat::assert_that(is.vector(labels) || is.data.frame(labels))
   if (is.data.frame(labels)) {
     assertthat::assert_that(nrow(data) == nrow(labels))
