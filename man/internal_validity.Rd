@@ -3,17 +3,36 @@
 \name{internal_validity}
 \alias{internal_validity}
 \alias{iv_compactness}
+\alias{iv_db_dunn}
+\alias{iv_sumsq}
 \title{Internal validity indices}
 \usage{
 iv_compactness(x, labels)
+
+iv_db_dunn(x, labels)
+
+iv_sumsq(x, labels, k)
 }
 \arguments{
 \item{x}{a dataset with rows as observations, columns sariables}
 
 \item{labels}{a vector of cluster labels from a clustering result}
+
+\item{k}{number of clusters}
 }
 \value{
 \code{iv_compactness} returns the compactness score
+
+\code{iv_db_dunn} returns a list with elements
+  \item{DB}{Davies-Bouldin score}
+  \item{Dunn}{Dunn score}
+
+\code{iv_sumsq} returns a list with elements 
+  \item{W}{within group sum of squares and cross-products}
+  \item{B}{between group sum of squares and cross-products}
+  \item{T}{total sum of squares and cross-products}
+  \item{Sintra}{centroid diameter}
+  \item{Sinter}{linkage distance}
 }
 \description{
 \strong{I}nternal \strong{v}alidity indices are agnostic to any reference
@@ -23,6 +42,11 @@ compactness and separability.
 \details{
 \code{iv_compactness} computes the compactness validity index for a
 clustering result
+
+\code{iv_db_dunn} computes the Davies-Bouldin index and Dunn index
+
+\code{iv_sumsq} computes the within group, between group, and total
+  sum of squares and cross-products
 }
 \examples{
 data("FGD", "E", "FGT", "FGD")

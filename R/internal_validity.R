@@ -39,11 +39,11 @@ iv_compactness <- function(x, labels) {
   return(cp / n)
 }
 
-#' \code{iv_db_dunn} computes the Davies-Bouldin index and Dunn index
+#' @details \code{iv_db_dunn} computes the Davies-Bouldin index and Dunn index
 #' @return \code{iv_db_dunn} returns a list with elements
 #'   \item{DB}{Davies-Bouldin score}
 #'   \item{Dunn}{Dunn score}
-#' @rdname external_validity
+#' @rdname internal_validity
 #' @export
 iv_db_dunn <- function(x, labels) {
   if (is.data.frame(labels)) {
@@ -99,23 +99,23 @@ iv_db_dunn <- function(x, labels) {
 #'   \item{T}{total sum of squares and cross-products}
 #'   \item{Sintra}{centroid diameter}
 #'   \item{Sinter}{linkage distance}          
-#' @rdname external_validity
+#' @rdname internal_validity
 #' @export
-iv_sumsq <- function(data, labels, k) {
+iv_sumsq <- function(x, labels, k) {
   assertthat::assert_that(is.vector(labels) || is.data.frame(labels))
   if (is.data.frame(labels)) {
-    assertthat::assert_that(nrow(data) == nrow(labels))
+    assertthat::assert_that(nrow(x) == nrow(labels))
   } else{
-    assertthat::assert_that(nrow(data) == length(labels))
+    assertthat::assert_that(nrow(x) == length(labels))
   }
   assertthat::assert_that(is_pos_int(k))
-  if (is.data.frame(data)) {
-    data <- as.matrix(data)
+  if (is.data.frame(x)) {
+    data <- as.matrix(x)
   }
-  ncase <- nrow(data)
-  m <- ncol(data)
+  ncase <- nrow(x)
+  m <- ncol(x)
   Dm <- t(colMeans(data))
-  Dm <- data - Dm[ones(ncase, 1), ]
+  Dm <- x - Dm[ones(ncase, 1), ]
   Tot <- t(Dm) %*% Dm
   W <- matrix(rep(0, nrow(Tot) * ncol(Tot)), nrow = nrow(Tot))
   Dm <- matrix(rep(0, k * m), nrow = k)
@@ -128,7 +128,7 @@ iv_sumsq <- function(data, labels, k) {
     }
     nk <- length(Cindex)
     if (nk > 1) {
-      dataC <- data[Cindex, ]
+      dataC <- x[Cindex, ]
       m <- colMeans(dataC)
       Dm[i, ] <- m
       dataC <- dataC - repmat(m, nk, 1)
