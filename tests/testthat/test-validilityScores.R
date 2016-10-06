@@ -1,6 +1,12 @@
 
 context("validility scores")
 
+data("FGT")
+data("FGD")
+data("LT")
+data("LD")
+data("E_LCE")
+
 test_that("Check valid_CA works with basic inputs", {
   expect_equal(valid_CA(c(1, 2, 1, 1), c(1, 1, 1, 1)), 1)
   expect_equal(valid_CA(c(4, 2, 4, 4), c(4, 4, 4, 4)), 1)
@@ -16,7 +22,7 @@ test_that("Check valid_CA throws error with wrong inputs", {
 })
 
 test_that("Check valid_compactness", {
-  labels <- E[, 1]
+  labels <- E_LCE[, 1]
   expect_true(abs(valid_compactness(FGD, labels) - 5.8559) < 0.0001)
   labels[which(labels == 1)] <- 3
   labels[1] <- 1
@@ -24,14 +30,10 @@ test_that("Check valid_compactness", {
 })
 
 test_that("valid_compactness throws error with wrong inputs", {
-  expect_error(valid_compactness(FGD, E[-18, 1]))
+  expect_error(valid_compactness(FGD, E_LCE[-18, 1]))
   expect_error(valid_compactness(c(1, 2, 3, 4), c(1, 3, 3, 1)))
 })
 
-data("FGT")
-data("FGD")
-data("LT")
-data("LD")
 
 test_that("Check valid_DbDunn with FGD and FGT", {
   expect_true(abs(valid_DbDunn(FGD, FGT)$DB - 1.1441) <= 0.001)
@@ -48,15 +50,15 @@ test_that("Check valid_DbDunn with wrong inputs", {
 })
 
 
-data("E")
+data("E_LCE")
 data("final_c1_valid_RandIndex")
 data("final_c2_valid_RandIndex")
 
-test_that("Check valid_RandIndex with E and in case where AR is non-zero", {
-  expect_true(abs(valid_RandIndex(E[, 1], E[, 2])$AR - 0.2732) <= 0.0001)
-  expect_true(abs(valid_RandIndex(E[, 1], E[, 2])$HI - 0.3446) <= 0.0001)
-  expect_true(abs(valid_RandIndex(E[, 1], E[, 2])$MI - 0.3277) <= 0.0001)
-  expect_true(abs(valid_RandIndex(E[, 1], E[, 2])$RI - 0.6723) <= 0.0001)
+test_that("Check valid_RandIndex with E_LCE and in case where AR is non-zero", {
+  expect_true(abs(valid_RandIndex(E_LCE[, 1], E_LCE[, 2])$AR - 0.2732) <= 0.0001)
+  expect_true(abs(valid_RandIndex(E_LCE[, 1], E_LCE[, 2])$HI - 0.3446) <= 0.0001)
+  expect_true(abs(valid_RandIndex(E_LCE[, 1], E_LCE[, 2])$MI - 0.3277) <= 0.0001)
+  expect_true(abs(valid_RandIndex(E_LCE[, 1], E_LCE[, 2])$RI - 0.6723) <= 0.0001)
   expect_true(valid_RandIndex(final_c1_valid_RandIndex, final_c2_valid_RandIndex)$AR ==
                 0)
   expect_true(abs(
@@ -82,7 +84,7 @@ test_that("Check valid_RandIndex with wrong inputs", {
   expect_error(valid_RandIndex(c(1, 2, 3, 4), data.frame(name = letters[1:4], vals =
                                                            1:4)))
   expect_error(valid_RandIndex(data.frame(name = letters[1:4], vals = 1:4), c(6, 8, 3, 8)))
-  expect_error(valid_RandIndex(E[1:10, 1], E[, 2]))
+  expect_error(valid_RandIndex(E_LCE[1:10, 1], E_LCE[, 2]))
   expect_error(valid_RandIndex(matrix(c(1,2,3),ncol=3),matrix(c(1,2,3),ncol=3)))
 })
 
