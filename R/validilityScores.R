@@ -151,7 +151,7 @@ valid_sumsqures <- function(data, labels, k) {
   } else{
     assertthat::assert_that(nrow(data) == length(labels))
   }
-  assertthat::assert_that(checkPosInt(k))
+  assertthat::assert_that(is_pos_int(k))
   if (is.data.frame(data)) {
     data <- as.matrix(data)
   }
