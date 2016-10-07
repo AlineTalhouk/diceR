@@ -7,12 +7,10 @@
 graph_cdf(x)
 }
 \arguments{
-\item{x}{an object from \code{consensus_combine} using option \code{element
-= "matrix"}. A list of consensus matrices from different clustering
-algorithms is the input.}
+\item{x}{an object from \code{\link{ConClust}}}
 }
 \value{
-a ggplot showing the cdfs for different algortihms
+a plot showing the cdfs for different algortihms
 }
 \description{
 Graph CDF for consensus matrices from different algorithms
@@ -23,16 +21,17 @@ set.seed(911)
 x <- matrix(rnorm(1000), nrow = 10)
 CC1 <- ConClust(x, k = 4, reps = 10,
 method = c("hcAEucl", "apEucl", "gmmBIC"), save = FALSE)
-CC1.summ <- consensus_summary(CC1, k = 4)
-y <- consensus_combine(CC1.summ, element = "matrix")
 
 # Plot CDF
-p <- graph_cdf(y)
+p <- graph_cdf(CC1)
 p
 
 # Change y label and add colours
 p + labs(y = "Probability") + stat_ecdf(aes(colour = Method)) +
 scale_color_brewer(palette = "Set2")
+
+# Heatmaps with column side colours corresponding to clusters for each algorithm
+graph_heatmap(CC1)
 }
 \author{
 Derek Chiu
