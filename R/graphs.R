@@ -5,18 +5,19 @@
 #' 
 #' \code{graph_cdf} plots the CDF for consensus matrices from different 
 #' algorithms. \code{graph_delta_area} calculates the relative change in area 
-#' under CDF curve between algorithms. \code{graph_heatmap} generates consensus
-#' matrix heatmaps for each algorithm in \code{x}. \code{graph_tracking} tracks
+#' under CDF curve between algorithms. \code{graph_heatmap} generates consensus 
+#' matrix heatmaps for each algorithm in \code{x}. \code{graph_tracking} tracks 
 #' how cluster assignments change between algorithms.
 #' 
 #' @param x an object from \code{\link{ConClust}}
 #'   
 #' @return Various plots from \code{graph_*{}} functions. All plots are 
 #'   generated using \code{ggplot}, except for \code{graph_heatmap}, which uses 
-#'   \code{\link[gplots]{heatmap.2}}. Colours used in \code{graph_heatmap} and
-#'   \code{graph_tracking} utilize \code{\link{RColorBrewer}} palettes.
-#' @note The current implementations of \code{graph_delta_area} and
-#'   \code{graph_tracking} do not compare between different number of clusters.
+#'   \code{\link[gplots]{heatmap.2}}. Colours used in \code{graph_heatmap} and 
+#'   \code{graph_tracking} utilize \code{\link[RColorBrewer]{RColorBrewer}}
+#'   palettes.
+#' @note The current implementations of \code{graph_delta_area} and 
+#'   \code{graph_tracking} do not compare between different number of clusters. 
 #'   Thus the interpretation of relative change is not natural, and the tracking
 #'   plot shows low concordance.
 #' @name graphs
@@ -24,6 +25,7 @@
 #' @export
 #' @examples
 #' # Consensus clustering for 3 algorithms
+#' library(ggplot2)
 #' set.seed(911)
 #' x <- matrix(rnorm(1000), nrow = 10)
 #' CC1 <- ConClust(x, k = 4, reps = 10,
@@ -48,6 +50,7 @@
 #' p <- graph_tracking(CC1)
 #' p
 graph_cdf <- function(x) {
+  CDF <- NULL
   dat <- get_cdf(x)
   p <- ggplot(dat, aes(x = CDF)) +
     stat_ecdf() +
@@ -61,6 +64,7 @@ graph_cdf <- function(x) {
 #' @rdname graphs
 #' @export
 graph_delta_area <- function(x) {
+  Method <- CDF <- AUC <- da <- NULL
   dat <- get_cdf(x)
   xvec <- seq(0, 1, length.out = table(dat$Method)[1])
   auc <- dat %>% 
@@ -80,6 +84,7 @@ graph_delta_area <- function(x) {
 #' Calculate CDF for each clustering algorithm
 #' @noRd
 get_cdf <- function(x) {
+  Method <- CDF <- NULL
   dat <- consensus_summary(x, k = n_distinct(x[, 1, 1], na.rm = TRUE)) %>% 
     consensus_combine(element = "matrix") %>% 
     lapply(function(d) d[lower.tri(d, diag = TRUE)]) %>% 
@@ -103,9 +108,10 @@ graph_heatmap <- function(x, main = NULL, ...) {
   } else {
     assertthat::assert_that(length(main) == dim(x)[3])
   }
-  hm.col <- colorRampPalette(brewer.pal(n = 9, "PuBuGn"))(256)
-  cc <- lapply(dat, function(d) brewer.pal(k, "Set2")[cutree(as.dendrogram(
-    hclust(dist(d), method = "average")), k = k)])
+  hm.col <- grDevices::colorRampPalette(
+    RColorBrewer::brewer.pal(n = 9, "PuBuGn"))(256)
+  cc <- lapply(dat, function(d) RColorBrewer::brewer.pal(k, "Set2")[
+    cutree(hclust(dist(d), method = "average"), k = k)])
   hm <- mapply(function(dat, main, cc)
     gplots::heatmap.2(x = dat, main = paste(main, "Consensus Matrix"),
                       hclustfun = function(x) hclust(x, method = "average"),
@@ -118,6 +124,7 @@ graph_heatmap <- function(x, main = NULL, ...) {
 #' @rdname graphs
 #' @export
 graph_tracking <- function(x) {
+  Method <- Class <- Samples <- NULL
   k <- n_distinct(x[, 1, 1], na.rm = TRUE)
   dat <- consensus_summary(x, k = k) %>% 
     consensus_combine(element = "class") %>% 

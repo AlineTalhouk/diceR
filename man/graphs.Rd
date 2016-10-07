@@ -19,15 +19,17 @@ graph_tracking(x)
 \arguments{
 \item{x}{an object from \code{\link{ConClust}}}
 
-\item{main}{heatmap title}
+\item{main}{heatmap title. If \code{NULL} (default), the titles will be taken
+from names in \code{x}}
 
 \item{...}{additional arguments to \code{\link[gplots]{heatmap.2}}}
 }
 \value{
 Various plots from \code{graph_*{}} functions. All plots are 
   generated using \code{ggplot}, except for \code{graph_heatmap}, which uses 
-  \code{\link[gplots]{heatmap.2}}. Colours used in \code{graph_heatmap} and
-  \code{graph_tracking} utilize \code{\link{RColorBrewer}} palettes.
+  \code{\link[gplots]{heatmap.2}}. Colours used in \code{graph_heatmap} and 
+  \code{graph_tracking} utilize \code{\link[RColorBrewer]{RColorBrewer}}
+  palettes.
 }
 \description{
 Graph cumulative distribution function (CDF) graphs, relative change in area 
@@ -36,18 +38,19 @@ under CDF curves, heatmaps, and cluster assignment tracking plots.
 \details{
 \code{graph_cdf} plots the CDF for consensus matrices from different 
 algorithms. \code{graph_delta_area} calculates the relative change in area 
-under CDF curve between algorithms. \code{graph_heatmap} generates consensus
-matrix heatmaps for each algorithm in \code{x}. \code{graph_tracking} tracks
+under CDF curve between algorithms. \code{graph_heatmap} generates consensus 
+matrix heatmaps for each algorithm in \code{x}. \code{graph_tracking} tracks 
 how cluster assignments change between algorithms.
 }
 \note{
-The current implementations of \code{graph_delta_area} and
-  \code{graph_tracking} do not compare between different number of clusters.
+The current implementations of \code{graph_delta_area} and 
+  \code{graph_tracking} do not compare between different number of clusters. 
   Thus the interpretation of relative change is not natural, and the tracking
   plot shows low concordance.
 }
 \examples{
 # Consensus clustering for 3 algorithms
+library(ggplot2)
 set.seed(911)
 x <- matrix(rnorm(1000), nrow = 10)
 CC1 <- ConClust(x, k = 4, reps = 10,
