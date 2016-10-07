@@ -13,6 +13,7 @@
 dist_cluster<-function(Z,maxclust){
   assertthat::assert_that(is.matrix(Z))
   assertthat::assert_that(is.numeric(Z))
+  assertthat::assert_that(is_pos_int(maxclust))
   m<-nrow(Z)+1
   resultT<-pracma::zeros(m,length(maxclust))
   for(j in 1:length(maxclust)){
