@@ -7,14 +7,14 @@
 \alias{iv_sumsq}
 \title{Internal validity indices}
 \usage{
-iv_compactness(x, labels)
+iv_compactness(data, labels)
 
-iv_db_dunn(x, labels)
+iv_db_dunn(data, labels)
 
-iv_sumsq(x, labels, k)
+iv_sumsq(data, labels, k)
 }
 \arguments{
-\item{x}{a dataset with rows as observations, columns sariables}
+\item{data}{a dataset with rows as observations, columns sariables}
 
 \item{labels}{a vector of cluster labels from a clustering result}
 
@@ -49,8 +49,8 @@ clustering result
   sum of squares and cross-products
 }
 \examples{
-data("FGD", "E", "FGT", "FGD")
-iv_compactness(FGD, E[, 1])
+data("FGD", "E_LCE", "FGT", "FGD")
+iv_compactness(FGD, E_LCE[, 1])
 iv_db_dunn(FGD, FGT)
 iv_sumsq(data = FGD, labels = FGT, k = 4)
 }

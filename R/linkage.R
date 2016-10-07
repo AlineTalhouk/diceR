@@ -15,7 +15,7 @@ linkage<-function(Y,method){
   assertthat::assert_that(method%in%c("complete","average","single"))
   n<-length(Y)
   m<-ceiling(sqrt(2*n))
-  Z<-zeros(m-1,3)
+  Z<-pracma::zeros(m-1,3)
   N<-rep(0,2*m-1)
   N[1:m]<-1
   n<-m
