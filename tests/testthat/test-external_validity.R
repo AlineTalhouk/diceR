@@ -1,7 +1,7 @@
 
 context("External validity indices")
 
-data("FGT", "FGD", "LT", "LD", "E",
+data("FGT", "FGD", "LT", "LD", "E_LCE",
      "final_c1_valid_RandIndex", "final_c2_valid_RandIndex")
 
 test_that("Check ev_accuracy works with basic inputs", {
@@ -19,10 +19,10 @@ test_that("Check ev_accuracy throws error with wrong inputs", {
 })
 
 test_that("Check ev_rand with E and in case where AR is non-zero", {
-  expect_true(abs(ev_rand(E[, 1], E[, 2])$AR - 0.2732) <= 0.0001)
-  expect_true(abs(ev_rand(E[, 1], E[, 2])$HI - 0.3446) <= 0.0001)
-  expect_true(abs(ev_rand(E[, 1], E[, 2])$MI - 0.3277) <= 0.0001)
-  expect_true(abs(ev_rand(E[, 1], E[, 2])$RI - 0.6723) <= 0.0001)
+  expect_true(abs(ev_rand(E_LCE[, 1], E_LCE[, 2])$AR - 0.2732) <= 0.0001)
+  expect_true(abs(ev_rand(E_LCE[, 1], E_LCE[, 2])$HI - 0.3446) <= 0.0001)
+  expect_true(abs(ev_rand(E_LCE[, 1], E_LCE[, 2])$MI - 0.3277) <= 0.0001)
+  expect_true(abs(ev_rand(E_LCE[, 1], E_LCE[, 2])$RI - 0.6723) <= 0.0001)
   expect_true(ev_rand(final_c1_valid_RandIndex, final_c2_valid_RandIndex)$AR ==
                 0)
   expect_true(abs(

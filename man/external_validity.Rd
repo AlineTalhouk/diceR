@@ -36,9 +36,9 @@ result
   compare two partitions
 }
 \examples{
-data("E")
+data("E_LCE")
 ev_accuracy(c(4, 4, 4, 4), c(4, 2, 4, 4))
 ev_accuracy(c(4, 4, 4, 4, 8), c(4, 2, 4, 4, 6))
-ev_rand(E[, 1], E[, 2])
+ev_rand(E_LCE[, 1], E_LCE[, 2])
 }
 

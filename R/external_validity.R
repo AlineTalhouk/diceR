@@ -14,10 +14,10 @@
 #' @export
 #' 
 #' @examples
-#' data("E")
+#' data("E_LCE")
 #' ev_accuracy(c(4, 4, 4, 4), c(4, 2, 4, 4))
 #' ev_accuracy(c(4, 4, 4, 4, 8), c(4, 2, 4, 4, 6))
-#' ev_rand(E[, 1], E[, 2])
+#' ev_rand(E_LCE[, 1], E_LCE[, 2])
 ev_accuracy <- function(pred.lab, ref.lab) {
   assertthat::assert_that(is.vector(pred.lab), is.vector(ref.lab))
   nrow <- length(ref.lab)
