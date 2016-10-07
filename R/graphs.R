@@ -1,13 +1,27 @@
-#' Cumulative distribution function graphs
+#' Graphical Displays
 #' 
-#' Graph CDF for consensus matrices from different algorithms
+#' Graph cumulative distribution function (CDF) graphs, relative change in area 
+#' under CDF curves, heatmaps, and cluster assignment tracking plots.
+#' 
+#' \code{graph_cdf} plots the CDF for consensus matrices from different 
+#' algorithms. \code{graph_delta_area} calculates the relative change in area 
+#' under CDF curve between algorithms. \code{graph_heatmap} generates consensus
+#' matrix heatmaps for each algorithm in \code{x}. \code{graph_tracking} tracks
+#' how cluster assignments change between algorithms.
 #' 
 #' @param x an object from \code{\link{ConClust}}
 #'   
-#' @return a plot showing the cdfs for different algortihms
-#' @export
+#' @return Various plots from \code{graph_*{}} functions. All plots are 
+#'   generated using \code{ggplot}, except for \code{graph_heatmap}, which uses 
+#'   \code{\link[gplots]{heatmap.2}}. Colours used in \code{graph_heatmap} and
+#'   \code{graph_tracking} utilize \code{\link{RColorBrewer}} palettes.
+#' @note The current implementations of \code{graph_delta_area} and
+#'   \code{graph_tracking} do not compare between different number of clusters.
+#'   Thus the interpretation of relative change is not natural, and the tracking
+#'   plot shows low concordance.
+#' @name graphs
 #' @author Derek Chiu
-#'   
+#' @export
 #' @examples
 #' # Consensus clustering for 3 algorithms
 #' set.seed(911)
@@ -29,6 +43,10 @@
 #' 
 #' # Heatmaps with column side colours corresponding to clusters for each algorithm
 #' graph_heatmap(CC1)
+#' 
+#' # Track how cluster assignments change between algorithms
+#' p <- graph_tracking(CC1)
+#' p
 graph_cdf <- function(x) {
   dat <- get_cdf(x)
   p <- ggplot(dat, aes(x = CDF)) +
@@ -40,11 +58,7 @@ graph_cdf <- function(x) {
   return(p)
 }
 
-#' Delta Area graph
-#' 
-#' Calculate the relative change in area under CDF curve between algorithms
-#' 
-#' @param x an object from \code{\link{ConClust}}
+#' @rdname graphs
 #' @export
 graph_delta_area <- function(x) {
   dat <- get_cdf(x)
@@ -74,14 +88,11 @@ get_cdf <- function(x) {
   return(dat)
 }
 
-#' Consensus matrix heatmaps
-#' 
-#' @param x an object from \code{\link{ConClust}}
-#' @param main heatmap title
+#' @param main heatmap title. If \code{NULL} (default), the titles will be taken
+#'   from names in \code{x}
 #' @param ... additional arguments to \code{\link[gplots]{heatmap.2}}
 #' 
-#' @return consensus matrix heatmaps for each algorithm in \code{x}
-#' @author Derek Chiu
+#' @rdname graphs
 #' @export
 graph_heatmap <- function(x, main = NULL, ...) {
   k <- n_distinct(x[, 1, 1], na.rm = TRUE)
@@ -102,4 +113,23 @@ graph_heatmap <- function(x, main = NULL, ...) {
                       labRow = "", labCol = "", ColSideColors = cc, ...),
     dat = dat, main = main, cc = cc)
   return(hm)
+}
+
+#' @rdname graphs
+#' @export
+graph_tracking <- function(x) {
+  k <- n_distinct(x[, 1, 1], na.rm = TRUE)
+  dat <- consensus_summary(x, k = k) %>% 
+    consensus_combine(element = "class") %>% 
+    as.data.frame() %>% 
+    tidyr::gather(key = Method, value = Class, dplyr::everything()) %>% 
+    mutate(Class = factor(Class), Method = factor(Method)) %>% 
+    cbind(Samples = factor(rownames(x[, , 1]), levels = rownames(x[, , 1])))
+  p <- ggplot(dat, aes(Samples, Method)) +
+    geom_tile(aes(fill = Class)) +
+    scale_fill_brewer(palette = "Set2") +
+    ggtitle("Tracking Cluster Assignments Across Algorithms") +
+    theme(axis.text.x = element_blank(),
+          axis.ticks.x = element_blank())
+  return(p)
 }
