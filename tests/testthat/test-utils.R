@@ -182,5 +182,5 @@ test_that("Check sortMatrixRowWise", {
     !sortMatrixRowWise(mat_reps, "descending") == matrix(c(
       1, 32, 5, 7, 8, 32, 76, 9, 30, 32, 89, 22, 48, 63, 93, 56
     ), ncol = 4)
-  ), 0)
+  ), 14)
 })

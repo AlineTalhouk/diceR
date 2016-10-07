@@ -19,6 +19,6 @@ Title function to create hierarchical cluster tree
 }
 \examples{
 data("E_LCE")
-linkage(stod(asrs(E_LCE,0.8)),"average")
+linkage(stod(asrs(E_LCE, 0.8)), "average")
 }
 

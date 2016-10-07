@@ -2,24 +2,25 @@
 % Please edit documentation in R/dist_cluster.R
 \name{dist_cluster}
 \alias{dist_cluster}
-\title{Title function to create clusters using distance criterion from a hierarchical cluster tree, equivalent to cluster in MATLAB}
+\title{Generate clusters using distance criterion}
 \usage{
 dist_cluster(Z, maxclust)
 }
 \arguments{
-\item{Z}{: matrix representing a hierarchical cluster tree}
+\item{Z}{matrix representing a hierarchical cluster tree}
 
-\item{maxclust}{: desired number of clusters}
+\item{maxclust}{desired number of clusters}
 }
 \value{
-resultT: clustering result
+clustering result
 }
 \description{
-Title function to create clusters using distance criterion from a hierarchical cluster tree, equivalent to cluster in MATLAB
+The function generates clusters using the distance criterion from a
+hierarchical cluster tree, equivalent to \code{cluster} in MATLAB
 }
 \examples{
 data("E_LCE")
-tree<-linkage(stod(asrs(E_LCE,0.8)),"complete")
-cluster_tree<-dist_cluster(tree,4)
+tree <- linkage(stod(asrs(E_LCE, 0.8)), "complete")
+cluster_tree <- dist_cluster(tree, 4)
 }
 

@@ -108,20 +108,18 @@ is_pos_int <- function(x) {
 
 #' function to sort rows of a matrix
 #' @noRd
-sortMatrixRowWise<-function(M,order){
-  assertthat::assert_that(nrow(M)>=1)
-  assertthat::assert_that(is.matrix(M))
-  assertthat::assert_that(is.numeric(M))
-  for(i in 1:nrow(M)){
-    temp<-M[i,]
-    if(order=="ascending"){
-      temp<-sort(temp)
-    }else if(order=="descending"){
-      temp<-sort(temp,decreasing = TRUE)
-    } else{
+sortMatrixRowWise <- function(M, order) {
+  assertthat::assert_that(nrow(M) >= 1, is.matrix(M), is.numeric(M))
+  for (i in 1:nrow(M)) {
+    temp <- M[i, ]
+    if (order == "ascending") {
+      temp <- sort(temp)
+    } else if (order == "descending") {
+      temp <- sort(temp, decreasing = TRUE)
+    } else {
       stop("Invalid order argument in sortMatrixRowWise")
     }
-    M[i,]<-temp
+    M[i, ] <- temp
   }
   return(M)
 }
