@@ -30,6 +30,10 @@ p
 p + labs(y = "Probability") + stat_ecdf(aes(colour = Method)) +
 scale_color_brewer(palette = "Set2")
 
+# Delta Area
+p <- graph_delta_area(CC1)
+p
+
 # Heatmaps with column side colours corresponding to clusters for each algorithm
 graph_heatmap(CC1)
 }

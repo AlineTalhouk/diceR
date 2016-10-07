@@ -18,6 +18,10 @@ test_that("graph_cdf object can have added/modified ggplot layers", {
   expect_false(isTRUE(all.equal(p1, p2)))
 })
 
+test_that("graph_delta_area works", {
+  pda <- expect_error(graph_delta_area(CC1), NA)
+})
+
 test_that("graph_heatmap can have same plot but different titles", {
   phm1 <- graph_heatmap(CC1)
   phm2 <- graph_heatmap(CC1, main = c("A", "B", "C"))
@@ -27,3 +31,5 @@ test_that("graph_heatmap can have same plot but different titles", {
 test_that("error in graph_heatmap if too few titles", {
   expect_error(graph_heatmap(CC1, main = "A"))
 })
+
+
