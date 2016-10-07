@@ -50,7 +50,8 @@
 #' @author Derek Chiu, Aline Talhouk
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom stats dist hclust kmeans setNames
-#' @import apcluster kernlab mclust blockcluster
+#' @importFrom kernlab specc
+#' @import apcluster mclust blockcluster
 #' @export
 #' @examples
 #' data(hgsc)
@@ -106,8 +107,8 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
           apcluster::apclusterK(negDistMat, t(x.rest[, ind.new]), k,
                      verbose = FALSE)@idx)),
           rownames(t(x.rest[, ind.new]))),
-        scRbf = setNames(kernlab::specc(t(x.rest[, ind.new]), k,
-                                        kernel = "rbfdot")@.Data,
+        scRbf = setNames(specc(t(x.rest[, ind.new]), k,
+                               kernel = "rbfdot")@.Data,
                          rownames(t(x.rest[, ind.new]))),
         gmmBIC = mclust::Mclust(t(x.rest[, ind.new]), k)$classification,
         biclust = blockcluster::cocluster(as.matrix(x.rest[, ind.new]),

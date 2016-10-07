@@ -1,10 +1,10 @@
 
 context("Internal validity indices")
 
-data("FGT", "FGD", "LT", "LD", "E_LCE")
+data("FGT", "FGD", "LT", "LD", "E")
 
 test_that("Check iv_compactness", {
-  labels <- E_LCE[, 1]
+  labels <- E[, 1]
   expect_true(abs(iv_compactness(FGD, labels) - 5.8559) < 0.0001)
   labels[which(labels == 1)] <- 3
   labels[1] <- 1
@@ -12,7 +12,7 @@ test_that("Check iv_compactness", {
 })
 
 test_that("iv_compactness throws error with wrong inputs", {
-  expect_error(iv_compactness(FGD, E_LCE[-18, 1]))
+  expect_error(iv_compactness(FGD, E[-18, 1]))
   expect_error(iv_compactness(c(1, 2, 3, 4), c(1, 3, 3, 1)))
 })
 

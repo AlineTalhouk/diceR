@@ -18,6 +18,8 @@ Imports:
     dplyr,
     readr,
     magrittr,
+    tidyr,
+    ggplot2,
     pracma,
     cluster,
     bioDist,
@@ -36,9 +38,7 @@ Suggests:
     knitr,
     rmarkdown,
     reshape2,
-    tidyr,
     gplots,
-    ggplot2,
     covr
 License: MIT + file LICENSE
 Encoding: UTF-8
