@@ -1,6 +1,14 @@
 
 context("Utility functions")
 
+library(cluster)
+data(votes.repub)
+
+test_that("diana hook works", {
+  d <- dist(votes.repub)
+  expect_length(diana_hook(d, k = 2), nrow(votes.repub))
+})
+
 test_that("data preparation removes rows", {
   set.seed(2)
   x <- replicate(10, rnorm(100, sd = 1))

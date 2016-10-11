@@ -1,6 +1,17 @@
 # magrittr placeholder
 globalVariables(".")
 
+#' Custom hook functions for DIvisive ANAlysis clustering algorithm
+#'
+#' @param d distance matrix
+#' @param k scalar indicating number of clusters to cut tree into
+#' @noRd
+diana_hook <- function(d, k) {
+  tmp <- cluster::diana(d, diss = TRUE)
+  a <- cutree(tmp, k)
+  return(a)
+}
+
 #' Prepare data for consensus clustering
 #'
 #' Remove variables with low signal and scale before consensus clustering
