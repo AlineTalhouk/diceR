@@ -2,20 +2,20 @@
 % Please edit documentation in R/linkage.R
 \name{linkage}
 \alias{linkage}
-\title{Title function to create hierarchical cluster tree}
+\title{Create hierarchical cluster tree}
 \usage{
 linkage(Y, method)
 }
 \arguments{
-\item{Y}{: a distance vector}
+\item{Y}{a distance vector}
 
-\item{method}{: linkage method, can be "average","single", or "complete"}
+\item{method}{linkage method; can be "average", "single", or "complete"}
 }
 \value{
 matrix denoting hierarchical cluster tree
 }
 \description{
-Title function to create hierarchical cluster tree
+Create hierarchical cluster tree
 }
 \examples{
 data("E_LCE")
