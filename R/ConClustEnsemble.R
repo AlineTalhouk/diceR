@@ -1,5 +1,3 @@
-#' Generate a cluster ensemble using the K-means algorithm
-#' 
 #' Function to perform clustering using \code{\link{ConClust}} with all default 
 #' methods using user-sepcified number of clusters and number of repetitions.
 #' 

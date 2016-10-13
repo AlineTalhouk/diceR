@@ -2,7 +2,8 @@
 % Please edit documentation in R/ConClustEnsemble.R
 \name{ConClustEnsemble}
 \alias{ConClustEnsemble}
-\title{Generate a cluster ensemble using the K-means algorithm}
+\title{Function to perform clustering using \code{\link{ConClust}} with all default 
+methods using user-sepcified number of clusters and number of repetitions.}
 \usage{
 ConClustEnsemble(X, k, reps = 1000, method = NULL)
 }
