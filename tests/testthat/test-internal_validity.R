@@ -83,3 +83,10 @@ test_that("Check iv_sumsq with wrong inputs", {
     k = 4
   ))
 })
+
+test_that("PAC can have different bounds", {
+  set.seed(1)
+  x <- replicate(100, rbinom(100, 4, 0.2))
+  y <- consensus_matrix(x)
+  expect_error(PAC(y, lower = 0.3, upper = 0.7), NA)
+})

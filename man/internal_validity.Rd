@@ -14,7 +14,7 @@ iv_db_dunn(data, labels)
 iv_sumsq(data, labels, k)
 }
 \arguments{
-\item{data}{a dataset with rows as observations, columns sariables}
+\item{data}{a dataset with rows as observations, columns as variables}
 
 \item{labels}{a vector of cluster labels from a clustering result}
 
@@ -35,12 +35,12 @@ iv_sumsq(data, labels, k)
   \item{Sinter}{linkage distance}
 }
 \description{
-\strong{I}nternal \strong{v}alidity indices are agnostic to any reference
+\strong{I}nternal \strong{v}alidity indices are agnostic to any reference 
 clustering results. They calculate cluster performance on the basis of 
 compactness and separability.
 }
 \details{
-\code{iv_compactness} computes the compactness validity index for a
+\code{iv_compactness} computes the compactness validity index for a 
 clustering result
 
 \code{iv_db_dunn} computes the Davies-Bouldin index and Dunn index
@@ -55,6 +55,7 @@ iv_db_dunn(FGD, FGT)
 iv_sumsq(data = FGD, labels = FGT, k = 4)
 }
 \references{
-MATLAB functions valid_compactness and valid_DbDunn and valid_sumsqures by Simon Garrett in LinkCluE
+MATLAB functions \code{valid_compactness} and \code{valid_DbDunn}
+  and \code{valid_sumsqures} by Simon Garrett in LinkCluE
 }
 

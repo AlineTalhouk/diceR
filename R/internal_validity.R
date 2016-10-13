@@ -1,19 +1,20 @@
 #' Internal validity indices
 #' 
-#' \strong{I}nternal \strong{v}alidity indices are agnostic to any reference
+#' \strong{I}nternal \strong{v}alidity indices are agnostic to any reference 
 #' clustering results. They calculate cluster performance on the basis of 
 #' compactness and separability.
 #' 
-#' \code{iv_compactness} computes the compactness validity index for a
+#' \code{iv_compactness} computes the compactness validity index for a 
 #' clustering result
-#'
-#' @param data a dataset with rows as observations, columns sariables
+#' 
+#' @param data a dataset with rows as observations, columns as variables
 #' @param labels a vector of cluster labels from a clustering result
-#' @references MATLAB functions valid_compactness and valid_DbDunn and valid_sumsqures by Simon Garrett in LinkCluE
+#' @references MATLAB functions \code{valid_compactness} and \code{valid_DbDunn}
+#'   and \code{valid_sumsqures} by Simon Garrett in LinkCluE
 #' @return \code{iv_compactness} returns the compactness score
 #' @name internal_validity
 #' @export
-#'
+#' 
 #' @examples
 #' data("FGD", "E_LCE", "FGT", "FGD")
 #' iv_compactness(FGD, E_LCE[, 1])
@@ -157,4 +158,38 @@ iv_sumsq <- function(data, labels, k) {
     Sintra = Sintra,
     Sinter = Sinter
   ))
+}
+
+#' Proportion of Ambiguous Clustering
+#'
+#' Given a consensus matrix, returns the proportion of ambiguous clusters (PAC).
+#' This is a robust way to assess clustering performance.
+#'
+#' Since a consensus matrix is symmetric, we only look at its lower (or upper)
+#' triangular matrix. The proportion of entries strictly between \code{lower}
+#' and \code{upper} is the PAC. In a perfect clustering, the consensus matrix
+#' would consist of only 0s and 1s, and the PAC assessed on the (0, 1) interval
+#' would have a perfect score of 0. Using a (0.1, 0.9) interval for defining
+#' ambiguity is common as well.
+#'
+#' @param cm consensus matrix. Should be symmetric and values between 0
+#'   and 1.
+#' @param lower the lower bound that determines what is ambiguous
+#' @param upper the upper bound that determines what is ambiguous
+#' @return the PAC is a score used in clustering performance. The lower it is
+#'   the better, because we want minimal ambiguity amongst the consensus.
+#' @author Derek Chiu
+#' @export
+#' @examples
+#' set.seed(1)
+#' x <- replicate(100, rbinom(100, 4, 0.2))
+#' y <- consensus_matrix(x)
+#' PAC(y, lower = 0.05, upper = 0.95)
+PAC <- function(cm, lower = 0, upper = 1) {
+  pac <- cm %>%
+    extract(lower.tri(.)) %>%
+    extract(and(is_greater_than(., lower), is_less_than(., upper))) %>%
+    length() %>%
+    divide_by(., length(cm[lower.tri(cm)]))
+  return(pac)
 }

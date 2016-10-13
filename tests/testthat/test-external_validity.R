@@ -67,3 +67,16 @@ test_that("Check ev_rand with artificial input vectors in case where AR is 0", {
     ev_rand(final_c1_valid_RandIndex, final_c2_valid_RandIndex)$MI - 0.3746)
     <= 0.0001)
 })
+
+test_that("normalized mutual information works", {
+  set.seed(1)
+  x <- sample(1:4, 100, replace = TRUE)
+  y <- sample(1:4, 100, replace = TRUE)
+  expect_error(ev_nmi(x, y), NA)
+})
+
+test_that("accuracy works", {
+  set.seed(1)
+  x <- matrix(rbinom(16, 20, 0.4), nrow = 4)
+  expect_error(accuracy(x), NA)
+})
