@@ -26,6 +26,7 @@ test_that("graph_heatmap can have same plot but different titles", {
   phm1 <- graph_heatmap(CC1)
   phm2 <- graph_heatmap(CC1, main = c("A", "B", "C"))
   expect_identical(phm1, phm2)
+  file.remove(list.files(pattern = "Rplots"))
 })
 
 test_that("error in graph_heatmap if too few titles", {
