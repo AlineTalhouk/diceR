@@ -22,7 +22,6 @@
 ConClustEnsemble <- function(X, k, reps = 1000, method = NULL) {
   assertthat::assert_that(is.matrix(X))
   assertthat::assert_that(reps > 1)  # can't compute consensus matrix on one rep
-  E <- NULL
   df_conClust <- data.frame(t(X))
   colnames(df_conClust) <- rownames(X)
   rownames(df_conClust) <- colnames(X)
@@ -74,6 +73,6 @@ ConClustEnsemble <- function(X, k, reps = 1000, method = NULL) {
       return(x)
     }))
   }
-  class(flat_E) <- "numeric"
+  flat_E<-apply(flat_E,c(1,2),as.numeric)
   return(flat_E)
 }
