@@ -24,4 +24,7 @@ E_LCE_relabelled <- relabel_clusters(E_LCE)
 \author{
 Johnson Liu
 }
+\references{
+MATLAB function relabelCl by Simon Garrett in LinkCluE package
+}
 

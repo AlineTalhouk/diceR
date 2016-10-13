@@ -2,7 +2,7 @@
 #'
 #' @param Y a distance vector
 #' @param method linkage method; can be "average", "single", or "complete"
-#'
+#' @references function linkage in MATLAB for average, single, and complete linkage
 #' @return matrix denoting hierarchical cluster tree
 #' @export
 #'

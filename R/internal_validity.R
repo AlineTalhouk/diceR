@@ -9,7 +9,7 @@
 #'
 #' @param data a dataset with rows as observations, columns sariables
 #' @param labels a vector of cluster labels from a clustering result
-#'
+#' @references MATLAB functions valid_compactness and valid_DbDunn and valid_sumsqures by Simon Garrett in LinkCluE
 #' @return \code{iv_compactness} returns the compactness score
 #' @name internal_validity
 #' @export

@@ -5,7 +5,7 @@
 #'
 #' @param Z matrix representing a hierarchical cluster tree
 #' @param maxclust desired number of clusters
-#'
+#' @references MATLAB function cluster
 #' @return clustering result
 #' @export
 #'

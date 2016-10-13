@@ -21,4 +21,7 @@ Create hierarchical cluster tree
 data("E_LCE")
 linkage(stod(asrs(E_LCE, 0.8)), "average")
 }
+\references{
+function linkage in MATLAB for average, single, and complete linkage
+}
 

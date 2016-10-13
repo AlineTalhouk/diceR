@@ -17,4 +17,8 @@ CR: an N by 3 matrix of clustering results from SL, CL, and AL
 \description{
 Title: function to perform final clustering using hierarchical algorithms (single linkage-SL, complete linkage-CL, average linkage-AL)
 }
+\examples{
+data("E_LCE")
+clHC(S=cts(E_LCE,0.8),K=4)
+}
 

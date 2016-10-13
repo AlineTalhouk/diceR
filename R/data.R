@@ -54,20 +54,6 @@
 #' @format A vector of length 200
 "final_c2_valid_RandIndex"
 
-#' TCGA example data
-#'
-#' The columns are intended to represent different cluster assignments.
-#'
-#' @format A matrix with 489 rows and 9 columns
-"fixedKmeansTCGA_CR"
-
-#' TCGA example data
-#' 
-#' The data is assessed using different similarity measures and external
-#' validity measures.
-#' 
-#' @format A matrix with 3 rows and 9 columns
-"fixedKmeansTCGA_V"
 
 #' High grade serous cancer data from TCGA used to classify subtypes
 #'

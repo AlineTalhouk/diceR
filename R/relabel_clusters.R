@@ -7,6 +7,7 @@
 #' @return A list with elements
 #' \item{newE}{N by M matrix of relabelled ensemble}
 #' \item{no_allcl}{total number of clusters in the ensemble}
+#' @references MATLAB function relabelCl by Simon Garrett in LinkCluE package
 #' @author Johnson Liu
 #' @export
 #'

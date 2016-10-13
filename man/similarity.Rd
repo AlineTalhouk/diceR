@@ -37,4 +37,7 @@ CTS <- cts(E_LCE, 0.8)
 \author{
 Johnson Liu
 }
+\references{
+MATLAB function srs, cts, asrs in package LinkCluE by Simon Garrett
+}
 

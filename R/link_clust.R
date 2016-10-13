@@ -1,16 +1,20 @@
 #' Title function to take many clustering results and create a cluster ensemble
 #'
-#' @param E : matrix of clustering resutls 
+#' @param E : matrix of clustering resutls
 #' @param dcCTS : decay constant for CTS matrix
 #' @param dcSRS : decay constant for SRS matrix
 #' @param dcASRS : decay constant for ASRS matrix
 #' @param R : number of repetitions for SRS matrix
 #' @param is.relabelled : boolean representing whether input E is relabelled
 #'
-#' @return a list containing final clustering result using k modes, majority vote, and hierarchical clustering(average, single, and complete linkages)
+#' @return a list containing the CTS, SRS, and ASRS matrix
 #' @export
 #'
 #' @examples
+#' data("E_imputed")
+#' link_clust(E=E_imputed,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
+#' data("E_LCE")
+#' link_clust(E=E_LCE,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
 link_clust <-
   function(E,
            dcCTS = 0.8,
@@ -23,18 +27,13 @@ link_clust <-
     assertthat::assert_that(dcASRS >= 0 && dcASRS <= 1)
     assertthat::assert_that(dcSRS >= 0 && dcSRS <= 1)
     assertthat::assert_that(is_pos_int(R))
-    cluster_maj_vote <- NULL
-    cluster_k_modes <- NULL
-    cluster_hc <- NULL
     mNames <- c("cts", "srs", "asrs")
     dcs <- c(dcCTS, dcSRS, dcASRS)
     if (!is.na(dim(E)[3])) {
-      maj_vote <- majority_voting(E = E, is.relabelled = is.relabelled)
-      cluster_k_modes <- k_modes(E = E, is.relabelled = is.relabelled)
       flat_E <- E
       dim(flat_E) <- c(dim(E)[1], dim(E)[2] * dim(E)[3])
       if (is.relabelled == FALSE) {
-        E_f <- apply(flat_E[,-1], 2, function(x) {
+        E_f <- apply(flat_E[, -1], 2, function(x) {
           relabel_class(x, flat_E[, 1])
         })
         flat_E <- cbind(flat_E[, 1], E_f)
@@ -45,18 +44,31 @@ link_clust <-
           return(x)
         }))
       }
-      flat_E<-apply(flat_E,c(1,2),as.numeric)
-      for (i in 1:length(mNames)) {
-        if (mNames[i] == "srs") {
-          S <- do.call(mNames[i], list(flat_E, dcs[i], R))
-        } else{
-          S <- do.call(mNames[i], list(flat_E, dcs[i]))
-        }
-        cluster_hc <- cbind(cluster_hc, clHC(S, K = max(flat_E)))
+      flat_E <- apply(flat_E, c(1, 2), as.numeric)
+      return(list(
+        cts = cts(E = flat_E, dc = dcCTS),
+        srs = srs(E = flat_E, dc = dcSRS, R = R),
+        asrs = asrs(E = flat_E, dc = dcASRS)
+      ))
+    } else{
+      if (sum(!complete.cases(E)) == 0) {
+        return(list(
+          cts = cts(E = E, dc = dcCTS),
+          srs = srs(E = E, dc = dcSRS,R=R),
+          asrs = asrs(E = E, dc = dcASRS)
+        ))
+      } else{
+        E[which(is.na(E))] <- names(which.max(table(E)))
+        E <- apply(E, c(1, 2), as.numeric)
+        return(list(
+          cts = cts(E = E, dc = dcCTS),
+          srs = srs(E = E, dc = dcSRS,R=R),
+          asrs = asrs(E = E, dc = dcASRS)
+        ))
       }
     }
-    return(list(cluster_hc=cluster_hc,cluster_k_modes=cluster_k_modes,cluster_maj_vote=cluster_maj_vote))
   }
+
 
 
 #' Title: function to perform final clustering using hierarchical algorithms (single linkage-SL, complete linkage-CL, average linkage-AL)
@@ -68,6 +80,8 @@ link_clust <-
 #' @export
 #'
 #' @examples
+#' data("E_LCE")
+#' clHC(S=cts(E_LCE,0.8),K=4)
 clHC <- function(S, K) {
   CR <- NULL
   d <- diceR::stod(S)

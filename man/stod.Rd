@@ -24,4 +24,7 @@ d <- stod(ASRS)
 \author{
 Johnson Liu
 }
+\references{
+MATLAB function stod in package LinkCluE by Simon Garrett
+}
 

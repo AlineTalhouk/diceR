@@ -23,4 +23,7 @@ data("E_LCE")
 tree <- linkage(stod(asrs(E_LCE, 0.8)), "complete")
 cluster_tree <- dist_cluster(tree, 4)
 }
+\references{
+MATLAB function cluster
+}
 

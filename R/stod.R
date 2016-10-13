@@ -4,7 +4,7 @@
 #' square to vector (input format for linkage function)
 #' 
 #' @param S N by N similarity matrix
-#'   
+#' @references MATLAB function stod in package LinkCluE by Simon Garrett   
 #' @return distance vector
 #' @author Johnson Liu
 #' @export

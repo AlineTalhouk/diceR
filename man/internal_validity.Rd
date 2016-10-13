@@ -54,4 +54,7 @@ iv_compactness(FGD, E_LCE[, 1])
 iv_db_dunn(FGD, FGT)
 iv_sumsq(data = FGD, labels = FGT, k = 4)
 }
+\references{
+MATLAB functions valid_compactness and valid_DbDunn and valid_sumsqures by Simon Garrett in LinkCluE
+}
 

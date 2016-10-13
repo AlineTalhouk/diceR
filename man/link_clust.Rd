@@ -21,9 +21,15 @@ link_clust(E, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
 \item{is.relabelled}{: boolean representing whether input E is relabelled}
 }
 \value{
-a list containing final clustering result using k modes, majority vote, and hierarchical clustering(average, single, and complete linkages)
+a list containing the CTS, SRS, and ASRS matrix
 }
 \description{
 Title function to take many clustering results and create a cluster ensemble
+}
+\examples{
+data("E_imputed")
+link_clust(E=E_imputed,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
+data("E_LCE")
+link_clust(E=E_LCE,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
 }
 

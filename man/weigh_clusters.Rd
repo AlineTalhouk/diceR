@@ -23,4 +23,7 @@ wl <- weigh_clusters(E_LCE)
 \author{
 Johnson Liu
 }
+\references{
+MATALAB function weightCl by Simon Garrett in package LinkCluE
+}
 

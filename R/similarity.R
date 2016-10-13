@@ -7,7 +7,7 @@
 #' @param E an N by M matrix of cluster ensembles
 #' @param dc decay factor, ranges from 0 to 1 inclusive
 #' @param R number of iterations for simrank algorithm
-#'   
+#' @references MATLAB function srs, cts, asrs in package LinkCluE by Simon Garrett   
 #' @return an N by N SRS, ASRS, or CTS matrix
 #' @name similarity
 #' @author Johnson Liu
