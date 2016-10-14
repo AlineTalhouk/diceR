@@ -21,12 +21,11 @@
 #' set.seed(1)
 #' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
 #'               FALSE)
+#' x <- sample(1:4, 100, replace = TRUE)
+#' y <- sample(1:4, 100, replace = TRUE)
 #' ev_accuracy(E[, 1], E[, 2])
 #' ev_rand(E[, 1], E[, 2])
-#' set.seed(4)
-#' X <- sample(1:4, 100, replace = TRUE)
-#' Y <- sample(1:4, 100, replace = TRUE)
-#' ev_nmi(X, Y)
+#' ev_nmi(x, y)
 ev_accuracy <- function(pred.lab, ref.lab) {
   assertthat::assert_that(is.vector(pred.lab), is.vector(ref.lab))
   nrow <- length(ref.lab)

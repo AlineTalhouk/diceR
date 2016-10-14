@@ -2,6 +2,7 @@
 % Please edit documentation in R/internal_validity.R
 \name{internal_validity}
 \alias{internal_validity}
+\alias{iv_chi}
 \alias{iv_compactness}
 \alias{iv_db_dunn}
 \alias{iv_sumsq}
@@ -12,6 +13,8 @@ iv_compactness(data, labels)
 iv_db_dunn(data, labels)
 
 iv_sumsq(data, labels, k)
+
+iv_chi(data, labels, ...)
 }
 \arguments{
 \item{data}{a dataset with rows as observations, columns as variables}
@@ -19,6 +22,8 @@ iv_sumsq(data, labels, k)
 \item{labels}{a vector of cluster labels from a clustering result}
 
 \item{k}{number of clusters}
+
+\item{...}{additional arguments to \code{\link[clusterSim]{index.G1}}}
 }
 \value{
 \code{iv_compactness} returns the compactness score
@@ -33,6 +38,8 @@ iv_sumsq(data, labels, k)
   \item{T}{total sum of squares and cross-products}
   \item{Sintra}{centroid diameter}
   \item{Sinter}{linkage distance}
+
+\code{iv_chi} returns the CHI
 }
 \description{
 \strong{I}nternal \strong{v}alidity indices are agnostic to any reference 
@@ -47,30 +54,27 @@ clustering result
 
 \code{iv_sumsq} computes the within group, between group, and total
   sum of squares and cross-products
+
+\code{iv_chi} computes the Calinski-Harabasz Index, or pseudo
+  F-statistic. The function is a wrapper for
+  \code{\link[clusterSim]{index.G1}}
 }
 \examples{
 set.seed(1)
-E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+              FALSE)
 set.seed(1)
-dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
-compactness<-iv_compactness(dat,E[,1])
-set.seed(1)
-E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
-set.seed(1)
-dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
-dbDunn<-iv_db_dunn(dat,E[,1])
+dat <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100, byrow = FALSE))
+iv_compactness(dat, E[, 1])
+iv_db_dunn(dat, E[, 1])
+iv_sumsq(dat, E[, 1], 4)
+iv_chi(dat, E[, 1], centrotypes = "centroids")
 }
 \references{
-MATLAB functions \code{valid_compactness} and \code{valid_DbDunn}
-  and \code{valid_sumsqures} by Simon Garrett in LinkCluE
+MATLAB functions \code{valid_compactness}, \code{valid_DbDunn}, 
+  \code{valid_sumsqures} by Simon Garrett in LinkCluE
 
-MATLAB function \code{valid_DbDunn} in LinkCluE by Simon Garrett
-
-MATLAB function \code{valid_sumsqures} in LinkCluE by Simon Garrett
-#' set.seed(1)
-E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
-set.seed(1)
-dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
-sumsq<-iv_sumsq(dat,E[,1],4)
+Calinski, T., Harabasz, J. (1974), A dendrite method for cluster
+  analysis, "Communications in Statistics", vol. 3, 1-27.
 }
 

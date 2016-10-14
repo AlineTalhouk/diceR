@@ -9,18 +9,24 @@
 #' 
 #' @param data a dataset with rows as observations, columns as variables
 #' @param labels a vector of cluster labels from a clustering result
-#' @references MATLAB functions \code{valid_compactness} and \code{valid_DbDunn}
-#'   and \code{valid_sumsqures} by Simon Garrett in LinkCluE
+#' @references MATLAB functions \code{valid_compactness}, \code{valid_DbDunn}, 
+#'   \code{valid_sumsqures} by Simon Garrett in LinkCluE
+#' @references Calinski, T., Harabasz, J. (1974), A dendrite method for cluster
+#'   analysis, "Communications in Statistics", vol. 3, 1-27.
 #' @return \code{iv_compactness} returns the compactness score
 #' @name internal_validity
 #' @export
 #' 
 #' @examples
 #' set.seed(1)
-#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+#'               FALSE)
 #' set.seed(1)
-#' dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
-#' compactness<-iv_compactness(dat,E[,1])
+#' dat <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100, byrow = FALSE))
+#' iv_compactness(dat, E[, 1])
+#' iv_db_dunn(dat, E[, 1])
+#' iv_sumsq(dat, E[, 1], 4)
+#' iv_chi(dat, E[, 1], centrotypes = "centroids")
 iv_compactness <- function(data, labels) {
   assertthat::assert_that(is.data.frame(data), length(labels) == nrow(data))
   n <- length(labels)
@@ -46,14 +52,7 @@ iv_compactness <- function(data, labels) {
 #'   \item{DB}{Davies-Bouldin score}
 #'   \item{Dunn}{Dunn score}
 #' @rdname internal_validity
-#' @references MATLAB function \code{valid_DbDunn} in LinkCluE by Simon Garrett
 #' @export
-#' @examples 
-#' set.seed(1)
-#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
-#' set.seed(1)
-#' dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
-#' dbDunn<-iv_db_dunn(dat,E[,1])
 iv_db_dunn <- function(data, labels) {
   if (is.data.frame(labels)) {
     assertthat::assert_that(nrow(data) == nrow(labels))
@@ -109,12 +108,6 @@ iv_db_dunn <- function(data, labels) {
 #'   \item{Sintra}{centroid diameter}
 #'   \item{Sinter}{linkage distance}          
 #' @rdname internal_validity
-#' @references MATLAB function \code{valid_sumsqures} in LinkCluE by Simon Garrett
-#' #' set.seed(1)
-#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
-#' set.seed(1)
-#' dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
-#' sumsq<-iv_sumsq(dat,E[,1],4)
 #' @export
 iv_sumsq <- function(data, labels, k) {
   assertthat::assert_that(is.vector(labels) || is.data.frame(labels))
@@ -174,6 +167,17 @@ iv_sumsq <- function(data, labels, k) {
   ))
 }
 
+#' @details \code{iv_chi} computes the Calinski-Harabasz Index, or pseudo
+#'   F-statistic. The function is a wrapper for
+#'   \code{\link[clusterSim]{index.G1}}
+#' @param ... additional arguments to \code{\link[clusterSim]{index.G1}}
+#' @return \code{iv_chi} returns the CHI
+#' @rdname internal_validity
+#' @export
+iv_chi <- function(data, labels, ...) {
+  return(clusterSim::index.G1(data, labels, ...))
+}
+
 #' Proportion of Ambiguous Clustering
 #'
 #' Given a consensus matrix, returns the proportion of ambiguous clusters (PAC).
@@ -185,6 +189,11 @@ iv_sumsq <- function(data, labels, k) {
 #' would consist of only 0s and 1s, and the PAC assessed on the (0, 1) interval
 #' would have a perfect score of 0. Using a (0.1, 0.9) interval for defining
 #' ambiguity is common as well.
+#' 
+#' The PAC is not, strictly speaking, an internal validity index. Originally
+#' used to choose the optimal number of clusters, here we use it to assess
+#' cluster stability. However, PAC is still agnostic any gold standard
+#' clustering result so we use it like an internal validity index.
 #'
 #' @param cm consensus matrix. Should be symmetric and values between 0
 #'   and 1.
@@ -193,6 +202,9 @@ iv_sumsq <- function(data, labels, k) {
 #' @return the PAC is a score used in clustering performance. The lower it is
 #'   the better, because we want minimal ambiguity amongst the consensus.
 #' @author Derek Chiu
+#' @references Șenbabaoğlu, Y., Michailidis, G., & Li, J. Z. (2014). Critical
+#'   limitations of consensus clustering in class discovery. Scientific reports,
+#'   4.
 #' @export
 #' @examples
 #' set.seed(1)
