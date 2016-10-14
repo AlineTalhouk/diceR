@@ -49,13 +49,28 @@ clustering result
   sum of squares and cross-products
 }
 \examples{
-data("FGD", "E_LCE", "FGT", "FGD")
-iv_compactness(FGD, E_LCE[, 1])
-iv_db_dunn(FGD, FGT)
-iv_sumsq(data = FGD, labels = FGT, k = 4)
+set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+set.seed(1)
+dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
+compactness<-iv_compactness(dat,E[,1])
+set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+set.seed(1)
+dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
+dbDunn<-iv_db_dunn(dat,E[,1])
 }
 \references{
 MATLAB functions \code{valid_compactness} and \code{valid_DbDunn}
   and \code{valid_sumsqures} by Simon Garrett in LinkCluE
+
+MATLAB function \code{valid_DbDunn} in LinkCluE by Simon Garrett
+
+MATLAB function \code{valid_sumsqures} in LinkCluE by Simon Garrett
+#' set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+set.seed(1)
+dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
+sumsq<-iv_sumsq(dat,E[,1],4)
 }
 

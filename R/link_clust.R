@@ -1,20 +1,22 @@
-#' Title function to take many clustering results and create a cluster ensemble
+#' Title wrapper function to generate CTS, SRS, and ASRS matrices. If input has NA, majority voting is used to eliminate NA.
 #'
-#' @param E : matrix of clustering resutls
+#' @param E : matrix of clustering resutls (may be 3D or 2D)
 #' @param dcCTS : decay constant for CTS matrix
 #' @param dcSRS : decay constant for SRS matrix
 #' @param dcASRS : decay constant for ASRS matrix
 #' @param R : number of repetitions for SRS matrix
 #' @param is.relabelled : boolean representing whether input E is relabelled
-#'
+#' @author Johnson Liu
 #' @return a list containing the CTS, SRS, and ASRS matrix
 #' @export
 #'
 #' @examples
-#' data("E_imputed")
-#' link_clust(E=E_imputed,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
-#' data("E_LCE")
-#' link_clust(E=E_LCE,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
+#' set.seed(1)
+#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' link_clust(E=E,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
+#' data(hgsc)
+#' x <- ConClust(hgsc, k = 4, reps = 10, method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
+#' y<-link_clust(x[1:10,,])
 link_clust <-
   function(E,
            dcCTS = 0.8,
@@ -77,11 +79,13 @@ link_clust <-
 #' @param K : preferred number of clusters
 #'
 #' @return CR: an N by 3 matrix of clustering results from SL, CL, and AL
+#' @references MATLAB function clHC in LinkCluE by Simon Garrett
 #' @export
 #'
 #' @examples
-#' data("E_LCE")
-#' clHC(S=cts(E_LCE,0.8),K=4)
+#' set.seed(1)
+#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' clHC(S=cts(E,0.8),K=4)
 clHC <- function(S, K) {
   CR <- NULL
   d <- diceR::stod(S)

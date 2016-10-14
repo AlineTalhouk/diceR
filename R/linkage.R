@@ -2,13 +2,15 @@
 #'
 #' @param Y a distance vector
 #' @param method linkage method; can be "average", "single", or "complete"
+#' @author Johnson Liu
 #' @references function linkage in MATLAB for average, single, and complete linkage
 #' @return matrix denoting hierarchical cluster tree
 #' @export
 #'
 #' @examples
-#' data("E_LCE")
-#' linkage(stod(asrs(E_LCE, 0.8)), "average")
+#' set.seed(1)
+#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' lk<-linkage(stod(cts(E,0.8)),"average")
 linkage <- function(Y, method) {
   assertthat::assert_that(is.vector(Y))
   assertthat::assert_that(is.numeric(Y))

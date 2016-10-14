@@ -47,10 +47,11 @@ result
 \code{ev_nmi} is adapted from \code{\link[infotheo]{mutinformation}}
 }
 \examples{
-data("E_LCE")
-ev_accuracy(c(4, 4, 4, 4), c(4, 2, 4, 4))
-ev_accuracy(c(4, 4, 4, 4, 8), c(4, 2, 4, 4, 6))
-ev_rand(E_LCE[, 1], E_LCE[, 2])
+set.seed(1)
+E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+              FALSE)
+ev_accuracy(E[, 1], E[, 2])
+ev_rand(E[, 1], E[, 2])
 set.seed(4)
 X <- sample(1:4, 100, replace = TRUE)
 Y <- sample(1:4, 100, replace = TRUE)
@@ -60,8 +61,8 @@ ev_nmi(X, Y)
 Johnson Liu, Derek Chiu
 }
 \references{
-MATLAB function valid_CA and valid_RandIndex in package LinkCluE
-  by Simon Garrett
+MATLAB function \code{valid_CA} and \code{valid_RandIndex} in
+  package LinkCluE by Simon Garrett
 
 Strehl A, Ghosh J. Cluster ensembles: a knowledge reuse framework
   for combining multiple partitions. J. Mach. Learn. Res. 2002;3:583-617.

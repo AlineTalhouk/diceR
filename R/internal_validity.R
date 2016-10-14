@@ -16,10 +16,11 @@
 #' @export
 #' 
 #' @examples
-#' data("FGD", "E_LCE", "FGT", "FGD")
-#' iv_compactness(FGD, E_LCE[, 1])
-#' iv_db_dunn(FGD, FGT)
-#' iv_sumsq(data = FGD, labels = FGT, k = 4)
+#' set.seed(1)
+#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' set.seed(1)
+#' dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
+#' compactness<-iv_compactness(dat,E[,1])
 iv_compactness <- function(data, labels) {
   assertthat::assert_that(is.data.frame(data), length(labels) == nrow(data))
   n <- length(labels)
@@ -45,7 +46,14 @@ iv_compactness <- function(data, labels) {
 #'   \item{DB}{Davies-Bouldin score}
 #'   \item{Dunn}{Dunn score}
 #' @rdname internal_validity
+#' @references MATLAB function \code{valid_DbDunn} in LinkCluE by Simon Garrett
 #' @export
+#' @examples 
+#' set.seed(1)
+#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' set.seed(1)
+#' dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
+#' dbDunn<-iv_db_dunn(dat,E[,1])
 iv_db_dunn <- function(data, labels) {
   if (is.data.frame(labels)) {
     assertthat::assert_that(nrow(data) == nrow(labels))
@@ -101,6 +109,12 @@ iv_db_dunn <- function(data, labels) {
 #'   \item{Sintra}{centroid diameter}
 #'   \item{Sinter}{linkage distance}          
 #' @rdname internal_validity
+#' @references MATLAB function \code{valid_sumsqures} in LinkCluE by Simon Garrett
+#' #' set.seed(1)
+#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' set.seed(1)
+#' dat<-as.data.frame(matrix(runif(1000,-10,10),nrow=100,byrow=FALSE))
+#' sumsq<-iv_sumsq(dat,E[,1],4)
 #' @export
 iv_sumsq <- function(data, labels, k) {
   assertthat::assert_that(is.vector(labels) || is.data.frame(labels))

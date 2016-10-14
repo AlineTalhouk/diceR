@@ -2,13 +2,13 @@
 % Please edit documentation in R/link_clust.R
 \name{link_clust}
 \alias{link_clust}
-\title{Title function to take many clustering results and create a cluster ensemble}
+\title{Title wrapper function to generate CTS, SRS, and ASRS matrices. If input has NA, majority voting is used to eliminate NA.}
 \usage{
 link_clust(E, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
   is.relabelled = TRUE)
 }
 \arguments{
-\item{E}{: matrix of clustering resutls}
+\item{E}{: matrix of clustering resutls (may be 3D or 2D)}
 
 \item{dcCTS}{: decay constant for CTS matrix}
 
@@ -24,12 +24,17 @@ link_clust(E, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
 a list containing the CTS, SRS, and ASRS matrix
 }
 \description{
-Title function to take many clustering results and create a cluster ensemble
+Title wrapper function to generate CTS, SRS, and ASRS matrices. If input has NA, majority voting is used to eliminate NA.
 }
 \examples{
-data("E_imputed")
-link_clust(E=E_imputed,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
-data("E_LCE")
-link_clust(E=E_LCE,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
+set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+link_clust(E=E,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
+data(hgsc)
+x <- ConClust(hgsc, k = 4, reps = 10, method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
+y<-link_clust(x[1:10,,])
+}
+\author{
+Johnson Liu
 }
 

@@ -10,8 +10,9 @@
 #' @export
 #'
 #' @examples
-#' data("E_LCE")
-#' tree <- linkage(stod(asrs(E_LCE, 0.8)), "complete")
+#' set.seed(1)
+#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' tree <- linkage(stod(asrs(E, 0.8)), "complete")
 #' cluster_tree <- dist_cluster(tree, 4)
 dist_cluster <- function(Z, maxclust) {
   assertthat::assert_that(is.matrix(Z))

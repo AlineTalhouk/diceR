@@ -17,9 +17,9 @@ Converts similarity values to distance values and change matrixs format from
 square to vector (input format for linkage function)
 }
 \examples{
-data("E_LCE")
-ASRS <- asrs(E_LCE, 0.8)
-d <- stod(ASRS)
+set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+d <- stod(cts(E,0.8))
 }
 \author{
 Johnson Liu

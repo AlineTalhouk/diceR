@@ -10,8 +10,9 @@
 #' @export
 #' 
 #' @examples
-#' data("E_LCE")
-#' wl <- weigh_clusters(E_LCE)
+#' set.seed(1)
+#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' wl <- weigh_clusters(E)
 weigh_clusters <- function(E) {
   assertthat::assert_that(is.matrix(E), is.numeric(E))
   for (i in 1:nrow(E)) {

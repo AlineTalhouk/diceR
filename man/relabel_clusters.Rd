@@ -18,8 +18,9 @@ A list with elements
 Relabel clusters in the ensemble \code{E}
 }
 \examples{
-data("E_LCE")
-E_LCE_relabelled <- relabel_clusters(E_LCE)
+set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+E_relabelled <- relabel_clusters(E)
 }
 \author{
 Johnson Liu

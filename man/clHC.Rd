@@ -18,7 +18,11 @@ CR: an N by 3 matrix of clustering results from SL, CL, and AL
 Title: function to perform final clustering using hierarchical algorithms (single linkage-SL, complete linkage-CL, average linkage-AL)
 }
 \examples{
-data("E_LCE")
-clHC(S=cts(E_LCE,0.8),K=4)
+set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+clHC(S=cts(E,0.8),K=4)
+}
+\references{
+MATLAB function clHC in LinkCluE by Simon Garrett
 }
 
