@@ -10,9 +10,9 @@
 #' @export
 #' 
 #' @examples
-#' data("E_LCE")
-#' ASRS <- asrs(E_LCE, 0.8)
-#' d <- stod(ASRS)
+#' set.seed(1)
+#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' d <- stod(cts(E,0.8))
 stod <- function(S) {
   assertthat::assert_that(is.numeric(S), is.matrix(S))
   s <- NULL

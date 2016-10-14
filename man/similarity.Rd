@@ -29,10 +29,11 @@ the approximated simrank based similarity matrix, and \code{cts} computes the
 connected triple based similarity matrix
 }
 \examples{
-data(E_LCE)
-SRS <- srs(E_LCE, 0.8, 3)
-ASRS <- asrs(E_LCE, 0.8)
-CTS <- cts(E_LCE, 0.8)
+set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+SRS <- srs(E=E, dc=0.8, R=3)
+ASRS <- asrs(E=E, dc=0.8)
+CTS <- cts(E=E, dc=0.8)
 }
 \author{
 Johnson Liu

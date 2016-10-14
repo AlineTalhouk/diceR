@@ -18,8 +18,12 @@ matrix denoting hierarchical cluster tree
 Create hierarchical cluster tree
 }
 \examples{
-data("E_LCE")
-linkage(stod(asrs(E_LCE, 0.8)), "average")
+set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+lk<-linkage(stod(cts(E,0.8)),"average")
+}
+\author{
+Johnson Liu
 }
 \references{
 function linkage in MATLAB for average, single, and complete linkage

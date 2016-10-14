@@ -19,8 +19,9 @@ The function generates clusters using the distance criterion from a
 hierarchical cluster tree, equivalent to \code{cluster} in MATLAB
 }
 \examples{
-data("E_LCE")
-tree <- linkage(stod(asrs(E_LCE, 0.8)), "complete")
+set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+tree <- linkage(stod(asrs(E, 0.8)), "complete")
 cluster_tree <- dist_cluster(tree, 4)
 }
 \references{

@@ -14,10 +14,11 @@
 #' @export
 #' 
 #' @examples 
-#' data(E_LCE)
-#' SRS <- srs(E_LCE, 0.8, 3)
-#' ASRS <- asrs(E_LCE, 0.8)
-#' CTS <- cts(E_LCE, 0.8)
+#' set.seed(1)
+#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' SRS <- srs(E=E, dc=0.8, R=3)
+#' ASRS <- asrs(E=E, dc=0.8)
+#' CTS <- cts(E=E, dc=0.8)
 srs <- function(E, dc, R) {
   assertthat::assert_that(is.matrix(E), is.numeric(R), dc >= 0 && dc <= 1,
                           is_pos_int(R) == TRUE)

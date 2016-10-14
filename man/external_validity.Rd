@@ -36,12 +36,16 @@ result
   compare two partitions
 }
 \examples{
-data("E_LCE")
-ev_accuracy(c(4, 4, 4, 4), c(4, 2, 4, 4))
-ev_accuracy(c(4, 4, 4, 4, 8), c(4, 2, 4, 4, 6))
-ev_rand(E_LCE[, 1], E_LCE[, 2])
+set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+ev_accuracy(E[, 1], E[, 2])
+set.seed(1)
+E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+ev_accuracy(E[, 1], E[, 2])
 }
 \references{
-MATLAB function valid_CA and valid_RandIndex in package LinkCluE by Simon Garrett
+MATLAB function valid_CA in package LinkCluE by Simon Garrett
+
+MATLAB function valid_RandIndex in LinkCluE by Simon Garrett
 }
 
