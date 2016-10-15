@@ -20,33 +20,33 @@ dist_cluster <- function(Z, maxclust) {
   assertthat::assert_that(is_pos_int(maxclust))
   m <- nrow(Z) + 1
   resultT <- pracma::zeros(m, length(maxclust))
-  for (j in 1:length(maxclust)) {
-    if (m <= maxclust[j]) {
-      resultT[, j] <- 1:m
-    } else if (maxclust[j] == 1) {
-      resultT[, j] <- rep(1, m)
+
+    if (m <= maxclust) {
+      resultT[, 1] <- 1:m
+    } else if (maxclust == 1) {
+      resultT[, 1] <- rep(1, m)
     } else{
       clsnum <- 1
-      for (k in (m + 1 - maxclust[j]):(m - 1)) {
+      for (k in (m + 1 - maxclust):(m - 1)) {
         i <- Z[k, 1]
         if (i <= m) {
-          resultT[i, j] <- clsnum
+          resultT[i, 1] <- clsnum
           clsnum <- clsnum + 1
-        } else if (i < (2 * m - maxclust[j] + 1)) {
-          resultT[, j] <- clusternum(Z, resultT[, j], i - m, clsnum)
+        } else if (i < (2 * m - maxclust + 1)) {
+          resultT[, 1] <- clusternum(Z, resultT[, 1], i - m, clsnum)
           clsnum <- clsnum + 1
         }
         i <- Z[k, 2]
         if (i <= m) {
-          resultT[i, j] <- clsnum
+          resultT[i, 1] <- clsnum
           clsnum <- clsnum + 1
-        } else if (i < (2 * m - maxclust[j] + 1)) {
-          resultT[, j] <- clusternum(Z, resultT[, j], i - m, clsnum)
+        } else if (i < (2 * m - maxclust + 1)) {
+          resultT[, 1] <- clusternum(Z, resultT[, 1], i - m, clsnum)
           clsnum <- clsnum + 1
         }
       }
     }
-  }
+  
   return(resultT)
 }
 

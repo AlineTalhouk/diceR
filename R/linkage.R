@@ -58,11 +58,9 @@ linkage <- function(Y, method) {
         Y[I] <- colMin(rbind(Y[I], Y[J]))
       } else if (method == "complete") {
         Y[I] <- colMax(rbind(Y[I], Y[J]))
-      } else if (method == "average") {
+      } else {
         Y[I] <- Y[I] + Y[J]
-      } else{
-        stop("Invalid method for function linkage")
-      }
+      } 
     }
     J <- c(J, i * (m - (i + 1) / 2) - m + j)
     Y <- Y[-J]
