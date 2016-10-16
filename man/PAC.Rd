@@ -45,7 +45,7 @@ PAC(y, lower = 0.05, upper = 0.95)
 Derek Chiu
 }
 \references{
-Șenbabaoğlu, Y., Michailidis, G., & Li, J. Z. (2014). Critical
+Senbabaoglu, Y., Michailidis, G., & Li, J. Z. (2014). Critical
   limitations of consensus clustering in class discovery. Scientific reports,
   4.
 }

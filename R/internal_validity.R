@@ -202,7 +202,7 @@ iv_chi <- function(data, labels, ...) {
 #' @return the PAC is a score used in clustering performance. The lower it is
 #'   the better, because we want minimal ambiguity amongst the consensus.
 #' @author Derek Chiu
-#' @references Șenbabaoğlu, Y., Michailidis, G., & Li, J. Z. (2014). Critical
+#' @references Senbabaoglu, Y., Michailidis, G., & Li, J. Z. (2014). Critical
 #'   limitations of consensus clustering in class discovery. Scientific reports,
 #'   4.
 #' @export
