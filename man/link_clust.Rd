@@ -28,11 +28,12 @@ Title wrapper function to generate CTS, SRS, and ASRS matrices. If input has NA,
 }
 \examples{
 set.seed(1)
-E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow = FALSE)
 link_clust(E=E,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
 data(hgsc)
-x <- ConClust(hgsc[1:50], k = 4, reps = 4, method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
-y<-link_clust(E=x,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10)
+x <- ConClust(hgsc[1:50], k = 4, reps = 4, method = c("nmfEucl", "hcAEucl",
+"hcDianaEucl"), save = FALSE)
+y <- link_clust(E=x,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10)
 }
 \author{
 Johnson Liu
