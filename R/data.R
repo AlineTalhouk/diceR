@@ -1,9 +1,4 @@
-#' Example data for Linkage Cluster Ensemble (LCE)
-#' 
-#' The data set is intended to be used with the LCE family of functions
-#' 
-#' @format A matrix with 100 rows (samples) and 10 columns (cluster assignments).
-"E_LCE"
+
 
 #' Example data for imputation
 #'
@@ -12,47 +7,7 @@
 #' @format An array with 489 rows, 10 columns, 12 slices
 "E_imputed"
 
-#' Example dataset FGD
-#' 
-#' The data is simulated for cluster analysis.
-#'
-#' @format A data frame with 100 rows and 12 columns
-"FGD"
 
-#' Example dataset FGT
-#'
-#' The single column has 25 elements evenly placed in 4 groups.
-#'
-#' @format A data frame with 100 rows and 1 column
-"FGT"
-
-#' Example dataset LD
-#'
-#' The data is simulated for cluster analysis.
-#'
-#' @format A data frame with 72 rows and 1081 columns
-"LD"
-
-#' Example dataset LT
-#'
-#' The single column has 24 elements in group 1 and 48 elements in group 2.
-#'
-#' @format A data frame with 72 rows and 1 column
-"LT"
-
-#' Example dataset final_c1_valid_RandIndex
-#'
-#' This vector is intended to be tested in \code{ev_rand}
-#'
-#' @format A vector of length 200
-"final_c1_valid_RandIndex"
-
-#' Example dataset final_c2_valid_RandIndex
-#'
-#' This vector is intended to be tested in \code{ev_rand}
-#'
-#' @format A vector of length 200
-"final_c2_valid_RandIndex"
 
 
 #' High grade serous cancer data from TCGA used to classify subtypes

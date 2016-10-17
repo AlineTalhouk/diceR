@@ -1,14 +1,15 @@
 
 context("stod, distance vector")
 
-data(E_LCE)
+set.seed(1)
+E <-
+  matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow = FALSE)
+dc <- 0.8
 
 test_that("Check stod", {
-  S <- cts(E_LCE, dc = 0.8)
+  S <- cts(E=E, dc = dc)
   s <- stod(S)
-  expect_true(sum(!s[1:24] == 0) == 0)
-  expect_true(abs(s[25] - 0.5979) <= 0.0001)
-  expect_true(abs(sum(s) - 2962) < 1)
+  expect_true(abs(sum(s) - 1115) < 1)
 
 })
 

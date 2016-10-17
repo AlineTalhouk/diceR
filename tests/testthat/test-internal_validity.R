@@ -8,12 +8,16 @@ MT<-sample(1:4,100,replace=TRUE)
 
 test_that("Check iv_compactness", {
   expect_true(abs(iv_compactness(MD, MT) - 24.1316) < 0.0001)
+  MT_k5<-MT
+  MT_k5[10]<-5
   MT[which(MT == 1)] <- 3
   expect_true(abs(iv_compactness(MD, MT) - 24.5493) < 0.0001)
+  expect_true(abs(iv_compactness(MD,MT_k5)-23.8454)<0.0001)
 })
 
 test_that("iv_compactness throws error with wrong inputs", {
   expect_error(iv_compactness(MD, NULL))
+  expect_error(iv_compactness(NULL,c(1,2,3)))
   expect_error(iv_compactness(c(1, 2, 3, 4), c(1, 3, 3, 1)))
 })
 
