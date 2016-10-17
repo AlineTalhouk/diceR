@@ -36,7 +36,7 @@ link_clust <-
       flat_E <- E
       dim(flat_E) <- c(dim(E)[1], dim(E)[2] * dim(E)[3])
       if (is.relabelled == FALSE) {
-        E_f <- apply(flat_E[, -1], 2, function(x) {
+        E_f <- apply(flat_E[,-1], 2, function(x) {
           relabel_class(x, flat_E[, 1])
         })
         flat_E <- cbind(flat_E[, 1], E_f)
@@ -57,7 +57,7 @@ link_clust <-
       if (sum(!complete.cases(E)) == 0) {
         return(list(
           cts = cts(E = E, dc = dcCTS),
-          srs = srs(E = E, dc = dcSRS,R=R),
+          srs = srs(E = E, dc = dcSRS, R = R),
           asrs = asrs(E = E, dc = dcASRS)
         ))
       } else{
@@ -65,7 +65,7 @@ link_clust <-
         E <- apply(E, c(1, 2), as.numeric)
         return(list(
           cts = cts(E = E, dc = dcCTS),
-          srs = srs(E = E, dc = dcSRS,R=R),
+          srs = srs(E = E, dc = dcSRS, R = R),
           asrs = asrs(E = E, dc = dcASRS)
         ))
       }
