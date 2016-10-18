@@ -7,7 +7,7 @@
 prepare_data(data, min.sd = 1)
 }
 \arguments{
-\item{data}{data matrix. Columns are samples and rows are genes/features.}
+\item{data}{data matrix with rows as samples and columns as variables}
 
 \item{min.sd}{minimum standard deviation threshold. See details.}
 }

@@ -20,7 +20,7 @@ diana_hook <- function(d, k) {
 #' highly variable features. Only features with a standard deviation across all
 #' samples greater than \code{min.sd} will be used.
 #'
-#' @param data data matrix. Columns are samples and rows are genes/features.
+#' @param data data matrix with rows as samples and columns as variables
 #' @param min.sd minimum standard deviation threshold. See details.
 #' @return dataset prepared for usage in \code{ConClust}
 #' @author Derek Chiu
@@ -32,15 +32,12 @@ diana_hook <- function(d, k) {
 #' prepare_data(x)
 prepare_data <- function(data, min.sd = 1) {
   dat.out <- data %>%
-    as.data.frame() %>%
-    select(which(sapply(., class) == "numeric")) %>%
-    extract(apply(., 1, function(x) sd(x, na.rm = TRUE)) > min.sd,
-            apply(., 2, function(x) !any(is.na(x)))) %>%
-    t() %>%
-    scale() %>%
-    t()
+    extract(apply(., 1, function(x) !any(is.na(x))),
+            apply(., 2, function(x) sd(x, na.rm = TRUE)) > min.sd) %>%
+    scale()
   return(dat.out)
 }
+
 
 #' Relabel classes to a standard
 #'

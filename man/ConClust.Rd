@@ -9,7 +9,7 @@ ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL,
   save = FALSE, file.name = "ConClustOutput", time.saved = FALSE)
 }
 \arguments{
-\item{x}{data matrix; genes are rows and samples are columns}
+\item{x}{data matrix with rows as samples and columns as variables}
 
 \item{k}{number of clusters requested}
 
@@ -43,9 +43,9 @@ appended to the file name. Only applicable when \code{dir} is not
 \code{NULL}.}
 }
 \value{
-An array of dimension \code{nrow(x)} by \code{reps} by
-  \code{length(methods)} Each slice of the array is a matrix showing
-  consensus clustering results for algorithms (method). The matrices have a
+An array of dimension \code{nrow(x)} by \code{reps} by 
+  \code{length(methods)} Each slice of the array is a matrix showing 
+  consensus clustering results for algorithms (method). The matrices have a 
   row for each sample, and a column for each subsample. Each entry represents
   a class membership.
 }
@@ -70,13 +70,14 @@ The clustering algorithms provided in \code{ConClust} are:
 \item{"biclust": }{Biclustering using a latent block model}
 }
 
-The \code{min.sd} argument is used to filter the feature space for only highly variable
-features. Only features with a standard deviation across all samples greater than
-\code{min.sd} will be used.
+The \code{min.sd} argument is used to filter the feature space for only
+highly variable features. Only features with a standard deviation across all
+samples greater than \code{min.sd} will be used.
 }
 \examples{
 data(hgsc)
-x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+dat <- t(hgsc[, -1])
+x <- ConClust(dat, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
 }
 \author{
 Derek Chiu, Aline Talhouk
