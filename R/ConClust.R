@@ -32,6 +32,8 @@
 #'   clustering. Must be any number of the following: "nmfDiv", "nmfEucl",
 #'   "hcAEucl", "hcDianaEucl", "kmEucl", "kmSpear", "pamEucl", "pamSpear",
 #'   "apEucl", "scRbf", "gmmBIC", "biclust". See details.
+#' @param parallel logical; if \code{TRUE}, the function registers a parallel
+#'   backend from the \code{doParallel} package and runs a foreach loop
 #' @param seed random seed to use for NMF-based algorithms
 #' @param seed.method seed to use to ensure each method operates on the same set
 #'   of subsamples
@@ -51,12 +53,12 @@
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom stats dist hclust kmeans setNames
 #' @importFrom kernlab specc
-#' @import apcluster mclust blockcluster
+#' @import apcluster mclust blockcluster foreach
 #' @export
 #' @examples
 #' data(hgsc)
 #' x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
-ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
+ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL, parallel = FALSE,
                      seed = 123456, seed.method = 1, min.sd = 1, save = FALSE,
                      file.name = "ConClustOutput", time.saved = FALSE) {
   x.rest <- prepare_data(x, min.sd = min.sd)
@@ -74,49 +76,47 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
   nm <- length(method)
   coclus <- array(NA, c(n, reps, nm),
                   dimnames = list(samples, paste0("R", 1:reps), method))
-  pb <- txtProgressBar(min = 0, max = reps, style = 3)
-
-  for (j in 1:nm) {
-    set.seed(seed.method)
-    for (i in 1:reps) {
-      setTxtProgressBar(pb, i)
-      ind.new <- sample(n, n.new, replace = FALSE)
-      if (any(c("nmfDiv", "nmfEucl") %in% method))
-        x.nmf.samp <- x.nmf[!(apply(x.nmf[, ind.new], 1,
-                                    function(x) all(x == 0))), ind.new]
-
-      coclus[ind.new, i, j] <- switch(
-        method[j],
-        nmfDiv = NMF::predict(NMF::nmf(
-          x.nmf.samp, rank = k, method = "brunet", seed = seed)),
-        nmfEucl = NMF::predict(NMF::nmf(
-          x.nmf.samp, rank = k, method = "lee", seed = seed)),
-        hcAEucl = cutree(hclust(dist(t(x.rest[, ind.new])),
-                                method = "average"), k),
-        hcDianaEucl = cutree(cluster::diana(euc(t(x.rest[, ind.new])),
-                                            diss = TRUE), k),
-        kmEucl = kmeans(euc(t(x.rest[, ind.new])),
-                        k)$cluster,
-        kmSpear = kmeans(spearman.dist(t(x.rest[, ind.new])),
-                         k)$cluster,
-        pamEucl = cluster::pam(euc(t(x.rest[, ind.new])), k,
-                               cluster.only = TRUE),
-        pamSpear = cluster::pam(spearman.dist(t(x.rest[, ind.new])), k,
-                                cluster.only = TRUE),
-        apEucl = setNames(dense_rank(suppressWarnings(
-          apcluster::apclusterK(negDistMat, t(x.rest[, ind.new]), k,
-                                verbose = FALSE)@idx)),
-          rownames(t(x.rest[, ind.new]))),
-        scRbf = setNames(specc(t(x.rest[, ind.new]), k,
-                               kernel = "rbfdot")@.Data,
-                         rownames(t(x.rest[, ind.new]))),
-        gmmBIC = mclust::Mclust(t(x.rest[, ind.new]), k)$classification,
-        biclust = blockcluster::cocluster(as.matrix(x.rest[, ind.new]),
-                                          "continuous",
-                                          nbcocluster = c(k, k))@colclass + 1
-      )
-      if (i %% 10 == 0) {
-        if (save) {
+  if (!parallel) {
+    pb <- txtProgressBar(max = nm * reps, style = 3)
+    for (j in 1:nm) {
+      set.seed(seed.method)
+      for (i in 1:reps) {c
+        setTxtProgressBar(pb, (j - 1) * reps + i)
+        ind.new <- sample(n, n.new, replace = FALSE)
+        if (any(c("nmfDiv", "nmfEucl") %in% method))
+          x.nmf.samp <- x.nmf[!(apply(x.nmf[, ind.new], 1,
+                                      function(x) all(x == 0))), ind.new]
+        coclus[ind.new, i, j] <- switch(
+          method[j],
+          nmfDiv = NMF::predict(NMF::nmf(
+            x.nmf.samp, rank = k, method = "brunet", seed = seed)),
+          nmfEucl = NMF::predict(NMF::nmf(
+            x.nmf.samp, rank = k, method = "lee", seed = seed)),
+          hcAEucl = cutree(hclust(dist(t(x.rest[, ind.new])),
+                                  method = "average"), k),
+          hcDianaEucl = cutree(cluster::diana(euc(t(x.rest[, ind.new])),
+                                              diss = TRUE), k),
+          kmEucl = kmeans(euc(t(x.rest[, ind.new])),
+                          k)$cluster,
+          kmSpear = kmeans(spearman.dist(t(x.rest[, ind.new])),
+                           k)$cluster,
+          pamEucl = cluster::pam(euc(t(x.rest[, ind.new])), k,
+                                 cluster.only = TRUE),
+          pamSpear = cluster::pam(spearman.dist(t(x.rest[, ind.new])), k,
+                                  cluster.only = TRUE),
+          apEucl = setNames(dense_rank(suppressWarnings(
+            apcluster::apclusterK(negDistMat, t(x.rest[, ind.new]), k,
+                                  verbose = FALSE)@idx)),
+            rownames(t(x.rest[, ind.new]))),
+          scRbf = setNames(specc(t(x.rest[, ind.new]), k,
+                                 kernel = "rbfdot")@.Data,
+                           rownames(t(x.rest[, ind.new]))),
+          gmmBIC = mclust::Mclust(t(x.rest[, ind.new]), k)$classification,
+          biclust = blockcluster::cocluster(as.matrix(x.rest[, ind.new]),
+                                            "continuous",
+                                            nbcocluster = c(k, k))@colclass + 1
+        )
+        if (i %% 10 == 0 & save) {
           if (time.saved) {
             path <- paste0(file.name, "_",
                            format(Sys.time(), "%Y-%m-%d_%H-%M-%S") , ".rds")
@@ -127,6 +127,52 @@ ConClust <- function(x, k, pItem = 0.8, reps = 1000, method = NULL,
         }
       }
     }
+  } else {
+    ncores <- parallel::detectCores()
+    cl <- parallel::makeCluster(ncores)
+    doParallel::registerDoParallel(cl)
+    coclus <- foreach(
+      j = 1:nm,
+      .packages = c("foreach", "bioDist", "dplyr", "apcluster", "mclust")) %dopar% {
+        set.seed(seed.method)
+        foreach(i = 1:reps) %dopar% {
+          ind.new <- sample(n, n.new, replace = FALSE)
+          if (any(c("nmfDiv", "nmfEucl") %in% method))
+            x.nmf.samp <- x.nmf[!(apply(x.nmf[, ind.new], 1,
+                                        function(x) all(x == 0))), ind.new]
+          coclus[ind.new, i, j] <- switch(
+            method[j],
+            nmfDiv = NMF::predict(NMF::nmf(
+              x.nmf.samp, rank = k, method = "brunet", seed = seed)),
+            nmfEucl = NMF::predict(NMF::nmf(
+              x.nmf.samp, rank = k, method = "lee", seed = seed)),
+            hcAEucl = cutree(hclust(dist(t(x.rest[, ind.new])),
+                                    method = "average"), k),
+            hcDianaEucl = cutree(cluster::diana(euc(t(x.rest[, ind.new])),
+                                                diss = TRUE), k),
+            kmEucl = kmeans(euc(t(x.rest[, ind.new])),
+                            k)$cluster,
+            kmSpear = kmeans(spearman.dist(t(x.rest[, ind.new])),
+                             k)$cluster,
+            pamEucl = cluster::pam(euc(t(x.rest[, ind.new])), k,
+                                   cluster.only = TRUE),
+            pamSpear = cluster::pam(spearman.dist(t(x.rest[, ind.new])), k,
+                                    cluster.only = TRUE),
+            apEucl = setNames(dplyr::dense_rank(suppressWarnings(
+              apcluster::apclusterK(negDistMat, t(x.rest[, ind.new]), k,
+                                    verbose = FALSE)@idx)),
+              rownames(t(x.rest[, ind.new]))),
+            scRbf = setNames(kernlab::specc(t(x.rest[, ind.new]), k,
+                                            kernel = "rbfdot")@.Data,
+                             rownames(t(x.rest[, ind.new]))),
+            gmmBIC = mclust::Mclust(t(x.rest[, ind.new]), k)$classification)
+        }
+        coclus[, , j]
+      } %>%
+      unlist() %>% 
+      array(dim = c(n, reps, nm),
+            dimnames = list(paste0("V", 1:n), paste0("R", 1:reps), method))
+    doParallel::stopImplicitCluster()
   }
   if (save) {
     if (time.saved) {

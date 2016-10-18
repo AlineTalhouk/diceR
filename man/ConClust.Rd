@@ -4,9 +4,9 @@
 \alias{ConClust}
 \title{Consensus clustering over samples and algorithms}
 \usage{
-ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, seed = 123456,
-  seed.method = 1, min.sd = 1, save = FALSE,
-  file.name = "ConClustOutput", time.saved = FALSE)
+ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL,
+  parallel = FALSE, seed = 123456, seed.method = 1, min.sd = 1,
+  save = FALSE, file.name = "ConClustOutput", time.saved = FALSE)
 }
 \arguments{
 \item{x}{data matrix; genes are rows and samples are columns}
@@ -22,6 +22,9 @@ algorithm}
 clustering. Must be any number of the following: "nmfDiv", "nmfEucl",
 "hcAEucl", "hcDianaEucl", "kmEucl", "kmSpear", "pamEucl", "pamSpear",
 "apEucl", "scRbf", "gmmBIC", "biclust". See details.}
+
+\item{parallel}{logical; if \code{TRUE}, the function registers a parallel
+backend from the \code{doParallel} package and runs a foreach loop}
 
 \item{seed}{random seed to use for NMF-based algorithms}
 
