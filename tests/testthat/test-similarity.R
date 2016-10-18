@@ -1,10 +1,8 @@
 
-
 context("Similarity matrices")
 
 set.seed(1)
-E <-
-  matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow = FALSE)
+E <- matrix(rep(sample(1:4, 800, replace = TRUE)), nrow = 100)
 dc <- 0.8
 K <- 4
 R <- 5
@@ -12,7 +10,7 @@ R <- 5
 test_that("Check srs works", {
   SRS <- srs(E = E, dc = dc, R = 5)
   expect_equal(sum(!diag(SRS) == 1), 0)
-  expect_true(abs(sum(SRS) - 510.7344) < 0.001)
+  expect_equal(abs(sum(SRS)), 587.01, tolerance = 0.1)
 })
 
 test_that("Error in srs with wrong inputs", {
@@ -26,7 +24,7 @@ test_that("Error in srs with wrong inputs", {
 test_that("Check asrs", {
   ASRS <- asrs(E = E, dc = 0.8)
   expect_equal(sum(!diag(ASRS) == 1), 0)
-  expect_true(abs(sum(ASRS) - 6260.9) < 0.1)
+  expect_equal(abs(sum(ASRS)), 6260.9, tolerance = 0.1)
 })
 
 test_that("Error in asrs with wrong inputs", {
@@ -39,7 +37,7 @@ test_that("Error in asrs with wrong inputs", {
 test_that("Check cts works", {
   CTS <- cts(E = E, dc = 0.8)
   expect_equal(sum(!diag(CTS) == 1), 0)
-  expect_true(abs(sum(CTS) - 7769.9) < 0.1)
+  expect_equal(abs(sum(CTS)), 7769.9, tolerance = 0.1)
 })
 
 test_that("Error in cts with wrong inputs", {

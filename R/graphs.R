@@ -29,7 +29,7 @@
 #' set.seed(911)
 #' x <- matrix(rnorm(1000), nrow = 10)
 #' CC1 <- ConClust(x, k = 4, reps = 10,
-#' method = c("hcAEucl", "apEucl", "gmmBIC"), save = FALSE)
+#' method = c("hcAEucl", "apEucl", "gmmBIC"))
 #' 
 #' # Plot CDF
 #' p <- graph_cdf(CC1)
@@ -43,8 +43,9 @@
 #' p <- graph_delta_area(CC1)
 #' p
 #' 
-#' # Heatmaps with column side colours corresponding to clusters for each algorithm
-#' graph_heatmap(CC1)
+#' # Heatmaps with column side colours corresponding to clusters
+#' CC2 <- ConClust(x, k = 3, reps = 5, method = "hcAEucl")
+#' graph_heatmap(CC2)
 #' 
 #' # Track how cluster assignments change between algorithms
 #' p <- graph_tracking(CC1)

@@ -38,22 +38,21 @@ ConClustEnsemble <- function(X, k, reps = 1000, method = NULL) {
     
   }
   E <- ConClust(df_conClust, k = k, reps = reps, method = method)
-
   E_imputed <- array(dim = dim(E))
   
-  #Use k nearest neighbour to get rid of some NAs
+  # Use k nearest neighbour to get rid of some NAs
   for (i in 1:dim(E_imputed)[3]) {
     E_imputed[, , i] <- apply(E[, , i], 2, knn_impute, data = X)
   }
-  #Get consensus summary
+  # Get consensus summary
   E_cs <- consensus_summary(E_imputed, k = k)
-  if(length(E_cs)>1){
+  if (length(E_cs) > 1) {
     for (i in 2:length(E_cs)) {
       E_cs[[i]]$consensus_class <- relabel_class(E_cs[[1]]$consensus_class,
                                                  E_cs[[i]]$consensus_class)
     }
   }
-  #Relabel and flatten the layers
+  # Relabel and flatten the layers
   for (i in 1:length(E_cs)) {
     E_imputed[, , i] <-
       apply(E_imputed[, , i], 2, relabel_class,
@@ -63,13 +62,13 @@ ConClustEnsemble <- function(X, k, reps = 1000, method = NULL) {
   flat_E <- E_imputed_relabelled
   dim(flat_E) <- c(dim(E_imputed_relabelled)[1],
                    dim(E_imputed_relabelled)[2] * dim(E_imputed_relabelled)[3])
-  #Get rid of remaining NAs with majority voting
+  # Get rid of remaining NAs with majority voting
   if (anyNA(flat_E)) {
     flat_E <- t(apply(flat_E, 1, function(x) {
       x[which(is.na(x))] <- names(which.max(table(x)))
       return(x)
     }))
   }
-  flat_E<-apply(flat_E,c(1,2),as.numeric)
+  flat_E <- apply(flat_E, c(1, 2), as.numeric)
   return(flat_E)
 }
