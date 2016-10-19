@@ -4,27 +4,33 @@
 \alias{ConClust}
 \title{Consensus clustering over samples and algorithms}
 \usage{
-ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL,
-  parallel = FALSE, seed = 123456, seed.method = 1, min.sd = 1,
-  save = FALSE, file.name = "ConClustOutput", time.saved = FALSE)
+ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, progress = TRUE,
+  parallel = FALSE, ncores = NULL, seed = 123456, seed.method = 1,
+  min.sd = 1, save = FALSE, file.name = "ConClustOutput",
+  time.saved = FALSE)
 }
 \arguments{
 \item{x}{data matrix with rows as samples and columns as variables}
 
 \item{k}{number of clusters requested}
 
-\item{pItem}{proportion of items to be used in subsampling within an
+\item{pItem}{proportion of items to be used in subsampling within an 
 algorithm}
 
 \item{reps}{number of subsamples}
 
-\item{method}{vector of clustering algorithms for performing consensus
-clustering. Must be any number of the following: "nmfDiv", "nmfEucl",
-"hcAEucl", "hcDianaEucl", "kmEucl", "kmSpear", "pamEucl", "pamSpear",
+\item{method}{vector of clustering algorithms for performing consensus 
+clustering. Must be any number of the following: "nmfDiv", "nmfEucl", 
+"hcAEucl", "hcDianaEucl", "kmEucl", "kmSpear", "pamEucl", "pamSpear", 
 "apEucl", "scRbf", "gmmBIC", "biclust". See details.}
 
-\item{parallel}{logical; if \code{TRUE}, the function registers a parallel
+\item{progress}{logical; should a progress bar be displayed?}
+
+\item{parallel}{logical; if \code{TRUE}, the function registers a parallel 
 backend from the \code{doParallel} package and runs a foreach loop}
+
+\item{ncores}{number of CPU cores to use for parallel computation. Default 
+uses all available cores.}
 
 \item{seed}{random seed to use for NMF-based algorithms}
 
@@ -33,14 +39,13 @@ of subsamples}
 
 \item{min.sd}{minimum standard deviation threshold. See details.}
 
-\item{save}{logical; if \code{TRUE}, the returned object will be saved at
+\item{save}{logical; if \code{TRUE}, the returned object will be saved at 
 each iteration as well as at the end.}
 
 \item{file.name}{file name of the written object}
 
-\item{time.saved}{logical; if \code{TRUE}, the date saved is
-appended to the file name. Only applicable when \code{dir} is not
-\code{NULL}.}
+\item{time.saved}{logical; if \code{TRUE}, the date saved is appended to the 
+file name. Only applicable when \code{dir} is not \code{NULL}.}
 }
 \value{
 An array of dimension \code{nrow(x)} by \code{reps} by 
@@ -50,29 +55,34 @@ An array of dimension \code{nrow(x)} by \code{reps} by
   a class membership.
 }
 \description{
-Generates multiple runs for consensus clustering among replicated subsamples
+Generates multiple runs for consensus clustering among replicated subsamples 
 of a dataset as well as across different clustering algorithms.
 }
 \details{
-The clustering algorithms provided in \code{ConClust} are:
-\itemize{
-\item{"nmfDiv": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence}
-\item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
-\item{"hcAEucl": }{Hierarchical Clustering using Average linkage and Euclidean distance}
-\item{"hcDianaEucl": }{Divisive Hierarchical Clustering using Euclidean distance}
-\item{"kmEucl": }{K-Means using Euclidean distance}
-\item{"kmSpear": }{K-Means using Spearman distance}
-\item{"pamEucl": }{Partition Around Mediods using Euclidean distance}
-\item{"pamSpear": }{Partition Around Mediods using Spearman distance}
-\item{"apEucl": }{Affinity Propagation using Euclidean distance}
-\item{"scRbf": }{Spectral Clustering using Radial-Basis kernel function}
-\item{"gmmBIC": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm}
-\item{"biclust": }{Biclustering using a latent block model}
+The clustering algorithms provided in \code{ConClust} are: \itemize{ 
+\item{"nmfDiv": }{Nonnegative Matrix Factorization using Kullback-Leibler 
+Divergence} \item{"nmfEucl": }{Nonnegative Matrix Factorization using 
+Euclidean distance} \item{"hcAEucl": }{Hierarchical Clustering using Average 
+linkage and Euclidean distance} \item{"hcDianaEucl": }{Divisive Hierarchical 
+Clustering using Euclidean distance} \item{"kmEucl": }{K-Means using 
+Euclidean distance} \item{"kmSpear": }{K-Means using Spearman distance} 
+\item{"pamEucl": }{Partition Around Mediods using Euclidean distance} 
+\item{"pamSpear": }{Partition Around Mediods using Spearman distance} 
+\item{"apEucl": }{Affinity Propagation using Euclidean distance} 
+\item{"scRbf": }{Spectral Clustering using Radial-Basis kernel function} 
+\item{"gmmBIC": }{Gaussian Mixture Model using Bayesian Information Criterion
+on EM algorithm} \item{"biclust": }{Biclustering using a latent block model} 
 }
 
-The \code{min.sd} argument is used to filter the feature space for only
-highly variable features. Only features with a standard deviation across all
+The \code{min.sd} argument is used to filter the feature space for only 
+highly variable features. Only features with a standard deviation across all 
 samples greater than \code{min.sd} will be used.
+
+The progress bar for \code{parallel = FALSE} increments for every unit of 
+\code{reps}, where as for \code{parallel = TRUE}, the increments are for 
+every \code{method}. Additionally, when the progress bar is used in 
+conjunction with parallel computation, each worker outputs the attached
+packages (and potential masking of functions).
 }
 \examples{
 data(hgsc)
