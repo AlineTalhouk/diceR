@@ -3,7 +3,7 @@
 diceR
 =====
 
-[![Travis-CI Build Status](https://travis-ci.com/AlineTalhouk/diceR.svg?token=R9saDTyWyg3zsFXfoa1H&branch=master)](https://travis-ci.com/AlineTalhouk/diceR) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?branch=master&svg=true)](https://ci.appveyor.com/project/dchiu911/diceR) [![Coverage Status](https://img.shields.io/codecov/c/github/AlineTalhouk/diceR/master.svg)](https://codecov.io/github/AlineTalhouk/diceR?branch=master)
+[![Travis-CI Build Status](https://travis-ci.com/AlineTalhouk/diceR.svg?token=R9saDTyWyg3zsFXfoa1H&branch=master)](https://travis-ci.com/AlineTalhouk/diceR) [![Coverage Status](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg)](https://codecov.io/gh/AlineTalhouk/diceR?branch=master)
 
 The goal of `diceR` is to provide pipelines for generating diverse cluster ensembles in R.
 
@@ -25,7 +25,8 @@ This is a basic example which shows you how to use the main workhouse function o
 ``` r
 library(diceR)
 data(hgsc)
-x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+dat <- t(hgsc[, -1])
+x <- ConClust(dat, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
 ```
 
 ``` r
