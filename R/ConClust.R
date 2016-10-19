@@ -51,8 +51,8 @@
 #'   a class membership.
 #' @author Derek Chiu, Aline Talhouk
 #' @importFrom utils setTxtProgressBar txtProgressBar
-#' @importFrom stats dist hclust kmeans setNames
-#' @import foreach
+#' @importFrom stats dist hclust cutree kmeans setNames
+#' @import foreach mclust
 #' @export
 #' @examples
 #' data(hgsc)
