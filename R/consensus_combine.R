@@ -25,23 +25,23 @@
 #' @examples
 #' # Consensus clustering for multiple algorithms
 #' set.seed(911)
-#' x <- matrix(rnorm(1000), nrow = 10)
+#' x <- matrix(rnorm(1000), ncol = 10)
 #' CC1 <- ConClust(x, k = 4, reps = 10, method = "apEucl", save = FALSE)
 #' CC2 <- ConClust(x, k = 4, reps = 10, method = "gmmBIC", save = FALSE)
-#'
+#' 
 #' # Get summary for ConClust
 #' CC1.summ <- consensus_summary(CC1, k = 4)
 #' CC2.summ <- consensus_summary(CC2, k = 4)
-#'
+#' 
 #' # Combine and return either matrices or classes
 #' y1 <- consensus_combine(CC1.summ, CC2.summ, element = "matrix")
 #' str(y1)
 #' y2 <- consensus_combine(CC1.summ, CC2.summ, element = "class")
 #' str(y2)
-#'
+#' 
 #' # Compare algorithms on PAC and CHI
 #' z <- consensus_compare(x, cl.mat = y2, cons.mat = y1)
-#'
+#' 
 #' # Weigh algorithms
 #' consensus_weigh(z)
 consensus_combine <- function(..., element = c("matrix", "class"),

@@ -22,7 +22,7 @@ consensus class, respectively.}
 
 \item{alg.names}{optional. Supply a vector of names for the algorithms.}
 
-\item{data}{data matrix with genes as rows, samples as columns}
+\item{data}{data matrix with rows as samples and columns as variables}
 
 \item{cl.mat}{matrix of cluster assignments. Each row is an assignment for a
 different algorithm. Use \code{element = "class"} in
@@ -62,7 +62,7 @@ consensus matrix across algorithms, which can be visualized as a heatmap.
 \examples{
 # Consensus clustering for multiple algorithms
 set.seed(911)
-x <- matrix(rnorm(1000), nrow = 10)
+x <- matrix(rnorm(1000), ncol = 10)
 CC1 <- ConClust(x, k = 4, reps = 10, method = "apEucl", save = FALSE)
 CC2 <- ConClust(x, k = 4, reps = 10, method = "gmmBIC", save = FALSE)
 

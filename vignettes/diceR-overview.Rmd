@@ -46,7 +46,7 @@ When Monti et al. (2003) first introduced consensus clustering, the idea was to 
 The main function of this package is `ConClust()`, which outputs cluster assignments across subsamples and algorithms. For example, let's say we were interested in clustering the `hgsc` data into 4 clusters, using 80% resampling on 10 replicates, for these clustering algorithms: K-Means (Spearman distance), PAM (Spearman distance), Spectral Clustering using Radial-Basis kernel function, and Biclustering using a latent block model.
 
 ```{r ConClust, results='hide'}
-dat <- hgsc[, -1]
+dat <- t(hgsc[, -1])
 CC <- ConClust(dat, k = 4, reps = 10, pItem = 0.8,
                method = c("hcAEucl", "kmSpear", "pamSpear", "biclust"), save = FALSE)
 ```
@@ -61,7 +61,7 @@ kable(head(CC[, , "biclust"]))
 Note the unavoidable presence of `NA`s because we used 80% subsampling. This can be problematic in some downstream ensemble methods, so we can impute as many of the missing values as we can using K-Nearest Neighbours beforehand. There might still be `NA`s after kNN because of how the decision threshold was set.
 
 ```{r knn_impute}
-CC.impute <- apply(CC, 2:3, knn_impute, t(dat))
+CC.impute <- apply(CC, 2:3, knn_impute, dat)
 sum(is.na(CC))
 sum(is.na(CC.impute))
 ```

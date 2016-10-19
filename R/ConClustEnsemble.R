@@ -16,15 +16,15 @@
 #' @examples 
 #' # Generate a 489 by 10 clustering ensemble using 2 algorithms in ConClust
 #' data(hgsc)
-#' dat <- hgsc[, -1]
-#' rownames(dat) <- hgsc[, 1]
-#' E <- ConClustEnsemble(X = t(dat), k = 4, reps = 5, method = c("hcAEucl", "kmEucl"))
+#' dat <- t(hgsc[, -1])
+#' colnames(dat) <- hgsc[, 1]
+#' E <- ConClustEnsemble(X = dat, k = 4, reps = 5, method = c("hcAEucl", "kmEucl"))
 ConClustEnsemble <- function(X, k, reps = 1000, method = NULL) {
   assertthat::assert_that(is.matrix(X))
   assertthat::assert_that(reps > 1)  # can't compute consensus matrix on one rep
-  df_conClust <- data.frame(t(X))
-  colnames(df_conClust) <- rownames(X)
-  rownames(df_conClust) <- colnames(X)
+  df_conClust <- data.frame(X)
+  colnames(df_conClust) <- colnames(X)
+  rownames(df_conClust) <- rownames(X)
   method.list <- c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
                    "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf",
                    "gmmBIC", "biclust")

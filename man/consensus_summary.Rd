@@ -25,8 +25,9 @@ Given an object from \code{\link{ConClust}}, returns a list of consensus
 matrices and consensus classes for each clustering algorithm.
 }
 \examples{
-data(tcga)
-x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+data(hgsc)
+dat <- t(hgsc[, -1])
+x <- ConClust(dat, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
 y <- consensus_summary(x, k = 2)
 str(y)
 }

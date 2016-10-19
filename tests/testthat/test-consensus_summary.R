@@ -2,7 +2,8 @@
 context("Consensus summary")
 
 data(hgsc)
-x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+dat <- t(hgsc[, -1])
+x <- ConClust(dat, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
 y1 <- consensus_summary(x, k = 2)
 y2 <- consensus_summary(x, k = 2, save = TRUE)
 

@@ -24,10 +24,10 @@
 #' @author Derek Chiu
 #' @export
 #' @examples
-#' # Consensus clustering for 3 algorithms
+# Consensus clustering for 3 algorithms
 #' library(ggplot2)
 #' set.seed(911)
-#' x <- matrix(rnorm(1000), nrow = 10)
+#' x <- matrix(rnorm(1000), ncol = 10)
 #' CC1 <- ConClust(x, k = 4, reps = 10,
 #' method = c("hcAEucl", "apEucl", "gmmBIC"))
 #' 
@@ -44,7 +44,7 @@
 #' p
 #' 
 #' # Heatmaps with column side colours corresponding to clusters
-#' CC2 <- ConClust(x, k = 3, reps = 5, method = "hcAEucl")
+#' CC2 <- ConClust(x, k = 3, reps = 5, method = "apEucl")
 #' graph_heatmap(CC2)
 #' 
 #' # Track how cluster assignments change between algorithms
@@ -132,7 +132,7 @@ graph_tracking <- function(x) {
     as.data.frame() %>% 
     tidyr::gather(key = Method, value = Class, dplyr::everything()) %>% 
     mutate(Class = factor(Class), Method = factor(Method)) %>% 
-    cbind(Samples = factor(rownames(x[, , 1]), levels = rownames(x[, , 1])))
+    cbind(Samples = factor(colnames(x[, , 1]), levels = colnames(x[, , 1])))
   p <- ggplot(dat, aes(Samples, Method)) +
     geom_tile(aes(fill = Class)) +
     scale_fill_brewer(palette = "Set2") +
