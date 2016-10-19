@@ -14,8 +14,9 @@
 #' @author Derek Chiu
 #' @export
 #' @examples
-#' data(tcga)
-#' x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+#' data(hgsc)
+#' dat <- t(hgsc[, -1])
+#' x <- ConClust(dat, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
 #' y <- consensus_summary(x, k = 2)
 #' str(y)
 consensus_summary <- function(res, k, save = FALSE, file.name = "results_CC") {

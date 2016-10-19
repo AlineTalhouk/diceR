@@ -1,23 +1,28 @@
-#' Title wrapper function to generate CTS, SRS, and ASRS matrices. If input has NA, majority voting is used to eliminate NA.
-#'
-#' @param E : matrix of clustering resutls (may be 3D or 2D)
-#' @param dcCTS : decay constant for CTS matrix
-#' @param dcSRS : decay constant for SRS matrix
-#' @param dcASRS : decay constant for ASRS matrix
-#' @param R : number of repetitions for SRS matrix
-#' @param is.relabelled : boolean representing whether input E is relabelled
+#' Generate CTS, SRS, and ASRS matrices.
+#' 
+#' If input has \code{NA}, majority voting is used to eliminate the missing
+#' values.
+#' 
+#' @param E matrix of clustering resutls (may be 3D or 2D)
+#' @param dcCTS decay constant for CTS matrix
+#' @param dcSRS decay constant for SRS matrix
+#' @param dcASRS decay constant for ASRS matrix
+#' @param R number of repetitions for SRS matrix
+#' @param is.relabelled boolean representing whether input E is relabelled
 #' @author Johnson Liu
 #' @return a list containing the CTS, SRS, and ASRS matrix
 #' @export
-#'
+#' 
 #' @examples
 #' set.seed(1)
 #' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow = FALSE)
-#' link_clust(E=E,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
+#' link_clust(E = E, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
+#'            is.relabelled = FALSE)
 #' data(hgsc)
-#' x <- ConClust(hgsc[1:50], k = 4, reps = 4, method = c("nmfEucl", "hcAEucl",
-#' "hcDianaEucl"), save = FALSE)
-#' y <- link_clust(E=x,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10)
+#' dat <- t(hgsc[, -1])
+#' x <- ConClust(dat[1:100, 1:50], k = 4, reps = 4,
+#'               method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
+#' y <- link_clust(E = x, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10)
 link_clust <-
   function(E,
            dcCTS = 0.8,

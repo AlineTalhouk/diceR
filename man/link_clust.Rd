@@ -2,38 +2,41 @@
 % Please edit documentation in R/link_clust.R
 \name{link_clust}
 \alias{link_clust}
-\title{Title wrapper function to generate CTS, SRS, and ASRS matrices. If input has NA, majority voting is used to eliminate NA.}
+\title{Generate CTS, SRS, and ASRS matrices.}
 \usage{
 link_clust(E, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
   is.relabelled = TRUE)
 }
 \arguments{
-\item{E}{: matrix of clustering resutls (may be 3D or 2D)}
+\item{E}{matrix of clustering resutls (may be 3D or 2D)}
 
-\item{dcCTS}{: decay constant for CTS matrix}
+\item{dcCTS}{decay constant for CTS matrix}
 
-\item{dcSRS}{: decay constant for SRS matrix}
+\item{dcSRS}{decay constant for SRS matrix}
 
-\item{dcASRS}{: decay constant for ASRS matrix}
+\item{dcASRS}{decay constant for ASRS matrix}
 
-\item{R}{: number of repetitions for SRS matrix}
+\item{R}{number of repetitions for SRS matrix}
 
-\item{is.relabelled}{: boolean representing whether input E is relabelled}
+\item{is.relabelled}{boolean representing whether input E is relabelled}
 }
 \value{
 a list containing the CTS, SRS, and ASRS matrix
 }
 \description{
-Title wrapper function to generate CTS, SRS, and ASRS matrices. If input has NA, majority voting is used to eliminate NA.
+If input has \code{NA}, majority voting is used to eliminate the missing
+values.
 }
 \examples{
 set.seed(1)
 E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow = FALSE)
-link_clust(E=E,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10,is.relabelled=FALSE)
+link_clust(E = E, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
+           is.relabelled = FALSE)
 data(hgsc)
-x <- ConClust(hgsc[1:50], k = 4, reps = 4, method = c("nmfEucl", "hcAEucl",
-"hcDianaEucl"), save = FALSE)
-y <- link_clust(E=x,dcCTS=0.8,dcSRS=0.8,dcASRS=0.8,R=10)
+dat <- t(hgsc[, -1])
+x <- ConClust(dat[1:100, 1:50], k = 4, reps = 4,
+              method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
+y <- link_clust(E = x, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10)
 }
 \author{
 Johnson Liu
