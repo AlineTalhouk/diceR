@@ -42,3 +42,5 @@ x <- ConClust(hgsc, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
 ```{r}
 head(x[, , 1])
 ```
+
+![Caption for the picture.](diagram.tiff)
