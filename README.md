@@ -40,4 +40,4 @@ head(x[, , 1])
 #> TCGA.04.1341_PRO.C5  1  1  1  1 NA  1 NA  1  1   1
 ```
 
-![Caption for the picture.](diagram.tiff)
+![Caption for the picture.](inst/img/pipeline.png)

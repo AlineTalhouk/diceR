@@ -43,4 +43,4 @@ x <- ConClust(dat, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
 head(x[, , 1])
 ```
 
-![Caption for the picture.](diagram.tiff)
+![Caption for the picture.](inst/img/pipeline.png)
