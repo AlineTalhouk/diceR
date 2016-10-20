@@ -14,7 +14,7 @@ iv_db_dunn(data, labels)
 
 iv_sumsq(data, labels, k)
 
-iv_chi(data, labels, ...)
+iv_chi(data, ...)
 }
 \arguments{
 \item{data}{a dataset with rows as observations, columns as variables}

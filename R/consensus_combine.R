@@ -3,7 +3,7 @@
 #' \code{consensus_combine} combines results for multiple objects from
 #' \code{consensus_summary(ConClust())} and outputs either the consensus
 #' matrices or consensus classes for all algorithms. \code{consensus_compare}
-#' compares algorithms on validation indices \code{\link{PAC}} and CHI.
+#' compares algorithms on internal/external validation indices.
 #' \code{consensus_weigh} weighs clustering algorithms based on these two
 #' indices.
 #'
@@ -11,6 +11,10 @@
 #' results have been combined into a single object. For example, if
 #' \code{element = "class"}, then the resulting object can be used to create a
 #' consensus matrix across algorithms, which can be visualized as a heatmap.
+#' 
+#' \code{consensus_compare} always shows internal indices. If \code{ref.cl} is
+#' not \code{NULL}, external indices are shown in addition to internal indices.
+#' Relevant graphical displays are also outputted.
 #'
 #' @param ... any number of objects outputted from
 #'   \code{\link{consensus_summary}}
@@ -26,8 +30,8 @@
 #' # Consensus clustering for multiple algorithms
 #' set.seed(911)
 #' x <- matrix(rnorm(1000), ncol = 10)
-#' CC1 <- ConClust(x, k = 4, reps = 10, method = "apEucl", save = FALSE)
-#' CC2 <- ConClust(x, k = 4, reps = 10, method = "gmmBIC", save = FALSE)
+#' CC1 <- ConClust(x, k = 4, reps = 10, method = "apEucl")
+#' CC2 <- ConClust(x, k = 4, reps = 10, method = "gmmBIC")
 #' 
 #' # Get summary for ConClust
 #' CC1.summ <- consensus_summary(CC1, k = 4)
@@ -39,8 +43,11 @@
 #' y2 <- consensus_combine(CC1.summ, CC2.summ, element = "class")
 #' str(y2)
 #' 
-#' # Compare algorithms on PAC and CHI
-#' z <- consensus_compare(x, cl.mat = y2, cons.mat = y1)
+#' # Compare algorithms on internal and external indices
+#' set.seed(1)
+#' ref.cl <- sample(1:4, 100, replace = TRUE)
+#' z.internal <- consensus_compare(x, cl.mat = y2, cons.mat = y1)
+#' z <- consensus_compare(x, cl.mat = y2, cons.mat = y1, ref.cl = ref.cl)
 #' 
 #' # Weigh algorithms
 #' consensus_weigh(z)

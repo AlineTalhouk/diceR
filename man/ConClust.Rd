@@ -4,8 +4,8 @@
 \alias{ConClust}
 \title{Consensus clustering over samples and algorithms}
 \usage{
-ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, progress = TRUE,
-  parallel = FALSE, ncores = NULL, seed = 123456, seed.method = 1,
+ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, parallel = NULL,
+  ncores = NULL, progress = TRUE, seed = 123456, seed.method = 1,
   min.sd = 1, save = FALSE, file.name = "ConClustOutput",
   time.saved = FALSE)
 }
@@ -24,13 +24,16 @@ clustering. Must be any number of the following: "nmfDiv", "nmfEucl",
 "hcAEucl", "hcDianaEucl", "kmEucl", "kmSpear", "pamEucl", "pamSpear", 
 "apEucl", "scRbf", "gmmBIC", "biclust". See details.}
 
-\item{progress}{logical; should a progress bar be displayed?}
-
 \item{parallel}{logical; if \code{TRUE}, the function registers a parallel 
-backend from the \code{doParallel} package and runs a foreach loop}
+backend from the \code{doParallel} package and runs a foreach loop. By 
+default, \code{parallel = NULL} means the function determines, based on 
+other parameters, whether to use parallel or not (e.g. number of
+\code{reps}, availability of multiple cores).}
 
 \item{ncores}{number of CPU cores to use for parallel computation. Default 
 uses all available cores.}
+
+\item{progress}{logical; should a progress bar be displayed?}
 
 \item{seed}{random seed to use for NMF-based algorithms}
 
@@ -59,19 +62,20 @@ Generates multiple runs for consensus clustering among replicated subsamples
 of a dataset as well as across different clustering algorithms.
 }
 \details{
-The clustering algorithms provided in \code{ConClust} are: \itemize{ 
-\item{"nmfDiv": }{Nonnegative Matrix Factorization using Kullback-Leibler 
-Divergence} \item{"nmfEucl": }{Nonnegative Matrix Factorization using 
-Euclidean distance} \item{"hcAEucl": }{Hierarchical Clustering using Average 
-linkage and Euclidean distance} \item{"hcDianaEucl": }{Divisive Hierarchical 
-Clustering using Euclidean distance} \item{"kmEucl": }{K-Means using 
-Euclidean distance} \item{"kmSpear": }{K-Means using Spearman distance} 
+The clustering algorithms provided in \code{ConClust} are:
+\itemize{ 
+\item{"nmfDiv": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence}
+\item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
+\item{"hcAEucl": }{Hierarchical Clustering using Average linkage and Euclidean distance}
+\item{"hcDianaEucl": }{Divisive Hierarchical Clustering using Euclidean distance}
+\item{"kmEucl": }{K-Means using Euclidean distance}
+\item{"kmSpear": }{K-Means using Spearman distance} 
 \item{"pamEucl": }{Partition Around Mediods using Euclidean distance} 
 \item{"pamSpear": }{Partition Around Mediods using Spearman distance} 
 \item{"apEucl": }{Affinity Propagation using Euclidean distance} 
 \item{"scRbf": }{Spectral Clustering using Radial-Basis kernel function} 
-\item{"gmmBIC": }{Gaussian Mixture Model using Bayesian Information Criterion
-on EM algorithm} \item{"biclust": }{Biclustering using a latent block model} 
+\item{"gmmBIC": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm}
+\item{"biclust": }{Biclustering using a latent block model} 
 }
 
 The \code{min.sd} argument is used to filter the feature space for only 
@@ -81,7 +85,7 @@ samples greater than \code{min.sd} will be used.
 The progress bar for \code{parallel = FALSE} increments for every unit of 
 \code{reps}, where as for \code{parallel = TRUE}, the increments are for 
 every \code{method}. Additionally, when the progress bar is used in 
-conjunction with parallel computation, each worker outputs the attached
+conjunction with parallel computation, each worker outputs the attached 
 packages (and potential masking of functions).
 }
 \examples{

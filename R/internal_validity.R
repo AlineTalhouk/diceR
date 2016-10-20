@@ -174,8 +174,8 @@ iv_sumsq <- function(data, labels, k) {
 #' @return \code{iv_chi} returns the CHI
 #' @rdname internal_validity
 #' @export
-iv_chi <- function(data, labels, ...) {
-  return(clusterSim::index.G1(data, labels, ...))
+iv_chi <- function(data, ...) {
+  clusterSim::index.G1(data, ...)
 }
 
 #' Proportion of Ambiguous Clustering
