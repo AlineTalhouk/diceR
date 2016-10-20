@@ -76,7 +76,7 @@ We can carry on the analysis using either `CC` or `CC.impute`.
 - [`consensus_class()`](#get-consensus-class-with-consensus_class)
 - [`consensus_summary()`](#organize-consensus-classes-and-matrices-with-consensus_summary)
 - [`consensus_combine()`](#combine-consensus-summaries-with-consensus_combine)
-- [`consensus_compare()`](#compare-algortihms-with-consensus_compare)
+- [`consensus_evaluate()`](#compare-algortihms-with-consensus_evaluate)
 - [`consensus_weigh()`](#rank-and-weigh-algorithms-with-consensus_weigh)
 - [`consensus_confmat()`](#compare-to-true-class-with-consensus_confmat)
 
@@ -140,12 +140,12 @@ ccomb_class2 <- consensus_combine(cs, cs2, element = "class")
 kable(head(ccomb_class2))
 ```
 
-### Compare algortihms with `consensus_compare()`
+### Compare algortihms with `consensus_evaluate()`
 
 Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose two indices on which to compare the ensemble of clustering algorithms. The first index is PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between `lower` (defaults to 0) and `upper` (defaults to 1). PAC gives a sense of cluster stability. The second index is CHI (Calinski-Harabasz Index) or pseudo F-statistic. It measures the ratio of between cluster distances to within cluster distances, and was observed in our simulations to be one of the more robust indices to different data structures.
 
-```{r consensus_compare}
-ccomp <- consensus_compare(dat, cl.mat = ccomb_class, cons.mat = ccomb_matrix)
+```{r consensus_evaluate}
+ccomp <- consensus_evaluate(dat, cl.mat = ccomb_class, cons.mat = ccomb_matrix)
 kable(head(ccomp))
 ```
 
@@ -156,7 +156,7 @@ We see that the biclustering algorithm is the least ambiguous and also most well
 Suppose we want a ranking of the algorithms from the previous table, and supply weights according to cluster performance. The idea is that we want to put higher weights in the final cluster ensemble to well-performing algorithms (such as bicluster in the last example), and vice versa.
 
 ```{r consensus_weigh}
-cweigh <- consensus_weigh(ccomp)
+cweigh <- consensus_weigh(ccomp$internal)
 kable(head(cweigh))
 ```
 

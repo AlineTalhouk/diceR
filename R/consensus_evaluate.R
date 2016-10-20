@@ -6,11 +6,11 @@
 #'   \code{element = "matrix"} in \code{consensus_combine}.
 #' @param ref.cl reference class
 #' @inheritParams consensus_combine
-#' @return \code{consensus_compare} returns a data frame of the indices PAC and
+#' @return \code{consensus_evaluate} returns a data frame of the indices PAC and
 #'   CHI in each column for each algorithm.
 #' @rdname consensus_combine
 #' @export
-consensus_compare <- function(data, cl.mat, cons.mat, ref.cl = NULL,
+consensus_evaluate <- function(data, cl.mat, cons.mat, ref.cl = NULL,
                               alg.names = NULL) {
   if (!is.null(alg.names)) {
     an <- alg.names

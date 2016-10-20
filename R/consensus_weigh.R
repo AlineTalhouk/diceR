@@ -1,5 +1,5 @@
 #' @param data.index matrix of indices for each algorthim outputted from
-#'   \code{consensus_compare}.
+#'   \code{consensus_evaluate}.
 #' @param top how many top algorithms to include for weighting. Defaults to 5.
 #' @return \code{consensus_weigh} returns a matrix of weighted algorithms.
 #' @rdname consensus_combine

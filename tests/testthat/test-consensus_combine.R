@@ -14,8 +14,8 @@ y2 <- consensus_combine(CC1.summ, CC2.summ, element = "class")
 y3 <- consensus_combine(CC1.summ, CC2.summ, element = "matrix", alg.names = an)
 y4 <- consensus_combine(CC1.summ, CC2.summ, element = "class", alg.names = an)
 
-z1 <- consensus_compare(x, cl.mat = y2, cons.mat = y1)
-z2 <- consensus_compare(x, cl.mat = y2, cons.mat = y1, alg.names =  an)
+z1 <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1)
+z2 <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1, alg.names =  an)
 
 test_that("combining results has expected lengths", {
   expect_length(y1, dim(CC1)[3] + dim(CC2)[3])
