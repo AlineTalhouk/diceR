@@ -4,7 +4,8 @@
 #' matrices and consensus classes for each clustering algorithm.
 #'
 #' @param res output from \code{ConClust}
-#' @param k number of clusters to compute for consensus class
+#' @param k number of clusters to compute for consensus class]
+#' @param progress logical; should a progress bar be displayed?
 #' @param save logical; if \code{TRUE}, the returned object will be saved at
 #'   each iteration as well as at the end.
 #' @param file.name file name of the written object
@@ -19,8 +20,10 @@
 #' x <- ConClust(dat, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
 #' y <- consensus_summary(x, k = 2)
 #' str(y)
-consensus_summary <- function(res, k, save = FALSE, file.name = "results_CC") {
-  con.mats <- plyr::alply(res, 3, consensus_matrix, .progress = "text",
+consensus_summary <- function(res, k, progress = TRUE,
+                              save = FALSE, file.name = "results_CC") {
+  prog <- ifelse(progress, "text", "none")
+  con.mats <- plyr::alply(res, 3, consensus_matrix, .progress = prog,
                           .dims = TRUE)
   con.cls <- plyr::llply(con.mats, consensus_class, k = k)
   z <- list(consensus_matrix = con.mats, consensus_class = con.cls)

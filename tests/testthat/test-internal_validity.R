@@ -2,7 +2,7 @@
 context("Internal validity indices")
 
 set.seed(1)
-MD <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100, byrow = FALSE))
+MD <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100))
 set.seed(1)
 MT <- sample(1:4, 100, replace = TRUE)
 
@@ -22,10 +22,6 @@ test_that("iv_compactness throws error with wrong inputs", {
 })
 
 test_that("Check iv_db_dunn with MD and MT", {
-  set.seed(1)
-  MD <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100, byrow = FALSE))
-  set.seed(1)
-  MT <- sample(1:4, 100, replace = TRUE)
   expect_true(abs(iv_db_dunn(MD, MT)$DB - 4.6724) <= 0.001)
   expect_true(abs(iv_db_dunn(MD, MT)$Dunn - 0.3734) <= 0.001)
 })

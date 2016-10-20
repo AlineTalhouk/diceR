@@ -86,7 +86,8 @@ graph_delta_area <- function(x) {
 #' @noRd
 get_cdf <- function(x) {
   Method <- CDF <- NULL
-  dat <- consensus_summary(x, k = n_distinct(x[, 1, 1], na.rm = TRUE)) %>% 
+  dat <- consensus_summary(x, k = n_distinct(x[, 1, 1], na.rm = TRUE),
+                           progress = FALSE) %>% 
     consensus_combine(element = "matrix") %>% 
     lapply(function(d) d[lower.tri(d, diag = TRUE)]) %>% 
     as.data.frame() %>% 
@@ -102,7 +103,7 @@ get_cdf <- function(x) {
 #' @export
 graph_heatmap <- function(x, main = NULL, ...) {
   k <- n_distinct(x[, 1, 1], na.rm = TRUE)
-  dat <- consensus_summary(x, k = k) %>% 
+  dat <- consensus_summary(x, k = k, progress = FALSE) %>% 
     consensus_combine(element = "matrix") 
   if (is.null(main)) {
     main <- names(dat)
@@ -127,7 +128,7 @@ graph_heatmap <- function(x, main = NULL, ...) {
 graph_tracking <- function(x) {
   Method <- Class <- Samples <- NULL
   k <- n_distinct(x[, 1, 1], na.rm = TRUE)
-  dat <- consensus_summary(x, k = k) %>% 
+  dat <- consensus_summary(x, k = k, progress = FALSE) %>% 
     consensus_combine(element = "class") %>% 
     as.data.frame() %>% 
     tidyr::gather(key = Method, value = Class, dplyr::everything()) %>% 

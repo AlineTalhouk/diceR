@@ -4,12 +4,15 @@
 \alias{consensus_summary}
 \title{Consensus summary}
 \usage{
-consensus_summary(res, k, save = FALSE, file.name = "results_CC")
+consensus_summary(res, k, progress = TRUE, save = FALSE,
+  file.name = "results_CC")
 }
 \arguments{
 \item{res}{output from \code{ConClust}}
 
-\item{k}{number of clusters to compute for consensus class}
+\item{k}{number of clusters to compute for consensus class]}
+
+\item{progress}{logical; should a progress bar be displayed?}
 
 \item{save}{logical; if \code{TRUE}, the returned object will be saved at
 each iteration as well as at the end.}

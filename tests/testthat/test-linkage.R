@@ -1,5 +1,5 @@
 
-context("linkage")
+context("Linkage")
 
 set.seed(1)
 E_LCE <- matrix(rep(sample(1:4, 800, replace = TRUE)), nrow = 100)

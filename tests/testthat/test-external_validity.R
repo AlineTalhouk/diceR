@@ -2,8 +2,7 @@
 context("External validity indices")
 
 set.seed(1)
-E <-
-  matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow = FALSE)
+E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100)
 
 test_that("Check ev_accuracy works with basic inputs", {
   expect_equal(ev_accuracy(c(1, 2, 1, 1), c(1, 1, 1, 1)), 1)

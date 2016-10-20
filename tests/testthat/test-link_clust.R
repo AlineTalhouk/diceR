@@ -8,9 +8,9 @@ E2 <- matrix(rep(sample(c(1:4, NA), 1000, replace = TRUE)), nrow = 100)
 test_that("Check link_clust with 2D complete case matrix", {
   test_lc_2d_complete <- link_clust(E = E1, dcCTS = 0.8, dcSRS = 0.8,
                                     dcASRS = 0.8, R = 10, is.relabelled = FALSE)
-  expect_equal(sum(test_lc_2d_complete$cts != cts(E, 0.8)), 0)
-  expect_equal(sum(test_lc_2d_complete$srs != srs(E, 0.8, 10)), 0)
-  expect_equal(sum(test_lc_2d_complete$asrs != asrs(E, 0.8)), 0)
+  expect_equal(sum(test_lc_2d_complete$cts != cts(E1, 0.8)), 0)
+  expect_equal(sum(test_lc_2d_complete$srs != srs(E1, 0.8, 10)), 0)
+  expect_equal(sum(test_lc_2d_complete$asrs != asrs(E1, 0.8)), 0)
 })
 
 test_that("Check link_clust with 2D incomplete case matrix", {
@@ -34,7 +34,7 @@ test_that("Check link_clust with 2D incomplete case matrix", {
 test_that("Check link_clust with hgsc data with 3 ConClust algorithms", {
   data(hgsc)
   dat <- t(hgsc[, -1])
-  x <- ConClust(dat[1:200, 1:100], k = 4, reps = 4,
+  x <- ConClust(dat[1:200, 1:100], k = 4, reps = 4, progress = FALSE,
                 method = c("nmfEucl", "hcAEucl", "hcDianaEucl"))
   test_lc_3d_incomplete <- link_clust(E = x, dcCTS = 0.8, dcSRS = 0.8,
                                       dcASRS = 0.8, R = 5,

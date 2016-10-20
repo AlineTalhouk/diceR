@@ -7,13 +7,11 @@ test_that("majority voting works", {
 })
 
 test_that("k modes works", {
-  x <- array(rep(c(rep(1, 10), rep(2, 10), rep(3, 10)), times=5), c(30,6,5))
+  x <- array(rep(c(rep(1, 10), rep(2, 10), rep(3, 10)), times = 5), c(30, 6, 5))
   xf <- x
-  dim(xf) <- c(30,30)
+  dim(xf) <- c(30, 30)
   set.seed(1)
   kmo.old <- klaR::kmodes(xf, 3)$cluster
-  kmo.new <- k_modes(x, is.relabelled = TRUE, seed=1)
+  kmo.new <- k_modes(x, is.relabelled = TRUE, seed = 1)
   expect_equal(kmo.old, kmo.new)
 })
-
-

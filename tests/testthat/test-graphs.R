@@ -4,7 +4,7 @@ context("Graphical displays")
 set.seed(911)
 x <- matrix(rnorm(1000), nrow = 10)
 CC1 <- ConClust(x, k = 4, reps = 10, method = c("hcAEucl", "apEucl", "gmmBIC"),
-                save = FALSE)
+                progress = FALSE)
 p1 <- graph_cdf(CC1)
 
 test_that("graph_cdf object can have added/modified ggplot layers", {
