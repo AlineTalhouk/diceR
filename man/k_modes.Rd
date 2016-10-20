@@ -30,7 +30,8 @@ data perturbations
 \examples{
 # Calculate for a fraction of first algorithm
 data(E_imputed)
-table(k_modes(E_imputed[1:100, , 1, drop = FALSE], is.relabelled = FALSE))
+table(k_modes(E_imputed[1:100, , 1, drop = FALSE], is.relabelled = FALSE,
+is.flat = FALSE))
 }
 \author{
 Aline Talhouk

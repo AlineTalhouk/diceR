@@ -11,6 +11,7 @@
 #' @param is.relabelled boolean representing whether input E is relabelled
 #' @author Johnson Liu
 #' @return a list containing the CTS, SRS, and ASRS matrix
+#' @importFrom stats complete.cases
 #' @export
 #' 
 #' @examples

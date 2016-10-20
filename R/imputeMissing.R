@@ -1,18 +1,23 @@
 #' Impute missing values due to subsampling
-#'
-#' Uses k nearest neighbour to impute missing values due to sampling, not all cases will be imputed using this method. If imputeALL is set to true (default), then cases will be relabelled and missing cases will be called by majority vote
-#'
-#' #' @param E a matrix of clusterings with number of rows equal to the number of cases to be clustered, number of columns equal to the clustering obtained by different resampling of the data, and the third dimension is the different algorithms.
+#' 
+#' Uses k nearest neighbours to impute missing values due to sampling. Not all
+#' cases will be imputed using this method.
+#' 
+#' @param E a matrix of clusterings with number of rows equal to the number of 
+#'   cases to be clustered, number of columns equal to the clustering obtained 
+#'   by different resampling of the data, and the third dimension is the 
+#'   different algorithms.
 #' @param data is data matrix with samples as rows and genes/features as columns
+#' @param imputeALL logical; if \code{TRUE} (default), then cases will be 
+#'   relabelled and missing cases will be called by majority vote
 #' @return a flat matrix of clusterings, fully imputed and relabelled.
 #' @author Aline Talhouk
 #' @export
 #' @examples
-
-# E <- ConClust(hgsc, k = 4, reps = 10, method = c("hcAEucl","kmEucl","scRbf"))
-# data <- t(hgsc[,-1])
-# imputeMissing(E,data)
-
+#' data(hgsc)
+#' dat <- t(hgsc[, -1])
+#' E <- ConClust(dat, k = 4, reps = 10, method = c("hcAEucl", "kmEucl", "scRbf"))
+#' imputeMissing(E, dat)
 imputeMissing <- function(E, data, imputeALL = TRUE) {
   # Flatten the matrix
   E_flat <- E
@@ -30,8 +35,7 @@ imputeMissing <- function(E, data, imputeALL = TRUE) {
       return(x)
     }))
     return(apply(E_imputed2, 2, as.numeric))
-  } else{
+  } else {
     return(E_imputed)
   }
-  
 }

@@ -7,16 +7,28 @@
 imputeMissing(E, data, imputeALL = TRUE)
 }
 \arguments{
+\item{E}{a matrix of clusterings with number of rows equal to the number of 
+cases to be clustered, number of columns equal to the clustering obtained 
+by different resampling of the data, and the third dimension is the 
+different algorithms.}
+
 \item{data}{is data matrix with samples as rows and genes/features as columns}
+
+\item{imputeALL}{logical; if \code{TRUE} (default), then cases will be 
+relabelled and missing cases will be called by majority vote}
 }
 \value{
 a flat matrix of clusterings, fully imputed and relabelled.
 }
 \description{
-Uses k nearest neighbour to impute missing values due to sampling, not all cases will be imputed using this method. If imputeALL is set to true (default), then cases will be relabelled and missing cases will be called by majority vote
+Uses k nearest neighbours to impute missing values due to sampling. Not all
+cases will be imputed using this method.
 }
-\details{
-#' @param E a matrix of clusterings with number of rows equal to the number of cases to be clustered, number of columns equal to the clustering obtained by different resampling of the data, and the third dimension is the different algorithms.
+\examples{
+data(hgsc)
+dat <- t(hgsc[, -1])
+E <- ConClust(dat, k = 4, reps = 10, method = c("hcAEucl", "kmEucl", "scRbf"))
+imputeMissing(E, dat)
 }
 \author{
 Aline Talhouk
