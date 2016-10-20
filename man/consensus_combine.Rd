@@ -89,7 +89,7 @@ z.internal <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1)
 z <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1, ref.cl = ref.cl)
 
 # Weigh algorithms
-consensus_weigh(z)
+consensus_weigh(z$internal)
 }
 \author{
 Derek Chiu

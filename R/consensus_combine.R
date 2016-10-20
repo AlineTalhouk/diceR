@@ -50,7 +50,7 @@
 #' z <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1, ref.cl = ref.cl)
 #' 
 #' # Weigh algorithms
-#' consensus_weigh(z)
+#' consensus_weigh(z$internal)
 consensus_combine <- function(..., element = c("matrix", "class"),
                               alg.names = NULL) {
   obj <- unlist(list(...), recursive = FALSE)
