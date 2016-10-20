@@ -10,8 +10,8 @@
 #' @examples
 
 # E <- ConClust(hgsc, k = 4, reps = 10, method = c("hcAEucl","kmEucl","scRbf"))
-# dat <- t(hgsc[,-1])
-# imputeMissing(E,dat)
+# data <- t(hgsc[,-1])
+# imputeMissing(E,data)
 
 imputeMissing <- function(E, data, imputeALL=TRUE){
 # Flatten the matrix
@@ -21,8 +21,10 @@ dim(E_flat) <- c(dim(E)[1], dim(E)[2]*dim(E)[3])
 E_imputed <- apply(E_flat,2, knn_impute, data= data)
 # Relabel and Majority vote
 if (imputeALL==TRUE) {
-E_imputed2 <- cbind(E_imputed[,1],
+E_relabeled <- cbind(E_imputed[,1],
              apply(E_imputed[,-1],2,function(x){relabel_class(x,E_imputed[,1])}))
+E_imputed2 <- t(apply(E_relabeled, 1, function(x) {
+  x[which(is.na(x))] <- names(which.max(table(x))); return(x)}))
 return(apply(E_imputed2,2, as.numeric))
 }else{
   return(E_imputed)

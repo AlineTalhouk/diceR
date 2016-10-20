@@ -4,12 +4,14 @@
 \alias{majority_voting}
 \title{Combine clustering results using majority voting}
 \usage{
-majority_voting(E, is.relabelled = TRUE)
+majority_voting(E, is.relabelled = TRUE, is.flat = TRUE)
 }
 \arguments{
-\item{E}{a matrix of clusterings with number of rows equal to the number of cases to be clustered, number of columns equal to the clustering obtained by different resampling of the data, and the third dimension is the different algorithms.}
+\item{E}{a matrix of clusterings with number of rows equal to the number of cases to be clustered, number of columns equal to the clustering obtained by different resampling of the data, and the third dimension is the different algorithms. Matrix can be flattened already}
 
 \item{is.relabelled}{TRUE/FALSE defaults to TRUE, but if FALSE the data will be relabelled}
+
+\item{is.flat}{set to TRUE to indicate that impute matrix is already 2D with rows as cases and columns as clusterings}
 }
 \value{
 a vector of cluster assignment based on majority vote

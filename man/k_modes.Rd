@@ -4,17 +4,19 @@
 \alias{k_modes}
 \title{Combine clustering results using K modes}
 \usage{
-k_modes(E, is.relabelled = TRUE, seed = 1)
+k_modes(E, is.relabelled = TRUE, is.flat = TRUE, seed = 1)
 }
 \arguments{
 \item{E}{a matrix of clusterings with number of rows equal to the number of
 cases to be clustered, number of columns equal to the clustering obtained
 by different resampling of the data, and the third dimension is the
 different algorithms. Needs complete cases: No NAs. If the matrix contains
-NAs those are imputed by majority voting (after class relabeling).}
+NAs those are imputed by majority voting (after class relabeling). Matrix can be flattened already.}
 
 \item{is.relabelled}{logical; defaults to TRUE, but if FALSE the data will
 be relabelled}
+
+\item{is.flat}{set to TRUE to indicate that impute matrix is already 2D with rows as cases and columns as clusterings}
 
 \item{seed}{random seed for reproducibility}
 }
