@@ -1,36 +1,22 @@
-context("Test link_clust")
+
+context("Link clustering")
+
+set.seed(1)
+E1 <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100)
+E2 <- matrix(rep(sample(c(1:4, NA), 1000, replace = TRUE)), nrow = 100)
 
 test_that("Check link_clust with 2D complete case matrix", {
-  set.seed(1)
-  E <-
-    matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow = FALSE)
-  test_lc_2d_complete <-
-    link_clust(
-      E = E,
-      dcCTS = 0.8,
-      dcSRS = 0.8,
-      dcASRS = 0.8,
-      R = 10,
-      is.relabelled = FALSE
-    )
+  test_lc_2d_complete <- link_clust(E = E1, dcCTS = 0.8, dcSRS = 0.8,
+                                    dcASRS = 0.8, R = 10, is.relabelled = FALSE)
   expect_equal(sum(test_lc_2d_complete$cts != cts(E, 0.8)), 0)
   expect_equal(sum(test_lc_2d_complete$srs != srs(E, 0.8, 10)), 0)
   expect_equal(sum(test_lc_2d_complete$asrs != asrs(E, 0.8)), 0)
 })
 
 test_that("Check link_clust with 2D incomplete case matrix", {
-  set.seed(1)
-  E <-
-    matrix(rep(sample(c(1:4, NA), 1000, replace = TRUE)), nrow = 100, byrow = FALSE)
-  test_lc_2d_incomplete <-
-    link_clust(
-      E = E,
-      dcCTS = 0.8,
-      dcSRS = 0.8,
-      dcASRS = 0.8,
-      R = 10,
-      is.relabelled = FALSE
-    )
+  test_lc_2d_incomplete <- link_clust(E = E2, dcCTS = 0.8, dcSRS = 0.8,
+                                      dcASRS = 0.8, R = 10,
+                                      is.relabelled = FALSE)
   expect_true(is.numeric(test_lc_2d_incomplete$cts))
   expect_true(is.numeric(test_lc_2d_incomplete$srs))
   expect_true(is.numeric(test_lc_2d_incomplete$asrs))
@@ -48,11 +34,8 @@ test_that("Check link_clust with 2D incomplete case matrix", {
 test_that("Check link_clust with hgsc data with 3 ConClust algorithms", {
   data(hgsc)
   dat <- t(hgsc[, -1])
-  k <- 4
-  reps <- 4
-  methods <- c("nmfEucl", "hcAEucl", "hcDianaEucl")
-  x <- ConClust(dat[1:200, 1:100], k = k, reps = reps, method = methods,
-                save = FALSE)
+  x <- ConClust(dat[1:200, 1:100], k = 4, reps = 4,
+                method = c("nmfEucl", "hcAEucl", "hcDianaEucl"))
   test_lc_3d_incomplete <- link_clust(E = x, dcCTS = 0.8, dcSRS = 0.8,
                                       dcASRS = 0.8, R = 5,
                                       is.relabelled = FALSE)
