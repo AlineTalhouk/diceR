@@ -13,13 +13,19 @@
 # dat <- t(hgsc[,-1])
 # imputeMissing(E,dat)
 
-imputeMissing <- function(E, data, imputeALL=TRUE)
+imputeMissing <- function(E, data, imputeALL=TRUE){
 # Flatten the matrix
-dim(E_imputed) <- c(dim(E)[1], dim(E)[2]*dim(E)[3])
+E_flat <- E
+dim(E_flat) <- c(dim(E)[1], dim(E)[2]*dim(E)[3])
 # knn impute
 E_imputed <- apply(E_flat,2, knn_impute, data= data)
 # Relabel and Majority vote
-if (imputeALL){
+if (imputeALL==TRUE) {
 E_imputed2 <- cbind(E_imputed[,1],
-             apply(E_imputed[,-1],2,function(x){relabel_class(x,E_imputed[,1])})
+             apply(E_imputed[,-1],2,function(x){relabel_class(x,E_imputed[,1])}))
+return(apply(E_imputed2,2, as.numeric))
+}else{
+  return(E_imputed)
+}
+
 }
