@@ -36,46 +36,6 @@ test_that("Check iv_db_dunn with wrong inputs", {
   expect_error(iv_db_dunn(MD, matrix(c(1, 2, 3), ncol = 3)))
 })
 
-test_that("Check iv_sumsq with MD and MT", {
-  set.seed(1)
-  MD <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100, byrow = FALSE))
-  set.seed(1)
-  MT <- sample(1:4, 100, replace = TRUE)
-  test_MD <- iv_sumsq(data = MD, labels = MT, k = 4)
-  expect_true(nrow(test_MD$Tot) == 10)
-  expect_true(ncol(test_MD$Tot) == 10)
-  expect_true(abs(sum(test_MD$Tot) - 40863) < 1)
-  expect_true(abs(sum(test_MD$Sintra) - 67.6140) < 0.0001)
-  expect_true(nrow(test_MD$Sinter) == 4)
-  expect_true(ncol(test_MD$Sinter) == 4)
-  expect_true(nrow(test_MD$W) == 10)
-  expect_true(ncol(test_MD$W) == 10)
-  expect_true(abs(sum(test_MD$Sinter) - 118.5502) < 0.0001)
-  expect_true(abs(sum(test_MD$W) - 35634) < 1)
-
-})
-
-test_that("Check iv_sumsq with MD and MT with k=1", {
-  set.seed(1)
-  MD <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100, byrow = FALSE))
-  set.seed(1)
-  MT <- sample(1:4, 100, replace = TRUE)
-  test_MD_k1 <- iv_sumsq(MD, MT, 1)
-  expect_true(sum(test_MD_k1$B) == 0)
-  expect_true(sum(test_MD_k1$Sinter) == 0)
-  expect_true(abs(sum(test_MD_k1$Sintra) - 17.9818) < 0.0001)
-  expect_true(abs(sum(test_MD_k1$W) - 40863) < 1)
-  expect_true(abs(sum(test_MD_k1$Tot) - 40863) < 1)
-})
-
-test_that("Check iv_sumsq with wrong inputs", {
-  expect_error(iv_sumsq(NULL, MT, 4))
-  expect_error(iv_sumsq(MD, MT, "a"))
-  expect_error(iv_sumsq(MD, sample(1:4, size = 18, replace = TRUE), 4))
-  expect_error(iv_sumsq(MD, as.factor(MT), 4))
-  expect_error(iv_sumsq(data = as.factor(MD[, 1]), labels = MT, k = 4))
-})
-
 test_that("PAC can have different bounds", {
   set.seed(1)
   x <- replicate(100, rbinom(100, 4, 0.2))

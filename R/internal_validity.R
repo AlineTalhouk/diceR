@@ -25,7 +25,6 @@
 #' dat <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100, byrow = FALSE))
 #' iv_compactness(dat, E[, 1])
 #' iv_db_dunn(dat, E[, 1])
-#' iv_sumsq(dat, E[, 1], 4)
 #' iv_chi(dat, E[, 1], centrotypes = "centroids")
 iv_compactness <- function(data, labels) {
   assertthat::assert_that(is.data.frame(data), length(labels) == nrow(data))
@@ -67,7 +66,7 @@ iv_db_dunn <- function(data, labels) {
   nrow <- nrow(data)
   nc <- ncol(data)
   k <- max(labels)
-  temp <- iv_sumsq(data, labels, k)
+  temp <- sumsq(data, labels, k)
   st <- temp$Tot
   sw <- temp$W
   sb <- temp$B
@@ -97,19 +96,16 @@ iv_db_dunn <- function(data, labels) {
   return(list(DB = DB, Dunn = min(dbs)))
 }
 
-#' @details \code{iv_sumsq} computes the within group, between group, and total
-#'   sum of squares and cross-products
+#' Sum of squares
 #' @param k number of clusters
-#'
-#' @return \code{iv_sumsq} returns a list with elements 
+#' @return \code{sumsq} returns a list with elements 
 #'   \item{W}{within group sum of squares and cross-products}
 #'   \item{B}{between group sum of squares and cross-products}
 #'   \item{T}{total sum of squares and cross-products}
 #'   \item{Sintra}{centroid diameter}
-#'   \item{Sinter}{linkage distance}          
-#' @rdname internal_validity
-#' @export
-iv_sumsq <- function(data, labels, k) {
+#'   \item{Sinter}{linkage distance}   
+#' @noRd       
+sumsq <- function(data, labels, k) {
   assertthat::assert_that(is.vector(labels) || is.data.frame(labels))
   if (is.data.frame(labels)) {
     assertthat::assert_that(nrow(data) == nrow(labels))

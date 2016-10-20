@@ -33,5 +33,5 @@ test_that("comparing results works", {
 })
 
 test_that("weighing works", {
-  expect_error(consensus_weigh(z1), NA)
+  expect_error(consensus_weigh(z1$internal), NA)
 })

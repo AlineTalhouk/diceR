@@ -5,14 +5,11 @@
 \alias{iv_chi}
 \alias{iv_compactness}
 \alias{iv_db_dunn}
-\alias{iv_sumsq}
 \title{Internal validity indices}
 \usage{
 iv_compactness(data, labels)
 
 iv_db_dunn(data, labels)
-
-iv_sumsq(data, labels, k)
 
 iv_chi(data, ...)
 }
@@ -20,8 +17,6 @@ iv_chi(data, ...)
 \item{data}{a dataset with rows as observations, columns as variables}
 
 \item{labels}{a vector of cluster labels from a clustering result}
-
-\item{k}{number of clusters}
 
 \item{...}{additional arguments to \code{\link[clusterSim]{index.G1}}}
 }
@@ -31,13 +26,6 @@ iv_chi(data, ...)
 \code{iv_db_dunn} returns a list with elements
   \item{DB}{Davies-Bouldin score}
   \item{Dunn}{Dunn score}
-
-\code{iv_sumsq} returns a list with elements 
-  \item{W}{within group sum of squares and cross-products}
-  \item{B}{between group sum of squares and cross-products}
-  \item{T}{total sum of squares and cross-products}
-  \item{Sintra}{centroid diameter}
-  \item{Sinter}{linkage distance}
 
 \code{iv_chi} returns the CHI
 }
@@ -52,9 +40,6 @@ clustering result
 
 \code{iv_db_dunn} computes the Davies-Bouldin index and Dunn index
 
-\code{iv_sumsq} computes the within group, between group, and total
-  sum of squares and cross-products
-
 \code{iv_chi} computes the Calinski-Harabasz Index, or pseudo
   F-statistic. The function is a wrapper for
   \code{\link[clusterSim]{index.G1}}
@@ -67,7 +52,6 @@ set.seed(1)
 dat <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100, byrow = FALSE))
 iv_compactness(dat, E[, 1])
 iv_db_dunn(dat, E[, 1])
-iv_sumsq(dat, E[, 1], 4)
 iv_chi(dat, E[, 1], centrotypes = "centroids")
 }
 \references{
