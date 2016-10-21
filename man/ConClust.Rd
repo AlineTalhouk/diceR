@@ -4,15 +4,15 @@
 \alias{ConClust}
 \title{Consensus clustering over samples and algorithms}
 \usage{
-ConClust(x, k, pItem = 0.8, reps = 1000, method = NULL, parallel = NULL,
-  ncores = NULL, progress = TRUE, seed = 123456, seed.method = 1,
-  min.sd = 1, save = FALSE, file.name = "ConClustOutput",
-  time.saved = FALSE)
+ConClust(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
+  parallel = NULL, ncores = NULL, progress = TRUE, seed = 123456,
+  seed.method = 1, min.sd = 1, save = FALSE,
+  file.name = "ConClustOutput", time.saved = FALSE)
 }
 \arguments{
 \item{x}{data matrix with rows as samples and columns as variables}
 
-\item{k}{number of clusters requested}
+\item{nc}{number of clusters requested}
 
 \item{pItem}{proportion of items to be used in subsampling within an 
 algorithm}
@@ -91,7 +91,7 @@ packages (and potential masking of functions).
 \examples{
 data(hgsc)
 dat <- t(hgsc[, -1])
-x <- ConClust(dat, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+x1 <- ConClust(dat, nc = 2:4, reps = 10, method = c("hcAEucl", "kmEucl"))
 }
 \author{
 Derek Chiu, Aline Talhouk

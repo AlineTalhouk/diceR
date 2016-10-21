@@ -8,7 +8,7 @@ link_clust(E, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
   is.relabelled = TRUE)
 }
 \arguments{
-\item{E}{matrix of clustering resutls (may be 3D or 2D)}
+\item{E}{matrix of clustering results (may be 3D or 2D)}
 
 \item{dcCTS}{decay constant for CTS matrix}
 
