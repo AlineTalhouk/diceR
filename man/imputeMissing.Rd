@@ -27,10 +27,10 @@ cases will be imputed using this method.
 }
 \examples{
 data(hgsc)
-data <- t(hgsc[,-1])
+data <- t(hgsc[,-1])[1:200, 1:100]
 E <- ConClust(data, k = 4, reps = 10, method = c("hcAEucl", "kmEucl",
 "scRbf"))
-imputeMissing(E,data)
+imputeMissing(E, data)
 }
 \author{
 Aline Talhouk

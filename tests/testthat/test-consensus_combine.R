@@ -14,8 +14,11 @@ y2 <- consensus_combine(CC1.summ, CC2.summ, element = "class")
 y3 <- consensus_combine(CC1.summ, CC2.summ, element = "matrix", alg.names = an)
 y4 <- consensus_combine(CC1.summ, CC2.summ, element = "class", alg.names = an)
 
-z1 <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1)
-z2 <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1, alg.names =  an)
+z1a <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1)
+z1b <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1, alg.names =  an)
+set.seed(1)
+ref.cl <- sample(1:4, 10, replace = TRUE)
+z2 <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1, ref.cl)
 
 test_that("combining results has expected lengths", {
   expect_length(y1, dim(CC1)[3] + dim(CC2)[3])
@@ -28,10 +31,12 @@ test_that("names can be overwritten", {
 })
 
 test_that("comparing results works", {
-  expect_error(z1, NA)
-  expect_error(z2, NA)
+  expect_error(z1a, NA)
+  expect_error(z1b, NA)
+  expect_length(z1a, 1)
+  expect_length(z2, 2)
 })
 
 test_that("weighing works", {
-  expect_error(consensus_weigh(z1$internal), NA)
+  expect_error(consensus_weigh(z1a$internal), NA)
 })

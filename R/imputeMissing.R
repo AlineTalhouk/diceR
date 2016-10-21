@@ -16,10 +16,10 @@
 #' @export
 #' @examples
 #' data(hgsc)
-#' data <- t(hgsc[,-1])
+#' data <- t(hgsc[,-1])[1:200, 1:100]
 #' E <- ConClust(data, k = 4, reps = 10, method = c("hcAEucl", "kmEucl",
 #' "scRbf"))
-#' imputeMissing(E,data)
+#' imputeMissing(E, data)
 imputeMissing <- function(E, data, imputeALL = TRUE) {
   assertthat::assert_that(is.array(E), is.matrix(data),
                           dim(E)[1] == nrow(data),

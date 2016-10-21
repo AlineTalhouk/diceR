@@ -24,6 +24,7 @@ test_that("iv_compactness throws error with wrong inputs", {
 test_that("Check iv_db_dunn with MD and MT", {
   expect_true(abs(iv_db_dunn(MD, MT)$DB - 4.6724) <= 0.001)
   expect_true(abs(iv_db_dunn(MD, MT)$Dunn - 0.3734) <= 0.001)
+  expect_identical(iv_db_dunn(MD, MT), iv_db_dunn(MD, data.frame(MT)))
 })
 
 test_that("Check iv_db_dunn with wrong inputs", {
@@ -37,4 +38,8 @@ test_that("PAC can have different bounds", {
   x <- replicate(100, rbinom(100, 4, 0.2))
   y <- consensus_matrix(x)
   expect_error(PAC(y, lower = 0.3, upper = 0.7), NA)
+})
+
+test_that("CHI wrapper same as original", {
+  expect_identical(iv_chi(MD, MT), clusterSim::index.G1(MD, MT))
 })

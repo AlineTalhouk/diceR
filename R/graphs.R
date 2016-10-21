@@ -24,12 +24,12 @@
 #' @author Derek Chiu
 #' @export
 #' @examples
-# Consensus clustering for 3 algorithms
+#' # Consensus clustering for 3 algorithms
 #' library(ggplot2)
 #' set.seed(911)
-#' x <- matrix(rnorm(1000), ncol = 10)
-#' CC1 <- ConClust(x, k = 4, reps = 10,
-#' method = c("hcAEucl", "apEucl", "gmmBIC"))
+#' x <- matrix(rnorm(100), ncol = 10)
+#' CC1 <- ConClust(x, k = 4, reps = 5,
+#' method = c("hcAEucl", "apEucl", "gmmBIC"), progress = FALSE)
 #' 
 #' # Plot CDF
 #' p <- graph_cdf(CC1)
@@ -44,7 +44,7 @@
 #' p
 #' 
 #' # Heatmaps with column side colours corresponding to clusters
-#' CC2 <- ConClust(x, k = 3, reps = 5, method = "apEucl")
+#' CC2 <- ConClust(x, k = 3, reps = 5, method = "apEucl", progress = FALSE)
 #' graph_heatmap(CC2)
 #' 
 #' # Track how cluster assignments change between algorithms
