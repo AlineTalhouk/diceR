@@ -3,7 +3,7 @@
 #' If input has \code{NA}, majority voting is used to eliminate the missing
 #' values.
 #' 
-#' @param E matrix of clustering resutls (may be 3D or 2D)
+#' @param E matrix of clustering results (may be 3D or 2D)
 #' @param dcCTS decay constant for CTS matrix
 #' @param dcSRS decay constant for SRS matrix
 #' @param dcASRS decay constant for ASRS matrix
