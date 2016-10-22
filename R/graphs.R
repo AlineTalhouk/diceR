@@ -51,7 +51,7 @@
 #' p <- graph_tracking(CC1)
 #' p
 graph_cdf <- function(x) {
-  CDF <- NULL
+  k <- CDF <- NULL
   dat <- get_cdf(x)
   p <- ggplot(dat, aes(x = CDF, colour = k)) +
     stat_ecdf() +
@@ -65,10 +65,10 @@ graph_cdf <- function(x) {
 #' @rdname graphs
 #' @export
 graph_delta_area <- function(x) {
-  k <- CDF <- AUC <- da <- NULL
+  k <- CDF <- AUC <- da <- Method <- NULL
   dat <- get_cdf(x) %>% 
     group_by(Method, k) %>% 
-    summarize(AUC = flux::auc(seq(0, 1, length.out = table(dat$k)[1]), CDF)) %>% 
+    summarize(AUC = flux::auc(seq(0, 1, length.out = table(k)[1]), CDF)) %>% 
     mutate(da = c(AUC[1], diff(AUC) / AUC[-length(AUC)]))
   p <- ggplot(dat, aes(k, da)) +
     geom_line(group = 1) +
@@ -82,7 +82,7 @@ graph_delta_area <- function(x) {
 #' Calculate CDF for each clustering algorithm at each k
 #' @noRd
 get_cdf <- function(x) {
-  Method <- CDF <- NULL
+  Group <- k <- CDF <- NULL
   dat <- consensus_summary(x, progress = FALSE) %>% 
     consensus_combine(element = "matrix") %>% 
     lapply(function(d) d[lower.tri(d, diag = TRUE)]) %>% 
@@ -128,7 +128,7 @@ graph_heatmap <- function(x, main = NULL, ...) {
 #' @rdname graphs
 #' @export
 graph_tracking <- function(x) {
-  Method <- Class <- Samples <- NULL
+  k <- Group <- Method <- Class <- Samples <- NULL
   dat <- consensus_summary(x, progress = FALSE) %>% 
     consensus_combine(element = "class") %>% 
     as.data.frame() %>% 

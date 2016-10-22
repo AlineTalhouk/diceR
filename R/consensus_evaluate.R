@@ -11,7 +11,7 @@
 #' @rdname consensus_combine
 #' @export
 consensus_evaluate <- function(data, cl.mat, cons.mat, ref.cl = NULL,
-                              alg.names = NULL) {
+                               alg.names = NULL) {
   if (!is.null(alg.names)) {
     an <- alg.names
   } else {

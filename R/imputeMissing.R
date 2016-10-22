@@ -17,7 +17,7 @@
 #' @examples
 #' data(hgsc)
 #' data <- t(hgsc[,-1])[1:200, 1:100]
-#' E <- ConClust(data, k = 4, reps = 10, method = c("hcAEucl", "kmEucl",
+#' E <- ConClust(data, nc = 2:4, reps = 10, method = c("hcAEucl", "kmEucl",
 #' "scRbf"))
 #' imputeMissing(E, data)
 imputeMissing <- function(E, data, imputeALL = TRUE) {

@@ -12,6 +12,7 @@
 #'   with two elements: consensus_matrix and consensus_class
 #' @family consensus functions
 #' @author Derek Chiu
+#' @importFrom utils relist
 #' @export
 #' @examples
 #' data(hgsc)

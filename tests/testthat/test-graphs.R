@@ -3,7 +3,8 @@ context("Graphical displays")
 
 set.seed(911)
 x <- matrix(rnorm(1000), nrow = 10)
-CC1 <- ConClust(x, k = 4, reps = 10, method = c("hcAEucl", "apEucl", "gmmBIC"),
+CC1 <- ConClust(x, nc = 2:4, reps = 10,
+                method = c("hcAEucl", "apEucl", "gmmBIC"),
                 progress = FALSE)
 p1 <- graph_cdf(CC1)
 
@@ -24,7 +25,7 @@ test_that("graph_delta_area works", {
 
 test_that("graph_heatmap can have same plot but different titles", {
   phm1 <- graph_heatmap(CC1)
-  phm2 <- graph_heatmap(CC1, main = c("A", "B", "C"))
+  phm2 <- graph_heatmap(CC1, main = paste0(LETTERS[1:3], rep(2:4, each = 3)))
   expect_identical(phm1, phm2)
   file.remove(list.files(pattern = "Rplots"))
 })

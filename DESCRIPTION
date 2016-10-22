@@ -20,6 +20,7 @@ Imports:
     magrittr,
     tidyr,
     purrr,
+    stringr,
     ggplot2,
     pracma,
     flux,

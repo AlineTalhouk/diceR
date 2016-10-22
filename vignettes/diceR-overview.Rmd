@@ -47,21 +47,21 @@ The main function of this package is `ConClust()`, which outputs cluster assignm
 
 ```{r ConClust, results='hide'}
 dat <- t(hgsc[, -1])
-CC <- ConClust(dat, k = 4, reps = 10, pItem = 0.8,
+CC <- ConClust(dat, nc = 2:4, reps = 10, pItem = 0.8,
                method = c("hcAEucl", "kmSpear", "pamSpear", "biclust"), save = FALSE)
 ```
 
-The output is a 3-dimensional array: rows are samples, columns are different bootstrap subsample replicates, and slices are algorithms. Below are the first few cluster assignments for each replicate in the biclustering algorithm.
+The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each "box" (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the biclustering algorithm for k = 2.
 
 ```{r ConClust_biclust}
 str(CC)
-kable(head(CC[, , "biclust"]))
+kable(head(CC[, , "biclust", "2"]))
 ```
 
 Note the unavoidable presence of `NA`s because we used 80% subsampling. This can be problematic in some downstream ensemble methods, so we can impute as many of the missing values as we can using K-Nearest Neighbours beforehand. There might still be `NA`s after kNN because of how the decision threshold was set.
 
 ```{r knn_impute}
-CC.impute <- apply(CC, 2:3, knn_impute, dat)
+CC.impute <- apply(CC, 2:4, knn_impute, dat)
 sum(is.na(CC))
 sum(is.na(CC.impute))
 ```
@@ -85,9 +85,15 @@ We can carry on the analysis using either `CC` or `CC.impute`.
 The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one's. Suppose we wanted to compute the consensus matrix for PAM only, and visualize using a heatmap.
 
 ```{r consensus_matrix}
-cm <- consensus_matrix(CC[, , "pamSpear"])
+cm <- consensus_matrix(CC[, , "pamSpear", "2"])
 gplots::heatmap.2(cm, dendrogram = "none", Rowv = TRUE, Colv = TRUE,
                   trace = "none", labRow = NA, labCol = NA)
+```
+
+Or we can use `graph_heatmap()`:
+
+```{r graph_heatmap}
+graph_heatmap(CC[, , "pamSpear", "2", drop = FALSE])
 ```
 
 ### Get consensus class with `consensus_class()`
@@ -101,10 +107,10 @@ kable(as.data.frame(table(cclass)))
 
 ### Organize consensus classes and matrices with `consensus_summary()`
 
-To quickly return the `consensus_matrix()` and `consensus_class()` for every clustering algorithm used, we can use `consensus_summary()` as a wrapper for generating these two outputs. The result is a list of lists: each element is an algorithm, and each algorithm has two elements: a `consensus_matrix` and a `consensus_class`.
+To quickly return the `consensus_matrix()` and `consensus_class()` for every clustering algorithm used, we can use `consensus_summary()` as a wrapper for generating these two outputs. The result is a 3 level list: each element is for a different k, which lists by algorithm, two elements: a `consensus_matrix` and a `consensus_class`.
 
 ```{r consensus_summary, results='hide'}
-cs <- consensus_summary(CC, k = 4)
+cs <- consensus_summary(CC)
 ```
 
 ```{r consensus_summary_str}
@@ -130,9 +136,9 @@ One can feed in `ccomb_class` into `consensus_matrix()` to obtain a consensus ma
 A situation might also arise where we initially decided on using 4 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. `consensus_combine()` takes in any number of `consensus_summary()` objects and combines the results.
 
 ```{r consensus_combine_2, results='hide'}
-CC2 <- ConClust(dat, k = 4, reps = 10, pItem = 0.8,
+CC2 <- ConClust(dat, nc = 2:4, reps = 10, pItem = 0.8,
                 method = c("hcDianaEucl", "pamEucl"), save = FALSE)
-cs2 <- consensus_summary(CC2, k = 4)
+cs2 <- consensus_summary(CC2)
 ccomb_class2 <- consensus_combine(cs, cs2, element = "class")
 ```
 
@@ -146,7 +152,7 @@ Internal cluster validation indices assess the performance of results by taking 
 
 ```{r consensus_evaluate}
 ccomp <- consensus_evaluate(dat, cl.mat = ccomb_class, cons.mat = ccomb_matrix)
-kable(head(ccomp))
+kable(ccomp$internal)
 ```
 
 We see that the biclustering algorithm is the least ambiguous and also most well-clustered (high compactness and separability).
@@ -156,8 +162,8 @@ We see that the biclustering algorithm is the least ambiguous and also most well
 Suppose we want a ranking of the algorithms from the previous table, and supply weights according to cluster performance. The idea is that we want to put higher weights in the final cluster ensemble to well-performing algorithms (such as bicluster in the last example), and vice versa.
 
 ```{r consensus_weigh}
-cweigh <- consensus_weigh(ccomp$internal)
-kable(head(cweigh))
+cweigh <- consensus_weigh(ccomp$internal, top = 12)
+kable(cweigh)
 ```
 
 The final column takes an equal weighting from PAC and CHI.
