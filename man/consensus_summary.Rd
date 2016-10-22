@@ -4,13 +4,11 @@
 \alias{consensus_summary}
 \title{Consensus summary}
 \usage{
-consensus_summary(res, k, progress = TRUE, save = FALSE,
+consensus_summary(res, progress = TRUE, save = FALSE,
   file.name = "results_CC")
 }
 \arguments{
 \item{res}{output from \code{ConClust}}
-
-\item{k}{number of clusters to compute for consensus class]}
 
 \item{progress}{logical; should a progress bar be displayed?}
 
@@ -30,8 +28,8 @@ matrices and consensus classes for each clustering algorithm.
 \examples{
 data(hgsc)
 dat <- t(hgsc[, -1])
-x <- ConClust(dat, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
-y <- consensus_summary(x, k = 2)
+x <- ConClust(dat, nc = 2:4, reps = 10, method = c("hcAEucl", "kmEucl"))
+y <- consensus_summary(x)
 str(y)
 }
 \author{

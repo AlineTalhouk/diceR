@@ -30,12 +30,12 @@
 #' # Consensus clustering for multiple algorithms
 #' set.seed(911)
 #' x <- matrix(rnorm(1000), ncol = 10)
-#' CC1 <- ConClust(x, k = 4, reps = 10, method = "apEucl")
-#' CC2 <- ConClust(x, k = 4, reps = 10, method = "gmmBIC")
+#' CC1 <- ConClust(x, nc = 2:4, reps = 10, method = "apEucl")
+#' CC2 <- ConClust(x, nc = 2:4, reps = 10, method = "gmmBIC")
 #' 
 #' # Get summary for ConClust
-#' CC1.summ <- consensus_summary(CC1, k = 4)
-#' CC2.summ <- consensus_summary(CC2, k = 4)
+#' CC1.summ <- consensus_summary(CC1)
+#' CC2.summ <- consensus_summary(CC2)
 #' 
 #' # Combine and return either matrices or classes
 #' y1 <- consensus_combine(CC1.summ, CC2.summ, element = "matrix")
@@ -53,20 +53,21 @@
 #' consensus_weigh(z$internal)
 consensus_combine <- function(..., element = c("matrix", "class"),
                               alg.names = NULL) {
-  obj <- unlist(list(...), recursive = FALSE)
+  obj <- unlist(list(...), recursive = FALSE) %>% 
+    unlist(recursive = FALSE)
   switch(match.arg(element),
          matrix = {
            out <- lapply(obj, "[[", "consensus_matrix")
-           out <- unlist(list(out), recursive = FALSE)
-           if (!is.null(alg.names))
-             names(out) <- alg.names
+           # out <- unlist(list(out), recursive = FALSE)
+           # if (!is.null(alg.names))
+           #   names(out) <- alg.names
          },
          class = {
            out <- apply(sapply(obj, "[[", "consensus_class"), c(1, 2),
                         as.integer)
-           out <- as.matrix(data.frame(out))
-           if (!is.null(alg.names))
-             colnames(out) <- alg.names
+           # out <- as.matrix(data.frame(out))
+           # if (!is.null(alg.names))
+           #   colnames(out) <- alg.names
          })
   return(out)
 }

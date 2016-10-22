@@ -53,7 +53,7 @@ The current implementations of \code{graph_delta_area} and
 library(ggplot2)
 set.seed(911)
 x <- matrix(rnorm(100), ncol = 10)
-CC1 <- ConClust(x, k = 4, reps = 5,
+CC1 <- ConClust(x, nc = 2:4, reps = 5,
 method = c("hcAEucl", "apEucl", "gmmBIC"), progress = FALSE)
 
 # Plot CDF
@@ -69,7 +69,7 @@ p <- graph_delta_area(CC1)
 p
 
 # Heatmaps with column side colours corresponding to clusters
-CC2 <- ConClust(x, k = 3, reps = 5, method = "apEucl", progress = FALSE)
+CC2 <- ConClust(x, nc = 3, reps = 5, method = "apEucl", progress = FALSE)
 graph_heatmap(CC2)
 
 # Track how cluster assignments change between algorithms

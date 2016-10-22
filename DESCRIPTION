@@ -19,6 +19,7 @@ Imports:
     readr,
     magrittr,
     tidyr,
+    purrr,
     ggplot2,
     pracma,
     flux,
