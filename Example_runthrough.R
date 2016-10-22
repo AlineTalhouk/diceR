@@ -3,13 +3,12 @@ data("hgsc")
 head(hgsc)
 
 # Fix the number of cluster or loop over several k options
-k=4
-B=10
 
 # Generate Diverse Cluster Ensemble for a fixed k
-E <- ConClust(t(hgsc[,-1]), k = k, reps = B, 
-              method = c("hcAEucl","kmEucl","scRbf"))
-
+E <-ConClust(t(hgsc[,-1]), nc = 2:4, reps = 10, 
+             method = c("hcAEucl", "kmEucl"), 
+             save = TRUE, file.name = "outputs/E")
+dim(E)
 # Impute Missing Values using KNN and majority vote
 E_imputed <- imputeMissing(E,data= t(hgsc[,-1]),imputeALL=TRUE)
 
