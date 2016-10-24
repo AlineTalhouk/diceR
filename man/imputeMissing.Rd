@@ -4,19 +4,16 @@
 \alias{imputeMissing}
 \title{Impute missing values due to subsampling}
 \usage{
-imputeMissing(E, data, imputeALL = TRUE)
+imputeMissing(E4, data, imputeALL = TRUE)
 }
 \arguments{
-\item{E}{a matrix of clusterings with number of rows equal to the number of
-cases to be clustered, number of columns equal to the clustering obtained
-by different resampling of the data, and the third dimension is the
-different algorithms.}
+\item{E4}{is an array of clusterings with number of rows equal to the number of cases to be clustered, number of columns equal to the clustering obtained by different resampling of the data, and the third dimension is the different algorithms and the fourth dimension is the cluster size.}
 
 \item{data}{is data matrix with samples as rows and genes/features as columns}
 
 \item{imputeALL}{if \code{FALSE} the function will only call knn_impute to
-impute some NAs; if \code{TRUE}, the function will use knn_impute and
-majority voting to eliminate NAs and relabel class}
+impute NAs missing due to resampling; if \code{TRUE}, the function will use knn_impute and
+majority voting to eliminate NAs and relabel classes}
 }
 \value{
 a flat matrix of clusterings, fully imputed and relabelled.
