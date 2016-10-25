@@ -4,7 +4,7 @@
 \alias{consensus_summary}
 \title{Consensus summary}
 \usage{
-consensus_summary(res, progress = TRUE, save = FALSE,
+consensus_summary(res, k = NULL, progress = TRUE, save = FALSE,
   file.name = "results_CC")
 }
 \arguments{
@@ -29,8 +29,10 @@ matrices and consensus classes for each clustering algorithm.
 data(hgsc)
 dat <- t(hgsc[, -1])
 x <- ConClust(dat, nc = 2:4, reps = 10, method = c("hcAEucl", "kmEucl"))
-y <- consensus_summary(x)
-str(y)
+y1 <- consensus_summary(x)
+y2 <- consensus_summary(x, k = 4)
+str(y1)
+str(y2)
 }
 \author{
 Derek Chiu

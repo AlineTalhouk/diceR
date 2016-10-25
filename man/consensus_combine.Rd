@@ -73,8 +73,8 @@ CC1 <- ConClust(x, nc = 2:4, reps = 10, method = "apEucl")
 CC2 <- ConClust(x, nc = 2:4, reps = 10, method = "gmmBIC")
 
 # Get summary for ConClust
-CC1.summ <- consensus_summary(CC1)
-CC2.summ <- consensus_summary(CC2)
+CC1.summ <- consensus_summary(CC1, k = 4)
+CC2.summ <- consensus_summary(CC2, k = 4)
 
 # Combine and return either matrices or classes
 y1 <- consensus_combine(CC1.summ, CC2.summ, element = "matrix")

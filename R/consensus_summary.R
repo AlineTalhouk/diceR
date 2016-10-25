@@ -18,9 +18,11 @@
 #' data(hgsc)
 #' dat <- t(hgsc[, -1])
 #' x <- ConClust(dat, nc = 2:4, reps = 10, method = c("hcAEucl", "kmEucl"))
-#' y <- consensus_summary(x)
-#' str(y)
-consensus_summary <- function(res, progress = TRUE, save = FALSE,
+#' y1 <- consensus_summary(x)
+#' y2 <- consensus_summary(x, k = 4)
+#' str(y1)
+#' str(y2)
+consensus_summary <- function(res, k = NULL, progress = TRUE, save = FALSE,
                               file.name = "results_CC") {
   prog <- ifelse(progress, "text", "none")
   con.mats <- plyr::alply(res, 3:4, consensus_matrix, .progress = prog,
@@ -34,6 +36,9 @@ consensus_summary <- function(res, progress = TRUE, save = FALSE,
   out <- list(consensus_matrix = con.mats, consensus_class = con.cls) %>% 
     purrr::transpose() %>% 
     lapply(purrr::transpose)
+  if (!is.null(k)) {
+    out <- out[[as.character(k)]]
+  }
   if (save) readr::write_rds(out, path = paste0(file.name, ".rds"),
                              compress = "xz")
   return(out)
