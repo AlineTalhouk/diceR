@@ -1,7 +1,7 @@
 #' Generate CTS, SRS, and ASRS similarity matrices.
 #' 
 #' 
-#' @param E matrix of clustering results. Complete and relabelled cases needed.
+#' @param E is a 2D matrix of clustering results. Complete and relabelled cases needed.
 #' @param dcCTS decay constant for CTS matrix
 #' @param dcSRS decay constant for SRS matrix
 #' @param dcASRS decay constant for ASRS matrix

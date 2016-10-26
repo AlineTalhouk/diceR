@@ -22,7 +22,7 @@ imputeMissing <- function(E4, data, imputeALL = TRUE) {
                           dim(E4)[1] == nrow(data),
                           imputeALL == TRUE || imputeALL == FALSE)
   # knn impute
-  E_imputed <- apply(E4,2:max(dim(E4)), knn_impute, data= t(hgsc[,-1]))
+  E_imputed <- apply(E4,2:4, knn_impute, data= t(hgsc[,-1]))
   
   
   # Relabel and Majority vote

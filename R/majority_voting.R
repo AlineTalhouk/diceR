@@ -30,6 +30,6 @@ majority_voting <- function(E, is.relabelled = TRUE, is.flat = TRUE) {
   }
   # majority vote
   maj.vote <- as.vector(apply(flat_E, 1, function(x)
-    names(which.max(table(x)))))
+    as.numeric(names(which.max(table(x))))))
   return(maj.vote)
 }

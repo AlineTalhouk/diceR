@@ -20,7 +20,7 @@ consensus_evaluate <- function(data, cl.mat, cons.mat, ref.cl = NULL,
   x <- data.frame(data)
   ind.int <- data.frame(
     Algorithms = an,
-    PAC = sapply(cons.mat, PAC, lower = 0.05, upper = 0.95),
+#    PAC = sapply(cons.mat, PAC, lower = 0.05, upper = 0.95),
     CHI = apply(cl.mat, 2, iv_chi, x = x),
     Compactness = apply(cl.mat, 2, iv_compactness, data = x)) %>% 
     cbind(plyr::aaply(cl.mat, 2, function(cl)
