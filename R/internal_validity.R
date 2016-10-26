@@ -27,7 +27,7 @@
 #' iv_db_dunn(dat, E[, 1])
 #' iv_chi(dat, E[, 1], centrotypes = "centroids")
 iv_compactness <- function(data, labels) {
-  assertthat::assert_that(is.data.frame(data), length(labels) == nrow(data))
+  assertthat::assert_that(is.data.frame(data) || is.matrix(data), length(labels) == nrow(data))
   n <- length(labels)
   C <- sort(unique(labels))
   k <- length(C)
