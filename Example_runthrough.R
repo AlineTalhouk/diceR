@@ -3,6 +3,8 @@ data("hgsc")
 head(hgsc)
 dat <- (t(hgsc[,-1]))
 k <- 4
+
+
 # Fix the number of cluster or loop over several k options
 
 # Generate Diverse Cluster Ensemble for a fixed k
@@ -33,8 +35,11 @@ kmodes_cl <- k_modes(E_imputed2)
 ## Reorder and majority vote
 majvot_cl <- majority_voting(E_imputed2)
 
+library(magrittr)
 # Combine all results
-Final <- cbind(CO_cl,LCE_cl,kmodes_cl,majvot_cl) 
+Final <- cbind(CO_cl,LCE_cl,kmodes_cl,majvot_cl) %>% 
+  data.frame(.)
+
 # Evaluate different clustering using internal, external (if applicable) and graphical method
 consensus_evaluate(t(hgsc[-1,-1]),Final,CO_mat)
 
