@@ -7,10 +7,11 @@
 #' algorithms. \code{graph_delta_area} calculates the relative change in area 
 #' under CDF curve between algorithms. \code{graph_heatmap} generates consensus 
 #' matrix heatmaps for each algorithm in \code{x}. \code{graph_tracking} tracks 
-#' how cluster assignments change between algorithms.
+#' how cluster assignments change between algorithms. \code{graph_all} is a 
+#' wrapper that runs all graphing functions.
 #' 
-#' @param x an object from \code{\link{ConClust}}
-#'   
+#' @param x an object from \code{\link{ConClust}}, or a list of multiple objects
+#'   from \code{\link{ConClust}}
 #' @return Various plots from \code{graph_*{}} functions. All plots are 
 #'   generated using \code{ggplot}, except for \code{graph_heatmap}, which uses 
 #'   \code{\link[gplots]{heatmap.2}}. Colours used in \code{graph_heatmap} and 
@@ -59,7 +60,7 @@ graph_cdf <- function(x) {
     labs(x = "Consensus Index",
          y = "CDF",
          title = "Consensus Cumulative Distribution Functions")
-  return(p)
+  print(p)
 }
 
 #' @rdname graphs
@@ -76,15 +77,19 @@ graph_delta_area <- function(x) {
     facet_wrap(~Method) +
     labs(y = "Relative change in Area under CDF curve",
          title = "Delta Area")
-  return(p)
+  print(p)
 }
 
 #' Calculate CDF for each clustering algorithm at each k
 #' @noRd
 get_cdf <- function(x) {
   Group <- k <- CDF <- NULL
-  dat <- consensus_summary(x, progress = FALSE) %>% 
-    consensus_combine(element = "matrix") %>% 
+  if (class(x) == "list") {
+    x <- abind::abind(x, along = 3)
+  } else if (class(x) != "array") {
+    stop("Error: Invalid input.")
+  }
+  dat <- consensus_combine(x, progress = FALSE, element = "matrix") %>% 
     lapply(function(d) d[lower.tri(d, diag = TRUE)]) %>% 
     as.data.frame() %>% 
     tidyr::gather(key = Group, value = CDF, dplyr::everything()) %>% 
@@ -100,8 +105,12 @@ get_cdf <- function(x) {
 #' @rdname graphs
 #' @export
 graph_heatmap <- function(x, main = NULL, ...) {
-  dat <- consensus_summary(x, progress = FALSE) %>% 
-    consensus_combine(element = "matrix") %>% 
+  if (class(x) == "list") {
+    x <- abind::abind(x, along = 3)
+  } else if (class(x) != "array") {
+    stop("Error: Invalid input.")
+  }
+  dat <- consensus_combine(x, progress = FALSE, element = "matrix") %>% 
     set_names(names(.) %>% 
                 stringr::str_split_fixed("\\.", n = 2) %>% 
                 apply(1, function(x) paste0(x[2], " k=", x[1])))
@@ -129,8 +138,12 @@ graph_heatmap <- function(x, main = NULL, ...) {
 #' @export
 graph_tracking <- function(x) {
   k <- Group <- Method <- Class <- Samples <- NULL
-  dat <- consensus_summary(x, progress = FALSE) %>% 
-    consensus_combine(element = "class") %>% 
+  if (class(x) == "list") {
+    x <- abind::abind(x, along = 3)
+  } else if (class(x) != "array") {
+    stop("Error: Invalid input.")
+  }
+  dat <- consensus_combine(x, progress = FALSE, element = "class") %>% 
     as.data.frame() %>% 
     tidyr::gather(key = Group, value = Class, dplyr::everything()) %>% 
     tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>%
@@ -144,5 +157,14 @@ graph_tracking <- function(x) {
     ggtitle("Tracking Cluster Assignments Across Algorithms") +
     theme(axis.text.x = element_blank(),
           axis.ticks.x = element_blank())
-  return(p)
+  print(p)
+}
+
+#' @rdname graphs
+#' @export
+graph_all <- function(x, ...) {
+  graph_cdf(x)
+  graph_delta_area(x)
+  graph_heatmap(x, ...)
+  graph_tracking(x)
 }
