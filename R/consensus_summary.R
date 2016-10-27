@@ -4,10 +4,9 @@
 #' matrices and consensus classes for each clustering algorithm.
 #'
 #' @param res output from \code{ConClust}
+#' @param k number of clusters. The default is \code{NULL}, which returns 
+#'   results for all k considered in \code{res}
 #' @param progress logical; should a progress bar be displayed?
-#' @param save logical; if \code{TRUE}, the returned object will be saved at
-#'   each iteration as well as at the end.
-#' @param file.name file name of the written object
 #' @return A list with summaries for each algorithm. Each algorithm has a list
 #'   with two elements: consensus_matrix and consensus_class
 #' @family consensus functions
@@ -22,8 +21,7 @@
 #' y2 <- consensus_summary(x, k = 4)
 #' str(y1)
 #' str(y2)
-consensus_summary <- function(res, k = NULL, progress = TRUE, save = FALSE,
-                              file.name = "results_CC") {
+consensus_summary <- function(res, k = NULL, progress = TRUE) {
   prog <- ifelse(progress, "text", "none")
   con.mats <- plyr::alply(res, 3:4, consensus_matrix, .progress = prog,
                           .dims = TRUE) %>% 
@@ -39,7 +37,5 @@ consensus_summary <- function(res, k = NULL, progress = TRUE, save = FALSE,
   if (!is.null(k)) {
     out <- out[[as.character(k)]]
   }
-  if (save) readr::write_rds(out, path = paste0(file.name, ".rds"),
-                             compress = "xz")
   return(out)
 }

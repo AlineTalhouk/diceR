@@ -1,7 +1,7 @@
 #' Combine, evaluate, and weigh algorithms
 #'
 #' \code{consensus_combine} combines results for multiple objects from
-#' \code{consensus_summary(ConClust())} and outputs either the consensus
+#' \code{ConClust()} and outputs either the consensus
 #' matrices or consensus classes for all algorithms. \code{consensus_evaluate}
 #' evaluates algorithms on internal/external validation indices.
 #' \code{consensus_weigh} weighs clustering algorithms based on these two
@@ -17,7 +17,7 @@
 #' Relevant graphical displays are also outputted.
 #'
 #' @param ... any number of objects outputted from
-#'   \code{\link{consensus_summary}}
+#'   \code{\link{ConClust}}
 #' @param element either "matrix" or "class" to extract the consensus matrix or
 #'   consensus class, respectively.
 #' @param alg.names optional. Supply a vector of names for the algorithms.
@@ -33,29 +33,23 @@
 #' CC1 <- ConClust(x, nc = 2:4, reps = 10, method = "apEucl")
 #' CC2 <- ConClust(x, nc = 2:4, reps = 10, method = "gmmBIC")
 #' 
-#' # Get summary for ConClust
-#' CC1.summ <- consensus_summary(CC1, k = 4)
-#' CC2.summ <- consensus_summary(CC2, k = 4)
-#' 
 #' # Combine and return either matrices or classes
-#' y1 <- consensus_combine(CC1.summ, CC2.summ, element = "matrix")
+#' y1 <- consensus_combine(CC1, CC2, k = 4, element = "matrix")
 #' str(y1)
-#' y2 <- consensus_combine(CC1.summ, CC2.summ, element = "class")
+#' y2 <- consensus_combine(CC1, CC2, k = 4, element = "class")
 #' str(y2)
 #' 
-#' # Evaluate algorithms on internal and external indices
+#' # Evaluate algorithms on internal and external indices and make plots
 #' set.seed(1)
 #' ref.cl <- sample(1:4, 100, replace = TRUE)
-#' z.internal <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1)
-#' z <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1, ref.cl = ref.cl)
-#' 
-#' # Weigh algorithms
-#' consensus_weigh(z$internal)
-consensus_combine <- function(..., element = c("matrix", "class"),
+#' z.internal <- consensus_evaluate(x, k = 4, CC1, CC2)
+#' z <- consensus_evaluate(x, k = 4, CC1, CC2, ref.cl = ref.cl, plot = FALSE)
+consensus_combine <- function(..., k = NULL, progress = TRUE,
+                              element = c("matrix", "class"),
                               alg.names = NULL) {
-  obj <- unlist(list(...), recursive = FALSE)
-  hask <- suppressWarnings(any(!is.na(as.numeric(names(obj)))))
-  if (hask) {
+  cs <- abind::abind(list(...), along = 3)
+  obj <- consensus_summary(cs, k = k, progress = progress)
+  if (is.null(k)) {
     obj <- unlist(obj, recursive = FALSE)
   }
   switch(match.arg(element),

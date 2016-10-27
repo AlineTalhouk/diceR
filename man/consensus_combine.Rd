@@ -7,15 +7,16 @@
 \alias{consensus_weigh}
 \title{Combine, evaluate, and weigh algorithms}
 \usage{
-consensus_combine(..., element = c("matrix", "class"), alg.names = NULL)
+consensus_combine(..., k = NULL, progress = TRUE, element = c("matrix",
+  "class"), alg.names = NULL)
 
-consensus_evaluate(data, cl.mat, cons.mat, ref.cl = NULL, alg.names = NULL)
+consensus_evaluate(data, k, ..., ref.cl = NULL, plot = TRUE)
 
 consensus_weigh(data.index, top = 5)
 }
 \arguments{
 \item{...}{any number of objects outputted from
-\code{\link{consensus_summary}}}
+\code{\link{ConClust}}}
 
 \item{element}{either "matrix" or "class" to extract the consensus matrix or
 consensus class, respectively.}
@@ -24,32 +25,29 @@ consensus class, respectively.}
 
 \item{data}{data matrix with rows as samples and columns as variables}
 
-\item{cl.mat}{matrix of cluster assignments. Each row is an assignment for a
-different algorithm. Use \code{element = "class"} in
-\code{consensus_combine}.}
-
-\item{cons.mat}{A list of consensus matrices, one for each algorithm. Use
-\code{element = "matrix"} in \code{consensus_combine}.}
-
 \item{ref.cl}{reference class}
+
+\item{plot}{logical; if \code{TRUE}, \code{graph_all} is run}
 
 \item{data.index}{matrix of indices for each algorthim outputted from
 \code{consensus_evaluate}.}
 
 \item{top}{how many top algorithms to include for weighting. Defaults to 5.}
+
+\item{cc.obj}{\code{ConClust} object}
 }
 \value{
 \code{consensus_combine} returns either a list of all consensus
   matrices or a data frame showing all the consensus classes
 
-\code{consensus_evaluate} returns a data frame of the indices PAC and
-  CHI in each column for each algorithm.
+\code{consensus_evaluate} returns a data frame of the indices in each
+  column for each algorithm.
 
 \code{consensus_weigh} returns a matrix of weighted algorithms.
 }
 \description{
 \code{consensus_combine} combines results for multiple objects from
-\code{consensus_summary(ConClust())} and outputs either the consensus
+\code{ConClust()} and outputs either the consensus
 matrices or consensus classes for all algorithms. \code{consensus_evaluate}
 evaluates algorithms on internal/external validation indices.
 \code{consensus_weigh} weighs clustering algorithms based on these two
@@ -72,24 +70,17 @@ x <- matrix(rnorm(1000), ncol = 10)
 CC1 <- ConClust(x, nc = 2:4, reps = 10, method = "apEucl")
 CC2 <- ConClust(x, nc = 2:4, reps = 10, method = "gmmBIC")
 
-# Get summary for ConClust
-CC1.summ <- consensus_summary(CC1, k = 4)
-CC2.summ <- consensus_summary(CC2, k = 4)
-
 # Combine and return either matrices or classes
-y1 <- consensus_combine(CC1.summ, CC2.summ, element = "matrix")
+y1 <- consensus_combine(CC1, CC2, k = 4, element = "matrix")
 str(y1)
-y2 <- consensus_combine(CC1.summ, CC2.summ, element = "class")
+y2 <- consensus_combine(CC1, CC2, k = 4, element = "class")
 str(y2)
 
-# Evaluate algorithms on internal and external indices
+# Evaluate algorithms on internal and external indices and make plots
 set.seed(1)
 ref.cl <- sample(1:4, 100, replace = TRUE)
-z.internal <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1)
-z <- consensus_evaluate(x, cl.mat = y2, cons.mat = y1, ref.cl = ref.cl)
-
-# Weigh algorithms
-consensus_weigh(z$internal)
+z.internal <- consensus_evaluate(x, k = 4, CC1, CC2)
+z <- consensus_evaluate(x, k = 4, CC1, CC2, ref.cl = ref.cl, plot = FALSE)
 }
 \author{
 Derek Chiu
