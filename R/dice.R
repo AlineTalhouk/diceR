@@ -68,7 +68,19 @@ dice <- function(data,
        CSPA = majority_voting(Ecomp$E_imputed2), #place holder
        LCE = majority_voting(Ecomp$E_imputed2) #place holder
      )
-     }
-    
-  return(Final)
+    }
+  # Relabel Final Clustering
+  if(ncf==1){
+    FinalR <- Final
+  } else if(ncf==2){
+      FinalR <- cbind(Final[, 1],as.numeric(relabel_class(Final[,2], Final[, 1])))
+    } else{
+      FinalR <- cbind(Final[, 1],
+        apply(Final[,-1], 2, function(x) {
+          as.numeric(relabel_class(x, Final[, 1]))
+        }))
+    }
+    colnames(FinalR) <- consensusFUNS
+    rownames(FinalR) <- rownames(data)
+  return(list(clusters=FinalR))
 }
