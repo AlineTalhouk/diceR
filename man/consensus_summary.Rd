@@ -4,18 +4,15 @@
 \alias{consensus_summary}
 \title{Consensus summary}
 \usage{
-consensus_summary(res, k = NULL, progress = TRUE, save = FALSE,
-  file.name = "results_CC")
+consensus_summary(res, k = NULL, progress = TRUE)
 }
 \arguments{
 \item{res}{output from \code{ConClust}}
 
+\item{k}{number of clusters. The default is \code{NULL}, which returns 
+results for all k considered in \code{res}}
+
 \item{progress}{logical; should a progress bar be displayed?}
-
-\item{save}{logical; if \code{TRUE}, the returned object will be saved at
-each iteration as well as at the end.}
-
-\item{file.name}{file name of the written object}
 }
 \value{
 A list with summaries for each algorithm. Each algorithm has a list

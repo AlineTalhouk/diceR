@@ -13,6 +13,7 @@ Description: Cluster analysis using ensemble/consensus clustering concepts.
 Depends:
     R (>= 3.2.4)
 Imports:
+    abind,
     assertthat,
     plyr,
     dplyr,

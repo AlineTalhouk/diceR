@@ -134,23 +134,18 @@ asrs <- function(E, dc) {
 #' @export
 cts <- function(E, dc) {
   assertthat::assert_that(is.matrix(E), dc >= 0 && dc <= 1)
-  n = nrow(E)
-  M = ncol(E)
+  n <- nrow(E)
+  M <- ncol(E)
   E.new <- relabel_clusters(E)
   E <- E.new$newE
   no_allcl <- E.new$no_allcl
   wcl <- weigh_clusters(E)
-  
   wCT <- matrix(rep(0, no_allcl * no_allcl), nrow = no_allcl)
-  
-  maxCl <- NULL
-  minCl <- NULL
-  
+  maxCl <- minCl <- NULL
   for (i in 1:ncol(E)) {
     maxCl <- append(maxCl, max(E[, i]))
     minCl <- append(minCl, min(E[, i]))
   }
-  
   for (q in 1:M) {
     for (i in minCl[q]:(maxCl[q] - 1)) {
       Ni <- wcl[i, ]

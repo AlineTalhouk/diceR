@@ -5,3 +5,5 @@
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^codecov\.yml$
+^Example_runthrough\.R$
+^outputs/E\.rds$

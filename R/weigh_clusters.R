@@ -11,24 +11,19 @@
 #' 
 #' @examples
 #' set.seed(1)
-#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+#'               FALSE)
 #' wl <- weigh_clusters(E)
 weigh_clusters <- function(E) {
   assertthat::assert_that(is.matrix(E), is.numeric(E))
-  for (i in 1:nrow(E)) {
-    for (j in 1:ncol(E)) {
-      if (!is_pos_int(E[i, j])) {
-        stop("Error in relabel_clusters: one of the entries in the input matrix is not a positive integer.")
-      }
-    }
-  }
-  N = nrow(E)
+  if (!all(apply(E, 1:length(dim(E)), is_pos_int)))
+    stop("Error: one of the entries in the input matrix is not a positive integer.")
+  N <- nrow(E)
   no_allcl <- max(max(E))
   pc <- matrix(rep(0, N * no_allcl), nrow = N)
   for (i in 1:N) {
     pc[i, E[i, ]] <- 1
   }
-  
   wcl <- matrix(rep(0, no_allcl ^ 2), nrow = no_allcl)
   for (i in 1:(no_allcl - 1)) {
     for (j in (i + 1):no_allcl) {

@@ -35,6 +35,7 @@ library(dplyr)
 library(ggplot2)
 library(knitr)
 data(hgsc)
+dat <- t(hgsc[, -1])
 ```
 
 We load an example data set of `r ncol(hgsc) - 1` high grade serous carcinoma samples measured on `r nrow(hgsc)` genes.
@@ -46,7 +47,6 @@ When Monti et al. (2003) first introduced consensus clustering, the idea was to 
 The main function of this package is `ConClust()`, which outputs cluster assignments across subsamples and algorithms. For example, let's say we were interested in clustering the `hgsc` data into 4 clusters, using 80% resampling on 10 replicates, for these clustering algorithms: K-Means (Spearman distance), PAM (Spearman distance), Spectral Clustering using Radial-Basis kernel function, and Biclustering using a latent block model.
 
 ```{r ConClust, results='hide'}
-dat <- t(hgsc[, -1])
 CC <- ConClust(dat, nc = 2:4, reps = 10, pItem = 0.8,
                method = c("hcAEucl", "kmSpear", "pamSpear", "biclust"), save = FALSE)
 ```
@@ -74,10 +74,8 @@ We can carry on the analysis using either `CC` or `CC.impute`.
 
 - [`consensus_matrix()`](#compute-consensus-matrix-with-consensus_matrix)
 - [`consensus_class()`](#get-consensus-class-with-consensus_class)
-- [`consensus_summary()`](#organize-consensus-classes-and-matrices-with-consensus_summary)
 - [`consensus_combine()`](#combine-consensus-summaries-with-consensus_combine)
 - [`consensus_evaluate()`](#compare-algortihms-with-consensus_evaluate)
-- [`consensus_weigh()`](#rank-and-weigh-algorithms-with-consensus_weigh)
 - [`consensus_confmat()`](#compare-to-true-class-with-consensus_confmat)
 
 ### Compute consensus matrix with `consensus_matrix()`
@@ -105,25 +103,13 @@ cclass <- consensus_class(cm, k = 4)
 kable(as.data.frame(table(cclass)))
 ```
 
-### Organize consensus classes and matrices with `consensus_summary()`
-
-To quickly return the `consensus_matrix()` and `consensus_class()` for every clustering algorithm used, we can use `consensus_summary()` as a wrapper for generating these two outputs. The result is a 3 level list: each element is for a different k, which lists by algorithm, two elements: a `consensus_matrix` and a `consensus_class`.
-
-```{r consensus_summary, results='hide'}
-cs <- consensus_summary(CC)
-```
-
-```{r consensus_summary_str}
-str(cs, max.level = 2)
-```
-
 ### Combine consensus summaries with `consensus_combine()`
 
 The return value of `consensus_summary()` has `consensus_matrix` and `consensus_class` objects as sublists. If we wish to extract these separately for every algorithm, `consensus_combine()` is a convenient wrapper to do so. Setting `element = "matrix"` returns a list of consensus matrices. On the other hand, setting `element = "class"` returns a matrix with rows as samples, and columns as clustering assignments for each algorithm.
 
 ```{r consensus_combine}
-ccomb_matrix <- consensus_combine(cs, element = "matrix")
-ccomb_class <- consensus_combine(cs, element = "class")
+ccomb_matrix <- consensus_combine(CC, element = "matrix")
+ccomb_class <- consensus_combine(CC, element = "class")
 ```
 
 ```{r consensus_combine_str}
@@ -138,8 +124,7 @@ A situation might also arise where we initially decided on using 4 clustering al
 ```{r consensus_combine_2, results='hide'}
 CC2 <- ConClust(dat, nc = 2:4, reps = 10, pItem = 0.8,
                 method = c("hcDianaEucl", "pamEucl"), save = FALSE)
-cs2 <- consensus_summary(CC2)
-ccomb_class2 <- consensus_combine(cs, cs2, element = "class")
+ccomb_class2 <- consensus_combine(CC, CC2, element = "class")
 ```
 
 ```{r consensus_combine_2_str}
@@ -151,43 +136,11 @@ kable(head(ccomb_class2))
 Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose two indices on which to compare the ensemble of clustering algorithms. The first index is PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between `lower` (defaults to 0) and `upper` (defaults to 1). PAC gives a sense of cluster stability. The second index is CHI (Calinski-Harabasz Index) or pseudo F-statistic. It measures the ratio of between cluster distances to within cluster distances, and was observed in our simulations to be one of the more robust indices to different data structures.
 
 ```{r consensus_evaluate}
-ccomp <- consensus_evaluate(dat, cl.mat = ccomb_class, cons.mat = ccomb_matrix)
+ccomp <- consensus_evaluate(dat, k = 4, CC, CC2, plot = FALSE)
 kable(ccomp$internal)
 ```
 
 We see that the biclustering algorithm is the least ambiguous and also most well-clustered (high compactness and separability).
-
-### Rank and weigh algorithms with `consensus_weigh()`
-
-Suppose we want a ranking of the algorithms from the previous table, and supply weights according to cluster performance. The idea is that we want to put higher weights in the final cluster ensemble to well-performing algorithms (such as bicluster in the last example), and vice versa.
-
-```{r consensus_weigh}
-cweigh <- consensus_weigh(ccomp$internal, top = 12)
-kable(cweigh)
-```
-
-The final column takes an equal weighting from PAC and CHI.
-
-Consider the following example of how these weights can be used. We use `ccomb_class` as the input. Recall these are the consensus classes within an algorithm. Then we apply `consensus_matrix()` to get the consensus matrix across algorithms **and** subsamples, which can optionally be weighed using `cweigh$Weight`. The user needs to ensure that the algorithms match, however.
-
-```{r consensus_weigh_example}
-# Generate both consensus matrices
-cm_algs <- consensus_matrix(ccomb_class)
-cm_algs_w <- consensus_matrix(ccomb_class,
-                              weights = cweigh$Weight[match(colnames(ccomb_class), cweigh$Algorithms)])
-
-# Calculate range of PAC from 0 to Upper Limit
-pac_dat <- data.frame(Upper = seq(0, 1, 0.01)) %>% 
-  mutate(Unweighted = sapply(Upper, PAC, cm = cm_algs, lower = 0),
-         Weighted = sapply(Upper, PAC, cm = cm_algs_w, lower = 0)) %>% 
-  tidyr::gather(key = Type, value = PAC, 2:3)
-
-# Show distribution of PAC for both Types of consensus matrices
-ggplot(pac_dat, aes(Upper, PAC)) + 
-  geom_line(aes(colour = Type)) + 
-  labs(x = "Upper Limit",
-       title = "Distribution of PAC from 0 to Upper Limit")
-```
 
 ### Compare to true class with `consensus_confmat()`
 

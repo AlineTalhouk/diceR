@@ -3,7 +3,7 @@ context("Impute missing values")
 
 data(hgsc)
 data <- t(hgsc[, -1])
-E <- ConClust(data, k = 4, reps = 10,
+E <- ConClust(data, nc = 4, reps = 10,
               method = c("hcAEucl", "kmEucl", "scRbf"), progress = FALSE)
 
 test_that("Check imputeMissing with hgsc data with imputeALL TRUE", {
@@ -17,7 +17,7 @@ test_that("Check imputeMissing with hgsc data with imputeALL FALSE", {
   E_imputed <- imputeMissing(E, data, imputeALL = FALSE)
   expect_true(sum(!complete.cases(E_imputed)) < sum(!complete.cases(E)))
   expect_equal(nrow(E_imputed), dim(E)[1])
-  expect_equal(ncol(E_imputed), dim(E)[2] * dim(E)[3])
+  expect_equal(ncol(E_imputed), dim(E)[2])
 })
 
 test_that("Check imputeMissing throws error with wrong inputs", {
