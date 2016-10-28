@@ -16,17 +16,10 @@ dim(E)
 
 # E <- load("outputs/E.rds")
 # Impute Missing Values using KNN and majority vote
-<<<<<<< HEAD
-Enew<- imputeMissing(E,data= t(hgsc[,-1]),imputeALL=TRUE)
-=======
-<<<<<<< HEAD
+
 E_imputed <- apply(E, 2:4, knn_impute, data = dat)
 E_imputed2 <- imputeMissing(E, data = dat, imputeALL = TRUE)
 dim(E_imputed2)
-=======
-Enew<- imputeMissing(E,data= t(hgsc[,-1]),imputeALL=TRUE)
->>>>>>> master
->>>>>>> feature/organize-consensus
 
 # Do one or all of the following
 
@@ -47,25 +40,12 @@ kmodes_cl <- k_modes(E_imputed2)
 ## Reorder and majority vote
 majvot_cl <- majority_voting(E_imputed2)
 
-library(magrittr)
 # Combine all results
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-# Final <- cbind(CO_cl, LCE_cl, kmodes_cl, majvot_cl)
 cons_cl <- cbind(LCE = LCE_cl, KModes = kmodes_cl, MajVot = majvot_cl)
 
 # Evaluate different clustering using internal, external (if applicable) and
 # graphical method
 consensus_evaluate(data = dat, k = 4, E, cons.cl = cons_cl, plot = FALSE)
-=======
->>>>>>> feature/organize-consensus
-Final <- cbind(CO_cl,LCE_cl,kmodes_cl,majvot_cl) %>% 
-  data.frame(.)
-
-# Evaluate different clustering using internal, external (if applicable) and graphical method
-consensus_evaluate(t(hgsc[-1,-1]),Final,CO_mat)
->>>>>>> master
 
 # Identify the best number of clustering and test against the null hypothesis
 # that the data was generated from a unimodal distribution
