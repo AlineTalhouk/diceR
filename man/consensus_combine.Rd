@@ -10,7 +10,8 @@
 consensus_combine(..., k = NULL, progress = TRUE, element = c("matrix",
   "class"), alg.names = NULL)
 
-consensus_evaluate(data, k, ..., ref.cl = NULL, plot = TRUE)
+consensus_evaluate(data, k, ..., cons.cl = NULL, ref.cl = NULL,
+  plot = TRUE)
 
 consensus_weigh(data.index, top = 5)
 }
@@ -29,6 +30,9 @@ consensus class, respectively.}
 \item{alg.names}{optional. Supply a vector of names for the algorithms.}
 
 \item{data}{data matrix with rows as samples and columns as variables}
+
+\item{cons.cl}{matrix of cluster assignments from consensus algorithms such
+as \code{kmodes} and \code{majority_voting}}
 
 \item{ref.cl}{reference class}
 

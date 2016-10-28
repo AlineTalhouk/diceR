@@ -28,8 +28,8 @@ CO_cl <- consensus_combine(E, element = "class")
 CO_mat <- consensus_combine(E, element = "matrix")
 
 ## Compute Link-based similarity Matrix and cluster
-S <- apply(E_imputed2, 3, LCE)
-LCE_cl <- consensus_class(S[[1]]$CTS, 4)
+S <- LCE(E, data = dat)  # LCE calls imputeMissing
+LCE_cl <- consensus_class(S$CTS, 4)
 
 ## Reorder and k modes
 kmodes_cl <- k_modes(E_imputed2)
@@ -38,9 +38,12 @@ kmodes_cl <- k_modes(E_imputed2)
 majvot_cl <- majority_voting(E_imputed2)
 
 # Combine all results
-Final <- cbind(CO_cl, LCE_cl, kmodes_cl, majvot_cl)
+# Final <- cbind(CO_cl, LCE_cl, kmodes_cl, majvot_cl)
+cons_cl <- cbind(LCE = LCE_cl, KModes = kmodes_cl, MajVot = majvot_cl)
 
-# Evaluate different clustering using internal, external (if applicable) and graphical method
-consensus_evaluate(t(hgsc[-1, -1]), Final, CO_mat)   # TODO: modify `Final` and `CO_mat` so it resembles `E` data structure
+# Evaluate different clustering using internal, external (if applicable) and
+# graphical method
+consensus_evaluate(data = dat, k = 4, E, cons.cl = cons_cl, plot = FALSE)
 
-# Identify the best number of clustering and test against the null hypothesis that the data was generated from a unimodal distribution
+# Identify the best number of clustering and test against the null hypothesis
+# that the data was generated from a unimodal distribution

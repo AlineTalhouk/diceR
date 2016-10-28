@@ -1,16 +1,24 @@
 #' @param data data matrix with rows as samples and columns as variables
 #' @param ref.cl reference class
+#' @param cons.cl matrix of cluster assignments from consensus algorithms such
+#'   as \code{kmodes} and \code{majority_voting}
 #' @param plot logical; if \code{TRUE}, \code{graph_all} is called
 #' @inheritParams consensus_combine
 #' @return \code{consensus_evaluate} returns a data frame of the indices in each
 #'   column for each algorithm.
 #' @rdname consensus_combine
 #' @export
-consensus_evaluate <- function(data, k, ..., ref.cl = NULL, plot = TRUE) {
+consensus_evaluate <- function(data, k, ..., cons.cl = NULL,
+                               ref.cl = NULL, plot = TRUE) {
   x <- data.frame(data)
   cc.obj <- abind::abind(list(...), along = 3)
   cl.mat <- consensus_combine(cc.obj, k = k, element = "class")
   an <- dimnames(cc.obj)[3][[1]]
+  if (!is.null(cons.cl)) {
+    assertthat::assert_that(is.matrix(cons.cl))
+    cl.mat <- cbind(cl.mat, cons.cl)
+    an <- c(an, colnames(cons.cl))
+  }
   ind.int <- data.frame(
     Algorithms = an,
     CHI = apply(cl.mat, 2, iv_chi, x = x),
