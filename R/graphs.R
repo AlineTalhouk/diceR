@@ -34,15 +34,13 @@
 #' 
 #' # Plot CDF
 #' p <- graph_cdf(CC1)
-#' p
 #' 
 #' # Change y label and add colours
-#' p + labs(y = "Probability") + stat_ecdf(aes(colour = Method)) +
+#' p + labs(y = "Probability") + stat_ecdf(aes(colour = k)) +
 #' scale_color_brewer(palette = "Set2")
 #' 
 #' # Delta Area
 #' p <- graph_delta_area(CC1)
-#' p
 #' 
 #' # Heatmaps with column side colours corresponding to clusters
 #' CC2 <- ConClust(x, nc = 3, reps = 5, method = "apEucl", progress = FALSE)
@@ -50,7 +48,6 @@
 #' 
 #' # Track how cluster assignments change between algorithms
 #' p <- graph_tracking(CC1)
-#' p
 graph_cdf <- function(x) {
   k <- CDF <- NULL
   dat <- get_cdf(x)
@@ -61,6 +58,7 @@ graph_cdf <- function(x) {
          y = "CDF",
          title = "Consensus Cumulative Distribution Functions")
   print(p)
+  return(p)
 }
 
 #' @rdname graphs
@@ -78,6 +76,7 @@ graph_delta_area <- function(x) {
     labs(y = "Relative change in Area under CDF curve",
          title = "Delta Area")
   print(p)
+  return(p)
 }
 
 #' Calculate CDF for each clustering algorithm at each k
@@ -158,6 +157,7 @@ graph_tracking <- function(x) {
     theme(axis.text.x = element_blank(),
           axis.ticks.x = element_blank())
   print(p)
+  return(p)
 }
 
 #' @rdname graphs

@@ -63,15 +63,13 @@ method = c("hcAEucl", "apEucl", "gmmBIC"), progress = FALSE)
 
 # Plot CDF
 p <- graph_cdf(CC1)
-p
 
 # Change y label and add colours
-p + labs(y = "Probability") + stat_ecdf(aes(colour = Method)) +
+p + labs(y = "Probability") + stat_ecdf(aes(colour = k)) +
 scale_color_brewer(palette = "Set2")
 
 # Delta Area
 p <- graph_delta_area(CC1)
-p
 
 # Heatmaps with column side colours corresponding to clusters
 CC2 <- ConClust(x, nc = 3, reps = 5, method = "apEucl", progress = FALSE)
@@ -79,7 +77,6 @@ graph_heatmap(CC2)
 
 # Track how cluster assignments change between algorithms
 p <- graph_tracking(CC1)
-p
 }
 \author{
 Derek Chiu
