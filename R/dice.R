@@ -1,6 +1,8 @@
 #' Runs through the full diceR algorithm
 #'
-#' A function that runs through the full diceR algorithm
+#' A function that executes the diceR algorithm
+#'
+#' (Needs to be more informative) A function that runs through the full diceR algorithm
 #'
 #' @param data a data set with rows as observations, columns as variables
 #' @param nk a rangeof cluster sizes (or a single value).
@@ -11,9 +13,7 @@
 #' @param weigh a logical value to indicate whether after pruning, certain algorithms should have more weight than others. defaults to FALSE.If weigh is TRUE pruning will be set to TRUE as well.
 #' @param evaluate indicate whether internal evaluation is needed. evaluate=c("internal","external","both"). If evaluate is either external or both, then a reference class must be provided.
 #' @param refClass a vector of length n, indicating the reference class to compare against.
-
 #' @export
-
 dice <- function(data,
                  nk,
                  R = 10,
@@ -49,7 +49,7 @@ dice <- function(data,
   if (prune == TRUE) {
     #Function that Derek writing
     #Must return Enew with nalgs< for original E
-  if (reweigh == TRUE){
+  if (reweigh == TRUE) {
     #Future function
     #Must return Enew with nalgs< for original E and certain slices are assigned more weight
   }
@@ -59,29 +59,35 @@ dice <- function(data,
   
   # Impute Missing Values using KNN and majority vote
   Ecomp <- imputeMissing(Enew, data, imputeALL = TRUE)
-  
-  Final <- matrix(NA,nrow = n, ncol = ncf) 
-    for (i in 1:ncf){
-     Final[,i] <- switch (consensusFUNS[i],
-       kmodes = k_modes(Ecomp$E_imputed2),
-       majority = majority_voting(Ecomp$E_imputed2),
-       CSPA = majority_voting(Ecomp$E_imputed2), #place holder
-       LCE = LCE(drop(Ecomp$E_imputed2),nk) #place holder
-     )
-    }
+
+  if (!is.null(refClass)) {
+    
+  }
+  Final <- matrix(NA, nrow = n, ncol = ncf)
+  for (i in 1:ncf) {
+    Final[, i] <- switch(
+      consensusFUNS[i],
+      kmodes = k_modes(Ecomp$E_imputed2),
+      majority = majority_voting(Ecomp$E_imputed2),
+      CSPA = majority_voting(Ecomp$E_imputed2),  # place holder
+      LCE = LCE(drop(Ecomp$E_imputed2), nk)
+    )
+  }
   
   # Relabel Final Clustering
-  if(ncf==1){
+  if (ncf == 1) {
+    # if one consensus algorithm is requested only no need to relabel
     FinalR <- Final
-  } else if(ncf==2){
-      FinalR <- cbind(Final[, 1],as.numeric(relabel_class(Final[,2], Final[, 1])))
-    } else{
-      FinalR <- cbind(Final[, 1],
+  } else if (ncf == 2) {
+    FinalR <-
+      cbind(Final[, 1], as.numeric(relabel_class(Final[, 2], Final[, 1])))
+  } else{
+    FinalR <- cbind(Final[, 1],
         apply(Final[,-1], 2, function(x) {
           as.numeric(relabel_class(x, Final[, 1]))
         }))
-    }
-    colnames(FinalR) <- consensusFUNS
-    rownames(FinalR) <- rownames(data)
-  return(list(clusters=FinalR))
+  }
+  colnames(FinalR) <- consensusFUNS
+  rownames(FinalR) <- rownames(data)
+  return(list(clusters = FinalR))
 }
