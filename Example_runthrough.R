@@ -14,9 +14,8 @@ E <-ConClust(dat, nc = k, reps = 10,
 dim(E)
 # E <- load("outputs/E.rds")
 # Impute Missing Values using KNN and majority vote
-E_imputed <- apply(E,2:4, knn_impute, data= t(hgsc[,-1]))
-E_imputed2 <- imputeMissing(E,data= t(hgsc[,-1]),imputeALL=TRUE)
-dim(E_imputed2)
+Enew<- imputeMissing(E,data= t(hgsc[,-1]),imputeALL=TRUE)
+
 # Do one or all of the following
 
 # Obtain a consensus:
