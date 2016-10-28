@@ -4,6 +4,8 @@ data("hgsc")
 head(hgsc)
 dat <- t(hgsc[, -1])
 k <- 4
+
+
 # Fix the number of cluster or loop over several k options
 
 # Generate Diverse Cluster Ensemble for a fixed k
@@ -14,6 +16,7 @@ dim(E)
 
 # E <- load("outputs/E.rds")
 # Impute Missing Values using KNN and majority vote
+
 E_imputed <- apply(E, 2:4, knn_impute, data = dat)
 E_imputed2 <- imputeMissing(E, data = dat, imputeALL = TRUE)
 dim(E_imputed2)
@@ -38,7 +41,6 @@ kmodes_cl <- k_modes(E_imputed2)
 majvot_cl <- majority_voting(E_imputed2)
 
 # Combine all results
-# Final <- cbind(CO_cl, LCE_cl, kmodes_cl, majvot_cl)
 cons_cl <- cbind(LCE = LCE_cl, KModes = kmodes_cl, MajVot = majvot_cl)
 
 # Evaluate different clustering using internal, external (if applicable) and

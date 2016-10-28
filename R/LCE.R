@@ -24,29 +24,15 @@
 #' y <- LCE(E = x, data = dat, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
 #' sim.mat = "asrs")
 LCE <- function(E, data, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
-                sim.mat = c("cts", "srs", "asrs"), is.relabelled = TRUE) {
+                sim.mat = c("cts", "srs", "asrs")) {
   assertthat::assert_that(is.array(E), dcCTS >= 0 && dcCTS <= 1,
                           dcASRS >= 0 && dcASRS <= 1, dcSRS >= 0 && dcSRS <= 1,
                           is_pos_int(R))
-  sm.choices <- c("cts", "srs", "asrs")
-  if (!all(sim.mat %in% sm.choices)) {
-    stop("At least one of 'sim.mat' is not 'cts', 'srs', or 'asrs'.")  
-  } else {
-    sm <- match.arg(sim.mat, sm.choices, several.ok = TRUE)
-  }
-  E <- imputeMissing(E, data, imputeALL = TRUE)[, , 1]
-  if ("cts" %in% sm)
-    CTS <- cts(E = E, dc = dcCTS)
-  else
-    CTS <- NULL
-  if ("srs" %in% sm)
-    SRS <- srs(E = E, dc = dcSRS, R = R)
-  else
-    SRS <- NULL
-  if ("asrs" %in% sm)
-    ASRS <- asrs(E = E, dc = dcASRS)
-  else
-    ASRS <- NULL
-  out <- list(CTS = CTS, SRS = SRS, ASRS = ASRS)
-  return(Filter(Negate(is.null), out))
+  E2 <- imputeMissing(E, data, imputeALL = TRUE)[, , 1]
+  S <- switch(match.arg(sim.mat),
+              cts = cts(E = E2, dc = dcCTS),
+              srs = srs(E = E2, dc = dcSRS, R = R),
+              asrs = asrs(E = E2, dc = dcSRS))
+  LCE_cl <- consensus_class(S, k)
+  return(LCE_cl)
 }
