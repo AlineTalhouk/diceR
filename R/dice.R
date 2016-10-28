@@ -66,9 +66,10 @@ dice <- function(data,
        kmodes = k_modes(Ecomp$E_imputed2),
        majority = majority_voting(Ecomp$E_imputed2),
        CSPA = majority_voting(Ecomp$E_imputed2), #place holder
-       LCE = majority_voting(Ecomp$E_imputed2) #place holder
+       LCE = LCE(drop(Ecomp$E_imputed2),nk) #place holder
      )
     }
+  
   # Relabel Final Clustering
   if(ncf==1){
     FinalR <- Final
