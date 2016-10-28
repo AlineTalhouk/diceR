@@ -1,7 +1,6 @@
 #' @param data data matrix with rows as samples and columns as variables
-#' @param cc.obj \code{ConClust} object
 #' @param ref.cl reference class
-#' @param plot logical; if \code{TRUE}, \code{graph_all} is run
+#' @param plot logical; if \code{TRUE}, \code{graph_all} is called
 #' @inheritParams consensus_combine
 #' @return \code{consensus_evaluate} returns a data frame of the indices in each
 #'   column for each algorithm.

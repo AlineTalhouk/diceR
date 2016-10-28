@@ -18,6 +18,11 @@ consensus_weigh(data.index, top = 5)
 \item{...}{any number of objects outputted from
 \code{\link{ConClust}}}
 
+\item{k}{number of clusters requested. Default is \code{NULL}, which returns
+all k computed from \code{...}}
+
+\item{progress}{Should a progress bar be printed?}
+
 \item{element}{either "matrix" or "class" to extract the consensus matrix or
 consensus class, respectively.}
 
@@ -27,14 +32,12 @@ consensus class, respectively.}
 
 \item{ref.cl}{reference class}
 
-\item{plot}{logical; if \code{TRUE}, \code{graph_all} is run}
+\item{plot}{logical; if \code{TRUE}, \code{graph_all} is called}
 
 \item{data.index}{matrix of indices for each algorthim outputted from
 \code{consensus_evaluate}.}
 
 \item{top}{how many top algorithms to include for weighting. Defaults to 5.}
-
-\item{cc.obj}{\code{ConClust} object}
 }
 \value{
 \code{consensus_combine} returns either a list of all consensus
