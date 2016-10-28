@@ -7,19 +7,22 @@
 imputeMissing(E4, data, imputeALL = TRUE)
 }
 \arguments{
-\item{E4}{is an array of clusterings with number of rows equal to the number of cases to be clustered, number of columns equal to the clustering obtained by different resampling of the data, and the third dimension is the different algorithms and the fourth dimension is the cluster size.}
+\item{E4}{is an array of clusterings with number of rows equal to the number
+of cases to be clustered, number of columns equal to the clustering
+obtained by different resampling of the data, and the third dimension is
+the different algorithms and the fourth dimension is the cluster size.}
 
 \item{data}{is data matrix with samples as rows and genes/features as columns}
 
-\item{imputeALL}{if \code{FALSE} the function will only call knn_impute to
-impute NAs missing due to resampling; if \code{TRUE}, the function will use knn_impute and
-majority voting to eliminate NAs and relabel classes}
+\item{imputeALL}{if \code{FALSE} the function will only call knn_impute to 
+impute NAs missing due to resampling; if \code{TRUE}, the function will use
+knn_impute and majority voting to eliminate NAs and relabel classes}
 }
 \value{
 a flat matrix of clusterings, fully imputed and relabelled.
 }
 \description{
-Uses k nearest neighbour to impute missing values due to sampling. Not all
+Uses k nearest neighbour to impute missing values due to sampling. Not all 
 cases will be imputed using this method.
 }
 \examples{
@@ -27,7 +30,8 @@ data(hgsc)
 data <- t(hgsc[,-1])[1:200, 1:100]
 E <- ConClust(data, nc = 2:4, reps = 10, method = c("hcAEucl", "kmEucl",
 "scRbf"))
-imputeMissing(E, data)
+sum(is.na(E))
+sum(is.na(imputeMissing(E, data)))
 }
 \author{
 Aline Talhouk

@@ -28,8 +28,8 @@ definite decision is 3 (default).
 # Generate data from ConClust
 set.seed(2)
 x <- replicate(100, rnorm(100))
-CC <- ConClust(x, k = 4, reps = 10, method = "scRbf")
-orig.cl <- CC[, 1, 1]
+CC <- ConClust(x, nc = 4, reps = 10, method = "scRbf")
+orig.cl <- CC[, 1, 1, 1]
 sum(is.na(orig.cl))
 
 # Still missing values because there is doubt in the voting for some cases

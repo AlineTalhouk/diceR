@@ -13,20 +13,15 @@
 #'
 #' @examples
 #' set.seed(1)
-#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
+#' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+#'               FALSE)
 #' E_relabelled <- relabel_clusters(E)
 relabel_clusters <- function(E) {
-  assertthat::assert_that(is.matrix(E))
-  assertthat::assert_that(is.numeric(E))
+  assertthat::assert_that(is.matrix(E), is.numeric(E))
   N <- nrow(E)
   M <- ncol(E)
-  for (i in 1:N) {
-    for (j in 1:M) {
-      if (!is_pos_int(E[i, j])) {
-        stop("Error: one of the entries in the input matrix is not a positive integer.")
-      }
-    }
-  }
+  if (!all(apply(E, 1:length(dim(E)), is_pos_int)))
+    stop("Error: one of the entries in the input matrix is not a positive integer.")
   newE <- matrix(rep(0, N * M), nrow = N)
   ucl <- sort(unique(E[, 1]))
   if (max(E[, 1] != length(ucl)) == 1) {
@@ -41,6 +36,6 @@ relabel_clusters <- function(E) {
       newE[E[, i] == ucl[j], i] <- prevCl + j
     }
   }
-  no_allcl <- max(max(newE))
+  no_allcl <- max(newE)
   return(list(no_allcl = no_allcl, newE = newE))
 }

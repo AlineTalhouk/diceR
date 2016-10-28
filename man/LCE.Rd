@@ -2,13 +2,16 @@
 % Please edit documentation in R/LCE.R
 \name{LCE}
 \alias{LCE}
-\title{Generate CTS, SRS, and ASRS similarity matrices.}
+\title{Linkage Clustering Ensemble}
 \usage{
-LCE(E, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
-  is.relabelled = TRUE)
+LCE(E, data, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
+  sim.mat = c("cts", "srs", "asrs"), is.relabelled = TRUE)
 }
 \arguments{
-\item{E}{matrix of clustering results. Complete and relabelled cases needed.}
+\item{E}{is an array of clustering results. Missing entries are imputed using
+\code{imputeMissing}}
+
+\item{data}{original data matrix with rows as samples, columns as variables}
 
 \item{dcCTS}{decay constant for CTS matrix}
 
@@ -17,23 +20,26 @@ LCE(E, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
 \item{dcASRS}{decay constant for ASRS matrix}
 
 \item{R}{number of repetitions for SRS matrix}
+
+\item{sim.mat}{vector of similarity matrices to compute. Choices are "cts",
+"srs", "asrs".}
+
+\item{is.relabelled}{logical; defaults to \code{TRUE}, but if \code{FALSE}
+the data will be relabelled}
 }
 \value{
-a list containing the CTS, SRS, and ASRS matrix
+a list containing the CTS, SRS, and ASRS matrices (as specified)
 }
 \description{
 Generate CTS, SRS, and ASRS similarity matrices.
 }
 \examples{
-set.seed(1)
-E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow = FALSE)
-link_clust(E = E, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
-           is.relabelled = FALSE)
 data(hgsc)
-dat <- t(hgsc[, -1])
-x <- ConClust(dat[1:100, 1:50], k = 4, reps = 4,
+dat <- t(hgsc[, -1])[1:100, 1:50]
+x <- ConClust(dat, nc = 4, reps = 4,
               method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
-y <- link_clust(E = x, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10)
+y <- LCE(E = x, data = dat, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
+sim.mat = "asrs")
 }
 \author{
 Johnson Liu
