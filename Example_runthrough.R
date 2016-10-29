@@ -31,8 +31,7 @@ CO_cl <- consensus_combine(E, element = "class")
 CO_mat <- consensus_combine(E, element = "matrix")
 
 ## Compute Link-based similarity Matrix and cluster
-S <- LCE(E, data = dat)  # LCE calls imputeMissing
-LCE_cl <- consensus_class(S$CTS, 4)
+LCE_cl <- LCE(E, data = dat, k)
 
 ## Reorder and k modes
 kmodes_cl <- k_modes(E_imputed2)
