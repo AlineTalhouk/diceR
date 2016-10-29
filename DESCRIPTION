@@ -36,6 +36,8 @@ Imports:
     clusterSim,
     clue,
     class,
+    clValid,
+    clusterCrit,
     klaR,
     grDevices,
     RColorBrewer,

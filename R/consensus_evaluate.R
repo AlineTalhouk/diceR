@@ -10,7 +10,7 @@
 #' @export
 consensus_evaluate <- function(data, k, ..., cons.cl = NULL,
                                ref.cl = NULL, plot = TRUE) {
-  x <- data.frame(data)
+  x <- as.matrix(data)
   cc.obj <- abind::abind(list(...), along = 3)
   cl.mat <- consensus_combine(cc.obj, k = k, element = "class")
   an <- dimnames(cc.obj)[3][[1]]
@@ -19,13 +19,20 @@ consensus_evaluate <- function(data, k, ..., cons.cl = NULL,
     cl.mat <- cbind(cl.mat, cons.cl)
     an <- c(an, colnames(cons.cl))
   }
+  cl.mat <- apply(cl.mat, 1:2, as.integer)
   ind.int <- data.frame(
     Algorithms = an,
-    CHI = apply(cl.mat, 2, iv_chi, x = x),
-    Compactness = apply(cl.mat, 2, iv_compactness, data = x)) %>% 
-    cbind(plyr::aaply(cl.mat, 2, function(cl)
-      unlist(iv_db_dunn(data = x, labels = cl))) %>% 
-        rbind()) %>% 
+    plyr::aaply(cl.mat, 2, function(cl)
+      clusterCrit::intCriteria(
+        traj = x, part = cl,
+        crit = c("C_index", "Calinski_Harabasz",
+                 "Davies_Bouldin", "Dunn", "McClain_Rao",
+                 "PBM", "SD_Dis", "Ray_Turi", "Tau",
+                 "Gamma", "G_plus")) %>% 
+        unlist()),
+    Compactness = apply(cl.mat, 2, iv_compactness, data = x),
+    Connectivity = apply(cl.mat, 2, function(cl)
+      clValid::connectivity(Data = x, clusters = cl))) %>% 
     mutate_all(funs(structure(., names = an)))
   if (plot) {
     graph_all(cc.obj)
@@ -42,4 +49,46 @@ consensus_evaluate <- function(data, k, ..., cons.cl = NULL,
   } else {
     return(list(k = k, internal = ind.int))
   }
+}
+
+#' Compactness Measure
+#' 
+#' Compute the compactness validity index for a clustering result.
+#' 
+#' This index is agnostic to any reference clustering results, calculating
+#' cluster performance on the basis of compactness and separability.
+#' 
+#' @param data a dataset with rows as observations, columns as variables
+#' @param labels a vector of cluster labels from a clustering result
+#' @references MATLAB function \code{valid_compactness} by Simon Garrett in
+#'   LinkCluE
+#' @return the compactness score
+#' @export
+#' 
+#' @examples
+#' set.seed(1)
+#' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+#'               FALSE)
+#' set.seed(1)
+#' dat <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100, byrow = FALSE))
+#' iv_compactness(dat, E[, 1])
+iv_compactness <- function(data, labels) {
+  assertthat::assert_that(is.data.frame(data) || is.matrix(data),
+                          length(labels) == nrow(data))
+  n <- length(labels)
+  C <- sort(unique(labels))
+  k <- length(C)
+  cp <- 0
+  for (i in 1:k) {
+    ind <- which(labels == C[i])
+    nk <- length(ind)
+    if (nk <= 1) {
+      cp <- cp + 0
+    } else{
+      sum_d <- 0
+      sum_d <- sum(dist(data[ind, ], method = "euclidean"))
+      cp <- cp + (nk * (sum_d / (nk * (nk - 1) / 2)))
+    }
+  }
+  return(cp / n)
 }
