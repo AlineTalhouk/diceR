@@ -14,7 +14,7 @@
 #'   voting, k-modes, CSPA, LCE
 #' @param prune a logical value to indicate whether algorithm pruning is needed
 #'   prior to consensus clustering. defaults to FALSE.
-#' @param weigh a logical value to indicate whether after pruning, certain
+#' @param reweigh a logical value to indicate whether after pruning, certain
 #'   algorithms should have more weight than others. defaults to FALSE.If weigh
 #'   is TRUE pruning will be set to TRUE as well.
 #' @param evaluate indicate whether internal evaluation is needed.
@@ -29,14 +29,14 @@ dice <- function(data,
                  algorithms = c("hcAEucl", "kmEucl", "scRbf", "gmmBIC"),
                  consensusFUNS = c("kmodes", "CSPA", "majority", "LCE"),
                  prune = FALSE,
-                 weigh = FALSE,
+                 reweigh = FALSE,
                  evaluate = "internal",
                  refClass = NULL) {
   # Check that inputs are correct
   if (length(dim(data)) != 2) {
     stop("Data should be two dimensional")
   }
-  if (prune == FALSE & weigh == TRUE) {
+  if (prune == FALSE & reweigh == TRUE) {
     prune <- TRUE
   }
   if ((evaluate == "external" |
