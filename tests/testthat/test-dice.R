@@ -1,4 +1,10 @@
+library(dplyr)
 data("hgsc")
 dat <- t(hgsc[,-1])
-dice(dat, nk=4, algorithms = c("hcAEucl", "kmEucl"), 
-     consensusFUNS = c("kmodes", "majority", "LCE"))
+
+exp.dat <- data.frame(initCol=rownames(dat)) %>%
+    tidyr::separate(.,initCol,into=c("patientID","Class"), sep="_") 
+refClass <- factor(exp.dat$Class)
+dice(dat, nk=4, algorithms = c("hcAEucl"), 
+     consensusFUNS = c("kmodes", "majority", "LCE"),
+     refClass =refClass )

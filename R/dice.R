@@ -93,9 +93,7 @@ dice <- function(data,
   
   # Relabel Final Clustering
   # Relabelling is only possible for similar cluster numbers
-  Fk <- apply(Final,2, function(cl) length(table(cl)))
-  max.k <- as.numeric(names(table(Fk))[which.max(table(Fk))])
-  
+
   if(ncf==1 & is.null(refClass)){ # no need to relabel
     FinalR <- Final
   } else if(ncf==2 | ncf==1 & !is.null(refClass)){
