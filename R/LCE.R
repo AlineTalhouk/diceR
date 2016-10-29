@@ -25,14 +25,15 @@
 #' sim.mat = "asrs")
 LCE <- function(E, data, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
                 sim.mat = c("cts", "srs", "asrs")) {
+  
   assertthat::assert_that(is.array(E), dcCTS >= 0 && dcCTS <= 1,
-                          dcASRS >= 0 && dcASRS <= 1, dcSRS >= 0 && dcSRS <= 1,
-                          is_pos_int(R))
-  E2 <- imputeMissing(E, data, imputeALL = TRUE)$E_imputed2[, , 1]
+                          dcASRS >= 0 && dcASRS <= 1, dcSRS >= 0 && dcSRS <= 1)
+ # Check that the Cluster matrix is complete otherwise return Error
+  if(anyNA(E)) stop("Matrix must be complete for LCE algorithm")
   S <- switch(match.arg(sim.mat),
-              cts = cts(E = E2, dc = dcCTS),
-              srs = srs(E = E2, dc = dcSRS, R = R),
-              asrs = asrs(E = E2, dc = dcSRS))
+              cts = cts(E = E, dc = dcCTS),
+              srs = srs(E = E, dc = dcSRS, R = R),
+              asrs = asrs(E = E, dc = dcSRS))
   LCE_cl <- consensus_class(S, k)
   return(LCE_cl)
 }

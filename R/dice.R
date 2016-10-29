@@ -74,11 +74,12 @@ dice <- function(data,
   Final <- matrix(NA,nrow = n, ncol = ncf)
 
   for (i in 1:ncf){
+    cat(i)
     Final[,i] <- switch (consensusFUNS[i],
                          kmodes = k_modes(Ecomp$E_imputed2),
                          majority = majority_voting(Ecomp$E_imputed2),
                          CSPA = majority_voting(Ecomp$E_imputed2), #place holder
-                         LCE = LCE(drop(Ecomp$E_imputed2),nk) 
+                         LCE = LCE(drop(Ecomp$E_imputed2),k = nk, sim.mat = "cts") 
     )
   }
   
