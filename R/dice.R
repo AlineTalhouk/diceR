@@ -32,6 +32,7 @@ dice <- function(data,
                  reweigh = FALSE,
                  evaluate = "internal",
                  refClass = NULL) {
+  
   # Check that inputs are correct
   if (length(dim(data)) != 2) {
     stop("Data should be two dimensional")
@@ -58,41 +59,52 @@ dice <- function(data,
   if (prune == TRUE) {
     #Function that Derek writing
     #Must return Enew with nalgs< for original E
-  if (reweigh == TRUE){
-    #Future function
-    #Must return Enew with nalgs< for original E and certain slices are assigned more weight
-  }
+    if (reweigh == TRUE){
+      #Future function
+      #Must return Enew with nalgs< for original E and certain slices are assigned more weight
+    }
   } else {
     Enew <- E
   }
   
   # Impute Missing Values using KNN and majority vote
   Ecomp <- imputeMissing(Enew, data, imputeALL = TRUE)
-  if(!is.null(refClass)){
-    
+  
+  # Add the reference Class as the first column if provided
+  Final <- matrix(NA,nrow = n, ncol = ncf)
+
+  for (i in 1:ncf){
+    Final[,i] <- switch (consensusFUNS[i],
+                         kmodes = k_modes(Ecomp$E_imputed2),
+                         majority = majority_voting(Ecomp$E_imputed2),
+                         CSPA = majority_voting(Ecomp$E_imputed2), #place holder
+                         LCE = LCE(drop(Ecomp$E_imputed2),nk) 
+    )
   }
-  Final <- matrix(NA,nrow = n, ncol = ncf) 
-    for (i in 1:ncf){
-     Final[,i] <- switch (consensusFUNS[i],
-       kmodes = k_modes(Ecomp$E_imputed2),
-       majority = majority_voting(Ecomp$E_imputed2),
-       CSPA = majority_voting(Ecomp$E_imputed2), #place holder
-       LCE = LCE(drop(Ecomp$E_imputed2),nk) 
-     )
-    }
+  
+  colnames(Final) <- consensusFUNS
+  rownames(Final) <- rownames(data)
+  
+  if(!is.null(refClass)){
+    Final <- cbind(refClass,Final)
+  }
+
   
   # Relabel Final Clustering
-  if(ncf==1){ # if one consensus algorithm is requested only no need to relabel
+  # Relabelling is only possible for similar cluster numbers
+  Fk <- apply(Final,2, function(cl) length(table(cl)))
+  max.k <- as.numeric(names(table(Fk))[which.max(table(Fk))])
+  
+  if(ncf==1 & is.null(refClass)){ # no need to relabel
     FinalR <- Final
-  } else if(ncf==2){
-      FinalR <- cbind(Final[, 1],as.numeric(relabel_class(Final[,2], Final[, 1])))
-    } else{
-      FinalR <- cbind(Final[, 1],
-        apply(Final[,-1], 2, function(x) {
-          as.numeric(relabel_class(x, Final[, 1]))
-        }))
-    }
-    colnames(FinalR) <- consensusFUNS
-    rownames(FinalR) <- rownames(data)
+  } else if(ncf==2 | ncf==1 & !is.null(refClass)){
+    FinalR <- cbind(Final[, 1],as.numeric(relabel_class(Final[,2], Final[, 1])))
+  } else{
+    FinalR <- cbind(Final[, 1],
+                    apply(Final[,-1], 2, function(x) {
+                      as.numeric(relabel_class(x, Final[, 1]))
+                    }))
+  }
+  
   return(list(clusters=FinalR))
 }
