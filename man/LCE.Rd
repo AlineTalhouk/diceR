@@ -4,14 +4,16 @@
 \alias{LCE}
 \title{Linkage Clustering Ensemble}
 \usage{
-LCE(E, data, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
-  sim.mat = c("cts", "srs", "asrs"), is.relabelled = TRUE)
+LCE(E, data, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
+  sim.mat = c("cts", "srs", "asrs"))
 }
 \arguments{
 \item{E}{is an array of clustering results. Missing entries are imputed using
 \code{imputeMissing}}
 
 \item{data}{original data matrix with rows as samples, columns as variables}
+
+\item{k}{requested number of clusters}
 
 \item{dcCTS}{decay constant for CTS matrix}
 
@@ -23,12 +25,10 @@ LCE(E, data, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
 
 \item{sim.mat}{vector of similarity matrices to compute. Choices are "cts",
 "srs", "asrs".}
-
-\item{is.relabelled}{logical; defaults to \code{TRUE}, but if \code{FALSE}
-the data will be relabelled}
 }
 \value{
-a list containing the CTS, SRS, and ASRS matrices (as specified)
+a vector containing the cluster assignment from either the CTS, SRS,
+  or ASRS similarity matrices
 }
 \description{
 Generate CTS, SRS, and ASRS similarity matrices.
@@ -38,7 +38,7 @@ data(hgsc)
 dat <- t(hgsc[, -1])[1:100, 1:50]
 x <- ConClust(dat, nc = 4, reps = 4,
               method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
-y <- LCE(E = x, data = dat, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
+LCE(E = x, data = dat, k = 4, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
 sim.mat = "asrs")
 }
 \author{
