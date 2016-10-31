@@ -44,7 +44,7 @@ imputeMissing <- function(E4, data, imputeALL = TRUE) {
       }))
       E_return[, , k] <- apply(E_imputed2, 2, as.numeric)
     }
-    return(list(E_imputed = E_imputed, E_imputed2 = E_return))
+    return(list(E_imputed = E_imputed, E_imputed2 = E_return[, , 1]))
   } else {
     return(list(E_imputed = E_imputed))
   }

@@ -8,8 +8,8 @@ LCE(E, data, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
   sim.mat = c("cts", "srs", "asrs"))
 }
 \arguments{
-\item{E}{is an array of clustering results. Missing entries are imputed using
-\code{imputeMissing}}
+\item{E}{is an array of clustering results. An error is thrown if there are 
+missing values. \code{\link{imputeMissing}} can be used beforehand.}
 
 \item{data}{original data matrix with rows as samples, columns as variables}
 
@@ -23,23 +23,26 @@ LCE(E, data, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
 
 \item{R}{number of repetitions for SRS matrix}
 
-\item{sim.mat}{vector of similarity matrices to compute. Choices are "cts",
-"srs", "asrs".}
+\item{sim.mat}{similarity matrix; choices are "cts", "srs", "asrs".}
 }
 \value{
-a vector containing the cluster assignment from either the CTS, SRS,
+a vector containing the cluster assignment from either the CTS, SRS, 
   or ASRS similarity matrices
 }
 \description{
-Generate CTS, SRS, and ASRS similarity matrices.
+Generate a cluster assignment from a CTS, SRS, or ASRS similarity matrix.
 }
 \examples{
 data(hgsc)
 dat <- t(hgsc[, -1])[1:100, 1:50]
 x <- ConClust(dat, nc = 4, reps = 4,
               method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
-LCE(E = x, data = dat, k = 4, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
-sim.mat = "asrs")
+\dontrun{
+LCE(E = x, data = dat, k = 4, sim.mat = "asrs")
+}
+
+x_imputed <- imputeMissing(x, dat, imputeALL = TRUE)$E_imputed2
+LCE(E = x_imputed, data = dat, k = 4, sim.mat = "asrs")
 }
 \author{
 Johnson Liu
