@@ -7,5 +7,5 @@
 #' 
 #' @name diceR-package
 #' @docType package
-#' @import dplyr magrittr bioDist ggplot2
+#' @import dplyr magrittr ggplot2
 NULL

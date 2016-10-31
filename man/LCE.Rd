@@ -42,7 +42,7 @@ LCE(E = x, data = dat, k = 4, sim.mat = "asrs")
 }
 
 x_imputed <- imputeMissing(x, dat, imputeALL = TRUE)$E_imputed2
-LCE(E = x_imputed, data = dat, k = 4, sim.mat = "asrs")
+LCE(E = x_imputed, data = dat, k = 4, sim.mat = "cts")
 }
 \author{
 Johnson Liu

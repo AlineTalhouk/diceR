@@ -8,7 +8,7 @@ globalVariables(".")
 #' @noRd
 diana_hook <- function(d, k) {
   tmp <- cluster::diana(d, diss = TRUE)
-  a <- cutree(tmp, k)
+  a <- stats::cutree(tmp, k)
   return(a)
 }
 
@@ -24,7 +24,6 @@ diana_hook <- function(d, k) {
 #' @param min.sd minimum standard deviation threshold. See details.
 #' @return dataset prepared for usage in \code{ConClust}
 #' @author Derek Chiu
-#' @importFrom stats sd
 #' @export
 #' @examples
 #' set.seed(2)
@@ -33,7 +32,7 @@ diana_hook <- function(d, k) {
 prepare_data <- function(data, min.sd = 1) {
   dat.out <- data %>%
     extract(apply(., 1, function(x) !any(is.na(x))),
-            apply(., 2, function(x) sd(x, na.rm = TRUE)) > min.sd) %>%
+            apply(., 2, function(x) stats::sd(x, na.rm = TRUE)) > min.sd) %>%
     scale()
   return(dat.out)
 }
@@ -95,8 +94,8 @@ coord <- function(x, n) {
   assertthat::assert_that(is.matrix(x), is.numeric(x), is.numeric(n),
                           n %in% x, length(n) == 1)
   res <- which(x == n, arr.ind = TRUE)
-  return(setNames(unlist(apply(res, 2, list), recursive = FALSE),
-                  c("rows", "cols")))
+  return(stats::setNames(unlist(apply(res, 2, list), recursive = FALSE),
+                         c("rows", "cols")))
 }
 
 #' Check if a single number is a positive integer

@@ -86,7 +86,7 @@ iv_compactness <- function(data, labels) {
       cp <- cp + 0
     } else{
       sum_d <- 0
-      sum_d <- sum(dist(data[ind, ], method = "euclidean"))
+      sum_d <- sum(stats::dist(data[ind, ], method = "euclidean"))
       cp <- cp + (nk * (sum_d / (nk * (nk - 1) / 2)))
     }
   }

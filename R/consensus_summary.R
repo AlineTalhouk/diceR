@@ -11,12 +11,11 @@
 #'   with two elements: consensus_matrix and consensus_class
 #' @family consensus functions
 #' @author Derek Chiu
-#' @importFrom utils relist
 #' @export
 #' @examples
 #' data(hgsc)
 #' dat <- t(hgsc[, -1])
-#' x <- ConClust(dat, nc = 2:4, reps = 10, method = c("hcAEucl", "kmEucl"))
+#' x <- ConClust(dat, nc = 2:4, reps = 5, method = c("hcAEucl"))
 #' y1 <- consensus_summary(x)
 #' y2 <- consensus_summary(x, k = 4)
 #' str(y1)
@@ -25,10 +24,10 @@ consensus_summary <- function(res, k = NULL, progress = TRUE) {
   prog <- ifelse(progress, "text", "none")
   con.mats <- plyr::alply(res, 3:4, consensus_matrix, .progress = prog,
                           .dims = TRUE) %>% 
-    relist(setNames(replicate(dim(res)[4],
-                              list(structure(1:dim(res)[3],
-                                             names = dimnames(res)[[3]]))),
-                    dimnames(res)[[4]]))
+    utils::relist(stats::setNames(replicate(
+      dim(res)[4],
+      list(structure(1:dim(res)[3], names = dimnames(res)[[3]]))),
+      dimnames(res)[[4]]))
   con.cls <- mapply(function(cm, k) lapply(cm, consensus_class, k = k),
                     cm = con.mats, k = as.numeric(names(con.mats)), SIMPLIFY = FALSE)
   out <- list(consensus_matrix = con.mats, consensus_class = con.cls) %>% 

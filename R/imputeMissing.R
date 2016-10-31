@@ -20,7 +20,8 @@
 #' E <- ConClust(data, nc = 2:4, reps = 10, method = c("hcAEucl", "kmEucl",
 #' "scRbf"))
 #' sum(is.na(E))
-#' sum(is.na(imputeMissing(E, data)))
+#' sum(is.na(imputeMissing(E, data, imputeALL = FALSE)))
+#' sum(is.na(imputeMissing(E, data, imputeALL = TRUE)))
 imputeMissing <- function(E4, data, imputeALL = TRUE) {
   assertthat::assert_that(is.array(E4), is.matrix(data),
                           dim(E4)[1] == nrow(data), is.logical(imputeALL))

@@ -25,7 +25,7 @@ matrices and consensus classes for each clustering algorithm.
 \examples{
 data(hgsc)
 dat <- t(hgsc[, -1])
-x <- ConClust(dat, nc = 2:4, reps = 10, method = c("hcAEucl", "kmEucl"))
+x <- ConClust(dat, nc = 2:4, reps = 5, method = c("hcAEucl"))
 y1 <- consensus_summary(x)
 y2 <- consensus_summary(x, k = 4)
 str(y1)

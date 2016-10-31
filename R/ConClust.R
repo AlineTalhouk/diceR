@@ -61,8 +61,6 @@
 #'   row for each sample, and a column for each subsample. Each entry represents
 #'   a class membership.
 #' @author Derek Chiu, Aline Talhouk
-#' @importFrom utils setTxtProgressBar txtProgressBar
-#' @importFrom stats dist hclust cutree kmeans setNames
 #' @import foreach mclust
 #' @export
 #' @examples
@@ -101,12 +99,15 @@ ConClust <- function(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
   coclus <- array(NA, c(n, reps, nm, nk),
                   dimnames = list(samples, paste0("R", 1:reps), method, nc))
   if (!dopar) {
-    if (progress) pb <- txtProgressBar(max = nk * nm * reps, style = 3)
+    if (progress)
+      pb <- utils::txtProgressBar(max = nk * nm * reps, style = 3)
     for (k in 1:nk) {
       for (j in 1:nm) {
         set.seed(seed.method)
         for (i in 1:reps) {
-          if (progress) setTxtProgressBar(pb, (k - 1) * nm * reps + (j - 1) * reps + i)
+          if (progress) 
+            utils::setTxtProgressBar(pb,
+                                     (k - 1) * nm * reps + (j - 1) * reps + i)
           ind.new <- sample(n, n.new, replace = FALSE)
           if (any(c("nmfDiv", "nmfEucl") %in% method))
             x.nmf.samp <- x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
@@ -117,25 +118,25 @@ ConClust <- function(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
               t(x.nmf.samp), rank = nc[k], method = "brunet", seed = seed)),
             nmfEucl = NMF::predict(NMF::nmf(
               t(x.nmf.samp), rank = nc[k], method = "lee", seed = seed)),
-            hcAEucl = cutree(hclust(dist(x.rest[ind.new, ]),
-                                    method = "average"), nc[k]),
-            hcDianaEucl = cutree(cluster::diana(euc(x.rest[ind.new, ]),
-                                                diss = TRUE), nc[k]),
-            kmEucl = kmeans(euc(x.rest[ind.new, ]),
-                            nc[k])$cluster,
-            kmSpear = kmeans(spearman.dist(x.rest[ind.new, ]),
-                             nc[k])$cluster,
-            pamEucl = cluster::pam(euc(x.rest[ind.new, ]), nc[k],
-                                   cluster.only = TRUE),
-            pamSpear = cluster::pam(spearman.dist(x.rest[ind.new, ]), nc[k],
-                                    cluster.only = TRUE),
-            apEucl = setNames(dense_rank(suppressWarnings(
+            hcAEucl = stats::cutree(stats::hclust(
+              stats::dist(x.rest[ind.new, ]), method = "average"), nc[k]),
+            hcDianaEucl = stats::cutree(cluster::diana(
+              bioDist::euc(x.rest[ind.new, ]), diss = TRUE), nc[k]),
+            kmEucl = stats::kmeans(
+              bioDist::euc(x.rest[ind.new, ]), nc[k])$cluster,
+            kmSpear = stats::kmeans(
+              bioDist::spearman.dist(x.rest[ind.new, ]), nc[k])$cluster,
+            pamEucl = cluster::pam(
+              bioDist::euc(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
+            pamSpear = cluster::pam(
+              bioDist::spearman.dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
+            apEucl = stats::setNames(dense_rank(suppressWarnings(
               apcluster::apclusterK(apcluster::negDistMat, x.rest[ind.new, ],
                                     nc[k], verbose = FALSE)@idx)),
               rownames(x.rest[ind.new, ])),
-            scRbf = setNames(kernlab::specc(x.rest[ind.new, ], nc[k],
-                                            kernel = "rbfdot")@.Data,
-                             rownames(x.rest[ind.new, ])),
+            scRbf = stats::setNames(kernlab::specc(x.rest[ind.new, ], nc[k],
+                                                   kernel = "rbfdot")@.Data,
+                                    rownames(x.rest[ind.new, ])),
             gmmBIC = mclust::Mclust(x.rest[ind.new, ], nc[k])$classification,
             biclust = blockcluster::cocluster(
               x.rest[ind.new, ], "continuous",
@@ -163,9 +164,12 @@ ConClust <- function(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
     coclus <- foreach(k = 1:nk, .packages = c("foreach", "bioDist", "dplyr", "apcluster", "mclust")) %dopar% {
       foreach(j = 1:nm) %dopar% {
         set.seed(seed.method)
-        if (progress) pb <- txtProgressBar(max = nm * reps, style = 3)
+        if (progress)
+          pb <- utils::txtProgressBar(max = nm * reps, style = 3)
         foreach(i = 1:reps) %dopar% {
-          if (progress) setTxtProgressBar(pb, (k - 1) * nm * reps + (j - 1) * reps + i)
+          if (progress)
+            utils::setTxtProgressBar(pb,
+                                     (k - 1) * nm * reps + (j - 1) * reps + i)
           ind.new <- sample(n, n.new, replace = FALSE)
           if (any(c("nmfDiv", "nmfEucl") %in% method))
             x.nmf.samp <- x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
@@ -176,25 +180,25 @@ ConClust <- function(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
               t(x.nmf.samp), rank = nc[k], method = "brunet", seed = seed)),
             nmfEucl = NMF::predict(NMF::nmf(
               t(x.nmf.samp), rank = nc[k], method = "lee", seed = seed)),
-            hcAEucl = cutree(hclust(dist(x.rest[ind.new, ]),
-                                    method = "average"), nc[k]),
-            hcDianaEucl = cutree(cluster::diana(euc(x.rest[ind.new, ]),
-                                                diss = TRUE), nc[k]),
-            kmEucl = kmeans(euc(x.rest[ind.new, ]),
-                            nc[k])$cluster,
-            kmSpear = kmeans(spearman.dist(x.rest[ind.new, ]),
-                             nc[k])$cluster,
-            pamEucl = cluster::pam(euc(x.rest[ind.new, ]), nc[k],
-                                   cluster.only = TRUE),
-            pamSpear = cluster::pam(spearman.dist(x.rest[ind.new, ]), nc[k],
-                                    cluster.only = TRUE),
-            apEucl = setNames(dense_rank(suppressWarnings(
+            hcAEucl = stats::cutree(stats::hclust(
+              stats::dist(x.rest[ind.new, ]), method = "average"), nc[k]),
+            hcDianaEucl = stats::cutree(cluster::diana(
+              bioDist::euc(x.rest[ind.new, ]), diss = TRUE), nc[k]),
+            kmEucl = stats::kmeans(
+              bioDist::euc(x.rest[ind.new, ]), nc[k])$cluster,
+            kmSpear = stats::kmeans(
+              bioDist::spearman.dist(x.rest[ind.new, ]), nc[k])$cluster,
+            pamEucl = cluster::pam(
+              bioDist::euc(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
+            pamSpear = cluster::pam(
+              bioDist::spearman.dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
+            apEucl = stats::setNames(dense_rank(suppressWarnings(
               apcluster::apclusterK(apcluster::negDistMat, x.rest[ind.new, ],
                                     nc[k], verbose = FALSE)@idx)),
               rownames(x.rest[ind.new, ])),
-            scRbf = setNames(kernlab::specc(x.rest[ind.new, ], nc[k],
-                                            kernel = "rbfdot")@.Data,
-                             rownames(x.rest[ind.new, ])),
+            scRbf = stats::setNames(kernlab::specc(x.rest[ind.new, ], nc[k],
+                                                   kernel = "rbfdot")@.Data,
+                                    rownames(x.rest[ind.new, ])),
             gmmBIC = mclust::Mclust(x.rest[ind.new, ], nc[k])$classification,
             biclust = blockcluster::cocluster(
               x.rest[ind.new, ], "continuous",

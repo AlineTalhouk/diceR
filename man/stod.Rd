@@ -13,13 +13,14 @@ stod(S)
 distance vector
 }
 \description{
-Converts similarity values to distance values and change matrixs format from
+Converts similarity values to distance values and change matrix format from
 square to vector (input format for linkage function)
 }
 \examples{
 set.seed(1)
-E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
-d <- stod(cts(E,0.8))
+E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+              FALSE)
+d <- stod(cts(E, 0.8))
 }
 \author{
 Johnson Liu

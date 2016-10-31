@@ -19,8 +19,8 @@
 #' cm <- consensus_matrix(x)
 #' consensus_class(cm, k = 3)
 consensus_class <- function(x, k, method = "average", names = NULL) {
-  tree <- hclust(dist(x), method = method)
-  cl <- as.factor(cutree(tree, k))
+  tree <- stats::hclust(stats::dist(x), method = method)
+  cl <- as.factor(stats::cutree(tree, k))
   if (!is.null(names))
     names(cl) <- names
   else

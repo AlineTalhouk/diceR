@@ -1,6 +1,6 @@
 #' Similarity to Distance
 #' 
-#' Converts similarity values to distance values and change matrixs format from
+#' Converts similarity values to distance values and change matrix format from
 #' square to vector (input format for linkage function)
 #' 
 #' @param S N by N similarity matrix
@@ -11,8 +11,9 @@
 #' 
 #' @examples
 #' set.seed(1)
-#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
-#' d <- stod(cts(E,0.8))
+#' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+#'               FALSE)
+#' d <- stod(cts(E, 0.8))
 stod <- function(S) {
   assertthat::assert_that(is.numeric(S), is.matrix(S))
   s <- NULL

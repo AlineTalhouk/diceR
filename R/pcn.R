@@ -13,7 +13,6 @@
 #'   procedure.
 #' @author Derek Chiu
 #' @name pcn
-#' @importFrom stats princomp rnorm median
 #' @export
 #' @examples
 #' set.seed(9)
@@ -22,9 +21,10 @@
 #' cl <- sample(1:4, 20, replace = TRUE)
 #' pc.select <- pcn_select(pc.dat, cl, "rep")
 pcn_simulate <- function(data, n.sim = 50) {
-  pc <- princomp(data)
-  Yns <- replicate(n.sim, sapply(pc$sdev, function(x) rnorm(pc$n.obs, sd = x)),
-                   simplify = FALSE)
+  pc <- stats::princomp(data)
+  Yns <- replicate(n.sim, sapply(pc$sdev, function(x)
+    stats::rnorm(pc$n.obs, sd = x)),
+    simplify = FALSE)
   Qns <- lapply(Yns, function(x) x %*% t(pc$loadings))
   return(Qns)
 }
@@ -48,14 +48,16 @@ pcn_select <- function(data.sim, cl, type = c("rep", "range"), int = 5) {
   switch(type,
          rep = {
            ind <- which.min(apply(ss, 1, function(x)
-             dist(rbind(c(median(ss$fN), median(ss$aP)), x))))
+             stats::dist(rbind(c(stats::median(ss$fN), stats::median(ss$aP)),
+                               x))))
            sim <- data.sim[[ind]]
            return(list(ind = ind, dat = sim))
          },
          range = {
            rks <- seq(1 + int, length(data.sim), int)
            ord <- order(apply(ss, 1, function(x)
-             dist(rbind(c(median(ss$fN), median(ss$aP)), x))))
+             stats::dist(rbind(c(stats::median(ss$fN), stats::median(ss$aP)),
+                               x))))
            ind <- ord[rks]
            sim <- data.sim[ind]
            return(list(ranks = rks, ind = ind, dat = sim))
@@ -69,7 +71,7 @@ pcn_select <- function(data.sim, cl, type = c("rep", "range"), int = 5) {
 #' @param cl integer vector of cluster memberships
 #' @noRd
 sil_widths <- function(data, cl) {
-  s <- cluster::silhouette(cl, dist(data))
+  s <- cluster::silhouette(cl, stats::dist(data))
   fN <- sum(s[, "sil_width"] < 0) / nrow(s)
   aP <- mean(s[, "sil_width"][s[, "sil_width"] > 0])
   return(data.frame(fN, aP))

@@ -121,12 +121,12 @@ graph_heatmap <- function(x, main = NULL, ...) {
   hm.col <- grDevices::colorRampPalette(
     RColorBrewer::brewer.pal(n = 9, "PuBuGn"))(256)
   cc <- mapply(function(d, k) RColorBrewer::brewer.pal(8, "Set2")[
-    cutree(hclust(dist(d), method = "average"), k = k)],
+    stats::cutree(stats::hclust(stats::dist(d), method = "average"), k = k)],
     d = dat, k = rep(as.numeric(dimnames(x)[[4]]), each = dim(x)[3]),
     SIMPLIFY = FALSE)
   hm <- mapply(function(dat, main, cc)
     gplots::heatmap.2(x = dat, main = paste(main, "Consensus Matrix"),
-                      hclustfun = function(x) hclust(x, method = "average"),
+                      hclustfun = function(x) stats::hclust(x, method = "average"),
                       trace = "none", dendrogram = "column", col = hm.col,
                       labRow = "", labCol = "", ColSideColors = cc, ...),
     dat = dat, main = main, cc = cc)

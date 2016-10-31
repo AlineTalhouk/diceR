@@ -1,8 +1,8 @@
 Package: diceR
 Type: Package
 Title: Diverse Cluster Ensemble in R
-Version: 0.0.0.9007
-Date: 2016-10-28
+Version: 0.0.0.9008
+Date: 2016-10-31
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")),
     person("Aline", "Talhouk", , "atalhouk@bccrc.ca", "aut"),
@@ -11,7 +11,7 @@ Description: Cluster analysis using ensemble/consensus clustering concepts.
     Results from different algorithms are pooled using methods such as majority
     voting, K modes, LinkCluE, etc.
 Depends:
-    R (>= 3.2.4)
+    R (>= 3.2.3)
 Imports:
     abind,
     assertthat,
@@ -33,7 +33,6 @@ Imports:
     mclust,
     infotheo,
     blockcluster,
-    clusterSim,
     clue,
     class,
     clValid,
