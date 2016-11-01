@@ -2,32 +2,34 @@
 % Please edit documentation in R/majority_voting.R
 \name{majority_voting}
 \alias{majority_voting}
-\title{Combine clustering results using majority voting}
+\title{Majority voting}
 \usage{
-majority_voting(E, is.relabelled = TRUE, is.flat = TRUE)
+majority_voting(E, is.relabelled = TRUE)
 }
 \arguments{
 \item{E}{a matrix of clusterings with number of rows equal to the number of
-cases to be clustered, number of columns equal to the clustering obtained
-by different resampling of the data, and the third dimension is the
-different algorithms. Matrix can be flattened already}
+cases to be clustered, number of columns equal to the clustering obtained by
+different resampling of the data, and the third dimension are the different
+algorithms. Matrix may already be two-dimensional.}
 
-\item{is.relabelled}{TRUE/FALSE defaults to TRUE, but if FALSE the data will
-be relabelled}
-
-\item{is.flat}{set to TRUE to indicate that impute matrix is already 2D with
-rows as cases and columns as clusterings}
+\item{is.relabelled}{logical; if \code{FALSE} the data will be relabelled
+using the first clustering as the reference.}
 }
 \value{
-a vector of cluster assignment based on majority vote
+a vector of cluster assignments based on majority voting
 }
 \description{
-Combine clustering results generated using different algorithms and different
-data perturbations
+Combine clustering results using majority voting.
+}
+\details{
+Combine clustering results generated using different algorithms and
+different data perturbations by majority voting. The class of a sample is
+the cluster label which was selected most often across algorithms and
+subsamples.
 }
 \examples{
 data(E_imputed)
-table(majority_voting(E_imputed, is.relabelled = FALSE, is.flat = FALSE))
+table(majority_voting(E_imputed, is.relabelled = FALSE))
 }
 \author{
 Aline Talhouk

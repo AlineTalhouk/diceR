@@ -2,36 +2,38 @@
 % Please edit documentation in R/k_modes.R
 \name{k_modes}
 \alias{k_modes}
-\title{Combine clustering results using K modes}
+\title{K-modes}
 \usage{
-k_modes(E, is.relabelled = TRUE, is.flat = TRUE, seed = 1)
+k_modes(E, is.relabelled = TRUE, seed = 1)
 }
 \arguments{
 \item{E}{a matrix of clusterings with number of rows equal to the number of
-cases to be clustered, number of columns equal to the clustering obtained
-by different resampling of the data, and the third dimension is the
-different algorithms. Needs complete cases: No NAs. If the matrix contains
-NAs those are imputed by majority voting (after class relabeling). Matrix can be flattened already.}
+cases to be clustered, number of columns equal to the clustering obtained by
+different resampling of the data, and the third dimension are the different
+algorithms. Matrix may already be two-dimensional.}
 
-\item{is.relabelled}{logical; defaults to TRUE, but if FALSE the data will
-be relabelled}
-
-\item{is.flat}{set to TRUE to indicate that impute matrix is already 2D with rows as cases and columns as clusterings}
+\item{is.relabelled}{logical; if \code{FALSE} the data will be relabelled
+using the first clustering as the reference.}
 
 \item{seed}{random seed for reproducibility}
 }
 \value{
-a vector of cluster assignment based on kmodes
+a vector of cluster assignments based on k-modes
 }
 \description{
-Combine clustering results generated using different algorithms and different
-data perturbations
+Combine clustering results using K-modes.
+}
+\details{
+Combine clustering results generated using different algorithms and
+different data perturbations by k-modes. This method is the categorical data
+analog of k-means clustering. Complete cases are needed: i.e. no \code{NA}s.
+If the matrix contains \code{NA}s those are imputed by majority voting
+(after class relabeling).
 }
 \examples{
 # Calculate for a fraction of first algorithm
 data(E_imputed)
-table(k_modes(E_imputed[1:100, , 1, drop = FALSE], is.relabelled = FALSE,
-is.flat = FALSE))
+table(k_modes(E_imputed[1:100, , 1, drop = FALSE], is.relabelled = FALSE))
 }
 \author{
 Aline Talhouk
