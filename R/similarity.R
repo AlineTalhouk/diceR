@@ -141,11 +141,8 @@ cts <- function(E, dc) {
   no_allcl <- E.new$no_allcl
   wcl <- weigh_clusters(E)
   wCT <- matrix(rep(0, no_allcl * no_allcl), nrow = no_allcl)
-  maxCl <- minCl <- NULL
-  for (i in 1:ncol(E)) {
-    maxCl <- append(maxCl, max(E[, i]))
-    minCl <- append(minCl, min(E[, i]))
-  }
+  maxCl <- apply(E, 2, max)
+  minCl <- apply(E, 2, min)
   for (q in 1:M) {
     for (i in minCl[q]:(maxCl[q] - 1)) {
       Ni <- wcl[i, ]
@@ -155,8 +152,8 @@ cts <- function(E, dc) {
       }
     }
   }
-  if (max(max(wCT)) > 0) {
-    wCT <- wCT / max(max(wCT))
+  if (max(wCT) > 0) {
+    wCT <- wCT / max(wCT)
   }
   wCT <- wCT + t(wCT)
   for (i in 1:no_allcl) {
