@@ -11,7 +11,7 @@
 #' @param imputeALL if \code{FALSE} the function will only call knn_impute to 
 #'   impute NAs missing due to resampling; if \code{TRUE}, the function will use
 #'   knn_impute and majority voting to eliminate NAs and relabel classes
-#' @return a flat matrix of clusterings, fully imputed and relabelled.
+#' @return E_imputed a list with a list an array of similar dimension to E with elements that were left out imputed using KNN, as well as a flat matrix of clusterings (E_imputed2), fully imputed and relabelled, if imputeALL was set to TRUE.
 #' @author Aline Talhouk
 #' @export
 #' @examples

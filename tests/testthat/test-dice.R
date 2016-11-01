@@ -5,6 +5,9 @@ dat <- t(hgsc[,-1])
 exp.dat <- data.frame(initCol=rownames(dat)) %>%
     tidyr::separate(.,initCol,into=c("patientID","Class"), sep="_") 
 refClass <- factor(exp.dat$Class)
-dice(dat, nk=4, algorithms = c("hcAEucl"), 
-     consensusFUNS = c("kmodes", "majority", "LCE"),
-     refClass =refClass )
+
+
+c <- dice(dat, nk=4, algorithms = c("hcAEucl"), 
+     consensusFUNS = c("kmodes", "majority", "LCE"))
+
+c$clusters
