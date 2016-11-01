@@ -97,6 +97,24 @@ relabel_class <- function(cl.pred, cl.ref) {
   return(res)
 }
 
+#' Helper function for k_modes and majority_voting to flatten (and relabel) E
+#' @noRd
+flatten_E <- function(E, is.relabelled) {
+  # take E imputed and reshape into a flat matrix
+  if (length(dim(E)) < 2) {
+    flat_E <- matrix(E, nrow = dim(E)[1], ncol = prod(dim(E)[2:3]))
+  } else {
+    flat_E <- E
+  }
+  # relabel using first clustering as reference
+  if (!is.relabelled) {
+    flat_E <- cbind(flat_E[, 1],
+                    apply(flat_E[, -1], 2, function(x)
+                      relabel_class, ref.cl = flat_E[, 1]))
+  }
+  return(flat_E)
+}
+
 #' Form Row and Column Extremes
 #' 
 #' Form row and column maxs and mins for matrices
