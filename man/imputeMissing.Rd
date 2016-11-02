@@ -19,7 +19,7 @@ impute NAs missing due to resampling; if \code{TRUE}, the function will use
 knn_impute and majority voting to eliminate NAs and relabel classes}
 }
 \value{
-a flat matrix of clusterings, fully imputed and relabelled.
+E_imputed a list with a list an array of similar dimension to E with elements that were left out imputed using KNN, as well as a flat matrix of clusterings (E_imputed2), fully imputed and relabelled, if imputeALL was set to TRUE.
 }
 \description{
 Uses k nearest neighbour to impute missing values due to sampling. Not all 
