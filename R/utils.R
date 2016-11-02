@@ -32,9 +32,24 @@ diana_hook <- function(d, k) {
 prepare_data <- function(data, min.sd = 1) {
   dat.out <- data %>%
     magrittr::extract(apply(., 1, function(x) !any(is.na(x))),
-            apply(., 2, function(x) stats::sd(x, na.rm = TRUE)) > min.sd) %>%
+                      apply(., 2, function(x) stats::sd(x, na.rm = TRUE)) >
+                        min.sd) %>%
     scale()
   return(dat.out)
+}
+
+#' Calculate pairwise Spearman correlational distances using
+#' bioDist::spearman.dist defaults
+#' @references https://github.com/Bioconductor-mirror/bioDist/blob/master/R/spearman.dist.R
+#' @noRd
+spearman_dist <- function(x) {
+  rvec <- cor(t(x), method = "spearman") %>% 
+    abs() %>% 
+    magrittr::subtract(1, .) %>% 
+    magrittr::extract(lower.tri(.))
+  attributes(rvec) <- list(Size = nrow(x), Labels = rownames(x), Diag = FALSE,
+                           Upper = FALSE, methods = "spearman", class = "dist")
+  return(rvec)
 }
 
 #' Minimize Frobenius norm for between two matrices

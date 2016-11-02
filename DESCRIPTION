@@ -26,7 +26,6 @@ Imports:
     pracma,
     flux,
     cluster,
-    bioDist,
     NMF,
     apcluster,
     kernlab,

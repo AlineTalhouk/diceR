@@ -110,26 +110,26 @@ ConClust <- function(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
                                      (k - 1) * nm * reps + (j - 1) * reps + i)
           ind.new <- sample(n, n.new, replace = FALSE)
           if (any(c("nmfDiv", "nmfEucl") %in% method))
-            x.nmf.samp <- x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
-                                                 function(x) all(x == 0)))]
+            x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
+                                                 function(x) all(x == 0)))])
           coclus[ind.new, i, j, k] <- switch(
             method[j],
             nmfDiv = NMF::predict(NMF::nmf(
-              t(x.nmf.samp), rank = nc[k], method = "brunet", seed = seed)),
+              x.nmf.samp, rank = nc[k], method = "brunet", seed = seed)),
             nmfEucl = NMF::predict(NMF::nmf(
-              t(x.nmf.samp), rank = nc[k], method = "lee", seed = seed)),
+              x.nmf.samp, rank = nc[k], method = "lee", seed = seed)),
             hcAEucl = stats::cutree(stats::hclust(
               stats::dist(x.rest[ind.new, ]), method = "average"), nc[k]),
             hcDianaEucl = stats::cutree(cluster::diana(
-              bioDist::euc(x.rest[ind.new, ]), diss = TRUE), nc[k]),
+              stats::dist(x.rest[ind.new, ]), diss = TRUE), nc[k]),
             kmEucl = stats::kmeans(
-              bioDist::euc(x.rest[ind.new, ]), nc[k])$cluster,
+              stats::dist(x.rest[ind.new, ]), nc[k])$cluster,
             kmSpear = stats::kmeans(
-              bioDist::spearman.dist(x.rest[ind.new, ]), nc[k])$cluster,
+              spearman_dist(x.rest[ind.new, ]), nc[k])$cluster,
             pamEucl = cluster::pam(
-              bioDist::euc(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
+              stats::dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
             pamSpear = cluster::pam(
-              bioDist::spearman.dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
+              spearman_dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
             apEucl = stats::setNames(dense_rank(suppressWarnings(
               apcluster::apclusterK(apcluster::negDistMat, x.rest[ind.new, ],
                                     nc[k], verbose = FALSE)@idx)),
@@ -172,26 +172,26 @@ ConClust <- function(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
                                      (k - 1) * nm * reps + (j - 1) * reps + i)
           ind.new <- sample(n, n.new, replace = FALSE)
           if (any(c("nmfDiv", "nmfEucl") %in% method))
-            x.nmf.samp <- x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
-                                                 function(x) all(x == 0)))]
+            x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
+                                                 function(x) all(x == 0)))])
           coclus[ind.new, i, j, k] <- switch(
             method[j],
             nmfDiv = NMF::predict(NMF::nmf(
-              t(x.nmf.samp), rank = nc[k], method = "brunet", seed = seed)),
+              x.nmf.samp, rank = nc[k], method = "brunet", seed = seed)),
             nmfEucl = NMF::predict(NMF::nmf(
-              t(x.nmf.samp), rank = nc[k], method = "lee", seed = seed)),
+              x.nmf.samp, rank = nc[k], method = "lee", seed = seed)),
             hcAEucl = stats::cutree(stats::hclust(
               stats::dist(x.rest[ind.new, ]), method = "average"), nc[k]),
             hcDianaEucl = stats::cutree(cluster::diana(
-              bioDist::euc(x.rest[ind.new, ]), diss = TRUE), nc[k]),
+              stats::dist(x.rest[ind.new, ]), diss = TRUE), nc[k]),
             kmEucl = stats::kmeans(
-              bioDist::euc(x.rest[ind.new, ]), nc[k])$cluster,
+              stats::dist(x.rest[ind.new, ]), nc[k])$cluster,
             kmSpear = stats::kmeans(
-              bioDist::spearman.dist(x.rest[ind.new, ]), nc[k])$cluster,
+              spearman_dist(x.rest[ind.new, ]), nc[k])$cluster,
             pamEucl = cluster::pam(
-              bioDist::euc(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
+              stats::dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
             pamSpear = cluster::pam(
-              bioDist::spearman.dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
+              spearman_dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
             apEucl = stats::setNames(dense_rank(suppressWarnings(
               apcluster::apclusterK(apcluster::negDistMat, x.rest[ind.new, ],
                                     nc[k], verbose = FALSE)@idx)),
