@@ -9,12 +9,12 @@
 #'
 #' @examples
 #' set.seed(1)
-#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
-#' lk<-linkage(stod(cts(E,0.8)),"average")
+#' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+#'               FALSE)
+#' lk <- linkage(stod(cts(E, 0.8)), "average")
 linkage <- function(Y, method) {
-  assertthat::assert_that(is.vector(Y))
-  assertthat::assert_that(is.numeric(Y))
-  assertthat::assert_that(method %in% c("complete", "average", "single"))
+  assertthat::assert_that(is.vector(Y), is.numeric(Y),
+                          method %in% c("complete", "average", "single"))
   n <- length(Y)
   m <- ceiling(sqrt(2 * n))
   Z <- pracma::zeros(m - 1, 3)
@@ -82,17 +82,9 @@ linkage <- function(Y, method) {
 #' @param m see m in \code{linkage}
 #' @noRd
 UIJ <- function(i, j, m) {
-  assertthat::assert_that(is.numeric(i))
-  assertthat::assert_that(is.numeric(j))
-  assertthat::assert_that(is.numeric(m))
-  assertthat::assert_that(length(i) == 1)
-  assertthat::assert_that(length(j) == 1)
-  assertthat::assert_that(length(m) == 1)
-  I1 <- NULL
-  I2 <- NULL
-  I3 <- NULL
-  I <- NULL
-  J <- NULL
+  assertthat::assert_that(is.numeric(i), is.numeric(j), is.numeric(m),
+                          length(i) == 1, length(j) == 1, length(m) == 1)
+  I1 <- I2 <- I3 <- I <- J <- NULL
   if (i >= 2) {
     I1 <- 1:(i - 1)
   }

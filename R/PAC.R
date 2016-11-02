@@ -34,7 +34,7 @@
 PAC <- function(cm, lower = 0, upper = 1) {
   pac <- cm %>%
     extract(lower.tri(.)) %>%
-    extract(and(is_greater_than(., lower), is_less_than(., upper))) %>%
+    extract(between(., lower, upper)) %>% 
     length() %>%
     divide_by(., length(cm[lower.tri(cm)]))
   return(pac)
