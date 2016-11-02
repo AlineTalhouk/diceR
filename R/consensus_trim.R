@@ -49,9 +49,9 @@ consensus_trim <- function(data, k, ..., cons.cl = NULL, ref.cl = NULL,
       set_names(alg.keep)
     cc.trimmed <- plyr::alply(cc.trimmed, 3, .dims = TRUE) %>% 
       mapply(function(d, m) rep(list(d), m), d = ., m = multiples) %>%
-      lapply(abind, along = 3) %>% 
-      Reduce(function(...) abind(..., along = 3), .) %>% 
-      abind(along = 4)
+      lapply(abind::abind, along = 3) %>% 
+      Reduce(function(...) abind::abind(..., along = 3), .) %>% 
+      abind::abind(along = 4)
     dimnames(cc.trimmed)[[3]] <- unname(unlist(
       mapply(rep, names(multiples), multiples)))
     dimnames(cc.trimmed)[[4]] <- z$k
