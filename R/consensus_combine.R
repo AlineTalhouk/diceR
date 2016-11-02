@@ -39,8 +39,8 @@
 #' # Consensus clustering for multiple algorithms
 #' set.seed(911)
 #' x <- matrix(rnorm(1000), ncol = 10)
-#' CC1 <- ConClust(x, nc = 2:4, reps = 10, method = "apEucl")
-#' CC2 <- ConClust(x, nc = 2:4, reps = 10, method = "gmmBIC")
+#' CC1 <- ConClust(x, nc = 3:4, reps = 10, method = "apEucl")
+#' CC2 <- ConClust(x, nc = 3:4, reps = 10, method = "gmmBIC")
 #' 
 #' # Combine and return either matrices or classes
 #' y1 <- consensus_combine(CC1, CC2, k = 4, element = "matrix")
