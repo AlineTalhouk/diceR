@@ -31,7 +31,7 @@ diana_hook <- function(d, k) {
 #' prepare_data(x)
 prepare_data <- function(data, min.sd = 1) {
   dat.out <- data %>%
-    extract(apply(., 1, function(x) !any(is.na(x))),
+    magrittr::extract(apply(., 1, function(x) !any(is.na(x))),
             apply(., 2, function(x) stats::sd(x, na.rm = TRUE)) > min.sd) %>%
     scale()
   return(dat.out)
