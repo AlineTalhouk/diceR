@@ -11,13 +11,12 @@
 #'
 #' @examples
 #' set.seed(1)
-#' E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
-#' tree <- linkage(stod(asrs(E, 0.8)), "complete")
+#' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+#'               FALSE)
+#' tree <- linkage(asrs(E, 0.8), "complete")
 #' cluster_tree <- dist_cluster(tree, 4)
 dist_cluster <- function(Z, maxclust) {
-  assertthat::assert_that(is.matrix(Z))
-  assertthat::assert_that(is.numeric(Z))
-  assertthat::assert_that(is_pos_int(maxclust))
+  assertthat::assert_that(is.matrix(Z), is.numeric(Z), is_pos_int(maxclust))
   m <- nrow(Z) + 1
   resultT <- pracma::zeros(m, length(maxclust))
 
@@ -58,8 +57,7 @@ dist_cluster <- function(Z, maxclust) {
 #' @param c cluster to be assigned to the leaf
 #' @noRd
 clusternum <- function(X, resultT, k, c) {
-  assertthat::assert_that(is.numeric(X))
-  assertthat::assert_that(is.numeric(resultT))
+  assertthat::assert_that(is.numeric(X), is.numeric(resultT))
   m <- nrow(X) + 1
   children <- NULL
   while (length(k) != 0) {

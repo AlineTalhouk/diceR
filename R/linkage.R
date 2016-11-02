@@ -1,20 +1,27 @@
-#' Create hierarchical cluster tree
-#'
-#' @param Y a distance vector
+#' Hierarchical clustering tree with different linkage types
+#' 
+#' Create a hierarchical clustering tree using average, single, or complete
+#' linkage.
+#' 
+#' @param S N by N similarity matrix
 #' @param method linkage method; can be "average", "single", or "complete"
-#' @author Johnson Liu
-#' @references function linkage in MATLAB for average, single, and complete linkage
+#'   
 #' @return matrix denoting hierarchical cluster tree
+#' @author Johnson Liu
+#' @references function linkage in MATLAB for average, single, and complete
+#'   linkage
 #' @export
-#'
+#' 
 #' @examples
 #' set.seed(1)
 #' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
 #'               FALSE)
-#' lk <- linkage(stod(cts(E, 0.8)), "average")
-linkage <- function(Y, method) {
-  assertthat::assert_that(is.vector(Y), is.numeric(Y),
+#' s <- cts(E, 0.8)
+#' lk <- linkage(s, "average")
+linkage <- function(S, method) {
+  assertthat::assert_that(is.numeric(S), is.matrix(S),
                           method %in% c("complete", "average", "single"))
+  Y <- stod(S)
   n <- length(Y)
   m <- ceiling(sqrt(2 * n))
   Z <- pracma::zeros(m - 1, 3)
@@ -73,6 +80,18 @@ linkage <- function(Y, method) {
   }
   Z[, 1:2] <- sortMatrixRowWise(Z[, 1:2], "ascending")
   return(Z)
+}
+
+#' Similarity to Distance
+#' 
+#' Converts similarity values to distance values and change matrix format from
+#' square to vector (input format for linkage function)
+#' 
+#' @references MATLAB function stod in package LinkCluE by Simon Garrett
+#' @noRd
+stod <- function(S) {
+  assertthat::assert_that(is.numeric(S), is.matrix(S))
+  return(1 - t(S)[lower.tri(S)])
 }
 
 #' Update U, I, and J for \code{linkage}

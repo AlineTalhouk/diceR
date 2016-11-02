@@ -2,12 +2,12 @@
 % Please edit documentation in R/linkage.R
 \name{linkage}
 \alias{linkage}
-\title{Create hierarchical cluster tree}
+\title{Hierarchical clustering tree with different linkage types}
 \usage{
-linkage(Y, method)
+linkage(S, method)
 }
 \arguments{
-\item{Y}{a distance vector}
+\item{S}{N by N similarity matrix}
 
 \item{method}{linkage method; can be "average", "single", or "complete"}
 }
@@ -15,17 +15,21 @@ linkage(Y, method)
 matrix denoting hierarchical cluster tree
 }
 \description{
-Create hierarchical cluster tree
+Create a hierarchical clustering tree using average, single, or complete
+linkage.
 }
 \examples{
 set.seed(1)
-E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
-lk<-linkage(stod(cts(E,0.8)),"average")
+E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+              FALSE)
+s <- cts(E, 0.8)
+lk <- linkage(s, "average")
 }
 \author{
 Johnson Liu
 }
 \references{
-function linkage in MATLAB for average, single, and complete linkage
+function linkage in MATLAB for average, single, and complete
+  linkage
 }
 

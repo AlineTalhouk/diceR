@@ -20,8 +20,9 @@ hierarchical cluster tree, equivalent to \code{cluster} in MATLAB
 }
 \examples{
 set.seed(1)
-E<-matrix(rep(sample(1:4,1000,replace = TRUE)),nrow=100,byrow=FALSE)
-tree <- linkage(stod(asrs(E, 0.8)), "complete")
+E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
+              FALSE)
+tree <- linkage(asrs(E, 0.8), "complete")
 cluster_tree <- dist_cluster(tree, 4)
 }
 \references{
