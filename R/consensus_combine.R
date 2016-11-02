@@ -38,7 +38,7 @@
 #' @examples
 #' # Consensus clustering for multiple algorithms
 #' set.seed(911)
-#' x <- matrix(rnorm(1000), ncol = 10)
+#' x <- matrix(rnorm(500), ncol = 10)
 #' CC1 <- ConClust(x, nc = 3:4, reps = 10, method = "apEucl")
 #' CC2 <- ConClust(x, nc = 3:4, reps = 10, method = "gmmBIC")
 #' 
@@ -50,8 +50,7 @@
 #' 
 #' # Evaluate algorithms on internal and external indices and make plots
 #' set.seed(1)
-#' ref.cl <- sample(1:4, 100, replace = TRUE)
-#' z.internal <- consensus_evaluate(x, k = 4, CC1, CC2)
+#' ref.cl <- sample(1:4, 50, replace = TRUE)
 #' z <- consensus_evaluate(x, k = 4, CC1, CC2, ref.cl = ref.cl, plot = FALSE)
 #' 
 #' # Trim algorithms: remove those that rank low on internal indices

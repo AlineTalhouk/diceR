@@ -16,8 +16,8 @@
 #' @export
 #' @examples
 #' data(hgsc)
-#' data <- t(hgsc[,-1])[1:200, 1:100]
-#' E <- ConClust(data, nc = 2:4, reps = 10, method = c("hcAEucl", "kmEucl",
+#' data <- t(hgsc[, -1])[1:100, 1:50]
+#' E <- ConClust(data, nc = 3:4, reps = 10, method = c("hcAEucl", "kmEucl",
 #' "scRbf"))
 #' sum(is.na(E))
 #' sum(is.na(imputeMissing(E, data, imputeALL = FALSE)))
