@@ -130,7 +130,7 @@ ConClust <- function(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
               stats::dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
             pamSpear = cluster::pam(
               spearman_dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
-            apEucl = stats::setNames(dense_rank(suppressWarnings(
+            apEucl = stats::setNames(dplyr::dense_rank(suppressWarnings(
               apcluster::apclusterK(apcluster::negDistMat, x.rest[ind.new, ],
                                     nc[k], verbose = FALSE)@idx)),
               rownames(x.rest[ind.new, ])),
@@ -192,7 +192,7 @@ ConClust <- function(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
               stats::dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
             pamSpear = cluster::pam(
               spearman_dist(x.rest[ind.new, ]), nc[k], cluster.only = TRUE),
-            apEucl = stats::setNames(dense_rank(suppressWarnings(
+            apEucl = stats::setNames(dplyr::dense_rank(suppressWarnings(
               apcluster::apclusterK(apcluster::negDistMat, x.rest[ind.new, ],
                                     nc[k], verbose = FALSE)@idx)),
               rownames(x.rest[ind.new, ])),
