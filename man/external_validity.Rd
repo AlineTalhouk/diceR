@@ -23,10 +23,10 @@ ev_confmat(pred.lab, ref.lab)
 
 \code{ev_confmat} returns a vector of the following metrics: overall
   accuracy, Cohen's kappa, no information rate, accuracy p-value. Statistics
-  are difficult to compare when there are multiclass comparisons. We hence
-  also report averaged statistics for: accuracy, balanced accuracy,
-  sensitivity, specificity, PPV, NPV, prevalence, detection rate, and
-  detection prevalence.
+  are difficult to compare when there are multiclass comparisons. We hence 
+  also report averaged statistics for: sensitivity, specificity, PPV, NPV,
+  prevalence, detection rate, detection prevalence, accuracy, and balanced
+  accuracy.
 }
 \description{
 \strong{E}xternal \strong{v}alidity indices compare a predicted clustering 

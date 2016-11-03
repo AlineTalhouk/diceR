@@ -41,10 +41,10 @@ ev_nmi <- function(pred.lab, ref.lab, method = "emp") {
 #'
 #' @return \code{ev_confmat} returns a vector of the following metrics: overall
 #'   accuracy, Cohen's kappa, no information rate, accuracy p-value. Statistics
-#'   are difficult to compare when there are multiclass comparisons. We hence
-#'   also report averaged statistics for: accuracy, balanced accuracy,
-#'   sensitivity, specificity, PPV, NPV, prevalence, detection rate, and
-#'   detection prevalence.
+#'   are difficult to compare when there are multiclass comparisons. We hence 
+#'   also report averaged statistics for: sensitivity, specificity, PPV, NPV,
+#'   prevalence, detection rate, detection prevalence, accuracy, and balanced
+#'   accuracy.
 #' @rdname external_validity
 #' @export
 ev_confmat <- function(pred.lab, ref.lab) {
@@ -71,16 +71,17 @@ ev_confmat <- function(pred.lab, ref.lab) {
                           "No Information Rate", "P-Value [Acc > NIR]"))
   
   # Combine with averaged statistics
-  result <- data.frame(TP, TN, clm, rwm, sens, spec) %>%
-    dplyr::transmute(Accuracy = (TP + TN) / N,
-                     `Balanced Accuracy` = (sens + spec) / 2,
-                     Sensitivity = TP / clm,
+  Sensitivity <- Specificity <- NULL
+  result <- data.frame(TP, TN, clm, rwm) %>%
+    dplyr::transmute(Sensitivity = TP / clm,
                      Specificity = TN / (N - clm),
                      PPV = TP / rwm,
                      NPV = TN / (N - rwm),
                      Prevalence = clm / N,
                      `Detection Rate` = TP / N,
-                     `Detection Prevalence` = rwm / N) %>% 
+                     `Detection Prevalence` = rwm / N,
+                     Accuracy = (TP + TN) / N,
+                     `Balanced Accuracy` = (Sensitivity + Specificity) / 2) %>% 
     magrittr::set_names(paste("Average", names(.))) %>% 
     colMeans() %>% 
     c(overall, .)

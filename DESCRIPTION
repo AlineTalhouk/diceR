@@ -32,6 +32,7 @@ Imports:
     mclust,
     infotheo,
     blockcluster,
+    caret,
     clue,
     class,
     clValid,

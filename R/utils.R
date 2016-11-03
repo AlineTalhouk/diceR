@@ -43,7 +43,7 @@ prepare_data <- function(data, min.sd = 1) {
 #' @references https://github.com/Bioconductor-mirror/bioDist/blob/master/R/spearman.dist.R
 #' @noRd
 spearman_dist <- function(x) {
-  rvec <- cor(t(x), method = "spearman") %>% 
+  rvec <- stats::cor(t(x), method = "spearman") %>% 
     abs() %>% 
     magrittr::subtract(1, .) %>% 
     magrittr::extract(lower.tri(.))
