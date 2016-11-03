@@ -43,6 +43,7 @@ dice <- function(data, nk, R = 10,
   
   # Check that inputs are correct
   assertthat::assert_that(length(dim(data)) == 2)
+  if (!is.null(refClass)) assertthat::assert_that(is.integer(refClass))
   n <- dim(data)[1]
   ncf <- length(consensusFUNS)
   
