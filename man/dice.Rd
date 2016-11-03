@@ -7,7 +7,7 @@
 dice(data, nk, R = 10, algorithms = c("hcAEucl", "kmEucl", "scRbf",
   "gmmBIC"), consensusFUNS = c("kmodes", "CSPA", "majority", "LCE"),
   sim.mat = c("cts", "srs", "asrs"), trim = FALSE, reweigh = FALSE,
-  evaluate = TRUE, refClass = NULL)
+  evaluate = TRUE, refClass = NULL, progress = TRUE)
 }
 \arguments{
 \item{data}{matrix with rows as observations, columns as variables}
@@ -54,6 +54,22 @@ A final clustering assignment from the diverse clustering ensemble
 \description{
 Runs consensus clustering across subsamples, algorithms, and number of 
 clusters (k).
+}
+\examples{
+library(dplyr)
+data(hgsc)
+dat <- t(hgsc[, -1])
+refClass <- data.frame(initCol = rownames(dat)) \%>\%
+tidyr::separate(initCol,
+                into = c("patientID", "Class"),
+                sep = "_") \%>\% 
+  use_series(Class) \%>\% 
+  factor() \%>\% 
+  as.integer()
+dice.obj <- dice(dat, nk = 4, algorithms = c("hcAEucl", "hcDianaEucl",
+"pamEucl", "pamSpear"), consensusFUNS = c("kmodes", "majority", "LCE"), trim
+= TRUE, refClass = refClass)
+str(dice.obj)
 }
 \author{
 Aline Talhouk, Derek Chiu

@@ -11,11 +11,13 @@ test_that("dice works with one algorithm, one consensus funs", {
 })
 
 test_that("dice works with multiple algorithms, consensus funs, trimming, and reference class", {
-  exp.dat <- data.frame(initCol = rownames(dat)) %>%
+  refClass <- data.frame(initCol = rownames(dat)) %>%
     tidyr::separate(initCol,
                     into = c("patientID", "Class"),
-                    sep = "_")
-  refClass <- as.integer(factor(exp.dat$Class))
+                    sep = "_") %>% 
+    use_series(Class) %>% 
+    factor() %>% 
+    as.integer()
   
   dice.obj <- dice(dat, nk = 4,
                    algorithms = c("hcAEucl", "hcDianaEucl", "pamEucl", "pamSpear"),
