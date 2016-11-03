@@ -2,44 +2,60 @@
 % Please edit documentation in R/dice.R
 \name{dice}
 \alias{dice}
-\title{A function that executes the diceR algorithm}
+\title{Diverse Clustering Ensemble}
 \usage{
 dice(data, nk, R = 10, algorithms = c("hcAEucl", "kmEucl", "scRbf",
   "gmmBIC"), consensusFUNS = c("kmodes", "CSPA", "majority", "LCE"),
-  prune = FALSE, reweigh = FALSE, evaluate = "internal",
-  refClass = NULL)
+  sim.mat = c("cts", "srs", "asrs"), trim = FALSE, reweigh = FALSE,
+  evaluate = TRUE, refClass = NULL)
 }
 \arguments{
-\item{data}{a data set with rows as observations, columns as variables}
+\item{data}{matrix with rows as observations, columns as variables}
 
-\item{nk}{a rangeof cluster sizes (or a single value).}
+\item{nk}{a range of cluster sizes (or a single value)}
 
-\item{R}{number of data subsamples to obtain. (See ConClust documentation)}
+\item{R}{number of data subsamples to generate. See \code{\link{ConClust}} 
+for details.}
 
-\item{algorithms}{clustering algorithms to be used in the ensemble. Current
-options are c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl",
-"kmEucl","kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf",
-"gmmBIC","biclust"). Please see ConClust for definition.}
+\item{algorithms}{clustering algorithms to be used in the ensemble. Current 
+options are "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl", 
+"kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf", "gmmBIC", and 
+"biclust". See \code{\link{ConClust}} for details.}
 
-\item{consensusFUNS}{Consensus Functions to use. Current options are majority
-voting, k-modes, CSPA, LCE}
+\item{consensusFUNS}{consensus functions to use. Current options are "kmodes"
+(k-modes), "majority" (majority voting), "CSPA" (hierarchical clustering), 
+"LCE" (linkage clustering ensemble)}
 
-\item{prune}{a logical value to indicate whether algorithm pruning is needed
-prior to consensus clustering. defaults to FALSE.}
+\item{sim.mat}{type of similarity matrix. One of "cts", "srs", "asrs. See
+\code{\link{LCE}} for details.}
 
-\item{reweigh}{a logical value to indicate whether after pruning, certain
-algorithms should have more weight than others. defaults to FALSE.If weigh
-is TRUE pruning will be set to TRUE as well.}
+\item{trim}{logical; if \code{TRUE}, the number of algorithms in 
+\code{algorithms} is reduced based on internal validity index performance 
+prior to consensus clustering by \code{consensusFUNS}. Defaults to 
+\code{FALSE}.}
 
-\item{evaluate}{indicate whether internal evaluation is needed.
-evaluate=c("internal","external","both"). If evaluate is either external or
-both, then a reference class must be provided.}
+\item{reweigh}{logical; if \code{TRUE}, algorithms are reweighted based on 
+internal validity index performance after trimming. Well-performing 
+algorithms are given higher weight prior to consensus clustering by 
+\code{consensusFUNS}. Defaults to \code{FALSE}. Ignored if \code{trim = 
+FALSE}.}
 
-\item{refClass}{a vector of length n, indicating the reference class to
-compare against.}
+\item{evaluate}{logical; if \code{TRUE} (default), validity indices are 
+returned. Internal validity indices are always computed. If \code{refClass}
+is not \code{NULL}, then external validity indices will also be computed.}
+
+\item{refClass}{reference class; a vector of length equal to the number of 
+observations.}
+}
+\value{
+A final clustering assignment from the diverse clustering ensemble
+  method.
 }
 \description{
-(Needs to be more informative) A function that runs through the full diceR
-algorithm
+Runs consensus clustering across subsamples, algorithms, and number of 
+clusters (k).
+}
+\author{
+Aline Talhouk, Derek Chiu
 }
 

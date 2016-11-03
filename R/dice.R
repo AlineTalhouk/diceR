@@ -1,109 +1,101 @@
-#' A function that executes the diceR algorithm
+#' Diverse Clustering Ensemble
 #' 
-#' (Needs to be more informative) A function that runs through the full diceR
-#' algorithm
+#' Runs consensus clustering across subsamples, algorithms, and number of 
+#' clusters (k).
 #' 
-#' @param data a data set with rows as observations, columns as variables
-#' @param nk a rangeof cluster sizes (or a single value).
-#' @param R number of data subsamples to obtain. (See ConClust documentation)
-#' @param algorithms clustering algorithms to be used in the ensemble. Current
-#'   options are c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl",
-#'   "kmEucl","kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf",
-#'   "gmmBIC","biclust"). Please see ConClust for definition.
-#' @param consensusFUNS Consensus Functions to use. Current options are majority
-#'   voting, k-modes, CSPA, LCE
-#' @param prune a logical value to indicate whether algorithm pruning is needed
-#'   prior to consensus clustering. defaults to FALSE.
-#' @param reweigh a logical value to indicate whether after pruning, certain
-#'   algorithms should have more weight than others. defaults to FALSE.If weigh
-#'   is TRUE pruning will be set to TRUE as well.
-#' @param evaluate indicate whether internal evaluation is needed.
-#'   evaluate=c("internal","external","both"). If evaluate is either external or
-#'   both, then a reference class must be provided.
-#' @param refClass a vector of length n, indicating the reference class to
-#'   compare against.
+#' @param data matrix with rows as observations, columns as variables
+#' @param nk a range of cluster sizes (or a single value)
+#' @param R number of data subsamples to generate. See \code{\link{ConClust}} 
+#'   for details.
+#' @param algorithms clustering algorithms to be used in the ensemble. Current 
+#'   options are "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl", 
+#'   "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf", "gmmBIC", and 
+#'   "biclust". See \code{\link{ConClust}} for details.
+#' @param consensusFUNS consensus functions to use. Current options are "kmodes"
+#'   (k-modes), "majority" (majority voting), "CSPA" (hierarchical clustering), 
+#'   "LCE" (linkage clustering ensemble)
+#' @param sim.mat type of similarity matrix. One of "cts", "srs", "asrs. See
+#'   \code{\link{LCE}} for details.
+#' @param trim logical; if \code{TRUE}, the number of algorithms in 
+#'   \code{algorithms} is reduced based on internal validity index performance 
+#'   prior to consensus clustering by \code{consensusFUNS}. Defaults to 
+#'   \code{FALSE}.
+#' @param reweigh logical; if \code{TRUE}, algorithms are reweighted based on 
+#'   internal validity index performance after trimming. Well-performing 
+#'   algorithms are given higher weight prior to consensus clustering by 
+#'   \code{consensusFUNS}. Defaults to \code{FALSE}. Ignored if \code{trim = 
+#'   FALSE}.
+#' @param evaluate logical; if \code{TRUE} (default), validity indices are 
+#'   returned. Internal validity indices are always computed. If \code{refClass}
+#'   is not \code{NULL}, then external validity indices will also be computed.
+#' @param refClass reference class; a vector of length equal to the number of 
+#'   observations.
+#' @return A final clustering assignment from the diverse clustering ensemble
+#'   method.
+#' @author Aline Talhouk, Derek Chiu
 #' @export
-dice <- function(data,
-                 nk,
-                 R = 10,
+dice <- function(data, nk, R = 10,
                  algorithms = c("hcAEucl", "kmEucl", "scRbf", "gmmBIC"),
                  consensusFUNS = c("kmodes", "CSPA", "majority", "LCE"),
-                 prune = FALSE,
-                 reweigh = FALSE,
-                 evaluate = "internal",
+                 sim.mat = c("cts", "srs", "asrs"),
+                 trim = FALSE, reweigh = FALSE, evaluate = TRUE,
                  refClass = NULL) {
   
   # Check that inputs are correct
-  if (length(dim(data)) != 2) {
-    stop("Data should be two dimensional")
-  }
-  if (prune == FALSE & reweigh == TRUE) {
-    prune <- TRUE
-  }
-  if ((evaluate == "external" |
-       evaluate == "both") &
-      !is.null(refClass)) {
-    stop("Reference Class should be imputted or set evaluate to 'internal'")
-  }
-  
+  assertthat::assert_that(length(dim(data)) == 2)
   n <- dim(data)[1]
   ncf <- length(consensusFUNS)
   
   # Generate Diverse Cluster Ensemble
-  E <- ConClust(data,
-                nc = nk,
-                reps = R,
-                method = algorithms)
+  E <- ConClust(data, nc = nk, reps = R, method = algorithms)
   
-  # Pruning
-  if (prune == TRUE) {
-    #Function that Derek writing
-    #Must return Enew with nalgs< for original E
-    if (reweigh == TRUE){
-      #Future function
-      #Must return Enew with nalgs< for original E and certain slices are assigned more weight
-    }
+  # Evaluate
+  if (evaluate)
+    eval.obj <- consensus_evaluate(data, k = nk, E,
+                                   ref.cl = refClass, plot = FALSE)
+  
+  # Trim (and reweigh)
+  if (trim) {
+    trim.obj <- consensus_trim(data, k = nk, E,
+                               ref.cl = refClass, reweigh = reweigh)
+    Enew <- trim.obj$E_trimmed
   } else {
     Enew <- E
   }
   
   # Impute Missing Values using KNN and majority vote
-  Ecomp <- imputeMissing(Enew, data, imputeALL = TRUE)
+  imp.obj <- imputeMissing(Enew, data, imputeALL = TRUE)
+  Ecomp <- imp.obj$E_imputed2
   
-  # Add the reference Class as the first column if provided
-  Final <- matrix(NA,nrow = n, ncol = ncf)
-
-  for (i in 1:ncf){
+  # Consensus functions
+  Final <- matrix(NA, nrow = n, ncol = ncf,
+                  dimnames = list(rownames(data), consensusFUNS))
+  for (i in 1:ncf) {
     cat(i)
-    Final[,i] <- switch (consensusFUNS[i],
-                         kmodes = k_modes(Ecomp$E_imputed2),
-                         majority = majority_voting(Ecomp$E_imputed2),
-                         CSPA = majority_voting(Ecomp$E_imputed2), #place holder
-                         LCE = LCE(drop(Ecomp$E_imputed2),k = nk, sim.mat = "cts") 
+    Final[, i] <- switch(consensusFUNS[i],
+                         kmodes = k_modes(Ecomp),
+                         majority = majority_voting(Ecomp),
+                         CSPA = majority_voting(Ecomp), 
+                         LCE = LCE(drop(Ecomp), k = nk,
+                                   sim.mat = match.arg(sim.mat))
     )
   }
   
-  colnames(Final) <- consensusFUNS
-  rownames(Final) <- rownames(data)
-  
-  if(!is.null(refClass)){
-    Final <- cbind(refClass,Final)
+  # Add the reference Class as the first column if provided
+  if (!is.null(refClass)) {
+    Final <- cbind(refClass, Final)
   }
-
   
   # Relabel Final Clustering
   # Relabelling is only possible for similar cluster numbers
-
-  if(ncf==1 & is.null(refClass)){ # no need to relabel
+  if (ncf == 1 & is.null(refClass)) {
+    # no need to relabel
     FinalR <- Final
-  } else if(ncf==2 | ncf==1 & !is.null(refClass)){
-    FinalR <- cbind(Final[, 1],as.numeric(relabel_class(Final[,2], Final[, 1])))
-  } else{
-    FinalR <- cbind(Final[, 1],
-                    apply(Final[,-1], 2, function(x) {
-                      as.numeric(relabel_class(x, Final[, 1]))
-                    }))
+  } else {
+    FinalR <- cbind(Final[, 1, drop = FALSE],
+                    apply(Final[, -1, drop = FALSE], 2, function(x)
+                      as.numeric(relabel_class(x, Final[, 1]))))
   }
   
-  return(list(clusters=FinalR))
+  return(list(clusters = FinalR, indices = eval.obj))
 }
