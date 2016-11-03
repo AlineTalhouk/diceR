@@ -77,9 +77,7 @@ ev_confmat <- function(pred.lab, ref.lab) {
                      Specificity = TN / (N - clm),
                      PPV = TP / rwm,
                      NPV = TN / (N - rwm),
-                     Prevalence = clm / N,
                      `Detection Rate` = TP / N,
-                     `Detection Prevalence` = rwm / N,
                      Accuracy = (TP + TN) / N,
                      `Balanced Accuracy` = (Sensitivity + Specificity) / 2) %>% 
     magrittr::set_names(paste("Average", names(.))) %>% 
