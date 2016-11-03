@@ -83,11 +83,7 @@ graph_delta_area <- function(x) {
 #' @noRd
 get_cdf <- function(x) {
   Group <- k <- CDF <- NULL
-  if (class(x) == "list") {
-    x <- abind::abind(x, along = 3)
-  } else if (class(x) != "array") {
-    stop("Error: Invalid input.")
-  }
+  assertthat::assert_that(inherits(x, "array"))
   dat <- consensus_combine(x, progress = FALSE, element = "matrix") %>% 
     lapply(function(d) d[lower.tri(d, diag = TRUE)]) %>% 
     as.data.frame() %>% 
@@ -104,11 +100,7 @@ get_cdf <- function(x) {
 #' @rdname graphs
 #' @export
 graph_heatmap <- function(x, main = NULL, ...) {
-  if (class(x) == "list") {
-    x <- abind::abind(x, along = 3)
-  } else if (class(x) != "array") {
-    stop("Error: Invalid input.")
-  }
+  assertthat::assert_that(inherits(x, "array"))
   dat <- consensus_combine(x, progress = FALSE, element = "matrix") %>% 
     set_names(names(.) %>% 
                 stringr::str_split_fixed("\\.", n = 2) %>% 
@@ -137,11 +129,7 @@ graph_heatmap <- function(x, main = NULL, ...) {
 #' @export
 graph_tracking <- function(x) {
   k <- Group <- Method <- Class <- Samples <- NULL
-  if (class(x) == "list") {
-    x <- abind::abind(x, along = 3)
-  } else if (class(x) != "array") {
-    stop("Error: Invalid input.")
-  }
+  assertthat::assert_that(inherits(x, "array"))
   dat <- consensus_combine(x, progress = FALSE, element = "class") %>% 
     as.data.frame() %>% 
     tidyr::gather(key = Group, value = Class, dplyr::everything()) %>% 

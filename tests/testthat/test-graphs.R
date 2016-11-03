@@ -37,3 +37,7 @@ test_that("error in graph_heatmap if too few titles", {
 test_that("graph_tracking works", {
   expect_error(graph_tracking(CC1), NA)
 })
+
+test_that("graph_all runs all of the above" {
+  expect_error(graph_all(CC1), NA)
+})

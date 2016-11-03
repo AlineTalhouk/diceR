@@ -15,11 +15,23 @@ test_that("data preparation removes columns", {
   expect_lt(ncol(prepare_data(x)), ncol(x))
 })
 
+test_that("spearman_dist same as bioDist::spearman.dist", {
+  dat <- as.matrix(votes.repub)
+  expect_identical(spearman_dist(dat), bioDist::spearman.dist(dat))
+})
+
 test_that("relabelling outputs a factor", {
   set.seed(2)
   pred <- sample(1:4, 100, replace = TRUE)
   true <- sample(1:4, 100, replace = TRUE)
   expect_is(relabel_class(pred, true), "factor")
+})
+
+test_that("flatten uses first clustering as reference if not relabelled", {
+  E <- matrix(sample(1:4, 500, replace = TRUE), ncol = 5)
+  E4 <- array(sample(1:4, 2000, replace = TRUE), dim = c(100, 5, 2, 2))
+  expect_error(flatten_E(E, is.relabelled = FALSE), NA)
+  expect_error(flatten_E(E4, is.relabelled = FALSE), NA)
 })
 
 a <- matrix(c(60, 17, 58, 62, 81, 11, 32, 7, 28, 85, 80, 15, 19, 50, 45, 40,

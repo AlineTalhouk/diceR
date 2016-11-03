@@ -32,9 +32,9 @@ consensus_trim <- function(data, k, ..., cons.cl = NULL, ref.cl = NULL,
     filter(Quantile >= quantile)
   alg.keep <- as.character(sum.ranks$Algorithms)
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
-  cc.trimmed <- cc.obj[, , alg.keep, , drop = FALSE]
+  cc.trimmed <- cc.obj[, , alg.keep, as.character(z$k), drop = FALSE]
   
-  if (reweigh) {
+  if (reweigh && length(alg.keep) > 1) {
     max.bests <- max.bests %>% 
       extract(match(alg.keep, alg.all), ) 
     min.bests <- z.main[, apply(z.main, 2, which.min) == bests] %>% 
