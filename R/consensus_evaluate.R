@@ -40,16 +40,14 @@ consensus_evaluate <- function(data, k, ..., cons.cl = NULL,
   if (!is.null(ref.cl)) {
     ind.ext <- data.frame(
       Algorithms = an,
-      Accuracy = apply(cl.mat, 2, ev_accuracy, ref.lab = ref.cl),
-      plyr::aaply(cl.mat, 2, function(cl)
-        unlist(ev_rand(pred.lab = cl, ref.lab = ref.cl))),
-      NMI = apply(cl.mat, 2, ev_nmi, ref.lab = ref.cl),
       plyr::aaply(cl.mat, 2, function(cl)
         clusterCrit::extCriteria(
           part1 = cl, part2 = ref.cl,
           crit = c("Hubert", "Jaccard", "McNemar",
                    "Precision", "Rand", "Recall")) %>% 
-          unlist())) %>% 
+          unlist()),
+      NMI = apply(cl.mat, 2, ev_nmi, ref.lab = ref.cl)) %>% 
+      cbind(t(apply(cl.mat, 2, ev_confmat, ref.lab = ref.cl))) %>% 
       mutate_all(funs(structure(., names = an)))
     return(list(k = k, internal = ind.int, external = ind.ext))
   } else {
