@@ -6,12 +6,16 @@ test_that("majority voting works", {
   expect_equal(majority_voting(dt, is.relabelled = TRUE), c(2, 3))
 })
 
-test_that("k modes works", {
+test_that("k modes works with or without missing", {
   x <- array(rep(c(rep(1, 10), rep(2, 10), rep(3, 10)), times = 5), c(30, 6, 5))
   xf <- x
   dim(xf) <- c(30, 30)
   set.seed(1)
   kmo.old <- klaR::kmodes(xf, 3)$cluster
-  kmo.new <- k_modes(x, is.relabelled = TRUE, seed = 1)
+  kmo.new <- k_modes(x)
   expect_equal(kmo.old, kmo.new)
+  
+  x[3, , 1] <- NA
+  kmo.missing <- k_modes(x)
+  expect_false(anyNA(kmo.missing))
 })
