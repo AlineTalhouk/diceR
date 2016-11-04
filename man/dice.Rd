@@ -46,6 +46,8 @@ is not \code{NULL}, then external validity indices will also be computed.}
 
 \item{refClass}{reference class; a vector of length equal to the number of 
 observations.}
+
+\item{progress}{logical; if \code{TRUE} (default), progress bar is shown.}
 }
 \value{
 A final clustering assignment from the diverse clustering ensemble
@@ -63,7 +65,7 @@ refClass <- data.frame(initCol = rownames(dat)) \%>\%
 tidyr::separate(initCol,
                 into = c("patientID", "Class"),
                 sep = "_") \%>\% 
-  use_series(Class) \%>\% 
+  magrittr::use_series(Class) \%>\% 
   factor() \%>\% 
   as.integer()
 dice.obj <- dice(dat, nk = 4, algorithms = c("hcAEucl", "hcDianaEucl",
