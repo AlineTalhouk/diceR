@@ -34,7 +34,7 @@ LCE <- function(E, data, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
                           dcASRS >= 0 && dcASRS <= 1)
   # Check that the Cluster matrix is complete otherwise return Error
   if (anyNA(E)) stop("'E' must be complete for LCE algorithm.")
-  S <- switch(match.arg(sim.mat),
+  S <- switch(match.arg(sim.mat,c("cts","asrs","srs")),
               cts = cts(E = E, dc = dcCTS),
               srs = srs(E = E, dc = dcSRS, R = R),
               asrs = asrs(E = E, dc = dcSRS))
