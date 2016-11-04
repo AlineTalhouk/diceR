@@ -150,6 +150,7 @@ ConClust <- function(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
               path <- paste0(file.name, ".rds")
             }
             readr::write_rds(coclus, path = path)
+            message(paste("Second dimension of coclus is:",dim(readRDS(path))[2]))
           }
         }
       }
