@@ -17,4 +17,4 @@
 #' The 1st dimension indicates number of samples (489), second dimension is number of repetitions (50), third dimension is number of algorithms
 #'
 #' @format An arrary of dimension 489 by 50 by 12 by 1
-"hgsc"
+"conClust_tcga"

@@ -7,13 +7,9 @@
 \format{A data frame with 321 rows and 490 variables}
 \usage{
 hgsc
-
-hgsc
 }
 \description{
 There are 321 genes and 489 samples. The first column is a gene identifier.
-
-The 1st dimension indicates number of samples (489), second dimension is number of repetitions (50), third dimension is number of algorithms
 }
 \keyword{datasets}
 
