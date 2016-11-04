@@ -46,9 +46,7 @@ srs <- function(E, dc, R) {
       }
     }
     S1 <- S1 + t(S1)
-    for (i in 1:n) {
-      S1[i, i] <- 1
-    }
+    S1[row(S1) == col(S1)] <- 1
     C1 <- diag(x = 1, nrow = no_allcl, ncol = no_allcl)
     for (i in 1:(no_allcl - 1)) {
       Ni <- coord(E, i)$rows
@@ -70,9 +68,7 @@ srs <- function(E, dc, R) {
       }
     }
     C1 <- C1 + t(C1)
-    for (i in 1:no_allcl) {
-      C1[i, i] <- 1
-    }
+    C1[row(C1) == col(C1)] <- 1
     S <- S1
     C <- C1
   }
@@ -89,25 +85,25 @@ asrs <- function(E, dc) {
   E <- E.new$newE
   no_allcl <- E.new$no_allcl
   wcl <- weigh_clusters(E)
-  CS <- matrix(rep(0, no_allcl * no_allcl), nrow = no_allcl)
-  for (i in 1:(no_allcl - 1)) {
-    Ni <- wcl[i, ]
-    ni <- length(Ni[which(Ni > 0)])
-    for (j in (i + 1):no_allcl) {
-      Nj <- wcl[j, ]
-      nj <- length(Nj[which(Nj > 0)])
-      if ((ni * nj) > 0) {
-        CS[i, j] <- (Ni %*% Nj) / (ni * nj)
+  CS <- sapply(seq_len(no_allcl), function(j) {
+    sapply(seq_len(no_allcl), function(i) {
+      if (i < no_allcl & i < j) {
+        Ni <- wcl[i, ]
+        ni <- length(Ni[which(Ni > 0)])
+        Nj <- wcl[j, ]
+        nj <- length(Nj[which(Nj > 0)])
+        if ((ni * nj > 0))
+          return((Ni %*% Nj) / (ni * nj))
+      } else {
+        return(0)
       }
-    }
-  }
+    })
+  })
   if (max(CS) > 0) {
     CS <- CS / max(CS)
   }
   CS <- CS + t(CS)
-  for (i in 1:no_allcl) {
-    CS[i, i] <- 1
-  }
+  CS[row(CS) == col(CS)] <- 1
   S <- matrix(rep(0, n * n), nrow = n)
   for (i in 1:(n - 1)) {
     for (ii in (i + 1):n) {
@@ -124,9 +120,7 @@ asrs <- function(E, dc) {
   }
   S <- S / (M * M)
   S <- S + t(S)
-  for (i in 1:n) {
-    S[i, i] <- 1
-  }
+  S[row(S) == col(S)] <- 1
   return(S)
 }
 
@@ -156,9 +150,7 @@ cts <- function(E, dc) {
     wCT <- wCT / max(wCT)
   }
   wCT <- wCT + t(wCT)
-  for (i in 1:no_allcl) {
-    wCT[i, i] <- 1
-  }
+  wCT[row(wCT) == col(wCT)] <- 1
   S <- matrix(rep(0, n * n), nrow = n)
   for (m in 1:M) {
     for (i in 1:(n - 1)) {
@@ -173,8 +165,6 @@ cts <- function(E, dc) {
   }
   S <- S / M
   S <- S + t(S)
-  for (i in 1:n) {
-    S[i, i] <- 1
-  }
+  S[row(S) == col(S)] <- 1
   return(S)
 }
