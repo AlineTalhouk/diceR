@@ -2,28 +2,45 @@
 % Please edit documentation in R/imputeMissing.R
 \name{imputeMissing}
 \alias{imputeMissing}
-\title{Impute missing values due to subsampling}
+\title{Impute missing values}
 \usage{
-imputeMissing(E4, data, imputeALL = TRUE)
+imputeMissing(E4, data, imputeALL = TRUE, seed = 123456)
 }
 \arguments{
-\item{E4}{is an array of clusterings with number of rows equal to the number
-of cases to be clustered, number of columns equal to the clustering
-obtained by different resampling of the data, and the third dimension is
+\item{E4}{is an array of clusterings with number of rows equal to the number 
+of cases to be clustered, number of columns equal to the clustering 
+obtained by different resampling of the data, and the third dimension is 
 the different algorithms and the fourth dimension is the cluster size.}
 
 \item{data}{is data matrix with samples as rows and genes/features as columns}
 
-\item{imputeALL}{if \code{FALSE} the function will only call knn_impute to 
+\item{imputeALL}{if \code{FALSE} the function will only call \code{impute_knn} to 
 impute NAs missing due to resampling; if \code{TRUE}, the function will use
-knn_impute and majority voting to eliminate NAs and relabel classes}
+\code{impute_knn} and majority voting to eliminate NAs and relabel classes}
+
+\item{seed}{random seed for KNN reproducibility}
 }
 \value{
-E_imputed a list with a list an array of similar dimension to E with elements that were left out imputed using KNN, as well as a flat matrix of clusterings (E_imputed2), fully imputed and relabelled, if imputeALL was set to TRUE.
+E_imputed a list with a list an array of similar dimension to E with 
+  elements that were left out imputed using KNN, as well as a flat matrix of 
+  clusterings (E_imputed2), fully imputed and relabelled, if imputeALL was 
+  set to TRUE.
 }
 \description{
-Uses k nearest neighbour to impute missing values due to sampling. Not all 
-cases will be imputed using this method.
+Impute missing values from bootstrapped subsampling
+}
+\details{
+The default output from \code{ConClust} will undoubtedly contain \code{NA} 
+entries because each replicate chooses a random subset (with replacement) of 
+all samples. Missing values are first imputed using KNN (K-Nearest 
+Neighbours), with the non-missing cases indicating the training set, and
+missing cases indicating the test set. Not all missing values are guaranteed
+to be imputed by KNN. See \code{\link[class]{knn}} for details. Thus, any
+remaining missing values are imputed using majority voting.
+}
+\note{
+We consider 5 nearest neighbours and the minimum vote for definite 
+  decision is 3.
 }
 \examples{
 data(hgsc)
@@ -31,8 +48,8 @@ data <- t(hgsc[, -1])[1:100, 1:50]
 E <- ConClust(data, nc = 3:4, reps = 10, method = c("hcAEucl", "kmEucl",
 "scRbf"))
 sum(is.na(E))
-sum(is.na(imputeMissing(E, data, imputeALL = FALSE)))
-sum(is.na(imputeMissing(E, data, imputeALL = TRUE)))
+sum(is.na(imputeMissing(E, data, imputeALL = TRUE)$E_imputed))
+sum(is.na(imputeMissing(E, data, imputeALL = TRUE)$E_imputed2))
 }
 \author{
 Aline Talhouk

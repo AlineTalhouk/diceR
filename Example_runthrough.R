@@ -17,7 +17,7 @@ dim(E)
 # E <- load("outputs/E.rds")
 # Impute Missing Values using KNN and majority vote
 
-E_imputed <- apply(E, 2:4, knn_impute, data = dat)
+E_imputed <- apply(E, 2:4, impute_knn, data = dat)
 E_imputed2 <- imputeMissing(E, data = dat, imputeALL = TRUE)
 dim(E_imputed2)
 
@@ -55,7 +55,7 @@ consensus_evaluate(data = dat, k = 4, E, cons.cl = cons_cl, plot = FALSE)
 #GSC job number 1591697, completed
 
 
-rm(list=ls())
+rm(list = ls())
 library(NMF)
 library(stats)
 library(utils)
@@ -76,8 +76,8 @@ source('/home/gliu/documents/diceR/R/ConClust.R')
 dat <- hgsc[,-1]
 rownames(dat) <- hgsc[,1]
 tdat <- t(dat)
-result_conClustTest<-ConClust(x=tdat,nc=4,reps=50)
-saveRDS(result_conClustTest,file="/home/gliu/documents/conClustTest_out.rds")
+result_conClustTest <- ConClust(x = tdat, nc = 4, reps = 50)
+saveRDS(result_conClustTest, file = "/home/gliu/documents/conClustTest_out.rds")
 
 ################################################################################################################################################
 
@@ -102,10 +102,13 @@ library(readr)
 library(class)
 load('/home/gliu/documents/diceR/data/hgsc.rda')
 source('/home/gliu/documents/diceR/R/utils.R')
-file.sources = list.files(path='/home/gliu/documents/diceR/R',
-                          pattern="*.R$", full.names=TRUE,
-                          ignore.case=TRUE)
-sapply(file.sources,source,.GlobalEnv)
+file.sources = list.files(
+  path = '/home/gliu/documents/diceR/R',
+  pattern = "*.R$",
+  full.names = TRUE,
+  ignore.case = TRUE
+)
+sapply(file.sources, source, .GlobalEnv)
 data <- hgsc[,-1]
 rownames(data) <- hgsc[,1]
 data <- t(data) #data  with rows are samples
@@ -127,11 +130,11 @@ for (i in 1:ncf) {
                        kmodes = k_modes(Ecomp),
                        majority = majority_voting(Ecomp),
                        CSPA = majority_voting(Ecomp),
-                       cts=LCE(drop(Ecomp), k = 4, sim.mat = "cts"),
-                       asrs=LCE(drop(Ecomp), k = 4, sim.mat = "asrs"),
-                       srs=LCE(drop(Ecomp), k = 4, sim.mat = "srs"),
+                       cts = LCE(drop(Ecomp), k = 4, sim.mat = "cts"),
+                       asrs = LCE(drop(Ecomp), k = 4, sim.mat = "asrs"),
+                       srs = LCE(drop(Ecomp), k = 4, sim.mat = "srs"), 
   )
 }
 
-save(Final,file="/home/gliu/documents/testEvaluation/testEvaluation_final.rda")
+save(Final, file = "/home/gliu/documents/testEvaluation/testEvaluation_final.rda")
 ####################################################################################################################################################

@@ -1,17 +1,30 @@
-#' Impute missing values due to subsampling
+#' Impute missing values
 #' 
-#' Uses k nearest neighbour to impute missing values due to sampling. Not all 
-#' cases will be imputed using this method.
+#' Impute missing values from bootstrapped subsampling
 #' 
-#' @param E4 is an array of clusterings with number of rows equal to the number
-#'   of cases to be clustered, number of columns equal to the clustering
-#'   obtained by different resampling of the data, and the third dimension is
+#' The default output from \code{ConClust} will undoubtedly contain \code{NA} 
+#' entries because each replicate chooses a random subset (with replacement) of 
+#' all samples. Missing values are first imputed using KNN (K-Nearest 
+#' Neighbours), with the non-missing cases indicating the training set, and
+#' missing cases indicating the test set. Not all missing values are guaranteed
+#' to be imputed by KNN. See \code{\link[class]{knn}} for details. Thus, any
+#' remaining missing values are imputed using majority voting.
+#' 
+#' @param E4 is an array of clusterings with number of rows equal to the number 
+#'   of cases to be clustered, number of columns equal to the clustering 
+#'   obtained by different resampling of the data, and the third dimension is 
 #'   the different algorithms and the fourth dimension is the cluster size.
 #' @param data is data matrix with samples as rows and genes/features as columns
-#' @param imputeALL if \code{FALSE} the function will only call knn_impute to 
+#' @param imputeALL if \code{FALSE} the function will only call \code{impute_knn} to 
 #'   impute NAs missing due to resampling; if \code{TRUE}, the function will use
-#'   knn_impute and majority voting to eliminate NAs and relabel classes
-#' @return E_imputed a list with a list an array of similar dimension to E with elements that were left out imputed using KNN, as well as a flat matrix of clusterings (E_imputed2), fully imputed and relabelled, if imputeALL was set to TRUE.
+#'   \code{impute_knn} and majority voting to eliminate NAs and relabel classes
+#' @param seed random seed for KNN reproducibility
+#' @return E_imputed a list with a list an array of similar dimension to E with 
+#'   elements that were left out imputed using KNN, as well as a flat matrix of 
+#'   clusterings (E_imputed2), fully imputed and relabelled, if imputeALL was 
+#'   set to TRUE.
+#' @note We consider 5 nearest neighbours and the minimum vote for definite 
+#'   decision is 3.
 #' @author Aline Talhouk
 #' @export
 #' @examples
@@ -20,13 +33,13 @@
 #' E <- ConClust(data, nc = 3:4, reps = 10, method = c("hcAEucl", "kmEucl",
 #' "scRbf"))
 #' sum(is.na(E))
-#' sum(is.na(imputeMissing(E, data, imputeALL = FALSE)))
-#' sum(is.na(imputeMissing(E, data, imputeALL = TRUE)))
-imputeMissing <- function(E4, data, imputeALL = TRUE) {
+#' sum(is.na(imputeMissing(E, data, imputeALL = TRUE)$E_imputed))
+#' sum(is.na(imputeMissing(E, data, imputeALL = TRUE)$E_imputed2))
+imputeMissing <- function(E4, data, imputeALL = TRUE, seed = 123456) {
   assertthat::assert_that(is.array(E4), is.matrix(data),
                           dim(E4)[1] == nrow(data), is.logical(imputeALL))
   # knn impute
-  E_imputed <- apply(E4, 2:4, knn_impute, data = data)
+  E_imputed <- apply(E4, 2:4, impute_knn, data = data, seed = seed)
   
   # Relabel and Majority vote
   if (imputeALL == TRUE) {
@@ -36,7 +49,7 @@ imputeMissing <- function(E4, data, imputeALL = TRUE) {
       E_flat <- E_imputed[, , , k]
       dim(E_flat) <- c(dim(E4)[1], dim(E4)[2] * dim(E4)[3])
       E_relabeled <- cbind(E_flat[, 1],
-                           apply(E_flat[,-1], 2, function(x) {
+                           apply(E_flat[, -1], 2, function(x) {
                              relabel_class(x, E_flat[, 1])
                            }))
       E_imputed2 <- t(apply(E_relabeled, 1, function(x) {
@@ -49,4 +62,14 @@ imputeMissing <- function(E4, data, imputeALL = TRUE) {
   } else {
     return(list(E_imputed = E_imputed))
   }
+}
+
+#' K-Nearest Neighbours imputation
+#' @noRd
+impute_knn <- function(x, data, seed) {
+  set.seed(seed)
+  ind <- is.na(x)
+  x[ind] <- class::knn(train = data[!ind, ], test = data[ind, ], cl = x[!ind],
+                       k = 5, l = 3)
+  return(x)
 }

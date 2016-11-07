@@ -9,7 +9,7 @@
 E_imputed
 }
 \description{
-The data set is intended to be tested with \code{\link{knn_impute}}
+The data set is used as an example to test imputation
 }
 \keyword{datasets}
 
