@@ -4,27 +4,24 @@
 \alias{impute_missing}
 \title{Impute missing values}
 \usage{
-impute_missing(E4, data, imputeALL = TRUE, seed = 123456)
+impute_missing(E, data, seed = 123456)
 }
 \arguments{
-\item{E4}{is an array of clusterings with number of rows equal to the number 
-of cases to be clustered, number of columns equal to the clustering 
-obtained by different resampling of the data, and the third dimension is 
-the different algorithms and the fourth dimension is the cluster size.}
+\item{E}{4D array of clusterings from \code{ConClust}. The number of rows is 
+equal to the number of cases to be clustered, number of columns is equal to
+the clusterings obtained by different resamplings of the data, the third 
+dimension are the different algorithms and the fourth dimension are cluster
+sizes.}
 
-\item{data}{is data matrix with samples as rows and genes/features as columns}
-
-\item{imputeALL}{if \code{FALSE} the function will only call \code{impute_knn} to 
-impute NAs missing due to resampling; if \code{TRUE}, the function will use
-\code{impute_knn} and majority voting to eliminate NAs and relabel classes}
+\item{data}{data matrix with samples as rows and genes/features as columns}
 
 \item{seed}{random seed for KNN reproducibility}
 }
 \value{
-E_imputed a list with a list an array of similar dimension to E with 
-  elements that were left out imputed using KNN, as well as a flat matrix of 
-  clusterings (E_imputed2), fully imputed and relabelled, if imputeALL was 
-  set to TRUE.
+A list with the following elements
+  \item{knn}{E with (some) missing cases imputed using KNN}
+  \item{complete}{flattened matrix of clusterings with complete cases imputed
+  using KNN and majority voting, and relabelled}
 }
 \description{
 Impute missing values from bootstrapped subsampling
@@ -48,8 +45,9 @@ data <- t(hgsc[, -1])[1:100, 1:50]
 E <- ConClust(data, nc = 3:4, reps = 10, method = c("hcAEucl", "kmEucl",
 "scRbf"))
 sum(is.na(E))
-sum(is.na(impute_missing(E, data, imputeALL = TRUE)$E_imputed))
-sum(is.na(impute_missing(E, data, imputeALL = TRUE)$E_imputed2))
+E_imputed <- impute_missing(E, data)
+sum(is.na(E_imputed$knn))
+sum(is.na(E_imputed$complete))
 }
 \author{
 Aline Talhouk

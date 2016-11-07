@@ -82,8 +82,8 @@ dice <- function(data, nk, R = 10,
   }
   
   # Impute Missing Values using KNN and majority vote
-  imp.obj <- impute_missing(Enew, data, imputeALL = TRUE)
-  Ecomp <- imp.obj$E_imputed2
+  imp.obj <- impute_missing(Enew, data)
+  Ecomp <- imp.obj$complete
   
   # Consensus functions
   Final <- matrix(NA, nrow = n, ncol = ncf,

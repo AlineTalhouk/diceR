@@ -24,7 +24,7 @@
 #' LCE(E = x, data = dat, k = 4, sim.mat = "asrs")
 #' }
 #' 
-#' x_imputed <- impute_missing(x, dat, imputeALL = TRUE)$E_imputed2
+#' x_imputed <- impute_missing(x, dat)$complete
 #' LCE(E = x_imputed, data = dat, k = 4, sim.mat = "cts")
 LCE <- function(E, data, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
                 sim.mat = c("cts", "srs", "asrs")) {

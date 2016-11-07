@@ -41,7 +41,7 @@ x <- ConClust(dat, nc = 4, reps = 4,
 LCE(E = x, data = dat, k = 4, sim.mat = "asrs")
 }
 
-x_imputed <- impute_missing(x, dat, imputeALL = TRUE)$E_imputed2
+x_imputed <- impute_missing(x, dat)$complete
 LCE(E = x_imputed, data = dat, k = 4, sim.mat = "cts")
 }
 \author{

@@ -17,27 +17,28 @@ dim(E)
 # E <- load("outputs/E.rds")
 # Impute Missing Values using KNN and majority vote
 
-E_imputed <- apply(E, 2:4, impute_knn, data = dat)
-E_imputed2 <- impute_missing(E, data = dat, imputeALL = TRUE)
-dim(E_imputed2)
+E_imputed <- impute_missing(E, dat)
+E_knn <- E_imputed$knn
+E_complete <- E_imputed$complete
+dim(E_complete)
 
 # Do one or all of the following
 
 # Obtain a consensus:
 ## Compute co-association matrix and hierarchical cluster
-CO <- consensus_summary(E_imputed)
+CO <- consensus_summary(E_knn)
 
 CO_cl <- consensus_combine(E, element = "class")
 CO_mat <- consensus_combine(E, element = "matrix")
 
 ## Compute Link-based similarity Matrix and cluster
-LCE_cl <- LCE(E_imputed2, data = dat, k)
+LCE_cl <- LCE(E_complete, data = dat, k)
 
 ## Reorder and k modes
-kmodes_cl <- k_modes(E_imputed2)
+kmodes_cl <- k_modes(E_complete)
 
 ## Reorder and majority vote
-majvot_cl <- majority_voting(E_imputed2)
+majvot_cl <- majority_voting(E_complete)
 
 # Combine all results
 cons_cl <- cbind(LCE = LCE_cl, KModes = kmodes_cl, MajVot = majvot_cl)
@@ -73,8 +74,8 @@ library(plyr)
 load('/home/gliu/documents/diceR/data/hgsc.rda')
 source('/home/gliu/documents/diceR/R/utils.R')
 source('/home/gliu/documents/diceR/R/ConClust.R')
-dat <- hgsc[,-1]
-rownames(dat) <- hgsc[,1]
+dat <- hgsc[, -1]
+rownames(dat) <- hgsc[, 1]
 tdat <- t(dat)
 result_conClustTest <- ConClust(x = tdat, nc = 4, reps = 50)
 saveRDS(result_conClustTest, file = "/home/gliu/documents/conClustTest_out.rds")
@@ -109,19 +110,19 @@ file.sources = list.files(
   ignore.case = TRUE
 )
 sapply(file.sources, source, .GlobalEnv)
-data <- hgsc[,-1]
-rownames(data) <- hgsc[,1]
+data <- hgsc[, -1]
+rownames(data) <- hgsc[, 1]
 data <- t(data) #data  with rows are samples
 rm(hgsc)
 load('/home/gliu/documents/diceR/data/conClust_tcga.rda')
 
 
 #Begin evaluation
-consensusFUNS = c("kmodes", "majority", "cts","asrs","srs")
+consensusFUNS = c("kmodes", "majority", "cts", "asrs", "srs")
 n <- dim(data)[1]
 ncf <- length(consensusFUNS)
-imp.obj <- impute_missing(conClust_tcga, data, imputeALL = TRUE)
-Ecomp <- imp.obj$E_imputed2
+imp.obj <- impute_missing(conClust_tcga, data)
+Ecomp <- imp.obj$complete
 Final <- matrix(NA, nrow = n, ncol = ncf,
                 dimnames = list(rownames(data), consensusFUNS))
 for (i in 1:ncf) {

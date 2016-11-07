@@ -10,19 +10,17 @@
 #' to be imputed by KNN. See \code{\link[class]{knn}} for details. Thus, any
 #' remaining missing values are imputed using majority voting.
 #' 
-#' @param E4 is an array of clusterings with number of rows equal to the number 
-#'   of cases to be clustered, number of columns equal to the clustering 
-#'   obtained by different resampling of the data, and the third dimension is 
-#'   the different algorithms and the fourth dimension is the cluster size.
-#' @param data is data matrix with samples as rows and genes/features as columns
-#' @param imputeALL if \code{FALSE} the function will only call \code{impute_knn} to 
-#'   impute NAs missing due to resampling; if \code{TRUE}, the function will use
-#'   \code{impute_knn} and majority voting to eliminate NAs and relabel classes
+#' @param E 4D array of clusterings from \code{ConClust}. The number of rows is 
+#'   equal to the number of cases to be clustered, number of columns is equal to
+#'   the clusterings obtained by different resamplings of the data, the third 
+#'   dimension are the different algorithms and the fourth dimension are cluster
+#'   sizes.
+#' @param data data matrix with samples as rows and genes/features as columns
 #' @param seed random seed for KNN reproducibility
-#' @return E_imputed a list with a list an array of similar dimension to E with 
-#'   elements that were left out imputed using KNN, as well as a flat matrix of 
-#'   clusterings (E_imputed2), fully imputed and relabelled, if imputeALL was 
-#'   set to TRUE.
+#' @return A list with the following elements
+#'   \item{knn}{E with (some) missing cases imputed using KNN}
+#'   \item{complete}{flattened matrix of clusterings with complete cases imputed
+#'   using KNN and majority voting, and relabelled}
 #' @note We consider 5 nearest neighbours and the minimum vote for definite 
 #'   decision is 3.
 #' @author Aline Talhouk
@@ -33,35 +31,32 @@
 #' E <- ConClust(data, nc = 3:4, reps = 10, method = c("hcAEucl", "kmEucl",
 #' "scRbf"))
 #' sum(is.na(E))
-#' sum(is.na(impute_missing(E, data, imputeALL = TRUE)$E_imputed))
-#' sum(is.na(impute_missing(E, data, imputeALL = TRUE)$E_imputed2))
-impute_missing <- function(E4, data, imputeALL = TRUE, seed = 123456) {
-  assertthat::assert_that(is.array(E4), is.matrix(data),
-                          dim(E4)[1] == nrow(data), is.logical(imputeALL))
+#' E_imputed <- impute_missing(E, data)
+#' sum(is.na(E_imputed$knn))
+#' sum(is.na(E_imputed$complete))
+impute_missing <- function(E, data, seed = 123456) {
+  assertthat::assert_that(is.array(E), is.matrix(data),
+                          dim(E)[1] == nrow(data))
   # KNN imputation
-  E_imputed <- apply(E4, 2:4, impute_knn, data = data, seed = seed)
+  E_knn <- apply(E, 2:4, impute_knn, data = data, seed = seed)
   
   # Relabel and Majority vote
-  if (imputeALL) {
-    E_return <- array(NaN, c(dim(E4)[1], prod(dim(E)[-1])))
-    for (k in (1:dim(E4)[4])) {
-      # Flatten the matrix
-      E_flat <- E_imputed[, , , k]
-      dim(E_flat) <- c(dim(E4)[1], dim(E4)[2] * dim(E4)[3])
-      E_relabeled <- cbind(E_flat[, 1],
-                           apply(E_flat[, -1], 2, function(x) {
-                             relabel_class(x, E_flat[, 1])
-                           }))
-      E_imputed2 <- t(apply(E_relabeled, 1, function(x) {
-        x[which(is.na(x))] <- names(which.max(table(x)))
-        return(x)
-      }))
-      E_return[, , k] <- apply(E_imputed2, 2, as.numeric)
-    }
-    return(list(E_imputed = E_imputed, E_imputed2 = E_return[, , 1]))
-  } else {
-    return(list(E_imputed = E_imputed))
+  E_complete <- array(NaN, c(dim(E)[1], prod(dim(E)[2:3]), dim(E)[4]))
+  for (k in (1:dim(E)[4])) {
+    # Flatten the matrix
+    E_flat <- E_knn[, , , k]
+    dim(E_flat) <- c(dim(E)[1], prod(dim(E)[2:3]))
+    E_relabeled <- cbind(E_flat[, 1],
+                         apply(E_flat[, -1], 2, function(x) {
+                           relabel_class(x, E_flat[, 1])
+                         }))
+    E_majvote <- t(apply(E_relabeled, 1, function(x) {
+      x[which(is.na(x))] <- names(which.max(table(x)))
+      return(x)
+    }))
+    E_complete[, , k] <- apply(E_majvote, 2, as.numeric)
   }
+  return(list(knn = E_knn, complete = E_complete[, , 1]))
 }
 
 #' K-Nearest Neighbours imputation
