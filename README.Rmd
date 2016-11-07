@@ -36,11 +36,11 @@ This is a basic example which shows you how to use the main workhouse function o
 library(diceR)
 data(hgsc)
 dat <- t(hgsc[, -1])
-x <- ConClust(dat, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+x <- ConClust(dat, nc = 4, reps = 10, method = "hcAEucl", save = FALSE)
 ```
 
 ```{r}
-head(x[, , 1])
+head(x[, , 1, 1])
 ```
 
 ![Caption for the picture.](inst/img/pipeline.png)

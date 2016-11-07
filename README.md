@@ -26,11 +26,11 @@ This is a basic example which shows you how to use the main workhouse function o
 library(diceR)
 data(hgsc)
 dat <- t(hgsc[, -1])
-x <- ConClust(dat, k = 4, reps = 10, method = "hcAEucl", save = FALSE)
+x <- ConClust(dat, nc = 4, reps = 10, method = "hcAEucl", save = FALSE)
 ```
 
 ``` r
-head(x[, , 1])
+head(x[, , 1, 1])
 #>                     R1 R2 R3 R4 R5 R6 R7 R8 R9 R10
 #> TCGA.04.1331_PRO.C5 NA  1  1  1  1  1 NA  1  1   1
 #> TCGA.04.1332_MES.C1 NA  1  1  1  1  1 NA  1  1   1
