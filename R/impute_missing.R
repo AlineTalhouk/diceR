@@ -33,17 +33,17 @@
 #' E <- ConClust(data, nc = 3:4, reps = 10, method = c("hcAEucl", "kmEucl",
 #' "scRbf"))
 #' sum(is.na(E))
-#' sum(is.na(imputeMissing(E, data, imputeALL = TRUE)$E_imputed))
-#' sum(is.na(imputeMissing(E, data, imputeALL = TRUE)$E_imputed2))
-imputeMissing <- function(E4, data, imputeALL = TRUE, seed = 123456) {
+#' sum(is.na(impute_missing(E, data, imputeALL = TRUE)$E_imputed))
+#' sum(is.na(impute_missing(E, data, imputeALL = TRUE)$E_imputed2))
+impute_missing <- function(E4, data, imputeALL = TRUE, seed = 123456) {
   assertthat::assert_that(is.array(E4), is.matrix(data),
                           dim(E4)[1] == nrow(data), is.logical(imputeALL))
-  # knn impute
+  # KNN imputation
   E_imputed <- apply(E4, 2:4, impute_knn, data = data, seed = seed)
   
   # Relabel and Majority vote
-  if (imputeALL == TRUE) {
-    E_return <- array(NaN, c(dim(E4)[1], dim(E4)[2] * dim(E4)[3], dim(E4)[4]))
+  if (imputeALL) {
+    E_return <- array(NaN, c(dim(E4)[1], prod(dim(E)[-1])))
     for (k in (1:dim(E4)[4])) {
       # Flatten the matrix
       E_flat <- E_imputed[, , , k]
@@ -65,6 +65,7 @@ imputeMissing <- function(E4, data, imputeALL = TRUE, seed = 123456) {
 }
 
 #' K-Nearest Neighbours imputation
+#' Set NA cases as test, otherwise training; neighbours = 5, min vote = 3
 #' @noRd
 impute_knn <- function(x, data, seed) {
   set.seed(seed)

@@ -18,7 +18,7 @@ dim(E)
 # Impute Missing Values using KNN and majority vote
 
 E_imputed <- apply(E, 2:4, impute_knn, data = dat)
-E_imputed2 <- imputeMissing(E, data = dat, imputeALL = TRUE)
+E_imputed2 <- impute_missing(E, data = dat, imputeALL = TRUE)
 dim(E_imputed2)
 
 # Do one or all of the following
@@ -120,7 +120,7 @@ load('/home/gliu/documents/diceR/data/conClust_tcga.rda')
 consensusFUNS = c("kmodes", "majority", "cts","asrs","srs")
 n <- dim(data)[1]
 ncf <- length(consensusFUNS)
-imp.obj <- imputeMissing(conClust_tcga, data, imputeALL = TRUE)
+imp.obj <- impute_missing(conClust_tcga, data, imputeALL = TRUE)
 Ecomp <- imp.obj$E_imputed2
 Final <- matrix(NA, nrow = n, ncol = ncf,
                 dimnames = list(rownames(data), consensusFUNS))
