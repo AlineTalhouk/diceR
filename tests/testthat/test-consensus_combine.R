@@ -25,8 +25,9 @@ test_that("names can be overwritten", {
 test_that("evaluation works with reference class and can plot", {
   cons.cl <- matrix(sample(1:4, 400, replace = TRUE), ncol = 4,
                     dimnames = list(NULL, LETTERS[1:4]))
-  expect_output(consensus_evaluate(x, k = 4, CC1, CC2, cons.cl = cons.cl,
-                                   plot = TRUE))
+  expect_output(suppressWarnings(
+    consensus_evaluate(x, k = 4, CC1, CC2, cons.cl = cons.cl,
+                       plot = TRUE)))
   expect_length(consensus_evaluate(x, k = 4, CC1, CC2, ref.cl = ref.cl,
                                    plot = FALSE), 3)
 })
