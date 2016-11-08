@@ -23,9 +23,9 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-Cluster analysis is a way of "slicing and dicing" data such that we group together similar entities and separate dissimilar ones. The trouble is that there is a diverse list of clustering algorithms, each with different user inputs. Thus an automated cluster analysis pipeline is not feasible. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels are obtained after considering a variety of methods. We currently implement about 15 clustering algorithms. Although the results are relatively dependent on the subset chosen for the ensemble, the intent is that the subset cuts the data up in diverse ways.
+Cluster analysis is a way of "slicing and dicing" data such that we group together similar entities and separate dissimilar ones. The trouble is that there is a diverse number of clustering algorithms, each with different techniques and inputs. Thus, an automated cluster analysis pipeline is not feasible. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels are obtained after considering a variety of methods. We currently implement about 15 clustering algorithms. Although the results are relatively dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering ideologies and reach a consensus class.
 
-`diceR` is currently only available on GitHub (the second line will be uncommented once the repository becomes public).
+`diceR` is currently only available on GitHub (*the second line below will be uncommented once the repository becomes public*).
 
 ```{r load}
 # install.packages("devtools")
@@ -38,35 +38,35 @@ data(hgsc)
 dat <- t(hgsc[, -1])
 ```
 
-We load an example data set of `r ncol(hgsc) - 1` high grade serous carcinoma samples measured on `r nrow(hgsc)` genes.
+We load an expression data set from TCGA of `r nrow(dat)` high grade serous carcinoma samples measured on `r ncol(dat)` genes.
 
 ## Consensus Clustering
 
-When Monti et al. (2003) first introduced consensus clustering, the idea was to use one clustering algorithm on bootstrapped subsamples of the data. We implement some extensions where a consensus is reached across subsamples *and* across algorithms. The final cluster assignment is then computed using some statistical transformations on the ensemble cluster.
+When Monti et al. (2003) first introduced consensus clustering, the idea was to use one clustering algorithm on bootstrapped subsamples of the data. We implement some extensions where a consensus is reached across subsamples *and* across algorithms. The final cluster assignment is then computed using statistical transformations on the ensemble cluster.
 
-The main function of this package is `ConClust()`, which outputs cluster assignments across subsamples and algorithms. For example, let's say we were interested in clustering the `hgsc` data into 4 clusters, using 80% resampling on 10 replicates, for these clustering algorithms: K-Means (Spearman distance), PAM (Spearman distance), Spectral Clustering using Radial-Basis kernel function, and Biclustering using a latent block model.
+The main function of this package is `ConClust()`, which outputs cluster assignments across subsamples and algorithms, for different k (number of clusters). For example, let's say we were interested in clustering the `hgsc` data into 2, 3, or 4 clusters, using 80% resampling on 10 replicates, for these clustering algorithms: K-Means (Spearman distance), PAM (Spearman distance), Spectral Clustering using Radial-Basis kernel function, and Biclustering using a latent block model.
 
 ```{r ConClust, results='hide'}
-CC <- ConClust(dat, nc = 2:4, reps = 10, pItem = 0.8,
-               method = c("hcAEucl", "kmSpear", "pamSpear", "biclust"), save = FALSE)
+CC <- ConClust(dat, nc = 2:4, pItem = 0.8, reps = 10, 
+               method = c("hcAEucl", "kmSpear", "pamSpear", "biclust"))
 ```
 
-The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each "box" (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the biclustering algorithm for k = 2.
+The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each "box" (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the biclustering algorithm for k = 3.
 
 ```{r ConClust_biclust}
 str(CC)
-kable(head(CC[, , "biclust", "2"]))
+kable(head(CC[, , "biclust", "3"]))
 ```
 
-Note the unavoidable presence of `NA`s because we used 80% subsampling. This can be problematic in some downstream ensemble methods, so we can impute as many of the missing values as we can using K-Nearest Neighbours beforehand. There might still be `NA`s after kNN because of how the decision threshold was set.
+Note the unavoidable presence of `NA`s because we used 80% subsampling. This can be problematic in certain downstream ensemble methods, so we can impute missing values using K-Nearest Neighbours beforehand. There might still be `NA`s after KNN because of how the decision threshold was set. The remaining missing values can be imputed using majority voting.
 
-```{r knn_impute}
-CC.impute <- apply(CC, 2:4, knn_impute, dat)
+```{r impute_knn}
+CC_imputed <- impute_missing(CC, dat)$knn
 sum(is.na(CC))
-sum(is.na(CC.impute))
+sum(is.na(CC_imputed))
 ```
 
-We can carry on the analysis using either `CC` or `CC.impute`.
+We can carry on the analysis using either `CC` or `CC_imputed`.
 
 ## Consensus Functions
 
@@ -76,6 +76,7 @@ We can carry on the analysis using either `CC` or `CC.impute`.
 - [`consensus_class()`](#get-consensus-class-with-consensus_class)
 - [`consensus_combine()`](#combine-consensus-summaries-with-consensus_combine)
 - [`consensus_evaluate()`](#compare-algortihms-with-consensus_evaluate)
+- [`consensus_trim()`](#trim-and-reweigh-algorithms-with-consensus-trim)
 - [`consensus_confmat()`](#compare-to-true-class-with-consensus_confmat)
 
 ### Compute consensus matrix with `consensus_matrix()`
@@ -107,7 +108,7 @@ kable(as.data.frame(table(cclass)))
 
 The return value of `consensus_summary()` has `consensus_matrix` and `consensus_class` objects as sublists. If we wish to extract these separately for every algorithm, `consensus_combine()` is a convenient wrapper to do so. Setting `element = "matrix"` returns a list of consensus matrices. On the other hand, setting `element = "class"` returns a matrix with rows as samples, and columns as clustering assignments for each algorithm.
 
-```{r consensus_combine}
+```{r consensus_combine, results='hide'}
 ccomb_matrix <- consensus_combine(CC, element = "matrix")
 ccomb_class <- consensus_combine(CC, element = "class")
 ```
@@ -135,12 +136,31 @@ kable(head(ccomb_class2))
 
 Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose two indices on which to compare the ensemble of clustering algorithms. The first index is PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between `lower` (defaults to 0) and `upper` (defaults to 1). PAC gives a sense of cluster stability. The second index is CHI (Calinski-Harabasz Index) or pseudo F-statistic. It measures the ratio of between cluster distances to within cluster distances, and was observed in our simulations to be one of the more robust indices to different data structures.
 
-```{r consensus_evaluate}
+```{r consensus_evaluate, results='hide'}
 ccomp <- consensus_evaluate(dat, k = 4, CC, CC2, plot = FALSE)
+```
+
+```{r consensus_evaluate_kable}
 kable(ccomp$internal)
 ```
 
 We see that the biclustering algorithm is the least ambiguous and also most well-clustered (high compactness and separability).
+
+### Trim and reweigh algorithms with `consensus_trim()`
+
+Some algorithms perform too poorly to deserve membership in the cluster ensemble. We consider the relative ranks of each algorithm across all internal indices, and compute their sum. All algorithms below a certain quantile for the sum rank are trimmed (removed). By default this quantile is 75%.
+
+After trimming, we can optionally choose to reweigh the algorithms based on the internal index magnitudes. Of course, we take into account the direction of optimality (higher is better is lower is better). Algorithms reweighed are then fed into the consensus functions. This is done by replicating each algorithm by a scalar factor that is proportional to its weight. For example, if we have two algorithms A and B, and A is given a weight of 80% and B is given a weight of 20%, then we make 4 copies of A and 1 copy of B. To minimize computational time, the total number of copies out of all algorithms has an upper bound of 100. Without reweighing, each algorithm is given equal weight.
+
+```{r consensus_trim, results='hide'}
+ctrim <- consensus_trim(dat, k = 4, CC, CC2, reweigh = TRUE)
+```
+
+```{r consensus_trim_str}
+str(ctrim)
+```
+
+The return value shows which algorithms were kept, removed (if any), and the trimmed (and potentially reweighed) cluster ensemble.
 
 ### Compare to true class with `consensus_confmat()`
 
