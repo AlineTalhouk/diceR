@@ -8,50 +8,71 @@
 #'   column for each algorithm.
 #' @rdname consensus_combine
 #' @export
-consensus_evaluate <- function(data, k, ..., cons.cl = NULL,
+consensus_evaluate <- function(data, k = NULL, ..., cons.cl = NULL,
                                ref.cl = NULL, plot = TRUE) {
   x <- as.matrix(data)
   cc.obj <- abind::abind(list(...), along = 3)
-  cl.mat <- consensus_combine(cc.obj, k = k, element = "class")
+  # cl.mat <- consensus_combine(cc.obj, k = k, element = "class")
+  cl.mat <- consensus_combine(cc.obj, element = "class")
   an <- dimnames(cc.obj)[3][[1]]
   if (!is.null(cons.cl)) {
     assertthat::assert_that(is.matrix(cons.cl))
-    cl.mat <- cbind(cl.mat, cons.cl)
+    # cl.mat <- cbind(cl.mat, cons.cl)
+    cl.mat <- lapply(cl.mat, cbind, cons.cl)
     an <- c(an, colnames(cons.cl))
   }
-  cl.mat <- apply(cl.mat, 1:2, as.integer)
-  ind.int <- data.frame(
-    Algorithms = an,
-    plyr::aaply(cl.mat, 2, function(cl)
-      clusterCrit::intCriteria(
-        traj = x, part = cl,
-        crit = c("C_index", "Calinski_Harabasz",
-                 "Davies_Bouldin", "Dunn", "McClain_Rao",
-                 "PBM", "SD_Dis", "Ray_Turi", "Tau",
-                 "Gamma", "G_plus")) %>% 
-        unlist()),
-    Compactness = apply(cl.mat, 2, iv_compactness, data = x),
-    Connectivity = apply(cl.mat, 2, function(cl)
-      clValid::connectivity(Data = x, clusters = cl))) %>% 
-    mutate_all(funs(structure(., names = an)))
+  # cl.mat <- apply(cl.mat, 1:2, as.integer)
+  
+  ind.int <- lapply(cl.mat, function(m) {
+    data.frame(
+      Algorithms = an,
+      plyr::aaply(m, 2, function(cl)
+        clusterCrit::intCriteria(
+          traj = x, part = cl,
+          crit = c("C_index", "Calinski_Harabasz",
+                   "Davies_Bouldin", "Dunn", "McClain_Rao",
+                   "PBM", "SD_Dis", "Ray_Turi", "Tau",
+                   "Gamma", "G_plus")) %>%
+          unlist()),
+      Compactness = apply(m, 2, iv_compactness, data = x),
+      Connectivity = apply(m, 2, function(cl)
+        clValid::connectivity(Data = x, clusters = cl))) %>%
+      mutate_all(funs(structure(., names = an)))
+  })
+  # ind.int <- data.frame(
+  #   Algorithms = an,
+  #   plyr::aaply(cl.mat, 2, function(cl)
+  #     clusterCrit::intCriteria(
+  #       traj = x, part = cl,
+  #       crit = c("C_index", "Calinski_Harabasz",
+  #                "Davies_Bouldin", "Dunn", "McClain_Rao",
+  #                "PBM", "SD_Dis", "Ray_Turi", "Tau",
+  #                "Gamma", "G_plus")) %>%
+  #       unlist()),
+  #   Compactness = apply(cl.mat, 2, iv_compactness, data = x),
+  #   Connectivity = apply(cl.mat, 2, function(cl)
+  #     clValid::connectivity(Data = x, clusters = cl))) %>%
+  #   mutate_all(funs(structure(., names = an)))
   if (plot) {
     graph_all(cc.obj)
   }
   if (!is.null(ref.cl)) {
+    cl.mat.ext <- cl.mat %>% 
+      extract2(match(n_distinct(ref.cl), names(.)))
     ind.ext <- data.frame(
       Algorithms = an,
-      plyr::aaply(cl.mat, 2, function(cl)
+      plyr::aaply(cl.mat.ext, 2, function(cl)
         clusterCrit::extCriteria(
           part1 = cl, part2 = ref.cl,
           crit = c("Hubert", "Jaccard", "McNemar",
-                   "Precision", "Rand", "Recall")) %>% 
+                   "Precision", "Rand", "Recall")) %>%
           unlist()),
-      NMI = apply(cl.mat, 2, ev_nmi, ref.lab = ref.cl)) %>% 
-      cbind(t(apply(cl.mat, 2, ev_confmat, ref.lab = ref.cl))) %>% 
+      NMI = apply(cl.mat.ext, 2, ev_nmi, ref.lab = ref.cl)) %>%
+      cbind(t(apply(cl.mat.ext, 2, ev_confmat, ref.lab = ref.cl))) %>%
       mutate_all(funs(structure(., names = an)))
-    return(list(k = k, internal = ind.int, external = ind.ext))
+    return(list(internal = ind.int, external = ind.ext))
   } else {
-    return(list(k = k, internal = ind.int))
+    return(list(internal = ind.int))
   }
 }
 
