@@ -1,4 +1,4 @@
-#' Combine, evaluate, trim, and weigh algorithms
+#' Combine, evaluate, trim, and reweigh algorithms
 #'
 #' \code{consensus_combine} combines results for multiple objects from
 #' \code{ConClust()} and outputs either the consensus
@@ -60,21 +60,30 @@ consensus_combine <- function(..., k = NULL, progress = TRUE,
                               element = c("matrix", "class"),
                               alg.names = NULL) {
   cs <- abind::abind(list(...), along = 3)
-  obj <- consensus_summary(cs, k = k, progress = progress)
-  if (is.null(k)) {
-    obj <- unlist(obj, recursive = FALSE)
-  }
+  # obj <- consensus_summary(cs, k = k, progress = progress)
+  obj <- consensus_summary(cs, progress = progress)
+  # if (is.null(k)) {
+  #   obj <- unlist(obj, recursive = FALSE)
+  # }
   switch(match.arg(element),
          matrix = {
-           out <- lapply(obj, "[[", "consensus_matrix")
+           # out <- lapply(obj, "[[", "consensus_matrix")
+           out <- lapply(obj, purrr::transpose) %>% 
+             lapply("[[", "consensus_matrix")
            if (!is.null(alg.names))
-             names(out) <- alg.names
+             # names(out) <- alg.names
+             out <- lapply(out, function(x) x %>% set_names(alg.names))
          },
          class = {
-           out <- apply(sapply(obj, "[[", "consensus_class"), c(1, 2),
-                        as.integer)
+           # out <- apply(sapply(obj, "[[", "consensus_class"), c(1, 2),
+           #              as.integer)
+           out <- lapply(obj, purrr::transpose) %>% 
+             lapply("[[", "consensus_class") %>% 
+             lapply(as.data.frame) %>% 
+             lapply(function(x) apply(x, 1:2, as.integer))
            if (!is.null(alg.names))
-             colnames(out) <- alg.names
+             # colnames(out) <- alg.names
+             out <- lapply(out, function(x) x %>% set_colnames(alg.names))
          })
   return(out)
 }

@@ -10,7 +10,7 @@
 consensus_combine(..., k = NULL, progress = TRUE, element = c("matrix",
   "class"), alg.names = NULL)
 
-consensus_evaluate(data, k, ..., cons.cl = NULL, ref.cl = NULL,
+consensus_evaluate(data, k = NULL, ..., cons.cl = NULL, ref.cl = NULL,
   plot = TRUE)
 
 consensus_trim(data, k, ..., cons.cl = NULL, ref.cl = NULL,
