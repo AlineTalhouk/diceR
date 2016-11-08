@@ -42,19 +42,13 @@ impute_missing <- function(E, data, seed = 123456) {
   
   # Relabel and Majority vote
   E_complete <- array(NaN, c(dim(E)[1], prod(dim(E)[2:3]), dim(E)[4]))
-  for (k in (1:dim(E)[4])) {
+  for (k in seq_len(dim(E)[4])) {
     # Flatten the matrix
-    E_flat <- E_knn[, , , k]
-    dim(E_flat) <- c(dim(E)[1], prod(dim(E)[2:3]))
-    E_relabeled <- cbind(E_flat[, 1],
-                         apply(E_flat[, -1], 2, function(x) {
-                           relabel_class(x, E_flat[, 1])
-                         }))
-    E_majvote <- t(apply(E_relabeled, 1, function(x) {
+    E_relabeled <- flatten_E(E_knn[, , , k], is.relabelled = FALSE)
+    E_complete[, , k] <- t(apply(E_relabeled, 1, function(x) {
       x[which(is.na(x))] <- names(which.max(table(x)))
-      return(x)
+      return(as.numeric(x))
     }))
-    E_complete[, , k] <- apply(E_majvote, 2, as.numeric)
   }
   return(list(knn = E_knn, complete = E_complete[, , 1]))
 }
