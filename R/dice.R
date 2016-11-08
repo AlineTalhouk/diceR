@@ -98,6 +98,8 @@ dice <- function(data, nk, R = 10,
                                    sim.mat = match.arg(sim.mat))
     )
   }
+  eval.obj <- consensus_evaluate(data, k = nk, E, cons.cl = Final,
+                                 ref.cl = refClass, plot = FALSE)
   
   # Add the reference Class as the first column if provided
   if (!is.null(refClass)) {
