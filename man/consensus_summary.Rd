@@ -4,13 +4,13 @@
 \alias{consensus_summary}
 \title{Consensus summary}
 \usage{
-consensus_summary(res, k = NULL, progress = TRUE)
+consensus_summary(E, k, progress = TRUE)
 }
 \arguments{
-\item{res}{output from \code{ConClust}}
+\item{E}{output from \code{ConClust}}
 
 \item{k}{number of clusters. The default is \code{NULL}, which returns 
-results for all k considered in \code{res}}
+results for all k considered in \code{E}}
 
 \item{progress}{logical; should a progress bar be displayed?}
 }
@@ -26,10 +26,8 @@ matrices and consensus classes for each clustering algorithm.
 data(hgsc)
 dat <- t(hgsc[, -1])
 x <- ConClust(dat, nc = 3:4, reps = 5, method = c("hcAEucl"))
-y1 <- consensus_summary(x)
-y2 <- consensus_summary(x, k = 4)
-str(y1)
-str(y2)
+cs <- consensus_summary(x)
+str(cs)
 }
 \author{
 Derek Chiu
