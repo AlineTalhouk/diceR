@@ -82,10 +82,10 @@ graph_delta_area <- function(x) {
 #' Calculate CDF for each clustering algorithm at each k
 #' @noRd
 get_cdf <- function(x) {
-  Group <- k <- CDF <- NULL
+  Group <- CDF <- NULL
   assertthat::assert_that(inherits(x, "array"))
   dat <- consensus_combine(x, element = "matrix") %>% 
-    lapply(function(d) d[lower.tri(d, diag = TRUE)]) %>% 
+    lapply(function(k) lapply(k, function(d) d[lower.tri(d, diag = TRUE)])) %>% 
     as.data.frame() %>% 
     tidyr::gather(key = Group, value = CDF, dplyr::everything()) %>% 
     tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>% 
@@ -102,6 +102,7 @@ get_cdf <- function(x) {
 graph_heatmap <- function(x, main = NULL, ...) {
   assertthat::assert_that(inherits(x, "array"))
   dat <- consensus_combine(x, element = "matrix") %>% 
+    unlist(recursive = FALSE) %>% 
     set_names(names(.) %>% 
                 stringr::str_split_fixed("\\.", n = 2) %>% 
                 apply(1, function(x) paste0(x[2], " k=", x[1])))
@@ -134,7 +135,8 @@ graph_tracking <- function(x) {
     as.data.frame() %>% 
     tidyr::gather(key = Group, value = Class, dplyr::everything()) %>% 
     tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>%
-    mutate(Class = factor(Class), Method = factor(Method)) %>% 
+    mutate(k = substring(k, first = 2),
+           Class = factor(Class), Method = factor(Method)) %>% 
     cbind(Samples = factor(colnames(x[, , 1, 1]),
                            levels = colnames(x[, , 1, 1])))
   p <- ggplot(dat, aes(Samples, k)) +
