@@ -10,15 +10,20 @@
 #'   no different than original depending on \code{quantile}}
 #' @rdname consensus_combine
 #' @export
-consensus_trim <- function(data, k, ..., cons.cl = NULL, ref.cl = NULL,
+consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                            quantile = 0.75, reweigh = FALSE) {
   Sumrank <- Quantile <- NULL
   cc.obj <- abind::abind(list(...), along = 3)
-  z <- consensus_evaluate(data = data, k = k, cc.obj, cons.cl = cons.cl,
+  z <- consensus_evaluate(data = data, cc.obj, cons.cl = cons.cl,
                           ref.cl = ref.cl, plot = FALSE)
-  alg.all <- z$internal$Algorithms
-  z.main <- z$internal[, -c(1, 13:14)]
-  z.other <- z$internal[, -c(1:12)]
+  if (is.null(ref.cl)) {
+    k <- z$best.k
+  } else {
+    k <- as.character(n_distinct(ref.cl))
+  }
+  alg.all <- z$internal[[k]]$Algorithms
+  z.main <- z$internal[[k]][, -c(1, 13:14)]
+  z.other <- z$internal[[k]][, -c(1:12)]
   bests <- mapply(function(z, n) clusterCrit::bestCriterion(z, n),
                   z = as.list(z.main), n = names(z.main))
   max.bests <- cbind(z.main[, apply(z.main, 2, which.max) == bests], z.other)
@@ -26,13 +31,13 @@ consensus_trim <- function(data, k, ..., cons.cl = NULL, ref.cl = NULL,
     apply(2, function(y) sum(y) - y)
   all.bests <- cbind(max.bests, min.bests)
   ind.ranks <- apply(all.bests, 2, rank)
-  sum.ranks <- data.frame(Algorithms = z$internal$Algorithms,
+  sum.ranks <- data.frame(Algorithms = alg.all,
                           Sumrank = apply(ind.ranks, 1, sum)) %>% 
     mutate(Quantile = Sumrank / max(Sumrank)) %>% 
     filter(Quantile >= quantile)
   alg.keep <- as.character(sum.ranks$Algorithms)
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
-  cc.trimmed <- cc.obj[, , alg.keep, as.character(z$k), drop = FALSE]
+  cc.trimmed <- cc.obj[, , alg.keep, k, drop = FALSE]
   
   if (reweigh && length(alg.keep) > 1) {
     max.bests <- max.bests %>% 
@@ -54,7 +59,7 @@ consensus_trim <- function(data, k, ..., cons.cl = NULL, ref.cl = NULL,
       abind::abind(along = 4)
     dimnames(cc.trimmed)[[3]] <- unname(unlist(
       mapply(rep, names(multiples), multiples)))
-    dimnames(cc.trimmed)[[4]] <- z$k
+    dimnames(cc.trimmed)[[4]] <- k
   } 
   return(list(alg.keep = alg.keep,
               alg.remove = alg.remove,
