@@ -4,22 +4,17 @@
 \alias{consensus_summary}
 \title{Consensus summary}
 \usage{
-consensus_summary(E, k, progress = TRUE)
+consensus_summary(E)
 }
 \arguments{
 \item{E}{output from \code{ConClust}}
-
-\item{k}{number of clusters. The default is \code{NULL}, which returns 
-results for all k considered in \code{E}}
-
-\item{progress}{logical; should a progress bar be displayed?}
 }
 \value{
-A list with summaries for each algorithm. Each algorithm has a list
+A list with summaries for each algorithm. Each algorithm has a list 
   with two elements: consensus_matrix and consensus_class
 }
 \description{
-Given an object from \code{\link{ConClust}}, returns a list of consensus
+Given an object from \code{\link{ConClust}}, returns a list of consensus 
 matrices and consensus classes for each clustering algorithm.
 }
 \examples{
