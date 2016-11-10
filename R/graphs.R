@@ -84,7 +84,7 @@ graph_delta_area <- function(x) {
 get_cdf <- function(x) {
   Group <- k <- CDF <- NULL
   assertthat::assert_that(inherits(x, "array"))
-  dat <- consensus_combine(x, progress = FALSE, element = "matrix") %>% 
+  dat <- consensus_combine(x, element = "matrix") %>% 
     lapply(function(d) d[lower.tri(d, diag = TRUE)]) %>% 
     as.data.frame() %>% 
     tidyr::gather(key = Group, value = CDF, dplyr::everything()) %>% 
@@ -101,7 +101,7 @@ get_cdf <- function(x) {
 #' @export
 graph_heatmap <- function(x, main = NULL, ...) {
   assertthat::assert_that(inherits(x, "array"))
-  dat <- consensus_combine(x, progress = FALSE, element = "matrix") %>% 
+  dat <- consensus_combine(x, element = "matrix") %>% 
     set_names(names(.) %>% 
                 stringr::str_split_fixed("\\.", n = 2) %>% 
                 apply(1, function(x) paste0(x[2], " k=", x[1])))
@@ -130,7 +130,7 @@ graph_heatmap <- function(x, main = NULL, ...) {
 graph_tracking <- function(x) {
   k <- Group <- Method <- Class <- Samples <- NULL
   assertthat::assert_that(inherits(x, "array"))
-  dat <- consensus_combine(x, progress = FALSE, element = "class") %>% 
+  dat <- consensus_combine(x, element = "class") %>% 
     as.data.frame() %>% 
     tidyr::gather(key = Group, value = Class, dplyr::everything()) %>% 
     tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>%
