@@ -10,43 +10,43 @@ ref.cl <- sample(1:4, 100, replace = TRUE)
 test_that("combining results has expected lengths", {
   y1 <- consensus_combine(CC1, CC2, element = "matrix")
   y2 <- consensus_combine(CC1, CC2, element = "class")
-  expect_length(y1, prod(dim(CC1)[3:4]) + prod(dim(CC2)[3:4]))
-  expect_equal(ncol(y2), prod(dim(CC1)[3:4]) + prod(dim(CC2)[3:4]))
+  expect_length(unlist(y1, recursive = FALSE),
+                prod(dim(CC1)[3:4]) + prod(dim(CC2)[3:4]))
+  expect_equal(ncol(data.frame(y2)), prod(dim(CC1)[3:4]) + prod(dim(CC2)[3:4]))
 })
 
 test_that("names can be overwritten", {
-  an <- paste0(rep(c("A", "B"), 3), rep(2:4, each = 2))
+  an <- LETTERS[1:2]
   y3 <- consensus_combine(CC1, CC2, element = "matrix", alg.names = an)
   y4 <- consensus_combine(CC1, CC2, element = "class", alg.names = an)
-  expect_identical(names(y3), an)
-  expect_identical(colnames(y4), an)
+  expect_identical(unique(unlist(lapply(y3, names))), an)
+  expect_identical(unique(unlist(lapply(y4, colnames))), an)
 })
 
 test_that("evaluation works with reference class and can plot", {
   cons.cl <- matrix(sample(1:4, 400, replace = TRUE), ncol = 4,
                     dimnames = list(NULL, LETTERS[1:4]))
-  expect_output(suppressWarnings(
-    consensus_evaluate(x, k = 4, CC1, CC2, cons.cl = cons.cl,
-                       plot = TRUE)))
-  expect_length(consensus_evaluate(x, k = 4, CC1, CC2, ref.cl = ref.cl,
-                                   plot = FALSE), 3)
+  expect_error(suppressWarnings(
+    consensus_evaluate(x, CC1, CC2, cons.cl = cons.cl, plot = TRUE), NA))
+  expect_length(consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, plot = FALSE),
+                4)
 })
 
 test_that("compactness measure works with singleton clusters", {
   ref.cl <- c(sample(1:3, 99, replace = TRUE), 4)
-  expect_error(iv_compactness(x, ref.cl), NA)
+  expect_error(compactness(x, ref.cl), NA)
 })
 
 test_that("trimming (potentially) removes algorithms", {
   CC3.combined <- abind::abind(list(CC1, CC2), along = 3)
-  CC3.trimmed <- consensus_trim(x, k = 4, CC1, CC2, ref.cl = ref.cl,
-                                quantile = 0.8)$E_trimmed
+  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl,
+                                quantile = 0.8)$data.new
   expect_lte(dim(CC3.trimmed)[3], dim(CC3.combined)[3])
 })
 
 test_that("reweighing (potentially) replicates each slice of algorithm", {
   CC3.combined <- abind::abind(list(CC1, CC2), along = 3)
-  CC3.trimmed <- consensus_trim(x, k = 4, CC1, CC2, ref.cl = ref.cl,
+  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl,
                                 reweigh = TRUE)
   expect_error(CC3.trimmed, NA)
 })
