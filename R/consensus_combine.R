@@ -24,8 +24,6 @@
 #'
 #' @param ... any number of objects outputted from
 #'   \code{\link{ConClust}}
-#' @param k number of clusters requested. Default is \code{NULL}, which returns
-#'   all k computed from \code{...}
 #' @param element either "matrix" or "class" to extract the consensus matrix or
 #'   consensus class, respectively.
 #' @param alg.names optional. Supply a vector of names for the algorithms.
