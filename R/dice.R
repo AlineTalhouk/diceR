@@ -67,45 +67,30 @@ dice <- function(data, nk, R = 10,
   E <- ConClust(data, nc = nk, reps = R, method = algorithms,
                 progress = progress)
   
-  # Evaluate
-  if (evaluate)
-    eval.obj <- consensus_evaluate(data, k = nk, E,
-                                   ref.cl = refClass, plot = FALSE)
+  # Evaluate, trim, and reweigh
+  res.obj <- consensus_trim(data, E, ref.cl = refClass, reweigh = reweigh)
+  if (trim) E <- res.obj$data.new
   
-  # Trim (and reweigh)
-  if (trim) {
-    trim.obj <- consensus_trim(data, k = nk, E,
-                               ref.cl = refClass, reweigh = reweigh)
-    Enew <- trim.obj$E_trimmed
-  } else {
-    Enew <- E
-  }
+  # Select k
+  k <- res.obj$eval$k
   
   # Impute Missing Values using KNN and majority vote
-  imp.obj <- impute_missing(Enew, data)
+  imp.obj <- impute_missing(E, data)
   Ecomp <- imp.obj$complete
   
   # Consensus functions
   Final <- matrix(NA, nrow = n, ncol = ncf,
                   dimnames = list(rownames(data), consensusFUNS))
   for (i in 1:ncf) {
-    cat(i)
     Final[, i] <- switch(consensusFUNS[i],
                          kmodes = k_modes(Ecomp),
                          majority = majority_voting(Ecomp),
-                         CSPA = majority_voting(Ecomp), 
-                         LCE = LCE(drop(Ecomp), k = nk,
+                         CSPA = consensus_class(Ecomp, k), 
+                         LCE = LCE(drop(Ecomp), k = k,
                                    sim.mat = match.arg(sim.mat))
     )
   }
-  eval.obj <- consensus_evaluate(data, k = nk, E, cons.cl = Final,
-                                 ref.cl = refClass, plot = FALSE)
-  
-  # Add the reference Class as the first column if provided
-  if (!is.null(refClass)) {
-    Final <- cbind(refClass, Final)
-  }
-  
+
   # Relabel Final Clustering
   # Relabelling is only possible for similar cluster numbers
   if (ncf == 1 & is.null(refClass)) {
@@ -115,6 +100,19 @@ dice <- function(data, nk, R = 10,
     FinalR <- cbind(Final[, 1, drop = FALSE],
                     apply(Final[, -1, drop = FALSE], 2, function(x)
                       as.numeric(relabel_class(x, Final[, 1]))))
+  }
+  
+  # Final classes need to be integer for certain functions to work
+  FinalR <- apply(FinalR, 2, as.integer)
+  
+  # Return evaluation output including consensus function results
+  if (evaluate)
+    eval.obj <- consensus_evaluate(data, E, cons.cl = FinalR,
+                                   ref.cl = refClass, plot = FALSE)
+  
+  # Add the reference class as the first column if provided
+  if (!is.null(refClass)) {
+    FinalR <- cbind(refClass, FinalR)
   }
   
   return(list(clusters = FinalR, indices = eval.obj))
