@@ -3,24 +3,25 @@
 #'   (trimmed).
 #' @param reweigh logical; if \code{TRUE}, after trimming out poor performing
 #'   algorithms, each algorithm is reweighed depending on its internal indices.
+#' @param show.eval logical; if \code{TRUE} (default), show the evaluation 
+#'   output from \code{consensus_evaluate}
 #' @inheritParams consensus_evaluate
 #' @return \code{consensus_trim} returns a list with three elements 
-#'   \item{alg.keep}{algorithms kept} \item{alg.remove}{algorithms removed} 
-#'   \item{E_trimmed}{A trimmed version of a \code{ConClust} object. Potentially
-#'   no different than original depending on \code{quantile}}
+#'   \item{alg.keep}{algorithms kept}
+#'   \item{alg.remove}{algorithms removed}
+#'   \item{eval}{if \code{show.eval = TRUE}, the evaluation output is returned, 
+#'   otherwise \code{NULL}}
+#'   \item{data.new}{A new version of a \code{ConClust} data object. Potentially
+#'   no trimming depending on \code{quantile}} value.
 #' @rdname consensus_combine
 #' @export
 consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
-                           quantile = 0.75, reweigh = FALSE) {
+                           quantile = 0.75, reweigh = FALSE, show.eval = TRUE) {
   Sumrank <- Quantile <- NULL
   cc.obj <- abind::abind(list(...), along = 3)
   z <- consensus_evaluate(data = data, cc.obj, cons.cl = cons.cl,
                           ref.cl = ref.cl, plot = FALSE)
-  if (is.null(ref.cl)) {
-    k <- z$best.k
-  } else {
-    k <- as.character(n_distinct(ref.cl))
-  }
+  k <- z$k
   alg.all <- z$internal[[k]]$Algorithms
   z.main <- z$internal[[k]][, -c(1, 13:14)]
   z.other <- z$internal[[k]][, -c(1:12)]
@@ -60,10 +61,16 @@ consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
     dimnames(cc.trimmed)[[3]] <- unname(unlist(
       mapply(rep, names(multiples), multiples)))
     dimnames(cc.trimmed)[[4]] <- k
-  } 
+  }
+  if (show.eval) {
+    eval <- z
+  } else {
+    eval <- NULL
+  }
   return(list(alg.keep = alg.keep,
               alg.remove = alg.remove,
-              E_trimmed = cc.trimmed))
+              eval = eval,
+              data.new = cc.trimmed))
 }
 
 #' Recursively find the greater common divisor of two numbers
