@@ -92,7 +92,7 @@ gplots::heatmap.2(cm, dendrogram = "none", Rowv = TRUE, Colv = TRUE,
 Or we can use `graph_heatmap()`:
 
 ```{r graph_heatmap}
-graph_heatmap(CC[, , "pamSpear", "2", drop = FALSE])
+hm <- graph_heatmap(CC[, , "pamSpear", "2", drop = FALSE])
 ```
 
 ### Get consensus class with `consensus_class()`
@@ -115,7 +115,7 @@ ccomb_class <- consensus_combine(CC, element = "class")
 
 ```{r consensus_combine_str}
 str(ccomb_matrix, max.level = 2)
-kable(head(ccomb_class))
+kable(head(ccomb_class$`4`))
 ```
 
 One can feed in `ccomb_class` into `consensus_matrix()` to obtain a consensus matrix across both subsamples **and** algorithms.
@@ -129,7 +129,7 @@ ccomb_class2 <- consensus_combine(CC, CC2, element = "class")
 ```
 
 ```{r consensus_combine_2_str}
-kable(head(ccomb_class2))
+kable(head(ccomb_class2$`4`))
 ```
 
 ### Compare algortihms with `consensus_evaluate()`
@@ -137,7 +137,7 @@ kable(head(ccomb_class2))
 Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose two indices on which to compare the ensemble of clustering algorithms. The first index is PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between `lower` (defaults to 0) and `upper` (defaults to 1). PAC gives a sense of cluster stability. The second index is CHI (Calinski-Harabasz Index) or pseudo F-statistic. It measures the ratio of between cluster distances to within cluster distances, and was observed in our simulations to be one of the more robust indices to different data structures.
 
 ```{r consensus_evaluate, results='hide'}
-ccomp <- consensus_evaluate(dat, k = 4, CC, CC2, plot = FALSE)
+ccomp <- consensus_evaluate(dat, CC, CC2, plot = FALSE)
 ```
 
 ```{r consensus_evaluate_kable}
@@ -153,11 +153,11 @@ Some algorithms perform too poorly to deserve membership in the cluster ensemble
 After trimming, we can optionally choose to reweigh the algorithms based on the internal index magnitudes. Of course, we take into account the direction of optimality (higher is better is lower is better). Algorithms reweighed are then fed into the consensus functions. This is done by replicating each algorithm by a scalar factor that is proportional to its weight. For example, if we have two algorithms A and B, and A is given a weight of 80% and B is given a weight of 20%, then we make 4 copies of A and 1 copy of B. To minimize computational time, the total number of copies out of all algorithms has an upper bound of 100. Without reweighing, each algorithm is given equal weight.
 
 ```{r consensus_trim, results='hide'}
-ctrim <- consensus_trim(dat, k = 4, CC, CC2, reweigh = TRUE)
+ctrim <- consensus_trim(dat, CC, CC2, reweigh = TRUE)
 ```
 
 ```{r consensus_trim_str}
-str(ctrim)
+str(ctrim, max.level = 2)
 ```
 
 The return value shows which algorithms were kept, removed (if any), and the trimmed (and potentially reweighed) cluster ensemble.
