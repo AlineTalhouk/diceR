@@ -9,10 +9,10 @@
 \usage{
 consensus_combine(..., element = c("matrix", "class"), alg.names = NULL)
 
-consensus_evaluate(data, ..., cons.cl = NULL, ref.cl = NULL, plot = TRUE)
+consensus_evaluate(data, ..., cons.cl = NULL, ref.cl = NULL, plot = FALSE)
 
 consensus_trim(data, ..., cons.cl = NULL, ref.cl = NULL, quantile = 0.75,
-  reweigh = FALSE)
+  reweigh = FALSE, show.eval = TRUE)
 }
 \arguments{
 \item{...}{any number of objects outputted from
@@ -39,20 +39,31 @@ as \code{kmodes} and \code{majority_voting}}
 \item{reweigh}{logical; if \code{TRUE}, after trimming out poor performing
 algorithms, each algorithm is reweighed depending on its internal indices.}
 
-\item{k}{number of clusters requested. Default is \code{NULL}, which returns
-all k computed from \code{...}}
+\item{show.eval}{logical; if \code{TRUE} (default), show the evaluation 
+output from \code{consensus_evaluate}}
 }
 \value{
 \code{consensus_combine} returns either a list of all consensus
   matrices or a data frame showing all the consensus classes
 
-\code{consensus_evaluate} returns a data frame of the indices in each
-  column for each algorithm.
+\code{consensus_evaluate} returns a list with the following elements
+  \item{k}{if \code{ref.cl} is not NULL, this is the number of distinct
+  classes in the reference; otherwise the chosen \code{k} is determined by
+  the one giving the largest mean PAC across algorithms}
+  \item{pac}{a data frame showing the PAC for each combination of algorithm
+  and cluster size}
+  \item{internal}{a list of data frames for all k showing internal evaluation
+  indices}
+  \item{external}{a data frame showing external evaluation indices for
+  \code{k}}
 
 \code{consensus_trim} returns a list with three elements 
-  \item{alg.keep}{algorithms kept} \item{alg.remove}{algorithms removed} 
-  \item{E_trimmed}{A trimmed version of a \code{ConClust} object. Potentially
-  no different than original depending on \code{quantile}}
+  \item{alg.keep}{algorithms kept}
+  \item{alg.remove}{algorithms removed}
+  \item{eval}{if \code{show.eval = TRUE}, the evaluation output is returned, 
+  otherwise \code{NULL}}
+  \item{data.new}{A new version of a \code{ConClust} data object. Potentially
+  no trimming depending on \code{quantile}} value.
 }
 \description{
 \code{consensus_combine} combines results for multiple objects from

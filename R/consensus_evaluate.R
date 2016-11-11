@@ -4,23 +4,33 @@
 #'   as \code{kmodes} and \code{majority_voting}
 #' @param plot logical; if \code{TRUE}, \code{graph_all} is called
 #' @inheritParams consensus_combine
-#' @return \code{consensus_evaluate} returns a data frame of the indices in each
-#'   column for each algorithm.
+#' @return \code{consensus_evaluate} returns a list with the following elements
+#'   \item{k}{if \code{ref.cl} is not NULL, this is the number of distinct
+#'   classes in the reference; otherwise the chosen \code{k} is determined by
+#'   the one giving the largest mean PAC across algorithms}
+#'   \item{pac}{a data frame showing the PAC for each combination of algorithm
+#'   and cluster size}
+#'   \item{internal}{a list of data frames for all k showing internal evaluation
+#'   indices}
+#'   \item{external}{a data frame showing external evaluation indices for
+#'   \code{k}}
 #' @rdname consensus_combine
 #' @export
-consensus_evaluate <- function(data, ..., cons.cl = NULL,
-                               ref.cl = NULL, plot = TRUE) {
+consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
+                               plot = FALSE) {
   x <- as.matrix(data)
   cc.obj <- abind::abind(list(...), along = 3)
   cl.mat <- consensus_combine(cc.obj, element = "class")
   cons.mat <- consensus_combine(cc.obj, element = "matrix")
-  if (is.null(ref.cl)) {
-    k <- lapply(cons.mat, lapply, PAC) %>%
-      lapply(., function(x) mean(unlist(x))) %>%
-      which.max() %>%
-      names()
-  } else {
+  pac <- lapply(cons.mat, lapply, PAC) %>%
+    plyr::ldply(unlist, .id = "k")
+  if (!is.null(ref.cl)) {
     k <- as.character(n_distinct(ref.cl))
+  } else {
+    k <- pac %>% 
+      magrittr::use_series(k) %>% 
+      magrittr::extract(apply(pac[, -1, drop = FALSE], 1, mean) %>% 
+                          which.max())
   }
   an <- dimnames(cc.obj)[3][[1]]
   if (!is.null(cons.cl)) {
@@ -61,9 +71,9 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL,
       NMI = apply(cl.mat.ext, 2, ev_nmi, ref.lab = ref.cl)) %>%
       cbind(t(apply(cl.mat.ext, 2, ev_confmat, ref.lab = ref.cl))) %>%
       mutate_all(funs(structure(., names = an)))
-    return(list(k = k, internal = ind.int, external = ind.ext))
+    return(list(k = k, pac = pac, internal = ind.int, external = ind.ext))
   } else {
-    return(list(k = k, internal = ind.int))
+    return(list(k = k, pac = pac, internal = ind.int))
   }
 }
 
