@@ -82,7 +82,7 @@ graph_delta_area <- function(x) {
 #' Calculate CDF for each clustering algorithm at each k
 #' @noRd
 get_cdf <- function(x) {
-  Group <- CDF <- NULL
+  k <- Group <- CDF <- NULL
   assertthat::assert_that(inherits(x, "array"))
   dat <- consensus_combine(x, element = "matrix") %>% 
     lapply(function(k) lapply(k, function(d) d[lower.tri(d, diag = TRUE)])) %>% 
