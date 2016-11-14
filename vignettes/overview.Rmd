@@ -73,11 +73,9 @@ We can carry on the analysis using either `CC` or `CC_imputed`.
 `diceR` provides functions for retrieving useful summaries and other results for consensus clustering.
 
 - [`consensus_matrix()`](#compute-consensus-matrix-with-consensus_matrix)
-- [`consensus_class()`](#get-consensus-class-with-consensus_class)
 - [`consensus_combine()`](#combine-consensus-summaries-with-consensus_combine)
 - [`consensus_evaluate()`](#compare-algortihms-with-consensus_evaluate)
 - [`consensus_trim()`](#trim-and-reweigh-algorithms-with-consensus-trim)
-- [`consensus_confmat()`](#compare-to-true-class-with-consensus_confmat)
 
 ### Compute consensus matrix with `consensus_matrix()`
 
@@ -93,15 +91,6 @@ Or we can use `graph_heatmap()`:
 
 ```{r graph_heatmap}
 hm <- graph_heatmap(CC[, , "pamSpear", "2", drop = FALSE])
-```
-
-### Get consensus class with `consensus_class()`
-
-The consensus class is the final cluster assignment obtained by performing hierarchical clustering on a consensus matrix.
-
-```{r consensus_class}
-cclass <- consensus_class(cm, k = 4)
-kable(as.data.frame(table(cclass)))
 ```
 
 ### Combine consensus summaries with `consensus_combine()`
@@ -161,16 +150,3 @@ str(ctrim, max.level = 2)
 ```
 
 The return value shows which algorithms were kept, removed (if any), and the trimmed (and potentially reweighed) cluster ensemble.
-
-### Compare to true class with `consensus_confmat()`
-
-Finally, we have a wrapper for comparing a predicted cluster assignment to some true class label or reference cluster assignment as a confusion matrix. The purpose of using `consensus_confmat()` is because the cluster labels do not consistently represent the same group in different runs of a clustering algorithm. For instance, cluster "1" may refer to different groups in K-means for different runs. We use `min_fnorm()` to reorder the confusion matrix such that the diagonal is maximized.
-
-```{r consensus_confmat}
-set.seed(10)
-cclass.true <- sample(1:4, size = length(cclass), replace = TRUE)
-table(cclass, cclass.true)
-consensus_confmat(cclass, cclass.true)
-```
-
-Notice the reordering of the rows when using `consensus_confmat()`.
