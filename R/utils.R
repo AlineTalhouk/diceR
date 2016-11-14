@@ -1,6 +1,15 @@
 # magrittr placeholder
 globalVariables(".")
 
+#' Hierarchical clustering with Euclidean distance and Average linkage
+#' @param d distance matrix
+#' @param k scalar indicating number of clusters to cut tree into
+#' @noRd
+hcAEucl <- function(d, k) {
+  return(as.integer(stats::cutree(stats::hclust(
+    stats::dist(d), method = "average"), k)))
+}
+
 #' Custom hook functions for DIvisive ANAlysis clustering algorithm
 #'
 #' @param d distance matrix
