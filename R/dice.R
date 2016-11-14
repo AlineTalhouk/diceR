@@ -95,7 +95,7 @@ dice <- function(data, nk, reps = 10,
   # Relabel Final Clustering using reference
   if (ncf == 1 & is.null(ref.cl)) {
     # Don't relabel if only one consensus function and no reference class
-    FinalR <- Final
+    FinalR <- apply(Final, 2, as.integer)
   } else {
     # Final classes need to be integer for certain functions to work
     FinalR <- apply(Final, 2, function(x) as.integer(
