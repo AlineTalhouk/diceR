@@ -4,14 +4,12 @@
 \alias{LCE}
 \title{Linkage Clustering Ensemble}
 \usage{
-LCE(E, data, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
+LCE(E, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
   sim.mat = c("cts", "srs", "asrs"))
 }
 \arguments{
 \item{E}{is an array of clustering results. An error is thrown if there are 
 missing values. \code{\link{impute_missing}} can be used beforehand.}
-
-\item{data}{original data matrix with rows as samples, columns as variables}
 
 \item{k}{requested number of clusters}
 
@@ -38,11 +36,11 @@ dat <- t(hgsc[, -1])[1:100, 1:50]
 x <- ConClust(dat, nc = 4, reps = 4,
               method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
 \dontrun{
-LCE(E = x, data = dat, k = 4, sim.mat = "asrs")
+LCE(E = x, k = 4, sim.mat = "asrs")
 }
 
 x_imputed <- impute_missing(x, dat)$complete
-LCE(E = x_imputed, data = dat, k = 4, sim.mat = "cts")
+LCE(E = x_imputed, k = 4, sim.mat = "cts")
 }
 \author{
 Johnson Liu
