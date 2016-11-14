@@ -91,19 +91,15 @@ dice <- function(data, nk, R = 10,
     )
   }
 
-  # Relabel Final Clustering
-  # Relabelling is only possible for similar cluster numbers
+  # Relabel Final Clustering using reference
   if (ncf == 1 & is.null(refClass)) {
-    # no need to relabel
+    # Don't relabel if only one consensus function and no reference class
     FinalR <- Final
   } else {
-    FinalR <- cbind(Final[, 1, drop = FALSE],
-                    apply(Final[, -1, drop = FALSE], 2, function(x)
-                      as.numeric(relabel_class(x, Final[, 1]))))
+    # Final classes need to be integer for certain functions to work
+    FinalR <- apply(Final, 2, function(x) as.integer(
+      relabel_class(cl.pred = x, cl.ref = refClass)))
   }
-  
-  # Final classes need to be integer for certain functions to work
-  FinalR <- apply(FinalR, 2, as.integer)
   
   # Return evaluation output including consensus function results
   if (evaluate)
