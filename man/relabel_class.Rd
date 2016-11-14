@@ -4,12 +4,12 @@
 \alias{relabel_class}
 \title{Relabel classes to a standard}
 \usage{
-relabel_class(cl.pred, cl.ref)
+relabel_class(pred.cl, ref.cl)
 }
 \arguments{
-\item{cl.pred}{vector of predicted cluster assignments}
+\item{pred.cl}{vector of predicted cluster assignments}
 
-\item{cl.ref}{vector of reference labels to match to}
+\item{ref.cl}{vector of reference labels to match to}
 }
 \value{
 A vector of relabeled cluster assignments

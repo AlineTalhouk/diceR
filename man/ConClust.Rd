@@ -4,7 +4,7 @@
 \alias{ConClust}
 \title{Consensus clustering over samples and algorithms}
 \usage{
-ConClust(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
+ConClust(x, nk = 2:4, pItem = 0.8, reps = 1000, method = NULL,
   parallel = NULL, ncores = NULL, progress = TRUE, seed = 123456,
   seed.method = 1, min.sd = 1, save = FALSE,
   file.name = "ConClustOutput", time.saved = FALSE)
@@ -12,7 +12,8 @@ ConClust(x, nc = 2:4, pItem = 0.8, reps = 1000, method = NULL,
 \arguments{
 \item{x}{data matrix with rows as samples and columns as variables}
 
-\item{nc}{number of clusters requested}
+\item{nk}{number of clusters (k) requested; can specify a single integer or a
+range of integers to compute multiple k}
 
 \item{pItem}{proportion of items to be used in subsampling within an 
 algorithm}
@@ -91,7 +92,7 @@ packages (and potential masking of functions).
 \examples{
 data(hgsc)
 dat <- t(hgsc[, -1])
-x1 <- ConClust(dat, nc = 2:4, reps = 10, method = c("hcAEucl", "kmEucl"))
+x1 <- ConClust(dat, nk = 2:4, reps = 10, method = c("hcAEucl", "kmEucl"))
 }
 \author{
 Derek Chiu, Aline Talhouk
