@@ -75,25 +75,28 @@ majority_voting <- function(E, is.relabelled = TRUE) {
 
 #' Cluster-based Similarity Partitioning Algorithm (CSPA)
 #'
-#' Performs hierarchical clustering on a consensus matrix to obtain consensus
-#' class labels.
+#' Performs hierarchical clustering on a stack of consensus matrices to obtain
+#' consensus class labels.
 #'
-#' @param x a \code{\link{consensus_matrix}}
+#' @param E is an array of clustering results.
 #' @param k number of clusters
-#' @param method linkage type for hierarchical clustering. Defaults to
-#'   "average". See \code{\link[stats]{hclust}} for details.
 #' @return cluster assignments for the consensus class
 #' @family consensus functions
 #' @author Derek Chiu
 #' @export
 #' @examples
-#' set.seed(2)
-#' x <- replicate(100, rbinom(100, 4, 0.2))
-#' cm <- consensus_matrix(x)
-#' CSPA(cm, k = 3)
-CSPA <- function(x, k, method = "average") {
-  tree <- stats::hclust(stats::dist(x), method = method)
-  cl <- as.factor(stats::cutree(tree, k))
+#' data(hgsc)
+#' dat <- t(hgsc[, -1])[1:100, 1:50]
+#' x <- ConClust(dat, nc = 4, reps = 4,
+#'               method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
+#' CSPA(x, k = 4)
+CSPA <- function(E, k) {
+  assertthat::assert_that(k %in% dimnames(E)[[4]])
+  cl <- consensus_combine(E, element = "matrix") %>% 
+    magrittr::extract2(as.character(k)) %>% 
+    Reduce("+", .) %>% 
+    magrittr::divide_by(dim(E)[3]) %>% 
+    hcAEucl(k = k)
   return(cl)
 }
 
@@ -103,7 +106,6 @@ CSPA <- function(x, k, method = "average") {
 #' 
 #' @param E is an array of clustering results. An error is thrown if there are 
 #'   missing values. \code{\link{impute_missing}} can be used beforehand.
-#' @param data original data matrix with rows as samples, columns as variables
 #' @param k requested number of clusters
 #' @param dcCTS decay constant for CTS matrix
 #' @param dcSRS decay constant for SRS matrix
@@ -121,12 +123,12 @@ CSPA <- function(x, k, method = "average") {
 #' x <- ConClust(dat, nc = 4, reps = 4,
 #'               method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
 #' \dontrun{
-#' LCE(E = x, data = dat, k = 4, sim.mat = "asrs")
+#' LCE(E = x, k = 4, sim.mat = "asrs")
 #' }
 #' 
 #' x_imputed <- impute_missing(x, dat)$complete
-#' LCE(E = x_imputed, data = dat, k = 4, sim.mat = "cts")
-LCE <- function(E, data, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
+#' LCE(E = x_imputed, k = 4, sim.mat = "cts")
+LCE <- function(E, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
                 sim.mat = c("cts", "srs", "asrs")) {
   assertthat::assert_that(is.array(E),
                           dcCTS >= 0 && dcCTS <= 1,
@@ -134,10 +136,10 @@ LCE <- function(E, data, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
                           dcASRS >= 0 && dcASRS <= 1)
   # Check that the Cluster matrix is complete otherwise return Error
   if (anyNA(E)) stop("'E' must be complete for LCE algorithm.")
-  S <- switch(match.arg(sim.mat,c("cts","asrs","srs")),
+  S <- switch(match.arg(sim.mat, c("cts", "asrs", "srs")),
               cts = cts(E = E, dc = dcCTS),
               srs = srs(E = E, dc = dcSRS, R = R),
               asrs = asrs(E = E, dc = dcSRS))
-  LCE_cl <- CSPA(S, k)
+  LCE_cl <- hcAEucl(S, k)
   return(LCE_cl)
 }

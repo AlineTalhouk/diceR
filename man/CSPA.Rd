@@ -4,28 +4,26 @@
 \alias{CSPA}
 \title{Cluster-based Similarity Partitioning Algorithm (CSPA)}
 \usage{
-CSPA(x, k, method = "average")
+CSPA(E, k)
 }
 \arguments{
-\item{x}{a \code{\link{consensus_matrix}}}
+\item{E}{is an array of clustering results.}
 
 \item{k}{number of clusters}
-
-\item{method}{linkage type for hierarchical clustering. Defaults to
-"average". See \code{\link[stats]{hclust}} for details.}
 }
 \value{
 cluster assignments for the consensus class
 }
 \description{
-Performs hierarchical clustering on a consensus matrix to obtain consensus
-class labels.
+Performs hierarchical clustering on a stack of consensus matrices to obtain
+consensus class labels.
 }
 \examples{
-set.seed(2)
-x <- replicate(100, rbinom(100, 4, 0.2))
-cm <- consensus_matrix(x)
-CSPA(cm, k = 3)
+data(hgsc)
+dat <- t(hgsc[, -1])[1:100, 1:50]
+x <- ConClust(dat, nc = 4, reps = 4,
+              method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
+CSPA(x, k = 4)
 }
 \author{
 Derek Chiu
