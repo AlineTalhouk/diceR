@@ -51,8 +51,7 @@
 #' "pamEucl", "pamSpear"), consensusFUNS = c("kmodes", "majority", "LCE"), trim
 #' = TRUE, ref.cl = ref.cl)
 #' str(dice.obj)
-dice <- function(data, nk, reps = 10,
-                 algorithms = c("hcAEucl", "kmEucl", "scRbf", "gmmBIC"),
+dice <- function(data, nk, reps = 10, algorithms = NULL,
                  consensusFUNS = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
                  trim = FALSE, reweigh = FALSE, evaluate = TRUE,
@@ -86,7 +85,7 @@ dice <- function(data, nk, reps = 10,
     Final[, i] <- switch(consensusFUNS[i],
                          kmodes = k_modes(Ecomp),
                          majority = majority_voting(Ecomp),
-                         CSPA = CSPA(Ecomp, k), 
+                         CSPA = CSPA(E, k), 
                          LCE = LCE(drop(Ecomp), k = k,
                                    sim.mat = match.arg(sim.mat))
     )
