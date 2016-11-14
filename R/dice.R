@@ -65,7 +65,7 @@ dice <- function(data, nk, reps = 10,
   ncf <- length(consensusFUNS)
   
   # Generate Diverse Cluster Ensemble
-  E <- ConClust(data, nk = nk, reps = R, method = algorithms,
+  E <- ConClust(data, nk = nk, reps = reps, method = algorithms,
                 progress = progress)
   
   # Evaluate, trim, and reweigh
@@ -86,7 +86,7 @@ dice <- function(data, nk, reps = 10,
     Final[, i] <- switch(consensusFUNS[i],
                          kmodes = k_modes(Ecomp),
                          majority = majority_voting(Ecomp),
-                         CSPA = consensus_class(Ecomp, k), 
+                         CSPA = CSPA(Ecomp, k), 
                          LCE = LCE(drop(Ecomp), k = k,
                                    sim.mat = match.arg(sim.mat))
     )
