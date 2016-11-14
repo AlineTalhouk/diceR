@@ -19,7 +19,6 @@
 #' @param weights a vector of weights for each algorithm used in meta-consensus
 #'   clustering. Must have \code{length(weights)} equal to \code{ncol(data)}.
 #' @return a consensus matrix
-#' @family consensus functions
 #' @author Derek Chiu
 #' @export
 #' @examples

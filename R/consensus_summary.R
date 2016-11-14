@@ -6,7 +6,6 @@
 #' @param E output from \code{ConClust}
 #' @return A list with summaries for each algorithm. Each algorithm has a list 
 #'   with two elements: consensus_matrix and consensus_class
-#' @family consensus functions
 #' @author Derek Chiu
 #' @export
 #' @examples
@@ -21,7 +20,7 @@ consensus_summary <- function(E) {
       dim(E)[4],
       list(structure(1:dim(E)[3], names = dimnames(E)[[3]]))),
       dimnames(E)[[4]]))
-  con.cls <- mapply(function(cm, k) lapply(cm, consensus_class, k = k),
+  con.cls <- mapply(function(cm, k) lapply(cm, CSPA, k = k),
                     cm = con.mats, k = as.numeric(names(con.mats)),
                     SIMPLIFY = FALSE)
   out <- list(consensus_matrix = con.mats, consensus_class = con.cls) %>% 

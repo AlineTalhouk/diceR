@@ -29,7 +29,6 @@
 #' @param alg.names optional. Supply a vector of names for the algorithms.
 #' @return \code{consensus_combine} returns either a list of all consensus
 #'   matrices or a data frame showing all the consensus classes
-#' @family consensus functions
 #' @author Derek Chiu
 #' @export
 #' @examples
