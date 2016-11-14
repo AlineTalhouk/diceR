@@ -94,8 +94,8 @@ min_fnorm <- function(A, B = diag(nrow(A))) {
 #' Relabel clustering categories to match to a standard by minimizing
 #' the Frobenius norm between the two labels.
 #'
-#' @param cl.pred vector of predicted cluster assignments
-#' @param cl.ref vector of reference labels to match to
+#' @param pred.cl vector of predicted cluster assignments
+#' @param ref.cl vector of reference labels to match to
 #' @return A vector of relabeled cluster assignments
 #' @author Aline Talhouk
 #' @export
@@ -104,11 +104,11 @@ min_fnorm <- function(A, B = diag(nrow(A))) {
 #' pred <- sample(1:4, 100, replace = TRUE)
 #' true <- sample(1:4, 100, replace = TRUE)
 #' relabel_class(pred, true)
-relabel_class <- function(cl.pred, cl.ref) {
-  perm <- table(cl.pred, cl.ref) %>%
+relabel_class <- function(pred.cl, ref.cl) {
+  perm <- table(pred.cl, ref.cl) %>%
     min_fnorm() %>%
     use_series(perm)
-  res <- factor(cl.pred, levels = perm, labels = levels(factor(cl.ref)))
+  res <- factor(pred.cl, levels = perm, labels = levels(factor(ref.cl)))
   return(res)
 }
 
@@ -124,7 +124,7 @@ flatten_E <- function(E, is.relabelled) {
   # relabel using first clustering as reference
   if (!is.relabelled) {
     flat_E <- cbind(flat_E[, 1],
-                    apply(flat_E[, -1], 2, relabel_class, cl.ref = flat_E[, 1]))
+                    apply(flat_E[, -1], 2, relabel_class, ref.cl = flat_E[, 1]))
   }
   return(flat_E)
 }

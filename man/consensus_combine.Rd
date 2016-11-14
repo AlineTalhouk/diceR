@@ -5,25 +5,18 @@
 \alias{consensus_combine}
 \alias{consensus_evaluate}
 \alias{consensus_trim}
-\title{Combine, evaluate, trim, and weigh algorithms}
+\title{Combine, evaluate, trim, and reweigh algorithms}
 \usage{
-consensus_combine(..., k = NULL, progress = TRUE, element = c("matrix",
-  "class"), alg.names = NULL)
+consensus_combine(..., element = c("matrix", "class"), alg.names = NULL)
 
-consensus_evaluate(data, k, ..., cons.cl = NULL, ref.cl = NULL,
-  plot = TRUE)
+consensus_evaluate(data, ..., cons.cl = NULL, ref.cl = NULL, plot = FALSE)
 
-consensus_trim(data, k, ..., cons.cl = NULL, ref.cl = NULL,
-  quantile = 0.75, reweigh = FALSE)
+consensus_trim(data, ..., cons.cl = NULL, ref.cl = NULL, quantile = 0.75,
+  reweigh = FALSE, show.eval = TRUE)
 }
 \arguments{
 \item{...}{any number of objects outputted from
 \code{\link{ConClust}}}
-
-\item{k}{number of clusters requested. Default is \code{NULL}, which returns
-all k computed from \code{...}}
-
-\item{progress}{Should a progress bar be printed?}
 
 \item{element}{either "matrix" or "class" to extract the consensus matrix or
 consensus class, respectively.}
@@ -45,18 +38,32 @@ as \code{kmodes} and \code{majority_voting}}
 
 \item{reweigh}{logical; if \code{TRUE}, after trimming out poor performing
 algorithms, each algorithm is reweighed depending on its internal indices.}
+
+\item{show.eval}{logical; if \code{TRUE} (default), show the evaluation 
+output from \code{consensus_evaluate}}
 }
 \value{
 \code{consensus_combine} returns either a list of all consensus
   matrices or a data frame showing all the consensus classes
 
-\code{consensus_evaluate} returns a data frame of the indices in each
-  column for each algorithm.
+\code{consensus_evaluate} returns a list with the following elements
+  \item{k}{if \code{ref.cl} is not NULL, this is the number of distinct
+  classes in the reference; otherwise the chosen \code{k} is determined by
+  the one giving the largest mean PAC across algorithms}
+  \item{pac}{a data frame showing the PAC for each combination of algorithm
+  and cluster size}
+  \item{internal}{a list of data frames for all k showing internal evaluation
+  indices}
+  \item{external}{a data frame showing external evaluation indices for
+  \code{k}}
 
 \code{consensus_trim} returns a list with three elements 
-  \item{alg.keep}{algorithms kept} \item{alg.remove}{algorithms removed} 
-  \item{E_trimmed}{A trimmed version of a \code{ConClust} object. Potentially
-  no different than original depending on \code{quantile}}
+  \item{alg.keep}{algorithms kept}
+  \item{alg.remove}{algorithms removed}
+  \item{eval}{if \code{show.eval = TRUE}, the evaluation output is returned, 
+  otherwise \code{NULL}}
+  \item{data.new}{A new version of a \code{ConClust} data object. Potentially
+  no trimming depending on \code{quantile}} value.
 }
 \description{
 \code{consensus_combine} combines results for multiple objects from
@@ -90,18 +97,18 @@ CC1 <- ConClust(x, nc = 3:4, reps = 10, method = "apEucl")
 CC2 <- ConClust(x, nc = 3:4, reps = 10, method = "gmmBIC")
 
 # Combine and return either matrices or classes
-y1 <- consensus_combine(CC1, CC2, k = 4, element = "matrix")
+y1 <- consensus_combine(CC1, CC2, element = "matrix")
 str(y1)
-y2 <- consensus_combine(CC1, CC2, k = 4, element = "class")
+y2 <- consensus_combine(CC1, CC2, element = "class")
 str(y2)
 
 # Evaluate algorithms on internal and external indices and make plots
 set.seed(1)
 ref.cl <- sample(1:4, 50, replace = TRUE)
-z <- consensus_evaluate(x, k = 4, CC1, CC2, ref.cl = ref.cl, plot = FALSE)
+z <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, plot = FALSE)
 
 # Trim algorithms: remove those that rank low on internal indices
-CC3 <- consensus_trim(x, k = 4, CC1, CC2, ref.cl = ref.cl, quantile = 0.8)
+CC3 <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, quantile = 0.8)
 str(CC3)
 }
 \author{

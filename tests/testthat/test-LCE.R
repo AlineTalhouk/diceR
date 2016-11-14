@@ -5,7 +5,7 @@ test_that("Check LCE with hgsc data with 3 ConClust algorithms", {
   data(hgsc)
   dat <- t(hgsc[, -1])[1:200, 1:100]
   k <- 4
-  x <- ConClust(dat, nc = k, reps = 4, progress = FALSE,
+  x <- ConClust(dat, nk = k, reps = 4, progress = FALSE,
                 method = c("nmfEucl", "hcAEucl", "hcDianaEucl"))
   x_imputed <- impute_missing(x, dat)$complete
   y_cts <- LCE(E = x_imputed, data = dat, k = k, R = 5, sim.mat = "cts")

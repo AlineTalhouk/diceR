@@ -1,4 +1,4 @@
-#' Combine, evaluate, trim, and weigh algorithms
+#' Combine, evaluate, trim, and reweigh algorithms
 #'
 #' \code{consensus_combine} combines results for multiple objects from
 #' \code{ConClust()} and outputs either the consensus
@@ -24,9 +24,6 @@
 #'
 #' @param ... any number of objects outputted from
 #'   \code{\link{ConClust}}
-#' @param k number of clusters requested. Default is \code{NULL}, which returns
-#'   all k computed from \code{...}
-#' @param progress Should a progress bar be printed?
 #' @param element either "matrix" or "class" to extract the consensus matrix or
 #'   consensus class, respectively.
 #' @param alg.names optional. Supply a vector of names for the algorithms.
@@ -43,38 +40,37 @@
 #' CC2 <- ConClust(x, nc = 3:4, reps = 10, method = "gmmBIC")
 #' 
 #' # Combine and return either matrices or classes
-#' y1 <- consensus_combine(CC1, CC2, k = 4, element = "matrix")
+#' y1 <- consensus_combine(CC1, CC2, element = "matrix")
 #' str(y1)
-#' y2 <- consensus_combine(CC1, CC2, k = 4, element = "class")
+#' y2 <- consensus_combine(CC1, CC2, element = "class")
 #' str(y2)
 #' 
 #' # Evaluate algorithms on internal and external indices and make plots
 #' set.seed(1)
 #' ref.cl <- sample(1:4, 50, replace = TRUE)
-#' z <- consensus_evaluate(x, k = 4, CC1, CC2, ref.cl = ref.cl, plot = FALSE)
+#' z <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, plot = FALSE)
 #' 
 #' # Trim algorithms: remove those that rank low on internal indices
-#' CC3 <- consensus_trim(x, k = 4, CC1, CC2, ref.cl = ref.cl, quantile = 0.8)
+#' CC3 <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, quantile = 0.8)
 #' str(CC3)
-consensus_combine <- function(..., k = NULL, progress = TRUE,
-                              element = c("matrix", "class"),
+consensus_combine <- function(..., element = c("matrix", "class"),
                               alg.names = NULL) {
   cs <- abind::abind(list(...), along = 3)
-  obj <- consensus_summary(cs, k = k, progress = progress)
-  if (is.null(k)) {
-    obj <- unlist(obj, recursive = FALSE)
-  }
+  obj <- consensus_summary(cs)
   switch(match.arg(element),
          matrix = {
-           out <- lapply(obj, "[[", "consensus_matrix")
+           out <- lapply(obj, purrr::transpose) %>% 
+             lapply("[[", "consensus_matrix")
            if (!is.null(alg.names))
-             names(out) <- alg.names
+             out <- lapply(out, function(x) x %>% set_names(alg.names))
          },
          class = {
-           out <- apply(sapply(obj, "[[", "consensus_class"), c(1, 2),
-                        as.integer)
+           out <- lapply(obj, purrr::transpose) %>% 
+             lapply("[[", "consensus_class") %>% 
+             lapply(as.data.frame) %>% 
+             lapply(function(x) apply(x, 1:2, as.integer))
            if (!is.null(alg.names))
-             colnames(out) <- alg.names
+             out <- lapply(out, function(x) x %>% set_colnames(alg.names))
          })
   return(out)
 }

@@ -3,7 +3,7 @@ context("Graphical displays")
 
 set.seed(911)
 x <- matrix(rnorm(1000), nrow = 10)
-CC1 <- ConClust(x, nc = 2:4, reps = 10,
+CC1 <- ConClust(x, nk = 2:4, reps = 10,
                 method = c("hcAEucl", "apEucl", "gmmBIC"),
                 progress = FALSE)
 p1 <- graph_cdf(CC1)

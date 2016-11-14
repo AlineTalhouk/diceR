@@ -3,22 +3,28 @@
 #'   (trimmed).
 #' @param reweigh logical; if \code{TRUE}, after trimming out poor performing
 #'   algorithms, each algorithm is reweighed depending on its internal indices.
+#' @param show.eval logical; if \code{TRUE} (default), show the evaluation 
+#'   output from \code{consensus_evaluate}
 #' @inheritParams consensus_evaluate
 #' @return \code{consensus_trim} returns a list with three elements 
-#'   \item{alg.keep}{algorithms kept} \item{alg.remove}{algorithms removed} 
-#'   \item{E_trimmed}{A trimmed version of a \code{ConClust} object. Potentially
-#'   no different than original depending on \code{quantile}}
+#'   \item{alg.keep}{algorithms kept}
+#'   \item{alg.remove}{algorithms removed}
+#'   \item{eval}{if \code{show.eval = TRUE}, the evaluation output is returned, 
+#'   otherwise \code{NULL}}
+#'   \item{data.new}{A new version of a \code{ConClust} data object. Potentially
+#'   no trimming depending on \code{quantile}} value.
 #' @rdname consensus_combine
 #' @export
-consensus_trim <- function(data, k, ..., cons.cl = NULL, ref.cl = NULL,
-                           quantile = 0.75, reweigh = FALSE) {
+consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
+                           quantile = 0.75, reweigh = FALSE, show.eval = TRUE) {
   Sumrank <- Quantile <- NULL
   cc.obj <- abind::abind(list(...), along = 3)
-  z <- consensus_evaluate(data = data, k = k, cc.obj, cons.cl = cons.cl,
+  z <- consensus_evaluate(data = data, cc.obj, cons.cl = cons.cl,
                           ref.cl = ref.cl, plot = FALSE)
-  alg.all <- z$internal$Algorithms
-  z.main <- z$internal[, -c(1, 13:14)]
-  z.other <- z$internal[, -c(1:12)]
+  k <- z$k
+  alg.all <- z$internal[[k]]$Algorithms
+  z.main <- z$internal[[k]][, -c(1, 13:14)]
+  z.other <- z$internal[[k]][, -c(1:12)]
   bests <- mapply(function(z, n) clusterCrit::bestCriterion(z, n),
                   z = as.list(z.main), n = names(z.main))
   max.bests <- cbind(z.main[, apply(z.main, 2, which.max) == bests], z.other)
@@ -26,13 +32,13 @@ consensus_trim <- function(data, k, ..., cons.cl = NULL, ref.cl = NULL,
     apply(2, function(y) sum(y) - y)
   all.bests <- cbind(max.bests, min.bests)
   ind.ranks <- apply(all.bests, 2, rank)
-  sum.ranks <- data.frame(Algorithms = z$internal$Algorithms,
+  sum.ranks <- data.frame(Algorithms = alg.all,
                           Sumrank = apply(ind.ranks, 1, sum)) %>% 
     mutate(Quantile = Sumrank / max(Sumrank)) %>% 
     filter(Quantile >= quantile)
   alg.keep <- as.character(sum.ranks$Algorithms)
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
-  cc.trimmed <- cc.obj[, , alg.keep, as.character(z$k), drop = FALSE]
+  cc.trimmed <- cc.obj[, , alg.keep, k, drop = FALSE]
   
   if (reweigh && length(alg.keep) > 1) {
     max.bests <- max.bests %>% 
@@ -54,11 +60,17 @@ consensus_trim <- function(data, k, ..., cons.cl = NULL, ref.cl = NULL,
       abind::abind(along = 4)
     dimnames(cc.trimmed)[[3]] <- unname(unlist(
       mapply(rep, names(multiples), multiples)))
-    dimnames(cc.trimmed)[[4]] <- z$k
-  } 
+    dimnames(cc.trimmed)[[4]] <- k
+  }
+  if (show.eval) {
+    eval <- z
+  } else {
+    eval <- NULL
+  }
   return(list(alg.keep = alg.keep,
               alg.remove = alg.remove,
-              E_trimmed = cc.trimmed))
+              eval = eval,
+              data.new = cc.trimmed))
 }
 
 #' Recursively find the greater common divisor of two numbers

@@ -4,17 +4,18 @@
 \alias{dice}
 \title{Diverse Clustering Ensemble}
 \usage{
-dice(data, nk, R = 10, algorithms = c("hcAEucl", "kmEucl", "scRbf",
+dice(data, nk, reps = 10, algorithms = c("hcAEucl", "kmEucl", "scRbf",
   "gmmBIC"), consensusFUNS = c("kmodes", "CSPA", "majority", "LCE"),
   sim.mat = c("cts", "srs", "asrs"), trim = FALSE, reweigh = FALSE,
-  evaluate = TRUE, refClass = NULL, progress = TRUE)
+  evaluate = TRUE, ref.cl = NULL, progress = TRUE)
 }
 \arguments{
 \item{data}{matrix with rows as observations, columns as variables}
 
-\item{nk}{a range of cluster sizes (or a single value)}
+\item{nk}{number of clusters (k) requested; can specify a single integer or a
+range of integers to compute multiple k}
 
-\item{R}{number of data subsamples to generate. See \code{\link{ConClust}} 
+\item{reps}{number of data subsamples to generate. See \code{\link{ConClust}}
 for details.}
 
 \item{algorithms}{clustering algorithms to be used in the ensemble. Current 
@@ -26,7 +27,7 @@ options are "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
 (k-modes), "majority" (majority voting), "CSPA" (hierarchical clustering), 
 "LCE" (linkage clustering ensemble)}
 
-\item{sim.mat}{type of similarity matrix. One of "cts", "srs", "asrs. See
+\item{sim.mat}{type of similarity matrix. One of "cts", "srs", "asrs. See 
 \code{\link{LCE}} for details.}
 
 \item{trim}{logical; if \code{TRUE}, the number of algorithms in 
@@ -41,16 +42,16 @@ algorithms are given higher weight prior to consensus clustering by
 FALSE}.}
 
 \item{evaluate}{logical; if \code{TRUE} (default), validity indices are 
-returned. Internal validity indices are always computed. If \code{refClass}
+returned. Internal validity indices are always computed. If \code{ref.cl} 
 is not \code{NULL}, then external validity indices will also be computed.}
 
-\item{refClass}{reference class; a vector of length equal to the number of 
+\item{ref.cl}{reference class; a vector of length equal to the number of 
 observations.}
 
 \item{progress}{logical; if \code{TRUE} (default), progress bar is shown.}
 }
 \value{
-A final clustering assignment from the diverse clustering ensemble
+A final clustering assignment from the diverse clustering ensemble 
   method.
 }
 \description{
@@ -61,7 +62,7 @@ clusters (k).
 library(dplyr)
 data(hgsc)
 dat <- t(hgsc[, -1])
-refClass <- data.frame(initCol = rownames(dat)) \%>\%
+ref.cl <- data.frame(initCol = rownames(dat)) \%>\%
 tidyr::separate(initCol,
                 into = c("patientID", "Class"),
                 sep = "_") \%>\% 
@@ -70,7 +71,7 @@ tidyr::separate(initCol,
   as.integer()
 dice.obj <- dice(dat, nk = 4, algorithms = c("hcAEucl", "hcDianaEucl",
 "pamEucl", "pamSpear"), consensusFUNS = c("kmodes", "majority", "LCE"), trim
-= TRUE, refClass = refClass)
+= TRUE, ref.cl = ref.cl)
 str(dice.obj)
 }
 \author{
