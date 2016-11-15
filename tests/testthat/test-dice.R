@@ -4,9 +4,8 @@ context("Diverse Cluster Ensemble")
 data(hgsc)
 dat <- t(hgsc[, -1])
 
-test_that("dice works with one consensus funs", {
-  dice.obj <- dice(dat, nk = 4, algorithms = c("hcAEucl", "hcDianaEucl"),
-                   consensusFUNS = "kmodes")
+test_that("dice works with one algorithm, one consensus funs", {
+  dice.obj <- dice(dat, nk = 4, algorithms = "hcAEucl", consensusFUNS = "kmodes")
   expect_length(dice.obj, 2)
   expect_equal(dim(dice.obj$clusters), c(nrow(dat), 1))
 })
