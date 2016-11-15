@@ -60,19 +60,21 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   # Check that inputs are correct
   assertthat::assert_that(length(dim(data)) == 2)
   if (!is.null(ref.cl)) assertthat::assert_that(is.integer(ref.cl))
-  n <- dim(data)[1]
+  n <- nrow(data)
   ncf <- length(consensusFUNS)
   
   # Generate Diverse Cluster Ensemble
   E <- consensus_cluster(data = data, nk = nk, reps = reps,
                          algorithms = algorithms, progress = progress)
   
-  # Evaluate, trim, and reweigh
-  res.obj <- consensus_trim(data, E, ref.cl = ref.cl, reweigh = reweigh)
-  if (trim) E <- res.obj$data.new
-  
   # Select k
-  k <- res.obj$eval$k
+  k <- consensus_evaluate(data = data, E, ref.cl = ref.cl, plot = FALSE)$k
+  
+  # Evaluate, trim, and reweigh
+  if (length(algorithms) > 1 & trim) {
+    trim.obj <- consensus_trim(data, E, ref.cl = ref.cl, reweigh = reweigh)
+    E <- trim.obj$data.new
+  }
   
   # Impute Missing Values using KNN and majority vote
   imp.obj <- impute_missing(E, data)
@@ -92,7 +94,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   }
 
   # Relabel Final Clustering using reference
-  if (ncf == 1 & is.null(ref.cl)) {
+  if (is.null(ref.cl)) {
     # Don't relabel if only one consensus function and no reference class
     FinalR <- apply(Final, 2, as.integer)
   } else {
