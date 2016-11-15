@@ -26,8 +26,7 @@ test_that("names can be overwritten", {
 test_that("evaluation works with reference class and can plot", {
   cons.cl <- matrix(sample(1:4, 400, replace = TRUE), ncol = 4,
                     dimnames = list(NULL, LETTERS[1:4]))
-  expect_error(suppressWarnings(
-    consensus_evaluate(x, CC1, CC2, cons.cl = cons.cl, plot = TRUE), NA))
+  expect_warning(consensus_evaluate(x, CC1, CC2, cons.cl = cons.cl, plot = TRUE))
   expect_length(consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, plot = FALSE),
                 4)
 })
@@ -49,4 +48,10 @@ test_that("reweighing (potentially) replicates each slice of algorithm", {
   CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl,
                                 reweigh = TRUE)
   expect_error(CC3.trimmed, NA)
+})
+
+test_that("trimming doesn't have to show evaluation", {
+  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl,
+                                quantile = 0.8, show.eval = FALSE)
+  expect_null(CC3.trimmed$eval)
 })
