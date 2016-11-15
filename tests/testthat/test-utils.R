@@ -15,6 +15,9 @@ test_that("flatten uses first clustering as reference if not relabelled", {
   expect_error(flatten_E(E4, is.relabelled = FALSE), NA)
 })
 
+a <- matrix(c(60, 17, 58, 62, 81, 11, 32, 7, 28, 85, 80, 15, 19, 50, 45, 40,
+              88, 31, 84, 30, 99, 94, 61, 55, 27), ncol = 5)
+
 test_that("Check coord works with a matrix without duplicated entry", {
   expect_true(coord(a, 60)$rows == 1)
   expect_true(coord(a, 60)$cols == 1)
