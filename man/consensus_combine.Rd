@@ -23,7 +23,7 @@ consensus class, respectively.}
 
 \item{data}{data matrix with rows as samples and columns as variables}
 
-\item{cons.cl}{matrix of cluster assignments from consensus algorithms such
+\item{cons.cl}{matrix of cluster assignments from consensus functions such
 as \code{kmodes} and \code{majority_voting}}
 
 \item{ref.cl}{reference class}
