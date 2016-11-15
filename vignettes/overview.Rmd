@@ -95,7 +95,7 @@ hm <- graph_heatmap(CC[, , "pamSpear", "2", drop = FALSE])
 
 ### Combine consensus summaries with `consensus_combine()`
 
-The return value of `consensus_summary()` has `consensus_matrix` and `consensus_class` objects as sublists. If we wish to extract these separately for every algorithm, `consensus_combine()` is a convenient wrapper to do so. Setting `element = "matrix"` returns a list of consensus matrices. On the other hand, setting `element = "class"` returns a matrix with rows as samples, and columns as clustering assignments for each algorithm.
+If we wish to separately extract consensus matrices and consensus classes for every algorithm, `consensus_combine()` is a convenient wrapper to do so. Setting `element = "matrix"` returns a list of consensus matrices. On the other hand, setting `element = "class"` returns a matrix with rows as samples, and columns as clustering assignments for each algorithm.
 
 ```{r consensus_combine, results='hide'}
 ccomb_matrix <- consensus_combine(CC, element = "matrix")
@@ -109,7 +109,7 @@ kable(head(ccomb_class$`4`))
 
 One can feed in `ccomb_class` into `consensus_matrix()` to obtain a consensus matrix across both subsamples **and** algorithms.
 
-A situation might also arise where we initially decided on using 4 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. `consensus_combine()` takes in any number of `consensus_summary()` objects and combines the results.
+A situation might also arise where we initially decided on using 4 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. `consensus_combine()` takes in any number of ensemble objects (e.g. `CC` and `CC2`) and combines the results.
 
 ```{r consensus_combine_2, results='hide'}
 CC2 <- consensus_cluster(dat, nk = 2:4, reps = 10, pItem = 0.8,
@@ -123,7 +123,7 @@ kable(head(ccomb_class2$`4`))
 
 ### Compare algortihms with `consensus_evaluate()`
 
-Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose two indices on which to compare the ensemble of clustering algorithms. The first index is PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between `lower` (defaults to 0) and `upper` (defaults to 1). PAC gives a sense of cluster stability. The second index is CHI (Calinski-Harabasz Index) or pseudo F-statistic. It measures the ratio of between cluster distances to within cluster distances, and was observed in our simulations to be one of the more robust indices to different data structures.
+Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between `lower` (defaults to 0) and `upper` (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each `k`, and choose the `k` with the greatest average PAC. If there *is* a reference class, `k` is the number of distinct classes in the reference.
 
 ```{r consensus_evaluate, results='hide'}
 ccomp <- consensus_evaluate(dat, CC, CC2, plot = FALSE)
