@@ -3,7 +3,7 @@
 #' Generates multiple runs for consensus clustering among replicated subsamples 
 #' of a dataset as well as across different clustering algorithms.
 #' 
-#' The clustering algorithms provided in \code{ConClust} are:
+#' The clustering algorithms provided are:
 #' \itemize{ 
 #' \item{"nmfDiv": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence}
 #' \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
@@ -25,17 +25,17 @@
 #' 
 #' The progress bar for \code{parallel = FALSE} increments for every unit of 
 #' \code{reps}, where as for \code{parallel = TRUE}, the increments are for 
-#' every \code{method}. Additionally, when the progress bar is used in 
+#' \code{algorithms}. Additionally, when the progress bar is used in 
 #' conjunction with parallel computation, each worker outputs the attached 
 #' packages (and potential masking of functions).
 #' 
-#' @param x data matrix with rows as samples and columns as variables
+#' @param data data matrix with rows as samples and columns as variables
 #' @param nk number of clusters (k) requested; can specify a single integer or a
 #'   range of integers to compute multiple k
 #' @param pItem proportion of items to be used in subsampling within an 
 #'   algorithm
 #' @param reps number of subsamples
-#' @param method vector of clustering algorithms for performing consensus 
+#' @param algorithms vector of clustering algorithms for performing consensus 
 #'   clustering. Must be any number of the following: "nmfDiv", "nmfEucl", 
 #'   "hcAEucl", "hcDianaEucl", "kmEucl", "kmSpear", "pamEucl", "pamSpear", 
 #'   "apEucl", "scRbf", "gmmBIC", "biclust". See details.
@@ -48,7 +48,7 @@
 #'   uses all available cores.
 #' @param progress logical; should a progress bar be displayed?
 #' @param seed random seed to use for NMF-based algorithms
-#' @param seed.method seed to use to ensure each method operates on the same set
+#' @param seed.alg seed to use to ensure each algorithm operates on the same set
 #'   of subsamples
 #' @param min.sd minimum standard deviation threshold. See details.
 #' @param save logical; if \code{TRUE}, the returned object will be saved at 
@@ -57,8 +57,8 @@
 #' @param time.saved logical; if \code{TRUE}, the date saved is appended to the 
 #'   file name. Only applicable when \code{dir} is not \code{NULL}.
 #' @return An array of dimension \code{nrow(x)} by \code{reps} by 
-#'   \code{length(methods)} Each slice of the array is a matrix showing 
-#'   consensus clustering results for algorithms (method). The matrices have a 
+#'   \code{length(algorithms)} Each slice of the array is a matrix showing 
+#'   consensus clustering results for algorithms. The matrices have a 
 #'   row for each sample, and a column for each subsample. Each entry represents
 #'   a class membership.
 #' @author Derek Chiu, Aline Talhouk
@@ -67,15 +67,17 @@
 #' @examples
 #' data(hgsc)
 #' dat <- t(hgsc[, -1])
-#' x1 <- ConClust(dat, nk = 2:4, reps = 10, method = c("hcAEucl", "kmEucl"))
-ConClust <- function(x, nk = 2:4, pItem = 0.8, reps = 1000, method = NULL,
-                     parallel = NULL, ncores = NULL, progress = TRUE,
-                     seed = 123456, seed.method = 1, min.sd = 1, save = FALSE,
-                     file.name = "ConClustOutput", time.saved = FALSE) {
-  if (is.null(method))
-    method <- c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
-                "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf", "gmmBIC",
-                "biclust")
+#' x1 <- consensus_cluster(dat, nk = 2:4, reps = 10, algorithms = c("hcAEucl",
+#' "kmEucl"))
+consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
+                              algorithms = NULL, parallel = NULL, ncores = NULL,
+                              progress = TRUE, seed = 123456, seed.alg = 1,
+                              min.sd = 1, save = FALSE, file.name = "CCOutput",
+                              time.saved = FALSE) {
+  if (is.null(algorithms))
+    algorithms <- c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
+                    "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf",
+                    "gmmBIC", "biclust")
   if (is.null(ncores)) ncores <- parallel::detectCores() - 1
   if (is.null(parallel)) {
     if (reps >= 100 & ncores >= 2) {
@@ -88,7 +90,7 @@ ConClust <- function(x, nk = 2:4, pItem = 0.8, reps = 1000, method = NULL,
   } else if (!isTRUE(parallel)) {
     dopar <- FALSE
   }
-  x.rest <- prepare_data(x, min.sd = min.sd)
+  x.rest <- prepare_data(data, min.sd = min.sd)
   x.nmf <- x.rest %>%
     cbind(-.) %>%
     apply(2, function(x) ifelse(x < 0, 0, x))
@@ -96,25 +98,25 @@ ConClust <- function(x, nk = 2:4, pItem = 0.8, reps = 1000, method = NULL,
   n <- nrow(x.rest)
   n.new <- floor(n * pItem)
   lnk <- length(nk)
-  nm <- length(method)
+  nm <- length(algorithms)
   coclus <- array(NA, c(n, reps, nm, lnk),
-                  dimnames = list(samples, paste0("R", 1:reps), method, nk))
+                  dimnames = list(samples, paste0("R", 1:reps), algorithms, nk))
   if (!dopar) {
     if (progress)
       pb <- utils::txtProgressBar(max = lnk * nm * reps, style = 3)
     for (k in 1:lnk) {
       for (j in 1:nm) {
-        set.seed(seed.method)
+        set.seed(seed.alg)
         for (i in 1:reps) {
           if (progress) 
             utils::setTxtProgressBar(pb,
                                      (k - 1) * nm * reps + (j - 1) * reps + i)
           ind.new <- sample(n, n.new, replace = FALSE)
-          if (any(c("nmfDiv", "nmfEucl") %in% method))
+          if (any(c("nmfDiv", "nmfEucl") %in% algorithms))
             x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
                                                  function(x) all(x == 0)))])
           coclus[ind.new, i, j, k] <- switch(
-            method[j],
+            algorithms[j],
             nmfDiv = NMF::predict(NMF::nmf(
               x.nmf.samp, rank = nk[k], method = "brunet", seed = seed)),
             nmfEucl = NMF::predict(NMF::nmf(
@@ -166,7 +168,7 @@ ConClust <- function(x, nk = 2:4, pItem = 0.8, reps = 1000, method = NULL,
     doParallel::registerDoParallel(cl)
     coclus <- foreach(k = 1:lnk, .packages = c("foreach", "bioDist", "dplyr", "apcluster", "mclust")) %dopar% {
       foreach(j = 1:nm) %dopar% {
-        set.seed(seed.method)
+        set.seed(seed.alg)
         if (progress)
           pb <- utils::txtProgressBar(max = nm * reps, style = 3)
         foreach(i = 1:reps) %dopar% {
@@ -174,11 +176,11 @@ ConClust <- function(x, nk = 2:4, pItem = 0.8, reps = 1000, method = NULL,
             utils::setTxtProgressBar(pb,
                                      (k - 1) * nm * reps + (j - 1) * reps + i)
           ind.new <- sample(n, n.new, replace = FALSE)
-          if (any(c("nmfDiv", "nmfEucl") %in% method))
+          if (any(c("nmfDiv", "nmfEucl") %in% algorithms))
             x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
                                                  function(x) all(x == 0)))])
           coclus[ind.new, i, j, k] <- switch(
-            method[j],
+            algorithms[j],
             nmfDiv = NMF::predict(NMF::nmf(
               x.nmf.samp, rank = nk[k], method = "brunet", seed = seed)),
             nmfEucl = NMF::predict(NMF::nmf(
@@ -213,7 +215,7 @@ ConClust <- function(x, nk = 2:4, pItem = 0.8, reps = 1000, method = NULL,
     } %>%
       unlist() %>% 
       array(dim = c(n, reps, nm, lnk),
-            dimnames = list(samples, paste0("R", 1:reps), method, nk))
+            dimnames = list(samples, paste0("R", 1:reps), algorithms, nk))
     doParallel::stopImplicitCluster()
   }
   if (save) {

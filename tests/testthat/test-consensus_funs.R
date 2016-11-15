@@ -4,8 +4,8 @@ context("Consensus functions")
 data(hgsc)
 dat <- t(hgsc[, -1])[1:200, 1:100]
 k <- 4
-x <- ConClust(dat, nk = k, reps = 4, progress = FALSE,
-              method = c("nmfEucl", "hcAEucl", "hcDianaEucl"))
+x <- consensus_cluster(dat, nk = k, reps = 4, progress = FALSE,
+                       algorithms = c("nmfEucl", "hcAEucl", "hcDianaEucl"))
 x_imputed <- impute_missing(x, dat)$complete
 
 test_that("majority voting works", {
@@ -32,7 +32,7 @@ test_that("CSPA works", {
   expect_equal(dplyr::n_distinct(CSPA(x, k = 4)), 4)
 })
 
-test_that("Check LCE with hgsc data with 3 ConClust algorithms", {
+test_that("Check LCE with hgsc data with 3 consensus_cluster algorithms", {
   y_cts <- LCE(E = x_imputed, k = k, R = 5, sim.mat = "cts")
   y_srs <- LCE(E = x_imputed, k = k, R = 5, sim.mat = "srs")
   y_asrs <- LCE(E = x_imputed, k = k, R = 5, sim.mat = "asrs")

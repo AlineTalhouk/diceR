@@ -7,20 +7,20 @@
 consensus_summary(E)
 }
 \arguments{
-\item{E}{output from \code{ConClust}}
+\item{E}{output from \code{consensus_cluster}}
 }
 \value{
 A list with summaries for each algorithm. Each algorithm has a list 
   with two elements: consensus_matrix and consensus_class
 }
 \description{
-Given an object from \code{\link{ConClust}}, returns a list of consensus 
-matrices and consensus classes for each clustering algorithm.
+Given an object from \code{\link{consensus_cluster}}, returns a list of
+consensus matrices and consensus classes for each clustering algorithm.
 }
 \examples{
 data(hgsc)
 dat <- t(hgsc[, -1])
-x <- ConClust(dat, nc = 3:4, reps = 5, method = c("hcAEucl"))
+x <- consensus_cluster(dat, nk = 3:4, reps = 5, algorithms = "hcAEucl")
 cs <- consensus_summary(x)
 str(cs)
 }

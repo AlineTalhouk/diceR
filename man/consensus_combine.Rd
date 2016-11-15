@@ -16,7 +16,7 @@ consensus_trim(data, ..., cons.cl = NULL, ref.cl = NULL, quantile = 0.75,
 }
 \arguments{
 \item{...}{any number of objects outputted from
-\code{\link{ConClust}}}
+\code{\link{consensus_cluster}}}
 
 \item{element}{either "matrix" or "class" to extract the consensus matrix or
 consensus class, respectively.}
@@ -62,17 +62,17 @@ output from \code{consensus_evaluate}}
   \item{alg.remove}{algorithms removed}
   \item{eval}{if \code{show.eval = TRUE}, the evaluation output is returned, 
   otherwise \code{NULL}}
-  \item{data.new}{A new version of a \code{ConClust} data object. Potentially
-  no trimming depending on \code{quantile}} value.
+  \item{data.new}{A new version of a \code{consensus_cluster} data object.
+  Potentially no trimming depending on \code{quantile}} value.
 }
 \description{
 \code{consensus_combine} combines results for multiple objects from
-\code{ConClust()} and outputs either the consensus
+\code{consensus_cluster()} and outputs either the consensus
 matrices or consensus classes for all algorithms. \code{consensus_evaluate}
 evaluates algorithms on internal/external validation indices.
 \code{consensus_weigh} weighs clustering algorithms based on these two
 indices. \code{consensus_trim} removes algorithms that rank low on internal
-indices before using in ensemble clustering methods.
+indices before using in consensus functions.
 }
 \details{
 \code{consensus_combine} is useful for generating summaries because the
@@ -93,8 +93,8 @@ indices is not taken into account.
 # Consensus clustering for multiple algorithms
 set.seed(911)
 x <- matrix(rnorm(500), ncol = 10)
-CC1 <- ConClust(x, nc = 3:4, reps = 10, method = "apEucl")
-CC2 <- ConClust(x, nc = 3:4, reps = 10, method = "gmmBIC")
+CC1 <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = "apEucl")
+CC2 <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = "gmmBIC")
 
 # Combine and return either matrices or classes
 y1 <- consensus_combine(CC1, CC2, element = "matrix")

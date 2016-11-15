@@ -87,8 +87,8 @@ majority_voting <- function(E, is.relabelled = TRUE) {
 #' @examples
 #' data(hgsc)
 #' dat <- t(hgsc[, -1])[1:100, 1:50]
-#' x <- ConClust(dat, nc = 4, reps = 4,
-#'               method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
+#' x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("nmfEucl", 
+#' "hcAEucl", "hcDianaEucl"), save = FALSE)
 #' CSPA(x, k = 4)
 CSPA <- function(E, k) {
   assertthat::assert_that(k %in% dimnames(E)[[4]])
@@ -120,8 +120,8 @@ CSPA <- function(E, k) {
 #' @examples
 #' data(hgsc)
 #' dat <- t(hgsc[, -1])[1:100, 1:50]
-#' x <- ConClust(dat, nc = 4, reps = 4,
-#'               method = c("nmfEucl", "hcAEucl", "hcDianaEucl"), save = FALSE)
+#' x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("nmfEucl",
+#' "hcAEucl", "hcDianaEucl"), save = FALSE)
 #' \dontrun{
 #' LCE(E = x, k = 4, sim.mat = "asrs")
 #' }

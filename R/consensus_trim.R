@@ -11,8 +11,8 @@
 #'   \item{alg.remove}{algorithms removed}
 #'   \item{eval}{if \code{show.eval = TRUE}, the evaluation output is returned, 
 #'   otherwise \code{NULL}}
-#'   \item{data.new}{A new version of a \code{ConClust} data object. Potentially
-#'   no trimming depending on \code{quantile}} value.
+#'   \item{data.new}{A new version of a \code{consensus_cluster} data object.
+#'   Potentially no trimming depending on \code{quantile}} value.
 #' @rdname consensus_combine
 #' @export
 consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
