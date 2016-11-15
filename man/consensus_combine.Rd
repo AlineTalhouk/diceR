@@ -7,7 +7,7 @@
 \alias{consensus_trim}
 \title{Combine, evaluate, trim, and reweigh algorithms}
 \usage{
-consensus_combine(..., element = c("matrix", "class"), alg.names = NULL)
+consensus_combine(..., element = c("matrix", "class"))
 
 consensus_evaluate(data, ..., cons.cl = NULL, ref.cl = NULL, plot = FALSE)
 
