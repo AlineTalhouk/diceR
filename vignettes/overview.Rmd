@@ -79,18 +79,16 @@ We can carry on the analysis using either `CC` or `CC_imputed`.
 
 ### Compute consensus matrix with `consensus_matrix()`
 
-The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one's. Suppose we wanted to compute the consensus matrix for PAM only, and visualize using a heatmap.
+The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one's. Suppose we wanted to compute the consensus matrix for PAM only, and visualize using `graph_heatmap()`:
 
 ```{r consensus_matrix}
-cm <- consensus_matrix(CC[, , "pamSpear", "2"])
-gplots::heatmap.2(cm, dendrogram = "none", Rowv = TRUE, Colv = TRUE,
-                  trace = "none", labRow = NA, labCol = NA)
+pam.2 <- CC[, , "pamSpear", "2", drop = FALSE]
+cm <- consensus_matrix(pam.2)
+dim(cm)
 ```
 
-Or we can use `graph_heatmap()`:
-
 ```{r graph_heatmap}
-hm <- graph_heatmap(CC[, , "pamSpear", "2", drop = FALSE])
+hm <- graph_heatmap(pam.2)
 ```
 
 ### Combine consensus summaries with `consensus_combine()`
