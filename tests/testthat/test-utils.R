@@ -1,25 +1,6 @@
 
 context("Utility functions")
 
-library(cluster)
-data(votes.repub)
-
-test_that("diana hook works", {
-  d <- dist(votes.repub)
-  expect_length(diana_hook(d, k = 2), nrow(votes.repub))
-})
-
-test_that("data preparation removes columns", {
-  set.seed(2)
-  x <- replicate(10, rnorm(100, sd = 1))
-  expect_lt(ncol(prepare_data(x)), ncol(x))
-})
-
-test_that("spearman_dist same as bioDist::spearman.dist", {
-  dat <- as.matrix(votes.repub)
-  expect_identical(spearman_dist(dat), bioDist::spearman.dist(dat))
-})
-
 test_that("relabelling outputs a factor", {
   set.seed(2)
   pred <- sample(1:4, 100, replace = TRUE)

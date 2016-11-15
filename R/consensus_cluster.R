@@ -121,10 +121,8 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
               x.nmf.samp, rank = nk[k], method = "brunet", seed = seed)),
             nmfEucl = NMF::predict(NMF::nmf(
               x.nmf.samp, rank = nk[k], method = "lee", seed = seed)),
-            hcAEucl = stats::cutree(stats::hclust(
-              stats::dist(x.rest[ind.new, ]), method = "average"), nk[k]),
-            hcDianaEucl = stats::cutree(cluster::diana(
-              stats::dist(x.rest[ind.new, ]), diss = TRUE), nk[k]),
+            hcAEucl = hcAEucl(x.rest[ind.new, ], nk[k]),
+            hcDianaEucl = hcDianaEucl(x.rest[ind.new, ], nk[k]),
             kmEucl = stats::kmeans(
               stats::dist(x.rest[ind.new, ]), nk[k])$cluster,
             kmSpear = stats::kmeans(
@@ -185,10 +183,8 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
               x.nmf.samp, rank = nk[k], method = "brunet", seed = seed)),
             nmfEucl = NMF::predict(NMF::nmf(
               x.nmf.samp, rank = nk[k], method = "lee", seed = seed)),
-            hcAEucl = stats::cutree(stats::hclust(
-              stats::dist(x.rest[ind.new, ]), method = "average"), nk[k]),
-            hcDianaEucl = stats::cutree(cluster::diana(
-              stats::dist(x.rest[ind.new, ]), diss = TRUE), nk[k]),
+            hcAEucl = hcAEucl(x.rest[ind.new, ], nk[k]),
+            hcDianaEucl = hcDianaEucl(x.rest[ind.new, ], nk[k]),
             kmEucl = stats::kmeans(
               stats::dist(x.rest[ind.new, ]), nk[k])$cluster,
             kmSpear = stats::kmeans(
@@ -228,4 +224,62 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
     readr::write_rds(coclus, path = path)
   }
   return(coclus)
+}
+
+#' Prepare data for consensus clustering
+#'
+#' Remove variables with low signal and scale before consensus clustering
+#'
+#' The \code{min.sd} argument is used to filter the feature space for only
+#' highly variable features. Only features with a standard deviation across all
+#' samples greater than \code{min.sd} will be used.
+#'
+#' @param data data matrix with rows as samples and columns as variables
+#' @param min.sd minimum standard deviation threshold. See details.
+#' @return dataset prepared for usage in \code{consensus_cluster}
+#' @author Derek Chiu
+#' @export
+#' @examples
+#' set.seed(2)
+#' x <- replicate(10, rnorm(100))
+#' prepare_data(x)
+prepare_data <- function(data, min.sd = 1) {
+  dat.out <- data %>%
+    magrittr::extract(apply(., 1, function(x) !any(is.na(x))),
+                      apply(., 2, function(x) stats::sd(x, na.rm = TRUE)) >
+                        min.sd) %>%
+    scale()
+  return(dat.out)
+}
+
+#' Hierarchical clustering with Euclidean distance and Average linkage
+#' @param d data matrix
+#' @param k scalar indicating number of clusters to cut tree into
+#' @noRd
+hcAEucl <- function(d, k) {
+  return(as.integer(stats::cutree(stats::hclust(
+    stats::dist(d), method = "average"), k)))
+}
+
+#' Hierarchical clustering using DIvisive ANAlysis algorithm
+#'
+#' @inheritParams hcAEucl
+#' @noRd
+hcDianaEucl <- function(d, k) {
+  return(as.integer(stats::cutree(cluster::diana(
+    stats::dist(d), diss = TRUE), k)))
+}
+
+#' Calculate pairwise Spearman correlational distances using
+#' bioDist::spearman.dist defaults
+#' @references https://github.com/Bioconductor-mirror/bioDist/blob/master/R/spearman.dist.R
+#' @noRd
+spearman_dist <- function(x) {
+  rvec <- stats::cor(t(x), method = "spearman") %>% 
+    abs() %>% 
+    magrittr::subtract(1, .) %>% 
+    magrittr::extract(lower.tri(.))
+  attributes(rvec) <- list(Size = nrow(x), Labels = rownames(x), Diag = FALSE,
+                           Upper = FALSE, methods = "spearman", class = "dist")
+  return(rvec)
 }
