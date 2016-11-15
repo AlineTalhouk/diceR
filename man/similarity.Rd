@@ -18,7 +18,7 @@ cts(E, dc)
 
 \item{dc}{decay factor, ranges from 0 to 1 inclusive}
 
-\item{R}{number of iterations for simrank algorithm}
+\item{R}{number of iterations for \code{srs}}
 }
 \value{
 an N by N SRS, ASRS, or CTS matrix
@@ -26,19 +26,20 @@ an N by N SRS, ASRS, or CTS matrix
 \description{
 \code{srs} computes the simrank based similarity matrix, \code{asrs} computes
 the approximated simrank based similarity matrix, and \code{cts} computes the
-connected triple based similarity matrix
+connected triple based similarity matrix.
 }
 \examples{
 set.seed(1)
 E <- matrix(rep(sample(1:4, 800, replace = TRUE)), nrow = 100)
-SRS <- srs(E = E, dc = 0.8, R = 3)
-ASRS <- asrs(E = E, dc = 0.8)
-CTS <- cts(E = E, dc = 0.8)
+srs(E = E, dc = 0.8, R = 3)
+asrs(E = E, dc = 0.8)
+cts(E = E, dc = 0.8)
 }
 \author{
 Johnson Liu
 }
 \references{
-MATLAB function srs, cts, asrs in package LinkCluE by Simon Garrett
+MATLAB functions srs, cts, asrs in package LinkCluE by Simon
+  Garrett
 }
 

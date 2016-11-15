@@ -2,26 +2,27 @@
 #' 
 #' \code{srs} computes the simrank based similarity matrix, \code{asrs} computes
 #' the approximated simrank based similarity matrix, and \code{cts} computes the
-#' connected triple based similarity matrix
+#' connected triple based similarity matrix.
 #' 
 #' @param E an N by M matrix of cluster ensembles
 #' @param dc decay factor, ranges from 0 to 1 inclusive
-#' @param R number of iterations for simrank algorithm
-#' @references MATLAB function srs, cts, asrs in package LinkCluE by Simon Garrett   
+#' @param R number of iterations for \code{srs}
 #' @return an N by N SRS, ASRS, or CTS matrix
 #' @name similarity
 #' @author Johnson Liu
+#' @references MATLAB functions srs, cts, asrs in package LinkCluE by Simon
+#'   Garrett
 #' @export
 #' 
 #' @examples 
 #' set.seed(1)
 #' E <- matrix(rep(sample(1:4, 800, replace = TRUE)), nrow = 100)
-#' SRS <- srs(E = E, dc = 0.8, R = 3)
-#' ASRS <- asrs(E = E, dc = 0.8)
-#' CTS <- cts(E = E, dc = 0.8)
+#' srs(E = E, dc = 0.8, R = 3)
+#' asrs(E = E, dc = 0.8)
+#' cts(E = E, dc = 0.8)
 srs <- function(E, dc, R) {
-  assertthat::assert_that(is.matrix(E), is.numeric(R), dc >= 0 && dc <= 1,
-                          is_pos_int(R) == TRUE)
+  assertthat::assert_that(is.matrix(E), is.numeric(E),
+                          is.numeric(R), is_pos_int(R), dc >= 0 && dc <= 1)
   n <- nrow(E)
   M <- ncol(E)
   E.new <- relabel_clusters(E)
@@ -111,7 +112,7 @@ asrs <- function(E, dc) {
         for (jj in 1:M) {
           if (CS[E[i, j], E[ii, jj]] == 1) {
             S[i, ii] <- S[i, ii] + 1
-          } else{
+          } else {
             S[i, ii] <- S[i, ii] + dc * CS[E[i, j], E[ii, jj]]
           }
         }
@@ -127,7 +128,7 @@ asrs <- function(E, dc) {
 #' @rdname similarity
 #' @export
 cts <- function(E, dc) {
-  assertthat::assert_that(is.matrix(E), dc >= 0 && dc <= 1)
+  assertthat::assert_that(is.matrix(E), is.numeric(E), dc >= 0 && dc <= 1)
   n <- nrow(E)
   M <- ncol(E)
   E.new <- relabel_clusters(E)
@@ -157,7 +158,7 @@ cts <- function(E, dc) {
       for (j in (i + 1):n) {
         if (E[i, m] == E[j, m]) {
           S[i, j] = S[i, j] + 1
-        } else{
+        } else {
           S[i, j] = S[i, j] + dc * wCT[E[i, m], E[j, m]]
         }
       }
@@ -167,4 +168,66 @@ cts <- function(E, dc) {
   S <- S + t(S)
   S[row(S) == col(S)] <- 1
   return(S)
+}
+
+#' Relabel clusters in ensemble \code{E}
+#'
+#' @param E N by M cluster ensemble matrix
+#' @return A list with elements
+#' \item{newE}{N by M relabelled cluster ensemble matrix}
+#' \item{no_allcl}{total number of clusters in the ensemble}
+#' @author Johnson Liu
+#' @references MATLAB function relabelCl by Simon Garrett in LinkCluE package
+#' @noRd
+relabel_clusters <- function(E) {
+  if (!all(apply(E, 1:length(dim(E)), is_pos_int)))
+    stop("Error: one of the entries in the input matrix is not a positive integer.")
+  N <- nrow(E)
+  M <- ncol(E)
+  newE <- matrix(rep(0, N * M), nrow = N)
+  ucl <- sort(unique(E[, 1]))
+  if (max(E[, 1] != length(ucl)) == 1) {
+    for (j in 1:length(ucl)) {
+      newE[which(E[, 1] == ucl[j]), 1] <- j
+    }
+  }
+  for (i in 2:M) {
+    ucl <- sort(unique(E[, i]))
+    prevCl <- length(sort(unique(c(newE[, 1:(i - 1)]))))
+    for (j in 1:length(ucl)) {
+      newE[E[, i] == ucl[j], i] <- prevCl + j
+    }
+  }
+  no_allcl <- max(newE)
+  return(list(no_allcl = no_allcl, newE = newE))
+}
+
+#' Compute weight for each pair of clusters using their shared members (Jaccard
+#' coefficient)
+#' 
+#' @param E N by M cluster ensemble matrix
+#' @return a p by p weighted cluster matrix where p denotes number of classes
+#' @author Johnson Liu
+#' @references MATLAB function weightCl by Simon Garrett in package LinkCluE   
+#' @noRd
+weigh_clusters <- function(E) {
+  if (!all(apply(E, 1:length(dim(E)), is_pos_int)))
+    stop("Error: one of the entries in the input matrix is not a positive integer.")
+  N <- nrow(E)
+  no_allcl <- max(E)
+  pc <- matrix(rep(0, N * no_allcl), nrow = N)
+  for (i in 1:N) {
+    pc[i, E[i, ]] <- 1
+  }
+  wcl <- matrix(rep(0, no_allcl ^ 2), nrow = no_allcl)
+  for (i in 1:(no_allcl - 1)) {
+    for (j in (i + 1):no_allcl) {
+      tmp <- sum(as.numeric((pc[, i] + pc[, j])) > 0)
+      if (tmp > 0) {
+        wcl[i, j] <- sum(as.numeric((pc[, i] + pc[, j])) == 2) / tmp
+      }
+    }
+  }
+  wcl <- wcl + t(wcl)
+  return(wcl)
 }
