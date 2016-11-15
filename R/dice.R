@@ -6,14 +6,14 @@
 #' @param data matrix with rows as observations, columns as variables
 #' @param nk number of clusters (k) requested; can specify a single integer or a
 #'   range of integers to compute multiple k
-#' @param reps number of data subsamples to generate. See
+#' @param reps number of data subsamples to generate. See 
 #'   \code{\link{consensus_cluster}} for details.
 #' @param algorithms clustering algorithms to be used in the ensemble. Current 
 #'   options are "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl", 
 #'   "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf", "gmmBIC", and 
 #'   "biclust". See \code{\link{consensus_cluster}} for details.
-#' @param cons.funs consensus functions to use. Current options are "kmodes"
-#'   (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity
+#' @param cons.funs consensus functions to use. Current options are "kmodes" 
+#'   (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity 
 #'   Partitioning Algorithm), "LCE" (linkage clustering ensemble)
 #' @param sim.mat type of similarity matrix. One of "cts", "srs", "asrs. See 
 #'   \code{\link{LCE}} for details.
@@ -24,8 +24,7 @@
 #' @param reweigh logical; if \code{TRUE}, algorithms are reweighted based on 
 #'   internal validity index performance after trimming. Well-performing 
 #'   algorithms are given higher weight prior to consensus clustering by 
-#'   \code{cons.funs}. Defaults to \code{FALSE}. Ignored if \code{trim = 
-#'   FALSE}.
+#'   \code{cons.funs}. Defaults to \code{FALSE}. Ignored if \code{trim = FALSE}.
 #' @param evaluate logical; if \code{TRUE} (default), validity indices are 
 #'   returned. Internal validity indices are always computed. If \code{ref.cl} 
 #'   is not \code{NULL}, then external validity indices will also be computed.
@@ -47,9 +46,8 @@
 #'   magrittr::use_series(Class) %>% 
 #'   factor() %>% 
 #'   as.integer()
-#' dice.obj <- dice(dat, nk = 4, algorithms = c("hcAEucl", "hcDianaEucl",
-#' "pamEucl", "pamSpear"), cons.funs = c("kmodes", "majority", "LCE"), trim
-#' = TRUE, ref.cl = ref.cl)
+#' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hcAEucl", "pamEucl"),
+#' cons.funs = c("kmodes", "majority"), ref.cl = ref.cl)
 #' str(dice.obj)
 dice <- function(data, nk, reps = 10, algorithms = NULL,
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),

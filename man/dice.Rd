@@ -69,9 +69,9 @@ tidyr::separate(initCol,
   magrittr::use_series(Class) \%>\% 
   factor() \%>\% 
   as.integer()
-dice.obj <- dice(dat, nk = 4, algorithms = c("hcAEucl", "hcDianaEucl",
-"pamEucl", "pamSpear"), cons.funs = c("kmodes", "majority", "LCE"), trim
-= TRUE, ref.cl = ref.cl)
+dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hcAEucl",
+"hcDianaEucl", "pamEucl", "pamSpear"), cons.funs = c("kmodes", "majority"),
+trim = TRUE, ref.cl = ref.cl)
 str(dice.obj)
 }
 \author{

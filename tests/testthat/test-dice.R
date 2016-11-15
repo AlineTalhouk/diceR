@@ -19,9 +19,9 @@ test_that("dice works with multiple algorithms, consensus funs, trimming, and re
     factor() %>% 
     as.integer()
   
-  dice.obj <- dice(dat, nk = 4,
+  dice.obj <- dice(dat, nk = 4, reps = 5,
                    algorithms = c("hcAEucl", "hcDianaEucl", "pamEucl", "pamSpear"),
-                   cons.funs = c("kmodes", "majority", "LCE"),
+                   cons.funs = c("kmodes", "majority"),
                    trim = TRUE, ref.cl = ref.cl)
   expect_length(dice.obj, 2)
   expect_is(dice.obj$clusters, "matrix")
