@@ -9,7 +9,6 @@
 #' \item{no_allcl}{total number of clusters in the ensemble}
 #' @references MATLAB function relabelCl by Simon Garrett in LinkCluE package
 #' @author Johnson Liu
-#' @export
 #'
 #' @examples
 #' set.seed(1)

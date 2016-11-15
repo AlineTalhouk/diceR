@@ -7,7 +7,6 @@
 #' @references MATALAB function weightCl by Simon Garrett in package LinkCluE   
 #' @return a p by p weighted cluster matrix where p denotes number of classes
 #' @author Johnson Liu
-#' @export
 #' 
 #' @examples
 #' set.seed(1)
