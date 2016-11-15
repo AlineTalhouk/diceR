@@ -118,16 +118,16 @@ load('/home/gliu/documents/diceR/data/conClust_tcga.rda')
 
 
 #Begin evaluation
-consensusFUNS = c("kmodes", "majority", "cts", "asrs", "srs")
+cons.funs = c("kmodes", "majority", "cts", "asrs", "srs")
 n <- dim(data)[1]
-ncf <- length(consensusFUNS)
+ncf <- length(cons.funs)
 imp.obj <- impute_missing(conClust_tcga, data)
 Ecomp <- imp.obj$complete
 Final <- matrix(NA, nrow = n, ncol = ncf,
-                dimnames = list(rownames(data), consensusFUNS))
+                dimnames = list(rownames(data), cons.funs))
 for (i in 1:ncf) {
   cat(i)
-  Final[, i] <- switch(consensusFUNS[i],
+  Final[, i] <- switch(cons.funs[i],
                        kmodes = k_modes(Ecomp),
                        majority = majority_voting(Ecomp),
                        CSPA = majority_voting(Ecomp),

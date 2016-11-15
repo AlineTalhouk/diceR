@@ -6,25 +6,25 @@
 #' @param data matrix with rows as observations, columns as variables
 #' @param nk number of clusters (k) requested; can specify a single integer or a
 #'   range of integers to compute multiple k
-#' @param reps number of data subsamples to generate. See \code{\link{consensus_cluster}}
-#'   for details.
+#' @param reps number of data subsamples to generate. See
+#'   \code{\link{consensus_cluster}} for details.
 #' @param algorithms clustering algorithms to be used in the ensemble. Current 
 #'   options are "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl", 
 #'   "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf", "gmmBIC", and 
 #'   "biclust". See \code{\link{consensus_cluster}} for details.
-#' @param consensusFUNS consensus functions to use. Current options are "kmodes"
-#'   (k-modes), "majority" (majority voting), "CSPA" (hierarchical clustering), 
-#'   "LCE" (linkage clustering ensemble)
+#' @param cons.funs consensus functions to use. Current options are "kmodes"
+#'   (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity
+#'   Partitioning Algorithm), "LCE" (linkage clustering ensemble)
 #' @param sim.mat type of similarity matrix. One of "cts", "srs", "asrs. See 
 #'   \code{\link{LCE}} for details.
 #' @param trim logical; if \code{TRUE}, the number of algorithms in 
 #'   \code{algorithms} is reduced based on internal validity index performance 
-#'   prior to consensus clustering by \code{consensusFUNS}. Defaults to 
+#'   prior to consensus clustering by \code{cons.funs}. Defaults to 
 #'   \code{FALSE}.
 #' @param reweigh logical; if \code{TRUE}, algorithms are reweighted based on 
 #'   internal validity index performance after trimming. Well-performing 
 #'   algorithms are given higher weight prior to consensus clustering by 
-#'   \code{consensusFUNS}. Defaults to \code{FALSE}. Ignored if \code{trim = 
+#'   \code{cons.funs}. Defaults to \code{FALSE}. Ignored if \code{trim = 
 #'   FALSE}.
 #' @param evaluate logical; if \code{TRUE} (default), validity indices are 
 #'   returned. Internal validity indices are always computed. If \code{ref.cl} 
@@ -48,11 +48,11 @@
 #'   factor() %>% 
 #'   as.integer()
 #' dice.obj <- dice(dat, nk = 4, algorithms = c("hcAEucl", "hcDianaEucl",
-#' "pamEucl", "pamSpear"), consensusFUNS = c("kmodes", "majority", "LCE"), trim
+#' "pamEucl", "pamSpear"), cons.funs = c("kmodes", "majority", "LCE"), trim
 #' = TRUE, ref.cl = ref.cl)
 #' str(dice.obj)
 dice <- function(data, nk, reps = 10, algorithms = NULL,
-                 consensusFUNS = c("kmodes", "CSPA", "majority", "LCE"),
+                 cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
                  trim = FALSE, reweigh = FALSE, evaluate = TRUE,
                  ref.cl = NULL, progress = TRUE) {
@@ -61,7 +61,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   assertthat::assert_that(length(dim(data)) == 2)
   if (!is.null(ref.cl)) assertthat::assert_that(is.integer(ref.cl))
   n <- nrow(data)
-  ncf <- length(consensusFUNS)
+  ncf <- length(cons.funs)
   
   # Generate Diverse Cluster Ensemble
   E <- consensus_cluster(data = data, nk = nk, reps = reps,
@@ -82,9 +82,9 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   
   # Consensus functions
   Final <- matrix(NA, nrow = n, ncol = ncf,
-                  dimnames = list(rownames(data), consensusFUNS))
+                  dimnames = list(rownames(data), cons.funs))
   for (i in 1:ncf) {
-    Final[, i] <- switch(consensusFUNS[i],
+    Final[, i] <- switch(cons.funs[i],
                          kmodes = k_modes(Ecomp),
                          majority = majority_voting(Ecomp),
                          CSPA = CSPA(E, k), 

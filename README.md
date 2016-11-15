@@ -20,14 +20,14 @@ You can install `diceR` from github with:
 Example
 -------
 
-This basic example shows you how to use the main function of the package, `dice()`. A data matrix `dat` is partitioned into (a range of) `nk` clusters over `reps` bootstrap subsamples using each of the clustering `algorithms`. Clustering assignments are aggregated by the `consensusFUNS`.
+This basic example shows you how to use the main function of the package, `dice()`. A data matrix `dat` is partitioned into (a range of) `nk` clusters over `reps` bootstrap subsamples using each of the clustering `algorithms`. Clustering assignments are aggregated by the `cons.funs`.
 
 ``` r
 library(diceR)
 data(hgsc)
 dat <- t(hgsc[, -1])
 obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hcAEucl", "hcDianaEucl"),
-            consensusFUNS = c("kmodes", "majority"))
+            cons.funs = c("kmodes", "majority"))
 ```
 
 The first few cluster assignments are shown below:
@@ -45,7 +45,7 @@ knitr::kable(head(obj$clusters))
 |       4|         1|
 |       1|         1|
 
-You can also compare the base `algorithms` with the `consensusFUNS` using internal evaluation indices:
+You can also compare the base `algorithms` with the `cons.funs` using internal evaluation indices:
 
 ``` r
 knitr::kable(obj$indices$internal$`4`)
