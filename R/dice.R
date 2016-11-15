@@ -6,12 +6,12 @@
 #' @param data matrix with rows as observations, columns as variables
 #' @param nk number of clusters (k) requested; can specify a single integer or a
 #'   range of integers to compute multiple k
-#' @param reps number of data subsamples to generate. See \code{\link{ConClust}}
+#' @param reps number of data subsamples to generate. See \code{\link{consensus_cluster}}
 #'   for details.
 #' @param algorithms clustering algorithms to be used in the ensemble. Current 
 #'   options are "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl", 
 #'   "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf", "gmmBIC", and 
-#'   "biclust". See \code{\link{ConClust}} for details.
+#'   "biclust". See \code{\link{consensus_cluster}} for details.
 #' @param consensusFUNS consensus functions to use. Current options are "kmodes"
 #'   (k-modes), "majority" (majority voting), "CSPA" (hierarchical clustering), 
 #'   "LCE" (linkage clustering ensemble)
@@ -51,8 +51,7 @@
 #' "pamEucl", "pamSpear"), consensusFUNS = c("kmodes", "majority", "LCE"), trim
 #' = TRUE, ref.cl = ref.cl)
 #' str(dice.obj)
-dice <- function(data, nk, reps = 10,
-                 algorithms = c("hcAEucl", "kmEucl", "scRbf", "gmmBIC"),
+dice <- function(data, nk, reps = 10, algorithms = NULL,
                  consensusFUNS = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
                  trim = FALSE, reweigh = FALSE, evaluate = TRUE,
@@ -65,8 +64,8 @@ dice <- function(data, nk, reps = 10,
   ncf <- length(consensusFUNS)
   
   # Generate Diverse Cluster Ensemble
-  E <- ConClust(data, nk = nk, reps = R, method = algorithms,
-                progress = progress)
+  E <- consensus_cluster(data = data, nk = nk, reps = reps,
+                         algorithms = algorithms, progress = progress)
   
   # Evaluate, trim, and reweigh
   res.obj <- consensus_trim(data, E, ref.cl = ref.cl, reweigh = reweigh)
@@ -86,7 +85,7 @@ dice <- function(data, nk, reps = 10,
     Final[, i] <- switch(consensusFUNS[i],
                          kmodes = k_modes(Ecomp),
                          majority = majority_voting(Ecomp),
-                         CSPA = consensus_class(Ecomp, k), 
+                         CSPA = CSPA(E, k), 
                          LCE = LCE(drop(Ecomp), k = k,
                                    sim.mat = match.arg(sim.mat))
     )

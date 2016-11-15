@@ -4,10 +4,10 @@
 \alias{dice}
 \title{Diverse Clustering Ensemble}
 \usage{
-dice(data, nk, reps = 10, algorithms = c("hcAEucl", "kmEucl", "scRbf",
-  "gmmBIC"), consensusFUNS = c("kmodes", "CSPA", "majority", "LCE"),
-  sim.mat = c("cts", "srs", "asrs"), trim = FALSE, reweigh = FALSE,
-  evaluate = TRUE, ref.cl = NULL, progress = TRUE)
+dice(data, nk, reps = 10, algorithms = NULL, consensusFUNS = c("kmodes",
+  "CSPA", "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"),
+  trim = FALSE, reweigh = FALSE, evaluate = TRUE, ref.cl = NULL,
+  progress = TRUE)
 }
 \arguments{
 \item{data}{matrix with rows as observations, columns as variables}
@@ -15,13 +15,13 @@ dice(data, nk, reps = 10, algorithms = c("hcAEucl", "kmEucl", "scRbf",
 \item{nk}{number of clusters (k) requested; can specify a single integer or a
 range of integers to compute multiple k}
 
-\item{reps}{number of data subsamples to generate. See \code{\link{ConClust}}
+\item{reps}{number of data subsamples to generate. See \code{\link{consensus_cluster}}
 for details.}
 
 \item{algorithms}{clustering algorithms to be used in the ensemble. Current 
 options are "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl", 
 "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf", "gmmBIC", and 
-"biclust". See \code{\link{ConClust}} for details.}
+"biclust". See \code{\link{consensus_cluster}} for details.}
 
 \item{consensusFUNS}{consensus functions to use. Current options are "kmodes"
 (k-modes), "majority" (majority voting), "CSPA" (hierarchical clustering), 

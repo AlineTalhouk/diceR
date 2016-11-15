@@ -2,7 +2,7 @@
 #' 
 #' Impute missing values from bootstrapped subsampling
 #' 
-#' The default output from \code{ConClust} will undoubtedly contain \code{NA} 
+#' The default output from \code{consensus_cluster} will undoubtedly contain \code{NA} 
 #' entries because each replicate chooses a random subset (with replacement) of 
 #' all samples. Missing values are first imputed using KNN (K-Nearest 
 #' Neighbours), with the non-missing cases indicating the training set, and
@@ -10,7 +10,7 @@
 #' to be imputed by KNN. See \code{\link[class]{knn}} for details. Thus, any
 #' remaining missing values are imputed using majority voting.
 #' 
-#' @param E 4D array of clusterings from \code{ConClust}. The number of rows is 
+#' @param E 4D array of clusterings from \code{consensus_cluster}. The number of rows is 
 #'   equal to the number of cases to be clustered, number of columns is equal to
 #'   the clusterings obtained by different resamplings of the data, the third 
 #'   dimension are the different algorithms and the fourth dimension are cluster
@@ -28,8 +28,8 @@
 #' @examples
 #' data(hgsc)
 #' data <- t(hgsc[, -1])[1:100, 1:50]
-#' E <- ConClust(data, nc = 3:4, reps = 10, method = c("hcAEucl", "kmEucl",
-#' "scRbf"))
+#' E <- consensus_cluster(data, nk = 3:4, reps = 10, algorithms = c("hcAEucl",
+#' "kmEucl", "scRbf"))
 #' sum(is.na(E))
 #' E_imputed <- impute_missing(E, data)
 #' sum(is.na(E_imputed$knn))

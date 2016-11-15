@@ -3,8 +3,8 @@ context("Consensus combine, evaluate, trim, and weigh")
 
 set.seed(911)
 x <- matrix(rnorm(1000), nrow = 100)
-CC1 <- ConClust(x, nk = 2:4, reps = 5, method = "apEucl", progress = FALSE)
-CC2 <- ConClust(x, nk = 2:4, reps = 5, method = "gmmBIC", progress = FALSE)
+CC1 <- consensus_cluster(x, nk = 2:4, reps = 5, algorithms = "apEucl", progress = FALSE)
+CC2 <- consensus_cluster(x, nk = 2:4, reps = 5, algorithms = "gmmBIC", progress = FALSE)
 ref.cl <- sample(1:4, 100, replace = TRUE)
 
 test_that("combining results has expected lengths", {

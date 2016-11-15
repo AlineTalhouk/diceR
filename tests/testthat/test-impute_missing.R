@@ -3,8 +3,9 @@ context("Impute missing values")
 
 data(hgsc)
 data <- t(hgsc[, -1])
-E <- ConClust(data, nk = 4, reps = 10,
-              method = c("hcAEucl", "kmEucl", "scRbf"), progress = FALSE)
+E <- consensus_cluster(data, nk = 4, reps = 10,
+                       algorithms = c("hcAEucl", "kmEucl", "scRbf"),
+                       progress = FALSE)
 E_imputed <- impute_missing(E, data)
 
 test_that("knn has less than or equal number of NA after imputation", {

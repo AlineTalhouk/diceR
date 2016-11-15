@@ -20,8 +20,8 @@ graph_tracking(x)
 graph_all(x, ...)
 }
 \arguments{
-\item{x}{an object from \code{\link{ConClust}}, or a list of multiple objects
-from \code{\link{ConClust}}}
+\item{x}{an object from \code{\link{consensus_cluster}}, or a list of multiple objects
+from \code{\link{consensus_cluster}}}
 
 \item{main}{heatmap title. If \code{NULL} (default), the titles will be taken
 from names in \code{x}}
@@ -58,8 +58,8 @@ The current implementations of \code{graph_delta_area} and
 library(ggplot2)
 set.seed(911)
 x <- matrix(rnorm(100), ncol = 10)
-CC1 <- ConClust(x, nc = 2:4, reps = 5,
-method = c("hcAEucl", "apEucl", "gmmBIC"), progress = FALSE)
+CC1 <- consensus_cluster(x, nk = 2:4, reps = 5,
+algorithms = c("hcAEucl", "apEucl", "gmmBIC"), progress = FALSE)
 
 # Plot CDF
 p <- graph_cdf(CC1)
@@ -72,7 +72,7 @@ scale_color_brewer(palette = "Set2")
 p <- graph_delta_area(CC1)
 
 # Heatmaps with column side colours corresponding to clusters
-CC2 <- ConClust(x, nc = 3, reps = 5, method = "apEucl", progress = FALSE)
+CC2 <- consensus_cluster(x, nk = 3, reps = 5, algorithms = "apEucl", progress = FALSE)
 graph_heatmap(CC2)
 
 # Track how cluster assignments change between algorithms
