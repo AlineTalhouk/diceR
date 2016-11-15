@@ -28,6 +28,8 @@
 #' @param evaluate logical; if \code{TRUE} (default), validity indices are 
 #'   returned. Internal validity indices are always computed. If \code{ref.cl} 
 #'   is not \code{NULL}, then external validity indices will also be computed.
+#' @param plot logical; if \code{TRUE}, \code{\link{graph_all}} is called and 
+#'   relevant graphs are outputted. Ignored if \code{evaluate = FALSE}.
 #' @param ref.cl reference class; a vector of length equal to the number of 
 #'   observations.
 #' @param progress logical; if \code{TRUE} (default), progress bar is shown.
@@ -52,7 +54,7 @@
 dice <- function(data, nk, reps = 10, algorithms = NULL,
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
-                 trim = FALSE, reweigh = FALSE, evaluate = TRUE,
+                 trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
                  ref.cl = NULL, progress = TRUE) {
   
   # Check that inputs are correct
@@ -79,17 +81,15 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   Ecomp <- imp.obj$complete
   
   # Consensus functions
-  Final <- matrix(NA, nrow = n, ncol = ncf,
-                  dimnames = list(rownames(data), cons.funs))
-  for (i in 1:ncf) {
-    Final[, i] <- switch(cons.funs[i],
-                         kmodes = k_modes(Ecomp),
-                         majority = majority_voting(Ecomp),
-                         CSPA = CSPA(E, k), 
-                         LCE = LCE(drop(Ecomp), k = k,
-                                   sim.mat = match.arg(sim.mat))
+  Final <- sapply(cons.funs, function(x) {
+    switch(x,
+           kmodes = k_modes(Ecomp),
+           majority = majority_voting(Ecomp),
+           CSPA = CSPA(E, k),
+           LCE = LCE(drop(Ecomp), k = k,
+                     sim.mat = match.arg(sim.mat))
     )
-  }
+  })
 
   # Relabel Final Clustering using reference
   if (is.null(ref.cl)) {
@@ -103,13 +103,14 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   
   # Return evaluation output including consensus function results
   if (evaluate)
-    eval.obj <- consensus_evaluate(data, E, cons.cl = FinalR,
-                                   ref.cl = ref.cl, plot = FALSE)
+    eval.obj <- consensus_evaluate(data, E, cons.cl = FinalR, ref.cl = ref.cl,
+                                   plot = plot)
   
   # Add the reference class as the first column if provided
   if (!is.null(ref.cl)) {
     FinalR <- cbind(ref.cl, FinalR)
   }
+  rownames(FinalR) <- rownames(data)
   
   return(list(clusters = FinalR, indices = eval.obj))
 }
