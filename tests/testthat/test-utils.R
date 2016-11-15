@@ -15,45 +15,6 @@ test_that("flatten uses first clustering as reference if not relabelled", {
   expect_error(flatten_E(E4, is.relabelled = FALSE), NA)
 })
 
-a <- matrix(c(60, 17, 58, 62, 81, 11, 32, 7, 28, 85, 80, 15, 19, 50, 45, 40,
-              88, 31, 84, 30, 99, 94, 61, 55, 27), ncol = 5)
-
-test_that("Check colMax works with a matrix", {
-  expect_equal(colMax(matrix(1:16, ncol = 4)), c(4, 8, 12, 16))
-  expect_equal(colMax(a), c(81, 85, 80, 88, 99))
-})
-
-test_that("Check colMax throws error with wrong type of input", {
-  expect_error(colMax(data.frame(
-    names = c("a", "b", "c"), vals = c(17, 18, 19)
-  )))
-  expect_error(colMax(data.frame(
-    states = c("CALI", "TEXS", "NEWY"),
-    cities = c("san fran", "houston", "new york")
-  )))
-  expect_error(colMax(data.frame(
-    val1 = c(1, 2, 3), val2 = c(3, 6, 9)
-  )))
-})
-
-test_that("Check colMin works with a matrix", {
-  expect_equal(colMin(matrix(1:16, ncol = 4)), c(1, 5, 9, 13))
-  expect_equal(colMin(a), c(17, 7, 15, 30, 27))
-})
-
-test_that("Check colMin throws error with wrong type of input", {
-  expect_error(colMin(data.frame(
-    names = c("a", "b", "c"), vals = c(17, 18, 19)
-  )))
-  expect_error(colMin(data.frame(
-    states = c("CALI", "TEXS", "NEWY"),
-    cities = c("san fran", "houston", "new york")
-  )))
-  expect_error(colMin(data.frame(
-    val1 = c(1, 2, 3), val2 = c(4, 5, 6)
-  )))
-})
-
 test_that("Check coord works with a matrix without duplicated entry", {
   expect_true(coord(a, 60)$rows == 1)
   expect_true(coord(a, 60)$cols == 1)

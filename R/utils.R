@@ -78,28 +78,18 @@ flatten_E <- function(E, is.relabelled) {
   return(flat_E)
 }
 
-#' Form Row and Column Extremes
-#' 
-#' Form row and column maxs and mins for matrices
-#' 
+#' Column max for matrix
 #' @param x a matrix
 #' @param na.rm logical; Should missing values be omitted from consideration?
-#'   
-#' @return a vector containing the maximums or minimums for each column in
-#'   \code{x}
-#' @export
-#' 
-#' @examples
-#' a <- matrix(1:9, ncol = 3)
-#' colMax(a)
-#' colMin(a)
+#' @noRd
 colMax <- function(x, na.rm = TRUE) {
   assertthat::assert_that(is.matrix(x), is.numeric(x))
   return(apply(x, 2, max, na.rm = na.rm))
 }
 
-#' @rdname colMax
-#' @export
+#' Column min for matrix
+#' @inheritParams colMax
+#' @noRd
 colMin <- function(x, na.rm = TRUE) {
   assertthat::assert_that(is.matrix(x), is.numeric(x))
   return(apply(x, 2, min, na.rm = na.rm))
