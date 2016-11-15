@@ -26,7 +26,6 @@
 #'   \code{\link{consensus_cluster}}
 #' @param element either "matrix" or "class" to extract the consensus matrix or
 #'   consensus class, respectively.
-#' @param alg.names optional. Supply a vector of names for the algorithms.
 #' @return \code{consensus_combine} returns either a list of all consensus
 #'   matrices or a data frame showing all the consensus classes
 #' @author Derek Chiu
@@ -52,24 +51,19 @@
 #' # Trim algorithms: remove those that rank low on internal indices
 #' CC3 <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, quantile = 0.8)
 #' str(CC3)
-consensus_combine <- function(..., element = c("matrix", "class"),
-                              alg.names = NULL) {
+consensus_combine <- function(..., element = c("matrix", "class")) {
   cs <- abind::abind(list(...), along = 3)
   obj <- consensus_summary(cs)
   switch(match.arg(element),
          matrix = {
            out <- lapply(obj, purrr::transpose) %>% 
              lapply("[[", "consensus_matrix")
-           if (!is.null(alg.names))
-             out <- lapply(out, function(x) x %>% set_names(alg.names))
          },
          class = {
            out <- lapply(obj, purrr::transpose) %>% 
              lapply("[[", "consensus_class") %>% 
              lapply(as.data.frame) %>% 
              lapply(function(x) apply(x, 1:2, as.integer))
-           if (!is.null(alg.names))
-             out <- lapply(out, function(x) x %>% set_colnames(alg.names))
          })
   return(out)
 }

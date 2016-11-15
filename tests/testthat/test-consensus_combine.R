@@ -15,14 +15,6 @@ test_that("combining results has expected lengths", {
   expect_equal(ncol(data.frame(y2)), prod(dim(CC1)[3:4]) + prod(dim(CC2)[3:4]))
 })
 
-test_that("names can be overwritten", {
-  an <- LETTERS[1:2]
-  y3 <- consensus_combine(CC1, CC2, element = "matrix", alg.names = an)
-  y4 <- consensus_combine(CC1, CC2, element = "class", alg.names = an)
-  expect_identical(unique(unlist(lapply(y3, names))), an)
-  expect_identical(unique(unlist(lapply(y4, colnames))), an)
-})
-
 test_that("evaluation works with reference class and can plot", {
   cons.cl <- matrix(sample(1:4, 400, replace = TRUE), ncol = 4,
                     dimnames = list(NULL, LETTERS[1:4]))

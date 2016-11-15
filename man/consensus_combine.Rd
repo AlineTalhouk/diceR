@@ -21,8 +21,6 @@ consensus_trim(data, ..., cons.cl = NULL, ref.cl = NULL, quantile = 0.75,
 \item{element}{either "matrix" or "class" to extract the consensus matrix or
 consensus class, respectively.}
 
-\item{alg.names}{optional. Supply a vector of names for the algorithms.}
-
 \item{data}{data matrix with rows as samples and columns as variables}
 
 \item{cons.cl}{matrix of cluster assignments from consensus algorithms such
