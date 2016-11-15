@@ -41,14 +41,14 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   ind.int <- lapply(cl.mat, function(m) {
     data.frame(
       Algorithms = an,
-      plyr::aaply(m, 2, function(cl)
+      apply(m, 2, function(cl)
         clusterCrit::intCriteria(
           traj = x, part = cl,
           crit = c("C_index", "Calinski_Harabasz",
                    "Davies_Bouldin", "Dunn", "McClain_Rao",
                    "PBM", "SD_Dis", "Ray_Turi", "Tau",
                    "Gamma", "G_plus")) %>%
-          unlist()),
+          unlist()) %>% t(),
       Compactness = apply(m, 2, compactness, data = x),
       Connectivity = apply(m, 2, function(cl)
         clValid::connectivity(Data = x, clusters = cl))) %>%
@@ -62,12 +62,12 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
       extract2(match(k, names(.)))
     ind.ext <- data.frame(
       Algorithms = an,
-      plyr::aaply(cl.mat.ext, 2, function(cl)
+      apply(cl.mat.ext, 2, function(cl)
         clusterCrit::extCriteria(
           part1 = cl, part2 = ref.cl,
           crit = c("Hubert", "Jaccard", "McNemar",
                    "Precision", "Rand", "Recall")) %>%
-          unlist()),
+          unlist()) %>% t(),
       NMI = apply(cl.mat.ext, 2, ev_nmi, ref.lab = ref.cl)) %>%
       cbind(t(apply(cl.mat.ext, 2, ev_confmat, ref.lab = ref.cl))) %>%
       mutate_all(funs(structure(., names = an)))
