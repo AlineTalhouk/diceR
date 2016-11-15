@@ -2,7 +2,7 @@
 globalVariables(".")
 
 #' Hierarchical clustering with Euclidean distance and Average linkage
-#' @param d distance matrix
+#' @param d data matrix
 #' @param k scalar indicating number of clusters to cut tree into
 #' @noRd
 hcAEucl <- function(d, k) {
@@ -10,15 +10,13 @@ hcAEucl <- function(d, k) {
     stats::dist(d), method = "average"), k)))
 }
 
-#' Custom hook functions for DIvisive ANAlysis clustering algorithm
+#' Hierarchical clustering using DIvisive ANAlysis algorithm
 #'
-#' @param d distance matrix
-#' @param k scalar indicating number of clusters to cut tree into
+#' @inheritParams hcAEucl
 #' @noRd
-diana_hook <- function(d, k) {
-  tmp <- cluster::diana(d, diss = TRUE)
-  a <- stats::cutree(tmp, k)
-  return(a)
+hcDianaEucl <- function(d, k) {
+  return(as.integer(stats::cutree(cluster::diana(
+    stats::dist(d), diss = TRUE), k)))
 }
 
 #' Prepare data for consensus clustering
@@ -31,7 +29,7 @@ diana_hook <- function(d, k) {
 #'
 #' @param data data matrix with rows as samples and columns as variables
 #' @param min.sd minimum standard deviation threshold. See details.
-#' @return dataset prepared for usage in \code{ConClust}
+#' @return dataset prepared for usage in \code{consensus_cluster}
 #' @author Derek Chiu
 #' @export
 #' @examples
