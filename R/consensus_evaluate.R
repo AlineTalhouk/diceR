@@ -1,6 +1,6 @@
 #' @param data data matrix with rows as samples and columns as variables
 #' @param ref.cl reference class
-#' @param cons.cl matrix of cluster assignments from consensus algorithms such
+#' @param cons.cl matrix of cluster assignments from consensus functions such
 #'   as \code{kmodes} and \code{majority_voting}
 #' @param plot logical; if \code{TRUE}, \code{graph_all} is called
 #' @inheritParams consensus_combine
@@ -18,26 +18,36 @@
 #' @export
 consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                                plot = FALSE) {
+  # Extract classes and matrices separately
   x <- as.matrix(data)
   cc.obj <- abind::abind(list(...), along = 3)
   cl.mat <- consensus_combine(cc.obj, element = "class")
   cons.mat <- consensus_combine(cc.obj, element = "matrix")
+  
+  # Calculate PAC
   pac <- lapply(cons.mat, lapply, PAC) %>%
     plyr::ldply(unlist, .id = "k")
+  
+  # If no reference, k is number of distinct classes
   if (!is.null(ref.cl)) {
     k <- as.character(n_distinct(ref.cl))
-  } else {
+    # Otherwise k is the maximum average PAC across algorithms
+  } else {  
     k <- pac %>% 
       magrittr::use_series(k) %>% 
       magrittr::extract(apply(pac[, -1, drop = FALSE], 1, mean) %>% 
                           which.max())
   }
+  
+  # If matrix of cluster assignments from cons.funs given, cbind to cl.mat
   an <- dimnames(cc.obj)[3][[1]]
   if (!is.null(cons.cl)) {
     assertthat::assert_that(is.matrix(cons.cl))
     cl.mat <- lapply(cl.mat, cbind, cons.cl)
     an <- c(an, colnames(cons.cl))
   }
+  
+  # Internal indices
   ind.int <- lapply(cl.mat, function(m) {
     data.frame(
       Algorithms = an,
@@ -54,9 +64,13 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
         clValid::connectivity(Data = x, clusters = cl))) %>%
       mutate_all(funs(structure(., names = an)))
   })
+  
+  # Graph all plotting functions
   if (plot) {
     graph_all(cc.obj)
   }
+  
+  # Only calculate external indices if a reference is given
   if (!is.null(ref.cl)) {
     cl.mat.ext <- cl.mat %>% 
       extract2(match(k, names(.)))

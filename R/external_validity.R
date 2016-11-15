@@ -54,6 +54,7 @@ ev_confmat <- function(pred.lab, ref.lab) {
   # Relabel predicted classes
   pred.relab <- plyr::mapvalues(pred.lab, unique(pred.lab),
                                 min_fnorm(table(pred.lab, ref.lab))$ord)
+  # Confusion matrix, column/row sums, total, true/false positives/negatives
   CM <- table(pred.relab, ref.lab)
   clm <- colSums(CM)
   rwm <- rowSums(CM)
@@ -63,7 +64,7 @@ ev_confmat <- function(pred.lab, ref.lab) {
   FN <- rwm - TP
   TN <- N - (TP + FP + FN)
   
-  # Overall
+  # Overall confusion matrix statistics
   overall <- caret::confusionMatrix(pred.relab, ref.lab) %>%
     magrittr::use_series(overall) %>% 
     magrittr::extract(c("Accuracy", "Kappa", "AccuracyNull", "AccuracyPValue")) %>% 

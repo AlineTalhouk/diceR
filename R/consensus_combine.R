@@ -52,14 +52,17 @@
 #' CC3 <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, quantile = 0.8)
 #' str(CC3)
 consensus_combine <- function(..., element = c("matrix", "class")) {
+  # Combine ensemble arrays and reorganize into matrices and classes
   cs <- abind::abind(list(...), along = 3)
   obj <- consensus_summary(cs)
   switch(match.arg(element),
          matrix = {
+           # Transpose list levels and extract matrices
            out <- lapply(obj, purrr::transpose) %>% 
              lapply("[[", "consensus_matrix")
          },
          class = {
+           # Transpose list levels and extract classes, coercing to integer
            out <- lapply(obj, purrr::transpose) %>% 
              lapply("[[", "consensus_class") %>% 
              lapply(as.data.frame) %>% 
