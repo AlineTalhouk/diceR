@@ -4,7 +4,7 @@
 \alias{impute_missing}
 \title{Impute missing values}
 \usage{
-impute_missing(E, data, k, seed = 123456)
+impute_missing(E, data, nk, seed = 123456)
 }
 \arguments{
 \item{E}{4D array of clusterings from \code{consensus_cluster}. The number of rows is 
@@ -15,7 +15,7 @@ sizes.}
 
 \item{data}{data matrix with samples as rows and genes/features as columns}
 
-\item{k}{cluster size to extract data for}
+\item{nk}{cluster size to extract data for (single value)}
 
 \item{seed}{random seed for KNN reproducibility}
 }
