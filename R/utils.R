@@ -57,7 +57,8 @@ relabel_class <- function(pred.cl, ref.cl) {
   perm <- table(pred.cl, ref.cl) %>%
     min_fnorm() %>%
     use_series(perm)
-  res <- factor(pred.cl, levels = perm, labels = levels(factor(ref.cl)))
+  res <- factor(pred.cl, levels = perm, labels = levels(factor(ref.cl))) %>% 
+    as.integer()
   return(res)
 }
 
