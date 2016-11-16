@@ -78,17 +78,9 @@ flatten_E <- function(E, is.relabelled) {
   return(flat_E)
 }
 
-#' Column max for matrix
+#' Column min for matrix
 #' @param x a matrix
 #' @param na.rm logical; Should missing values be omitted from consideration?
-#' @noRd
-colMax <- function(x, na.rm = TRUE) {
-  assertthat::assert_that(is.matrix(x), is.numeric(x))
-  return(apply(x, 2, max, na.rm = na.rm))
-}
-
-#' Column min for matrix
-#' @inheritParams colMax
 #' @noRd
 colMin <- function(x, na.rm = TRUE) {
   assertthat::assert_that(is.matrix(x), is.numeric(x))
