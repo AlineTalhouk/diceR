@@ -68,7 +68,7 @@
 #' data(hgsc)
 #' dat <- t(hgsc[, -1])
 #' x1 <- consensus_cluster(dat, nk = 2:4, reps = 10, algorithms = c("hcAEucl",
-#' "kmEucl"))
+#' "kmEucl"), progress = FALSE)
 consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                               algorithms = NULL, parallel = NULL, ncores = NULL,
                               progress = TRUE, seed = 123456, seed.alg = 1,
@@ -242,7 +242,9 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
 #' @examples
 #' set.seed(2)
 #' x <- replicate(10, rnorm(100))
-#' prepare_data(x)
+#' x.prep <- prepare_data(x)
+#' dim(x)
+#' dim(x.prep)
 prepare_data <- function(data, min.sd = 1) {
   dat.out <- data %>%
     magrittr::extract(apply(., 1, function(x) !any(is.na(x))),

@@ -30,7 +30,7 @@
 #' data(hgsc)
 #' data <- t(hgsc[, -1])[1:100, 1:50]
 #' E <- consensus_cluster(data, nk = 3:4, reps = 10, algorithms = c("hcAEucl",
-#' "kmEucl", "scRbf"))
+#' "kmEucl", "scRbf"), progress = FALSE)
 #' sum(is.na(E))
 #' E_imputed <- impute_missing(E, data, 4)
 #' sum(is.na(E_imputed$knn))

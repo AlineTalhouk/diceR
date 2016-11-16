@@ -93,7 +93,7 @@ packages (and potential masking of functions).
 data(hgsc)
 dat <- t(hgsc[, -1])
 x1 <- consensus_cluster(dat, nk = 2:4, reps = 10, algorithms = c("hcAEucl",
-"kmEucl"))
+"kmEucl"), progress = FALSE)
 }
 \author{
 Derek Chiu, Aline Talhouk

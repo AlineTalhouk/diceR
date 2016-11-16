@@ -37,8 +37,8 @@ set.seed(2)
 x <- replicate(100, rbinom(100, 4, 0.2))
 w <- rexp(100)
 w <- w / sum(w)
-consensus_matrix(x)
-consensus_matrix(x, weights = w)
+cm1 <- consensus_matrix(x)
+cm2 <- consensus_matrix(x, weights = w)
 }
 \author{
 Derek Chiu

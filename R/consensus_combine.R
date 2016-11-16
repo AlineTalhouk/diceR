@@ -34,8 +34,10 @@
 #' # Consensus clustering for multiple algorithms
 #' set.seed(911)
 #' x <- matrix(rnorm(500), ncol = 10)
-#' CC1 <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = "apEucl")
-#' CC2 <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = "gmmBIC")
+#' CC1 <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = "apEucl",
+#' progress = FALSE)
+#' CC2 <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = "gmmBIC",
+#' progress = FALSE)
 #' 
 #' # Combine and return either matrices or classes
 #' y1 <- consensus_combine(CC1, CC2, element = "matrix")
@@ -50,7 +52,7 @@
 #' 
 #' # Trim algorithms: remove those that rank low on internal indices
 #' CC3 <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, quantile = 0.8)
-#' str(CC3)
+#' str(CC3, max.level = 2)
 consensus_combine <- function(..., element = c("matrix", "class")) {
   # Combine ensemble arrays and reorganize into matrices and classes
   cs <- abind::abind(list(...), along = 3)

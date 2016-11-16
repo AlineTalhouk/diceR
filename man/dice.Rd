@@ -73,7 +73,7 @@ tidyr::separate(initCol,
   as.integer()
 dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hcAEucl", "pamEucl"),
 cons.funs = c("kmodes", "majority"), ref.cl = ref.cl)
-str(dice.obj)
+str(dice.obj, max.level = 2)
 }
 \author{
 Aline Talhouk, Derek Chiu

@@ -50,7 +50,7 @@
 #'   as.integer()
 #' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hcAEucl", "pamEucl"),
 #' cons.funs = c("kmodes", "majority"), ref.cl = ref.cl)
-#' str(dice.obj)
+#' str(dice.obj, max.level = 2)
 dice <- function(data, nk, reps = 10, algorithms = NULL,
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),

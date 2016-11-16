@@ -26,8 +26,8 @@
 #' x <- replicate(100, rbinom(100, 4, 0.2))
 #' w <- rexp(100)
 #' w <- w / sum(w)
-#' consensus_matrix(x)
-#' consensus_matrix(x, weights = w)
+#' cm1 <- consensus_matrix(x)
+#' cm2 <- consensus_matrix(x, weights = w)
 consensus_matrix <- function(data, weights = NULL) {
   all.IM <- plyr::alply(data, 2, indicator_matrix)
   all.CM <- plyr::alply(data, 2, connectivity_matrix)

@@ -25,7 +25,9 @@ samples greater than \code{min.sd} will be used.
 \examples{
 set.seed(2)
 x <- replicate(10, rnorm(100))
-prepare_data(x)
+x.prep <- prepare_data(x)
+dim(x)
+dim(x.prep)
 }
 \author{
 Derek Chiu

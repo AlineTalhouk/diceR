@@ -31,9 +31,10 @@ connected triple based similarity matrix.
 \examples{
 set.seed(1)
 E <- matrix(rep(sample(1:4, 800, replace = TRUE)), nrow = 100)
-srs(E = E, dc = 0.8, R = 3)
-asrs(E = E, dc = 0.8)
-cts(E = E, dc = 0.8)
+SRS <- srs(E = E, dc = 0.8, R = 3)
+ASRS <- asrs(E = E, dc = 0.8)
+CTS <- cts(E = E, dc = 0.8)
+str_out <- sapply(list(SRS, ASRS, CTS), str)
 }
 \author{
 Johnson Liu

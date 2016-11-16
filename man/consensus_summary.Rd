@@ -20,7 +20,8 @@ consensus matrices and consensus classes for each clustering algorithm.
 \examples{
 data(hgsc)
 dat <- t(hgsc[, -1])
-x <- consensus_cluster(dat, nk = 3:4, reps = 5, algorithms = "hcAEucl")
+x <- consensus_cluster(dat, nk = 3:4, reps = 5, algorithms = "hcAEucl",
+progress = FALSE)
 cs <- consensus_summary(x)
 str(cs)
 }
