@@ -39,7 +39,7 @@ x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("nmfEucl",
 LCE(E = x, k = 4, sim.mat = "asrs")
 }
 
-x_imputed <- impute_missing(x, dat)$complete
+x_imputed <- impute_missing(x, dat, nk = 4)$complete
 LCE(E = x_imputed, k = 4, sim.mat = "cts")
 }
 \author{
