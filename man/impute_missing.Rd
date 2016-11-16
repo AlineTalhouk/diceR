@@ -4,7 +4,7 @@
 \alias{impute_missing}
 \title{Impute missing values}
 \usage{
-impute_missing(E, data, seed = 123456)
+impute_missing(E, data, k, seed = 123456)
 }
 \arguments{
 \item{E}{4D array of clusterings from \code{consensus_cluster}. The number of rows is 
@@ -15,13 +15,15 @@ sizes.}
 
 \item{data}{data matrix with samples as rows and genes/features as columns}
 
+\item{k}{cluster size to extract data for}
+
 \item{seed}{random seed for KNN reproducibility}
 }
 \value{
 A list with the following elements
   \item{knn}{E with (some) missing cases imputed using KNN}
   \item{complete}{flattened matrix of clusterings with complete cases imputed
-  using KNN and majority voting, and relabelled}
+  using KNN and majority voting, and relabelled, for chosen \code{k}}
 }
 \description{
 Impute missing values from bootstrapped subsampling
@@ -45,7 +47,7 @@ data <- t(hgsc[, -1])[1:100, 1:50]
 E <- consensus_cluster(data, nk = 3:4, reps = 10, algorithms = c("hcAEucl",
 "kmEucl", "scRbf"))
 sum(is.na(E))
-E_imputed <- impute_missing(E, data)
+E_imputed <- impute_missing(E, data, 4)
 sum(is.na(E_imputed$knn))
 sum(is.na(E_imputed$complete))
 }

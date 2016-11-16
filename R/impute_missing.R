@@ -16,11 +16,12 @@
 #'   dimension are the different algorithms and the fourth dimension are cluster
 #'   sizes.
 #' @param data data matrix with samples as rows and genes/features as columns
+#' @param nk cluster size to extract data for (single value)
 #' @param seed random seed for KNN reproducibility
 #' @return A list with the following elements
 #'   \item{knn}{E with (some) missing cases imputed using KNN}
 #'   \item{complete}{flattened matrix of clusterings with complete cases imputed
-#'   using KNN and majority voting, and relabelled}
+#'   using KNN and majority voting, and relabelled, for chosen \code{k}}
 #' @note We consider 5 nearest neighbours and the minimum vote for definite 
 #'   decision is 3.
 #' @author Aline Talhouk
@@ -31,12 +32,13 @@
 #' E <- consensus_cluster(data, nk = 3:4, reps = 10, algorithms = c("hcAEucl",
 #' "kmEucl", "scRbf"))
 #' sum(is.na(E))
-#' E_imputed <- impute_missing(E, data)
+#' E_imputed <- impute_missing(E, data, 4)
 #' sum(is.na(E_imputed$knn))
 #' sum(is.na(E_imputed$complete))
-impute_missing <- function(E, data, seed = 123456) {
+impute_missing <- function(E, data, nk, seed = 123456) {
   assertthat::assert_that(is.array(E), is.matrix(data),
-                          dim(E)[1] == nrow(data))
+                          dim(E)[1] == nrow(data),
+                          as.character(nk) %in% dimnames(E)[[4]])
   # KNN imputation
   E_knn <- apply(E, 2:4, impute_knn, data = data, seed = seed)
   
@@ -50,7 +52,9 @@ impute_missing <- function(E, data, seed = 123456) {
       return(as.numeric(x))
     }))
   }
-  return(list(knn = E_knn, complete = E_complete[, , 1]))
+  idk <- match(nk, dimnames(E)[[4]])
+  E_complete <- E_complete[, , idk]
+  return(list(knn = E_knn, complete = E_complete))
 }
 
 #' K-Nearest Neighbours imputation
