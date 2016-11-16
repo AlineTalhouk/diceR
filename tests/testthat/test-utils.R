@@ -1,11 +1,11 @@
 
 context("Utility functions")
 
-test_that("relabelling outputs a factor", {
+test_that("relabelling outputs a integer", {
   set.seed(2)
   pred <- sample(1:4, 100, replace = TRUE)
   true <- sample(1:4, 100, replace = TRUE)
-  expect_is(relabel_class(pred, true), "factor")
+  expect_is(relabel_class(pred, true), "integer")
 })
 
 test_that("flatten uses first clustering as reference if not relabelled", {
