@@ -61,7 +61,7 @@ kable(head(CC[, , "biclust", "3"]))
 Note the unavoidable presence of `NA`s because we used 80% subsampling. This can be problematic in certain downstream ensemble methods, so we can impute missing values using K-Nearest Neighbours beforehand. There might still be `NA`s after KNN because of how the decision threshold was set. The remaining missing values can be imputed using majority voting.
 
 ```{r impute_knn}
-CC_imputed <- impute_missing(CC, dat)$knn
+CC_imputed <- impute_missing(CC, dat, nk = 4)$knn
 sum(is.na(CC))
 sum(is.na(CC_imputed))
 ```
