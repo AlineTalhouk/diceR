@@ -77,7 +77,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   }
   
   # Impute Missing Values using KNN and majority vote
-  imp.obj <- impute_missing(E, data)
+  imp.obj <- impute_missing(E, data, k)
   Ecomp <- imp.obj$complete
   
   # Consensus functions
@@ -89,16 +89,16 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
            LCE = LCE(drop(Ecomp), k = k,
                      sim.mat = match.arg(sim.mat))
     )
-  })
+  }) %>%
+    apply(2, as.integer)
 
   # Relabel Final Clustering using reference
-  if (is.null(ref.cl)) {
-    # Don't relabel if only one consensus function and no reference class
-    FinalR <- apply(Final, 2, as.integer)
+  # Don't relabel if only one consensus function and no reference class
+  if (!is.null(ref.cl)) {
+    FinalR <- Final %>% 
+      apply(2, relabel_class, ref.cl = ref.cl)
   } else {
-    # Final classes need to be integer for certain functions to work
-    FinalR <- apply(Final, 2, function(x) as.integer(
-      relabel_class(pred.cl = x, ref.cl = ref.cl)))
+    FinalR <- Final
   }
   
   # Return evaluation output including consensus function results
@@ -108,7 +108,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   
   # Add the reference class as the first column if provided
   if (!is.null(ref.cl)) {
-    FinalR <- cbind(ref.cl, FinalR)
+    FinalR <- cbind(Reference = ref.cl, FinalR)
   }
   rownames(FinalR) <- rownames(data)
   
