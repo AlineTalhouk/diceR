@@ -59,7 +59,6 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   
   # Check that inputs are correct
   assertthat::assert_that(length(dim(data)) == 2)
-  if (!is.null(ref.cl)) assertthat::assert_that(is.integer(ref.cl))
   n <- nrow(data)
   ncf <- length(cons.funs)
   

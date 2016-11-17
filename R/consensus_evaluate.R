@@ -19,7 +19,8 @@
 consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                                plot = FALSE) {
   # Assertions
-  assertthat::assert_that(nrow(data) == length(ref.cl))
+  if (!is.null(ref.cl))
+    assertthat::assert_that(is.integer(ref.cl), nrow(data) == length(ref.cl))
   
   # Extract classes and matrices separately
   x <- as.matrix(data)
