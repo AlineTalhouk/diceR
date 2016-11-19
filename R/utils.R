@@ -1,6 +1,10 @@
 # magrittr placeholder
 globalVariables(".")
 
+#' Same binary operator as %in% except for partial matching
+#' @noRd
+`%pin%` <- function(x, table) pmatch(x, table, nomatch = 0L) > 0L
+
 #' Minimize Frobenius norm for between two matrices
 #' 
 #' Finds a permutation of a matrix such that its Frobenius norm with another
