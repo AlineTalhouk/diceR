@@ -285,3 +285,49 @@ spearman_dist <- function(x) {
                            Upper = FALSE, methods = "spearman", class = "dist")
   return(rvec)
 }
+
+#' Return a list of distance matrices
+#' @param x data matrix
+#' @param dist a character vector of distance methods taken from stats::dist, or
+#'   "spearman", or a custom distance function in the current environment
+#' @noRd
+distances <- function(x, dist) {
+  # Change partial matching distance methods from stats::dist to full names
+  METHODS <- c("euclidean", "maximum", "manhattan", "canberra",
+               "binary", "minkowski")
+  dist <- ifelse(dist %pin% METHODS, METHODS[pmatch(dist, METHODS)], dist)
+  
+  # Check if spearman distance is used (starts with string)
+  sp.idx <- sapply(paste0("^", dist), grepl, "spearman")
+  if (any(sp.idx)) {
+    spear <- setNames(list(spearman_dist(x)), "spearman")
+    d <- dist[!sp.idx]
+  } else {
+    d <- dist
+  }
+  
+  # If only spearman requested
+  if (length(d) == 0) {
+    return(spear)
+  } else {
+    # Identify custom distance functions from those found in stats::dist
+    check <- setNames(lapply(d, function(d)
+      try(stats::dist(x = x, method = d), silent = TRUE)), d)
+    is.error <- sapply(check, inherits, "try-error")
+    succeeded <- which(!is.error)
+    failed <- which(is.error)
+    
+    # Search for custom function in parent environments
+    if (length(failed) > 0) {
+      custom <- setNames(lapply(names(check[failed]), function(d) get(d)(x)),
+                         names(failed))
+    } else {
+      custom <- NULL
+    }
+    
+    # Combine distances into list and return in same order as dist argument
+    dlist <- c(spear, check[succeeded], custom) %>% 
+      magrittr::extract(pmatch(dist, names(.)))
+    return(dlist)
+  }
+}
