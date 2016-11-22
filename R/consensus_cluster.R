@@ -303,6 +303,7 @@ distances <- function(x, dist) {
     spear <- setNames(list(spearman_dist(x)), "spearman")
     d <- dist[!sp.idx]
   } else {
+    spear <- NULL
     d <- dist
   }
   
