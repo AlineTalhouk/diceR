@@ -26,23 +26,37 @@ consensus_cluster2 <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
   data.prep <- prepare_data(data, min.sd = min.sd)
   nmf.arr <- other.arr <- dist.arr <- NULL
   check.dists <- distances(data.prep, distance)
+  lnk <- length(nk)
+  lnmf <- ifelse("nmf" %in% algorithms, length(nmf.method), 0)
+  ldist <- sum(!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")) * length(distance)
+  lother <- sum(c("ap", "sc", "gmm", "block") %in% algorithms)
+  if (progress) {
+    pb <- utils::txtProgressBar(max = lnk * (lnmf + lother + ldist) * reps, style = 3)
+  } else {
+    pb <- NULL
+  }
   
   if (is.null(algorithms))
     algorithms <- c("nmf", "hc", "diana", "km", "pam",
                     "ap", "sc", "gmm", "block")
   
   if ("nmf" %in% algorithms) {
-    nmf.arr <- cluster_nmf(data.prep, nk, pItem, reps, nmf.method, seed, seed.alg)
-  }
-  
-  oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block")]
-  if (length(oalgs) > 0) {
-    other.arr <- cluster_other(data.prep, nk, pItem, reps, oalgs, seed, seed.alg)
+    nmf.arr <- cluster_nmf(data.prep, nk, pItem, reps, nmf.method,
+                           seed, seed.alg, progress, pb)
   }
   
   dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")]
   if (length(dalgs) > 0) {
-    dist.arr <- cluster_dist(data.prep, nk, pItem, reps, dalgs, distance, seed, seed.alg)
+    dist.arr <- cluster_dist(data.prep, nk, pItem, reps, dalgs, distance,
+                             seed, seed.alg, progress, pb,
+                             offset = lnk * lnmf * reps)
+  }
+  
+  oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block")]
+  if (length(oalgs) > 0) {
+    other.arr <- cluster_other(data.prep, nk, pItem, reps, oalgs,
+                               seed, seed.alg, progress, pb,
+                               offset = lnk * (lnmf + ldist) * reps)
   }
   
   all.arr <- abind::abind(nmf.arr, dist.arr, other.arr, along = 3)
@@ -51,7 +65,8 @@ consensus_cluster2 <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
 
 #' Cluster NMF-based algorithms
 #' @noRd
-cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed, seed.alg) {
+cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed, seed.alg,
+                        progress, pb) {
   x.nmf <- data %>%
     cbind(-.) %>%
     apply(2, function(x) ifelse(x < 0, 0, x))
@@ -73,6 +88,8 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed, seed.alg) {
                                                function(x) all(x == 0)))])
         nmf.arr[ind.new, i, j, k] <- NMF::predict(NMF::nmf(
           x.nmf.samp, rank = nk[k], method = nmf.method[j], seed = seed))
+        if (progress)
+          utils::setTxtProgressBar(pb, (k - 1) * lnmf * reps + (j - 1) * reps + i)
       }
     }
   }
@@ -81,11 +98,13 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed, seed.alg) {
 
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
-cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed, seed.alg) {
+cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed, seed.alg,
+                         progress, pb, offset) {
   n <- nrow(data)
   n.new <- floor(n * pItem)
   ld <- length(distance)
-  ldist <- prod(length(dalgs), ld)
+  lalg <- length(dalgs)
+  ldist <- prod(lalg, ld)
   lnk <- length(nk)
   dist.arr <- array(NA, c(n, reps, ldist, lnk),
                     dimnames = list(rownames(data),
@@ -95,13 +114,17 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed, seed.alg)
                                           1, function(x) paste0(x[2], "_", x[1])),
                                     nk))
   for (k in 1:lnk) {
-    for (j in 1:length(dalgs)) {
+    for (j in 1:lalg) {
       for (d in 1:ld) {
         set.seed(seed.alg)
         for (i in 1:reps) {
           ind.new <- sample(n, n.new, replace = FALSE)
           dists <- distances(data[ind.new, ], distance[d])
           dist.arr[ind.new, i, (j - 1) * ld + d, k] <- get(dalgs[j])(dists[[1]], nk[k])
+          if (progress)
+            utils::setTxtProgressBar(pb, (k - 1) * lalg * ld * reps +
+                                       (j - 1) * ld * reps +
+                                       (d - 1) * reps + i + offset)
         }
       }
     }
@@ -111,18 +134,19 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed, seed.alg)
 
 #' Cluster other algorithms
 #' @noRd
-cluster_other <- function(data, nk, pItem, reps, oalgs, seed, seed.alg) {
+cluster_other <- function(data, nk, pItem, reps, oalgs, seed, seed.alg,
+                          progress, pb, offset) {
   n <- nrow(data)
   n.new <- floor(n * pItem)
-  lalgs <- length(oalgs)
+  lalg <- length(oalgs)
   lnk <- length(nk)
-  other.arr <- array(NA, c(n, reps, lalgs, lnk),
+  other.arr <- array(NA, c(n, reps, lalg, lnk),
                      dimnames = list(rownames(data),
                                      paste0("R", 1:reps),
                                      toupper(oalgs),
                                      nk))
   for (k in 1:lnk) {
-    for (j in 1:length(oalgs)) {
+    for (j in 1:lalg) {
       set.seed(seed.alg)
       for (i in 1:reps) {
         ind.new <- sample(n, n.new, replace = FALSE)
@@ -139,6 +163,9 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed, seed.alg) {
                  block = blockcluster::cocluster(
                    data[ind.new, ], "continuous",
                    nbcocluster = c(nk[k], nk[k]))@rowclass + 1)
+        if (progress)
+          utils::setTxtProgressBar(pb, (k - 1) * lalg * reps +
+                                     (j - 1) * reps + i + offset)
       }
     }
   }
