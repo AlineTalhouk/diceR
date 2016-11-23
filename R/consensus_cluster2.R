@@ -3,11 +3,20 @@
 #' @examples 
 #' data(hgsc)
 #' dat <- t(hgsc[, -1])
-#' test <- consensus_cluster(dat, reps = 5, algorithms = c("nmfDiv", "hcAEucl", "scRbf"))
-#' test2 <- consensus_cluster2(dat, reps = 5, algorithms = c("nmf", "hc", "sc"), nmf.method = "brunet", distance = c("euclidean", "myDistFunc"))
-#' str(test)
-#' str(test2)
-#' identical(unname(test), unname(test2))
+#' 
+#' # Custom distance function
+#' manh = function(x) {
+#'   stats::dist(x, method = "manhattan")
+#' }
+#' 
+#' # Custom clustering algorithm
+#' agnes <- function(d, k) {
+#'   return(as.integer(stats::cutree(cluster::agnes(d, diss = TRUE), k)))
+#' }
+#' 
+#' cc <- consensus_cluster2(dat, reps = 5, algorithms = c("hc", "agnes"),
+#' distance = c("euclidean", "manh"))
+#' str(cc)
 consensus_cluster2 <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                                algorithms = NULL, nmf.method = c("brunet", "lee"),
                                distance = "euclidean",
@@ -16,6 +25,8 @@ consensus_cluster2 <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                                time.saved = FALSE) {
   data.prep <- prepare_data(data, min.sd = min.sd)
   nmf.arr <- other.arr <- dist.arr <- NULL
+  check.dists <- distances(data.prep, distance)
+  
   if (is.null(algorithms))
     algorithms <- c("nmf", "hc", "diana", "km", "pam",
                     "ap", "sc", "gmm", "block")
@@ -29,7 +40,7 @@ consensus_cluster2 <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
     other.arr <- cluster_other(data.prep, nk, pItem, reps, oalgs, seed, seed.alg)
   }
   
-  dalgs <- algorithms[algorithms %in% c("hc", "diana", "km", "pam")]
+  dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")]
   if (length(dalgs) > 0) {
     dist.arr <- cluster_dist(data.prep, nk, pItem, reps, dalgs, distance, seed, seed.alg)
   }
@@ -132,11 +143,6 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed, seed.alg) {
     }
   }
   return(other.arr)
-}
-
-#' @noRd
-myDistFunc = function(x) {
-  stats::dist(x, method = "manhattan")
 }
 
 #' @noRd
