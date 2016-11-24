@@ -26,7 +26,7 @@ This basic example shows you how to use the main function of the package, `dice(
 library(diceR)
 data(hgsc)
 dat <- t(hgsc[, -1])
-obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hcAEucl", "hcDianaEucl"),
+obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hc", "diana"),
             cons.funs = c("kmodes", "majority"))
 ```
 
@@ -36,14 +36,14 @@ The first few cluster assignments are shown below:
 knitr::kable(head(obj$clusters))
 ```
 
-|  kmodes|  majority|
-|-------:|---------:|
-|       4|         1|
-|       4|         1|
-|       1|         1|
-|       4|         1|
-|       4|         1|
-|       1|         1|
+|                      |  kmodes|  majority|
+|----------------------|-------:|---------:|
+| TCGA.04.1331\_PRO.C5 |       4|         1|
+| TCGA.04.1332\_MES.C1 |       4|         1|
+| TCGA.04.1336\_DIF.C4 |       1|         1|
+| TCGA.04.1337\_MES.C1 |       4|         1|
+| TCGA.04.1338\_MES.C1 |       4|         1|
+| TCGA.04.1341\_PRO.C5 |       1|         1|
 
 You can also compare the base `algorithms` with the `cons.funs` using internal evaluation indices:
 
@@ -51,12 +51,12 @@ You can also compare the base `algorithms` with the `cons.funs` using internal e
 knitr::kable(obj$indices$internal$`4`)
 ```
 
-| Algorithms  |   c\_index|  calinski\_harabasz|  davies\_bouldin|       dunn|  mcclain\_rao|        pbm|    sd\_dis|  ray\_turi|        tau|      gamma|    g\_plus|  Compactness|  Connectivity|
-|:------------|----------:|-------------------:|----------------:|----------:|-------------:|----------:|----------:|----------:|----------:|----------:|----------:|------------:|-------------:|
-| hcAEucl     |  0.2108494|            19.41823|         3.292021|  0.3107600|     0.8077705|   20.76198|  0.1835442|   4.136054|  0.3829042|  0.6339045|  0.0667878|     23.84512|      90.57857|
-| hcDianaEucl |  0.2197691|            52.63775|         2.201666|  0.3314038|     0.8402420|   40.85617|  0.1382588|   1.625841|  0.3374781|  0.4982350|  0.1151047|     21.96780|     245.91349|
-| kmodes      |  0.1535169|            65.35652|         1.984004|  0.3403104|     0.8019908|   42.90585|  0.1771115|   2.148789|  0.4044636|  0.6382378|  0.0726419|     21.39036|     269.61310|
-| majority    |  0.2272101|            27.50499|         2.038839|  0.3096773|     0.8148563|  129.67108|  0.1138123|   1.060246|  0.3620268|  0.6068949|  0.0699412|     23.84113|      72.42857|
+| Algorithms       |   c\_index|  calinski\_harabasz|  davies\_bouldin|       dunn|  mcclain\_rao|        pbm|    sd\_dis|  ray\_turi|        tau|      gamma|    g\_plus|  Compactness|  Connectivity|
+|:-----------------|----------:|-------------------:|----------------:|----------:|-------------:|----------:|----------:|----------:|----------:|----------:|----------:|------------:|-------------:|
+| HC\_Euclidean    |  0.2108494|            19.41823|         3.292021|  0.3107600|     0.8077705|   20.76198|  0.1835442|   4.136054|  0.3829042|  0.6339045|  0.0667878|     23.84512|      90.57857|
+| DIANA\_Euclidean |  0.2197691|            52.63775|         2.201666|  0.3314038|     0.8402420|   40.85617|  0.1382588|   1.625841|  0.3374781|  0.4982350|  0.1151047|     21.96780|     245.91349|
+| kmodes           |  0.1535169|            65.35652|         1.984004|  0.3403104|     0.8019908|   42.90585|  0.1771115|   2.148789|  0.4044636|  0.6382378|  0.0726419|     21.39036|     269.61310|
+| majority         |  0.2272101|            27.50499|         2.038839|  0.3096773|     0.8148563|  129.67108|  0.1138123|   1.060246|  0.3620268|  0.6068949|  0.0699412|     23.84113|      72.42857|
 
 Pipeline
 --------
