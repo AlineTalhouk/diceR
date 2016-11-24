@@ -96,7 +96,8 @@ CSPA <- function(E, k) {
     magrittr::extract2(as.character(k)) %>% 
     Reduce("+", .) %>% 
     magrittr::divide_by(dim(E)[3]) %>% 
-    hcAEucl(k = k)
+    stats::dist() %>% 
+    hc(k = k)
   return(cl)
 }
 
@@ -140,6 +141,6 @@ LCE <- function(E, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
               cts = cts(E = E, dc = dcCTS),
               srs = srs(E = E, dc = dcSRS, R = R),
               asrs = asrs(E = E, dc = dcSRS))
-  LCE_cl <- hcAEucl(S, k)
+  LCE_cl <- hc(stats::dist(S), k)
   return(LCE_cl)
 }
