@@ -22,14 +22,15 @@ algorithm}
 
 \item{algorithms}{vector of clustering algorithms for performing consensus 
 clustering. Must be any number of the following: "nmf", 
-"hc", "diana", "km", "pam", "ap", "sc", "gmm", "block". See details.}
+"hc", "diana", "km", "pam", "ap", "sc", "gmm", "block". See details. Can
+use a custom clustering algorithm. See example.}
 
 \item{nmf.method}{specify NMF-based algorithms to run. By default the 
 "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 details.}
 
 \item{distance}{a vector of distance functions. Defaults to "euclidean". Can 
-use a custom distance function.}
+use a custom distance function. See example.}
 
 \item{progress}{logical; should a progress bar be displayed?}
 
@@ -88,7 +89,7 @@ data(hgsc)
 dat <- t(hgsc[, -1])
 
 # Custom distance function
-manh = function(x) {
+manh <- function(x) {
   stats::dist(x, method = "manhattan")
 }
 

@@ -34,12 +34,13 @@
 #' @param reps number of subsamples
 #' @param algorithms vector of clustering algorithms for performing consensus 
 #'   clustering. Must be any number of the following: "nmf", 
-#'   "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block". See details.
+#'   "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block". See details. Can
+#'   use a custom clustering algorithm. See example.
 #' @param nmf.method specify NMF-based algorithms to run. By default the 
 #'   "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 #'   details.
 #' @param distance a vector of distance functions. Defaults to "euclidean". Can 
-#'   use a custom distance function.
+#'   use a custom distance function. See example.
 #' @param progress logical; should a progress bar be displayed?
 #' @param seed random seed to use for NMF-based algorithms
 #' @param seed.alg seed to use to ensure each algorithm operates on the same set
@@ -63,7 +64,7 @@
 #' dat <- t(hgsc[, -1])
 #' 
 #' # Custom distance function
-#' manh = function(x) {
+#' manh <- function(x) {
 #'   stats::dist(x, method = "manhattan")
 #' }
 #' 
