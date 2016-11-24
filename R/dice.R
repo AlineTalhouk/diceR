@@ -9,9 +9,8 @@
 #' @param reps number of data subsamples to generate. See 
 #'   \code{\link{consensus_cluster}} for details.
 #' @param algorithms clustering algorithms to be used in the ensemble. Current 
-#'   options are "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl", 
-#'   "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf", "gmmBIC", and 
-#'   "biclust". See \code{\link{consensus_cluster}} for details.
+#'   options are "nmf", "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block".
+#'   See \code{\link{consensus_cluster}} for details.
 #' @param nmf.method specify NMF-based algorithms to run. By default the 
 #'   "brunet" and "lee" algorithms are called. See
 #'   \code{\link{consensus_cluster}} for details.
@@ -54,8 +53,8 @@
 #'   magrittr::use_series(Class) %>% 
 #'   factor() %>% 
 #'   as.integer()
-#' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hc", "pam"), 
-#' cons.funs = c("kmodes", "majority"), ref.cl = ref.cl)
+#' dice.obj <- dice(dat, nk = 4, reps = 3, algorithms = "hc", cons.funs =
+#' "kmodes", ref.cl = ref.cl)
 #' str(dice.obj, max.level = 2)
 dice <- function(data, nk, reps = 10, algorithms = NULL,
                  nmf.method = c("brunet", "lee"), distance = "euclidean",

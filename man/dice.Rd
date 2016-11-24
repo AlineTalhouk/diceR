@@ -20,9 +20,8 @@ range of integers to compute multiple k}
 \code{\link{consensus_cluster}} for details.}
 
 \item{algorithms}{clustering algorithms to be used in the ensemble. Current 
-options are "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl", 
-"kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf", "gmmBIC", and 
-"biclust". See \code{\link{consensus_cluster}} for details.}
+options are "nmf", "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block".
+See \code{\link{consensus_cluster}} for details.}
 
 \item{nmf.method}{specify NMF-based algorithms to run. By default the 
 "brunet" and "lee" algorithms are called. See
@@ -80,8 +79,8 @@ tidyr::separate(initCol,
   magrittr::use_series(Class) \%>\% 
   factor() \%>\% 
   as.integer()
-dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hc", "pam"), 
-cons.funs = c("kmodes", "majority"), ref.cl = ref.cl)
+dice.obj <- dice(dat, nk = 4, reps = 3, algorithms = "hc", cons.funs =
+"kmodes", ref.cl = ref.cl)
 str(dice.obj, max.level = 2)
 }
 \author{
