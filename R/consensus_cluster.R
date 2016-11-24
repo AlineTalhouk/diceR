@@ -4,30 +4,27 @@
 #' of a dataset as well as across different clustering algorithms.
 #' 
 #' The clustering algorithms provided are:
-#' \itemize{ 
-#' \item{"nmfDiv": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence}
-#' \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
-#' \item{"hcAEucl": }{Hierarchical Clustering using Average linkage and Euclidean distance}
-#' \item{"hcDianaEucl": }{Divisive Hierarchical Clustering using Euclidean distance}
-#' \item{"kmEucl": }{K-Means using Euclidean distance}
-#' \item{"kmSpear": }{K-Means using Spearman distance} 
-#' \item{"pamEucl": }{Partition Around Mediods using Euclidean distance} 
-#' \item{"pamSpear": }{Partition Around Mediods using Spearman distance} 
-#' \item{"apEucl": }{Affinity Propagation using Euclidean distance} 
-#' \item{"scRbf": }{Spectral Clustering using Radial-Basis kernel function} 
-#' \item{"gmmBIC": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm}
-#' \item{"biclust": }{Biclustering using a latent block model} 
+#' \itemize{
+#'   \item{"nmf": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence} 
+#'   \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
+#'   \item{"hc": }{Hierarchical Clustering}
+#'   \item{"diana": }{DIvisive ANAlysis Clustering}
+#'   \item{"km": }{K-Means Clustering}
+#'   \item{"pam": }{Partition Around Mediods}
+#'   \item{"ap": }{Affinity Propagation}
+#'   \item{"sc": }{Spectral Clustering using Radial-Basis kernel function}
+#'   \item{"gmm": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm} 
+#'   \item{"block": }{Biclustering using a latent block model}
 #' }
+#' 
+#' The \code{nmf.method} defaults are "brunet" (Kullback-Leibler divergence) and
+#' "lee" (Euclidean distance).
 #' 
 #' The \code{min.sd} argument is used to filter the feature space for only 
 #' highly variable features. Only features with a standard deviation across all 
 #' samples greater than \code{min.sd} will be used.
 #' 
-#' The progress bar for \code{parallel = FALSE} increments for every unit of 
-#' \code{reps}, where as for \code{parallel = TRUE}, the increments are for 
-#' \code{algorithms}. Additionally, when the progress bar is used in 
-#' conjunction with parallel computation, each worker outputs the attached 
-#' packages (and potential masking of functions).
+#' The progress bar increments for every unit of \code{reps}.
 #' 
 #' @param data data matrix with rows as samples and columns as variables
 #' @param nk number of clusters (k) requested; can specify a single integer or a
@@ -36,16 +33,13 @@
 #'   algorithm
 #' @param reps number of subsamples
 #' @param algorithms vector of clustering algorithms for performing consensus 
-#'   clustering. Must be any number of the following: "nmfDiv", "nmfEucl", 
-#'   "hcAEucl", "hcDianaEucl", "kmEucl", "kmSpear", "pamEucl", "pamSpear", 
-#'   "apEucl", "scRbf", "gmmBIC", "biclust". See details.
-#' @param parallel logical; if \code{TRUE}, the function registers a parallel 
-#'   backend from the \code{doParallel} package and runs a foreach loop. By 
-#'   default, \code{parallel = NULL} means the function determines, based on 
-#'   other parameters, whether to use parallel or not (e.g. number of
-#'   \code{reps}, availability of multiple cores).
-#' @param ncores number of CPU cores to use for parallel computation. Default 
-#'   uses all available cores.
+#'   clustering. Must be any number of the following: "nmf", 
+#'   "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block". See details.
+#' @param nmf.method specify NMF-based algorithms to run. By default the 
+#'   "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
+#'   details.
+#' @param distance a vector of distance functions. Defaults to "euclidean". Can 
+#'   use a custom distance function.
 #' @param progress logical; should a progress bar be displayed?
 #' @param seed random seed to use for NMF-based algorithms
 #' @param seed.alg seed to use to ensure each algorithm operates on the same set
@@ -58,162 +52,72 @@
 #'   file name. Only applicable when \code{dir} is not \code{NULL}.
 #' @return An array of dimension \code{nrow(x)} by \code{reps} by 
 #'   \code{length(algorithms)} Each slice of the array is a matrix showing 
-#'   consensus clustering results for algorithms. The matrices have a 
-#'   row for each sample, and a column for each subsample. Each entry represents
-#'   a class membership.
+#'   consensus clustering results for algorithms. The matrices have a row for
+#'   each sample, and a column for each subsample. Each entry represents a class
+#'   membership.
 #' @author Derek Chiu, Aline Talhouk
-#' @import foreach mclust
+#' @import mclust
 #' @export
-#' @examples
+#' @examples 
 #' data(hgsc)
 #' dat <- t(hgsc[, -1])
-#' x1 <- consensus_cluster(dat, nk = 2:4, reps = 10, algorithms = c("hcAEucl",
-#' "kmEucl"), progress = FALSE)
+#' 
+#' # Custom distance function
+#' manh = function(x) {
+#'   stats::dist(x, method = "manhattan")
+#' }
+#' 
+#' # Custom clustering algorithm
+#' agnes <- function(d, k) {
+#'   return(as.integer(stats::cutree(cluster::agnes(d, diss = TRUE), k)))
+#' }
+#' 
+#' cc <- consensus_cluster(dat, reps = 5, algorithms = c("pam", "agnes"),
+#' distance = c("euclidean", "manh"))
+#' str(cc)
 consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
-                              algorithms = NULL, parallel = NULL, ncores = NULL,
+                              algorithms = NULL, nmf.method = c("brunet", "lee"),
+                              distance = "euclidean",
                               progress = TRUE, seed = 123456, seed.alg = 1,
                               min.sd = 1, save = FALSE, file.name = "CCOutput",
                               time.saved = FALSE) {
-  if (is.null(algorithms))
-    algorithms <- c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
-                    "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf",
-                    "gmmBIC", "biclust")
-  if (is.null(ncores)) ncores <- parallel::detectCores() - 1
-  if (is.null(parallel)) {
-    if (reps >= 100 & ncores >= 2) {
-      dopar <- TRUE
-    } else {
-      dopar <- FALSE
-    }
-  } else if (isTRUE(parallel)) {
-    dopar <- TRUE
-  } else if (!isTRUE(parallel)) {
-    dopar <- FALSE
-  }
-  x.rest <- prepare_data(data, min.sd = min.sd)
-  x.nmf <- x.rest %>%
-    cbind(-.) %>%
-    apply(2, function(x) ifelse(x < 0, 0, x))
-  samples <- rownames(x.rest)
-  n <- nrow(x.rest)
-  n.new <- floor(n * pItem)
+  data.prep <- prepare_data(data, min.sd = min.sd)
+  nmf.arr <- other.arr <- dist.arr <- NULL
+  check.dists <- distances(data.prep, distance)
   lnk <- length(nk)
-  nm <- length(algorithms)
-  coclus <- array(NA, c(n, reps, nm, lnk),
-                  dimnames = list(samples, paste0("R", 1:reps), algorithms, nk))
-  if (!dopar) {
-    if (progress)
-      pb <- utils::txtProgressBar(max = lnk * nm * reps, style = 3)
-    for (k in 1:lnk) {
-      for (j in 1:nm) {
-        set.seed(seed.alg)
-        for (i in 1:reps) {
-          if (progress) 
-            utils::setTxtProgressBar(pb,
-                                     (k - 1) * nm * reps + (j - 1) * reps + i)
-          ind.new <- sample(n, n.new, replace = FALSE)
-          if (any(c("nmfDiv", "nmfEucl") %in% algorithms))
-            x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
-                                                 function(x) all(x == 0)))])
-          coclus[ind.new, i, j, k] <- switch(
-            algorithms[j],
-            nmfDiv = NMF::predict(NMF::nmf(
-              x.nmf.samp, rank = nk[k], method = "brunet", seed = seed)),
-            nmfEucl = NMF::predict(NMF::nmf(
-              x.nmf.samp, rank = nk[k], method = "lee", seed = seed)),
-            hcAEucl = hcAEucl(x.rest[ind.new, ], nk[k]),
-            hcDianaEucl = hcDianaEucl(x.rest[ind.new, ], nk[k]),
-            kmEucl = stats::kmeans(
-              stats::dist(x.rest[ind.new, ]), nk[k])$cluster,
-            kmSpear = stats::kmeans(
-              spearman_dist(x.rest[ind.new, ]), nk[k])$cluster,
-            pamEucl = cluster::pam(
-              stats::dist(x.rest[ind.new, ]), nk[k], cluster.only = TRUE),
-            pamSpear = cluster::pam(
-              spearman_dist(x.rest[ind.new, ]), nk[k], cluster.only = TRUE),
-            apEucl = stats::setNames(dplyr::dense_rank(suppressWarnings(
-              apcluster::apclusterK(apcluster::negDistMat, x.rest[ind.new, ],
-                                    nk[k], verbose = FALSE)@idx)),
-              rownames(x.rest[ind.new, ])),
-            scRbf = stats::setNames(kernlab::specc(x.rest[ind.new, ], nk[k],
-                                                   kernel = "rbfdot")@.Data,
-                                    rownames(x.rest[ind.new, ])),
-            gmmBIC = mclust::Mclust(x.rest[ind.new, ], nk[k])$classification,
-            biclust = blockcluster::cocluster(
-              x.rest[ind.new, ], "continuous",
-              nbcocluster = c(nk[k], nk[k]))@rowclass + 1
-          )
-          if (i %% 10 == 0 & save) {
-            if (time.saved) {
-              path <- paste0(file.name, "_",
-                             format(Sys.time(), "%Y-%m-%d_%H-%M-%S") , ".rds")
-            } else {
-              path <- paste0(file.name, ".rds")
-            }
-            readr::write_rds(coclus, path = path)
-            message(paste("Second dimension of coclus is:",
-                          dim(readRDS(path))[2]))
-          }
-        }
-      }
-    }
+  lnmf <- ifelse("nmf" %in% algorithms, length(nmf.method), 0)
+  ldist <- sum(!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")) * length(distance)
+  lother <- sum(c("ap", "sc", "gmm", "block") %in% algorithms)
+  if (progress) {
+    pb <- utils::txtProgressBar(max = lnk * (lnmf + lother + ldist) * reps, style = 3)
   } else {
-    if (progress) {
-      cl <- parallel::makeCluster(ncores, useXDR = FALSE, outfile = "")
-    } else {
-      cl <- parallel::makeCluster(ncores, useXDR = FALSE)
-    }
-    doParallel::registerDoParallel(cl)
-    coclus <- foreach(k = 1:lnk, .packages = c("foreach", "bioDist", "dplyr", "apcluster", "mclust")) %dopar% {
-      foreach(j = 1:nm) %dopar% {
-        set.seed(seed.alg)
-        if (progress)
-          pb <- utils::txtProgressBar(max = nm * reps, style = 3)
-        foreach(i = 1:reps) %dopar% {
-          if (progress)
-            utils::setTxtProgressBar(pb,
-                                     (k - 1) * nm * reps + (j - 1) * reps + i)
-          ind.new <- sample(n, n.new, replace = FALSE)
-          if (any(c("nmfDiv", "nmfEucl") %in% algorithms))
-            x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
-                                                 function(x) all(x == 0)))])
-          coclus[ind.new, i, j, k] <- switch(
-            algorithms[j],
-            nmfDiv = NMF::predict(NMF::nmf(
-              x.nmf.samp, rank = nk[k], method = "brunet", seed = seed)),
-            nmfEucl = NMF::predict(NMF::nmf(
-              x.nmf.samp, rank = nk[k], method = "lee", seed = seed)),
-            hcAEucl = hcAEucl(x.rest[ind.new, ], nk[k]),
-            hcDianaEucl = hcDianaEucl(x.rest[ind.new, ], nk[k]),
-            kmEucl = stats::kmeans(
-              stats::dist(x.rest[ind.new, ]), nk[k])$cluster,
-            kmSpear = stats::kmeans(
-              spearman_dist(x.rest[ind.new, ]), nk[k])$cluster,
-            pamEucl = cluster::pam(
-              stats::dist(x.rest[ind.new, ]), nk[k], cluster.only = TRUE),
-            pamSpear = cluster::pam(
-              spearman_dist(x.rest[ind.new, ]), nk[k], cluster.only = TRUE),
-            apEucl = stats::setNames(dplyr::dense_rank(suppressWarnings(
-              apcluster::apclusterK(apcluster::negDistMat, x.rest[ind.new, ],
-                                    nk[k], verbose = FALSE)@idx)),
-              rownames(x.rest[ind.new, ])),
-            scRbf = stats::setNames(kernlab::specc(x.rest[ind.new, ], nk[k],
-                                                   kernel = "rbfdot")@.Data,
-                                    rownames(x.rest[ind.new, ])),
-            gmmBIC = mclust::Mclust(x.rest[ind.new, ], nk[k])$classification,
-            biclust = blockcluster::cocluster(
-              x.rest[ind.new, ], "continuous",
-              nbcocluster = c(nk[k], nk[k]))@rowclass + 1
-          )
-        }
-      }
-      coclus[, , , k]
-    } %>%
-      unlist() %>% 
-      array(dim = c(n, reps, nm, lnk),
-            dimnames = list(samples, paste0("R", 1:reps), algorithms, nk))
-    doParallel::stopImplicitCluster()
+    pb <- NULL
   }
+  
+  if (is.null(algorithms))
+    algorithms <- c("nmf", "hc", "diana", "km", "pam",
+                    "ap", "sc", "gmm", "block")
+  
+  if ("nmf" %in% algorithms) {
+    nmf.arr <- cluster_nmf(data.prep, nk, pItem, reps, nmf.method,
+                           seed, seed.alg, progress, pb)
+  }
+  
+  dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")]
+  if (length(dalgs) > 0) {
+    dist.arr <- cluster_dist(data.prep, nk, pItem, reps, dalgs, distance,
+                             seed, seed.alg, progress, pb,
+                             offset = lnk * lnmf * reps)
+  }
+  
+  oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block")]
+  if (length(oalgs) > 0) {
+    other.arr <- cluster_other(data.prep, nk, pItem, reps, oalgs,
+                               seed, seed.alg, progress, pb,
+                               offset = lnk * (lnmf + ldist) * reps)
+  }
+  
+  all.arr <- abind::abind(nmf.arr, dist.arr, other.arr, along = 3)
   if (save) {
     if (time.saved) {
       path <- paste0(file.name, "_",
@@ -221,9 +125,9 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
     } else {
       path <- paste0(file.name, ".rds")
     }
-    readr::write_rds(coclus, path = path)
+    readr::write_rds(all.arr, path = path)
   }
-  return(coclus)
+  return(all.arr)
 }
 
 #' Prepare data for consensus clustering
@@ -254,22 +158,161 @@ prepare_data <- function(data, min.sd = 1) {
   return(dat.out)
 }
 
-#' Hierarchical clustering with Euclidean distance and Average linkage
-#' @param d data matrix
-#' @param k scalar indicating number of clusters to cut tree into
+#' Cluster NMF-based algorithms
 #' @noRd
-hcAEucl <- function(d, k) {
-  return(as.integer(stats::cutree(stats::hclust(
-    stats::dist(d), method = "average"), k)))
+cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed, seed.alg,
+                        progress, pb) {
+  x.nmf <- data %>%
+    cbind(-.) %>%
+    apply(2, function(x) ifelse(x < 0, 0, x))
+  n <- nrow(data)
+  n.new <- floor(n * pItem)
+  lnmf <- length(nmf.method)
+  lnk <- length(nk)
+  nmf.arr <- array(NA, c(n, reps, lnmf, lnk),
+                   dimnames = list(rownames(data),
+                                   paste0("R", 1:reps),
+                                   paste0("NMF_", Hmisc::capitalize(nmf.method)),
+                                   nk))
+  for (k in 1:lnk) {
+    for (j in 1:lnmf) {
+      set.seed(seed.alg)
+      for (i in 1:reps) {
+        ind.new <- sample(n, n.new, replace = FALSE)
+        x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
+                                               function(x) all(x == 0)))])
+        nmf.arr[ind.new, i, j, k] <- NMF::predict(NMF::nmf(
+          x.nmf.samp, rank = nk[k], method = nmf.method[j], seed = seed))
+        if (progress)
+          utils::setTxtProgressBar(pb, (k - 1) * lnmf * reps + (j - 1) * reps + i)
+      }
+    }
+  }
+  return(nmf.arr)
 }
 
-#' Hierarchical clustering using DIvisive ANAlysis algorithm
-#'
-#' @inheritParams hcAEucl
+#' Cluster algorithms with dissimilarity specification
 #' @noRd
-hcDianaEucl <- function(d, k) {
-  return(as.integer(stats::cutree(cluster::diana(
-    stats::dist(d), diss = TRUE), k)))
+cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed, seed.alg,
+                         progress, pb, offset) {
+  n <- nrow(data)
+  n.new <- floor(n * pItem)
+  ld <- length(distance)
+  lalg <- length(dalgs)
+  ldist <- prod(lalg, ld)
+  lnk <- length(nk)
+  dist.arr <- array(NA, c(n, reps, ldist, lnk),
+                    dimnames = list(rownames(data),
+                                    paste0("R", 1:reps),
+                                    apply(expand.grid(Hmisc::capitalize(distance),
+                                                      toupper(dalgs)),
+                                          1, function(x) paste0(x[2], "_", x[1])),
+                                    nk))
+  for (k in 1:lnk) {
+    for (j in 1:lalg) {
+      for (d in 1:ld) {
+        set.seed(seed.alg)
+        for (i in 1:reps) {
+          ind.new <- sample(n, n.new, replace = FALSE)
+          dists <- distances(data[ind.new, ], distance[d])
+          dist.arr[ind.new, i, (j - 1) * ld + d, k] <- get(dalgs[j])(dists[[1]], nk[k])
+          if (progress)
+            utils::setTxtProgressBar(pb, (k - 1) * lalg * ld * reps +
+                                       (j - 1) * ld * reps +
+                                       (d - 1) * reps + i + offset)
+        }
+      }
+    }
+  }
+  return(dist.arr)
+}
+
+#' Cluster other algorithms
+#' @noRd
+cluster_other <- function(data, nk, pItem, reps, oalgs, seed, seed.alg,
+                          progress, pb, offset) {
+  n <- nrow(data)
+  n.new <- floor(n * pItem)
+  lalg <- length(oalgs)
+  lnk <- length(nk)
+  other.arr <- array(NA, c(n, reps, lalg, lnk),
+                     dimnames = list(rownames(data),
+                                     paste0("R", 1:reps),
+                                     toupper(oalgs),
+                                     nk))
+  for (k in 1:lnk) {
+    for (j in 1:lalg) {
+      set.seed(seed.alg)
+      for (i in 1:reps) {
+        ind.new <- sample(n, n.new, replace = FALSE)
+        other.arr[ind.new, i, j, k] <- 
+          switch(oalgs[j],
+                 ap = stats::setNames(dplyr::dense_rank(suppressWarnings(
+                   apcluster::apclusterK(apcluster::negDistMat, data[ind.new, ],
+                                         nk[k], verbose = FALSE)@idx)),
+                   rownames(data[ind.new, ])),
+                 sc = stats::setNames(kernlab::specc(data[ind.new, ], nk[k],
+                                                     kernel = "rbfdot")@.Data,
+                                      rownames(data[ind.new, ])),
+                 gmm = mclust::Mclust(data[ind.new, ], nk[k])$classification,
+                 block = blockcluster::cocluster(
+                   data[ind.new, ], "continuous",
+                   nbcocluster = c(nk[k], nk[k]))@rowclass + 1)
+        if (progress)
+          utils::setTxtProgressBar(pb, (k - 1) * lalg * reps +
+                                     (j - 1) * reps + i + offset)
+      }
+    }
+  }
+  return(other.arr)
+}
+
+#' Return a list of distance matrices
+#' @param x data matrix
+#' @param dist a character vector of distance methods taken from stats::dist, or
+#'   "spearman", or a custom distance function in the current environment
+#' @noRd
+distances <- function(x, dist) {
+  # Change partial matching distance methods from stats::dist to full names
+  METHODS <- c("euclidean", "maximum", "manhattan", "canberra",
+               "binary", "minkowski")
+  dist <- ifelse(dist %pin% METHODS, METHODS[pmatch(dist, METHODS)], dist)
+  
+  # Check if spearman distance is used (starts with string)
+  sp.idx <- sapply(paste0("^", dist), grepl, "spearman")
+  if (any(sp.idx)) {
+    spear <- stats::setNames(list(spearman_dist(x)), "spearman")
+    d <- dist[!sp.idx]
+  } else {
+    spear <- NULL
+    d <- dist
+  }
+  
+  # If only spearman requested
+  if (length(d) == 0) {
+    return(spear)
+  } else {
+    # Identify custom distance functions from those found in stats::dist
+    check <- stats::setNames(lapply(d, function(d)
+      try(stats::dist(x = x, method = d), silent = TRUE)), d)
+    is.error <- sapply(check, inherits, "try-error")
+    succeeded <- which(!is.error)
+    failed <- which(is.error)
+    
+    # Search for custom function in parent environments
+    if (length(failed) > 0) {
+      custom <- stats::setNames(lapply(names(check[failed]),
+                                       function(d) get(d)(x)),
+                                names(failed))
+    } else {
+      custom <- NULL
+    }
+    
+    # Combine distances into list and return in same order as dist argument
+    dlist <- c(spear, check[succeeded], custom) %>% 
+      magrittr::extract(pmatch(dist, names(.)))
+    return(dlist)
+  }
 }
 
 #' Calculate pairwise Spearman correlational distances using
@@ -284,4 +327,24 @@ spearman_dist <- function(x) {
   attributes(rvec) <- list(Size = nrow(x), Labels = rownames(x), Diag = FALSE,
                            Upper = FALSE, methods = "spearman", class = "dist")
   return(rvec)
+}
+
+#' @noRd
+hc <- function(d, k, method = "average") {
+  return(as.integer(stats::cutree(stats::hclust(d, method = method), k)))
+}
+
+#' @noRd
+diana <- function(d, k) {
+  return(as.integer(stats::cutree(cluster::diana(d, diss = TRUE), k)))
+}
+
+#' @noRd
+km <- function(d, k) {
+  return(as.integer(stats::kmeans(d, k)$cluster))
+}
+
+#' @noRd
+pam <- function(d, k) {
+  return(as.integer(cluster::pam(d, k, cluster.only = TRUE)))
 }

@@ -5,9 +5,9 @@
 \title{Consensus clustering over samples and algorithms}
 \usage{
 consensus_cluster(data, nk = 2:4, pItem = 0.8, reps = 1000,
-  algorithms = NULL, parallel = NULL, ncores = NULL, progress = TRUE,
-  seed = 123456, seed.alg = 1, min.sd = 1, save = FALSE,
-  file.name = "CCOutput", time.saved = FALSE)
+  algorithms = NULL, nmf.method = c("brunet", "lee"),
+  distance = "euclidean", progress = TRUE, seed = 123456, seed.alg = 1,
+  min.sd = 1, save = FALSE, file.name = "CCOutput", time.saved = FALSE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -21,18 +21,15 @@ algorithm}
 \item{reps}{number of subsamples}
 
 \item{algorithms}{vector of clustering algorithms for performing consensus 
-clustering. Must be any number of the following: "nmfDiv", "nmfEucl", 
-"hcAEucl", "hcDianaEucl", "kmEucl", "kmSpear", "pamEucl", "pamSpear", 
-"apEucl", "scRbf", "gmmBIC", "biclust". See details.}
+clustering. Must be any number of the following: "nmf", 
+"hc", "diana", "km", "pam", "ap", "sc", "gmm", "block". See details.}
 
-\item{parallel}{logical; if \code{TRUE}, the function registers a parallel 
-backend from the \code{doParallel} package and runs a foreach loop. By 
-default, \code{parallel = NULL} means the function determines, based on 
-other parameters, whether to use parallel or not (e.g. number of
-\code{reps}, availability of multiple cores).}
+\item{nmf.method}{specify NMF-based algorithms to run. By default the 
+"brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
+details.}
 
-\item{ncores}{number of CPU cores to use for parallel computation. Default 
-uses all available cores.}
+\item{distance}{a vector of distance functions. Defaults to "euclidean". Can 
+use a custom distance function.}
 
 \item{progress}{logical; should a progress bar be displayed?}
 
@@ -54,9 +51,9 @@ file name. Only applicable when \code{dir} is not \code{NULL}.}
 \value{
 An array of dimension \code{nrow(x)} by \code{reps} by 
   \code{length(algorithms)} Each slice of the array is a matrix showing 
-  consensus clustering results for algorithms. The matrices have a 
-  row for each sample, and a column for each subsample. Each entry represents
-  a class membership.
+  consensus clustering results for algorithms. The matrices have a row for
+  each sample, and a column for each subsample. Each entry represents a class
+  membership.
 }
 \description{
 Generates multiple runs for consensus clustering among replicated subsamples 
@@ -64,36 +61,45 @@ of a dataset as well as across different clustering algorithms.
 }
 \details{
 The clustering algorithms provided are:
-\itemize{ 
-\item{"nmfDiv": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence}
-\item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
-\item{"hcAEucl": }{Hierarchical Clustering using Average linkage and Euclidean distance}
-\item{"hcDianaEucl": }{Divisive Hierarchical Clustering using Euclidean distance}
-\item{"kmEucl": }{K-Means using Euclidean distance}
-\item{"kmSpear": }{K-Means using Spearman distance} 
-\item{"pamEucl": }{Partition Around Mediods using Euclidean distance} 
-\item{"pamSpear": }{Partition Around Mediods using Spearman distance} 
-\item{"apEucl": }{Affinity Propagation using Euclidean distance} 
-\item{"scRbf": }{Spectral Clustering using Radial-Basis kernel function} 
-\item{"gmmBIC": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm}
-\item{"biclust": }{Biclustering using a latent block model} 
+\itemize{
+  \item{"nmf": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence} 
+  \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
+  \item{"hc": }{Hierarchical Clustering}
+  \item{"diana": }{DIvisive ANAlysis Clustering}
+  \item{"km": }{K-Means Clustering}
+  \item{"pam": }{Partition Around Mediods}
+  \item{"ap": }{Affinity Propagation}
+  \item{"sc": }{Spectral Clustering using Radial-Basis kernel function}
+  \item{"gmm": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm} 
+  \item{"block": }{Biclustering using a latent block model}
 }
+
+The \code{nmf.method} defaults are "brunet" (Kullback-Leibler divergence) and
+"lee" (Euclidean distance).
 
 The \code{min.sd} argument is used to filter the feature space for only 
 highly variable features. Only features with a standard deviation across all 
 samples greater than \code{min.sd} will be used.
 
-The progress bar for \code{parallel = FALSE} increments for every unit of 
-\code{reps}, where as for \code{parallel = TRUE}, the increments are for 
-\code{algorithms}. Additionally, when the progress bar is used in 
-conjunction with parallel computation, each worker outputs the attached 
-packages (and potential masking of functions).
+The progress bar increments for every unit of \code{reps}.
 }
 \examples{
 data(hgsc)
 dat <- t(hgsc[, -1])
-x1 <- consensus_cluster(dat, nk = 2:4, reps = 10, algorithms = c("hcAEucl",
-"kmEucl"), progress = FALSE)
+
+# Custom distance function
+manh = function(x) {
+  stats::dist(x, method = "manhattan")
+}
+
+# Custom clustering algorithm
+agnes <- function(d, k) {
+  return(as.integer(stats::cutree(cluster::agnes(d, diss = TRUE), k)))
+}
+
+cc <- consensus_cluster(dat, reps = 5, algorithms = c("pam", "agnes"),
+distance = c("euclidean", "manh"))
+str(cc)
 }
 \author{
 Derek Chiu, Aline Talhouk

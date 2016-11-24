@@ -59,7 +59,7 @@ library(ggplot2)
 set.seed(911)
 x <- matrix(rnorm(100), ncol = 10)
 CC1 <- consensus_cluster(x, nk = 2:4, reps = 5,
-algorithms = c("hcAEucl", "apEucl", "gmmBIC"), progress = FALSE)
+algorithms = c("hc", "ap", "gmm"), progress = FALSE)
 
 # Plot CDF
 p <- graph_cdf(CC1)
@@ -72,7 +72,7 @@ scale_color_brewer(palette = "Set2")
 p <- graph_delta_area(CC1)
 
 # Heatmaps with column side colours corresponding to clusters
-CC2 <- consensus_cluster(x, nk = 3, reps = 5, algorithms = "apEucl", progress = FALSE)
+CC2 <- consensus_cluster(x, nk = 3, reps = 5, algorithms = "ap", progress = FALSE)
 graph_heatmap(CC2)
 
 # Track how cluster assignments change between algorithms

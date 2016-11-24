@@ -5,7 +5,7 @@ data(hgsc)
 dat <- t(hgsc[, -1])[1:200, 1:100]
 k <- 4
 x <- consensus_cluster(dat, nk = k, reps = 4, progress = FALSE,
-                       algorithms = c("nmfEucl", "hcAEucl", "hcDianaEucl"))
+                       algorithms = c("nmf", "hc", "diana"), nmf.method = "lee")
 x_imputed <- impute_missing(x, dat, nk = k)$complete
 
 test_that("majority voting works", {
