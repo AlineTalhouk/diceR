@@ -12,6 +12,12 @@
 #'   options are "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl", 
 #'   "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf", "gmmBIC", and 
 #'   "biclust". See \code{\link{consensus_cluster}} for details.
+#' @param nmf.method specify NMF-based algorithms to run. By default the 
+#'   "brunet" and "lee" algorithms are called. See
+#'   \code{\link{consensus_cluster}} for details.
+#' @param distance a vector of distance functions. Defaults to "euclidean". Can 
+#'   use a custom distance function. See \code{\link{consensus_cluster}} for
+#'   details.
 #' @param cons.funs consensus functions to use. Current options are "kmodes" 
 #'   (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity 
 #'   Partitioning Algorithm), "LCE" (linkage clustering ensemble)
@@ -52,6 +58,7 @@
 #' cons.funs = c("kmodes", "majority"), ref.cl = ref.cl)
 #' str(dice.obj, max.level = 2)
 dice <- function(data, nk, reps = 10, algorithms = NULL,
+                 nmf.method = c("brunet", "lee"), distance = "euclidean",
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
                  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
@@ -64,7 +71,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   
   # Generate Diverse Cluster Ensemble
   E <- consensus_cluster(data = data, nk = nk, reps = reps,
-                         algorithms = algorithms, progress = progress)
+                         algorithms = algorithms, nmf.method = nmf.method,
+                         distance = distance, progress = progress)
   
   # Select k
   k <- consensus_evaluate(data = data, E, ref.cl = ref.cl, plot = FALSE)$k

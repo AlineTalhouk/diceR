@@ -4,10 +4,11 @@
 \alias{dice}
 \title{Diverse Clustering Ensemble}
 \usage{
-dice(data, nk, reps = 10, algorithms = NULL, cons.funs = c("kmodes",
-  "CSPA", "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"),
-  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
-  ref.cl = NULL, progress = TRUE)
+dice(data, nk, reps = 10, algorithms = NULL, nmf.method = c("brunet",
+  "lee"), distance = "euclidean", cons.funs = c("kmodes", "CSPA",
+  "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"), trim = FALSE,
+  reweigh = FALSE, evaluate = TRUE, plot = FALSE, ref.cl = NULL,
+  progress = TRUE)
 }
 \arguments{
 \item{data}{matrix with rows as observations, columns as variables}
@@ -22,6 +23,14 @@ range of integers to compute multiple k}
 options are "nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl", 
 "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf", "gmmBIC", and 
 "biclust". See \code{\link{consensus_cluster}} for details.}
+
+\item{nmf.method}{specify NMF-based algorithms to run. By default the 
+"brunet" and "lee" algorithms are called. See
+\code{\link{consensus_cluster}} for details.}
+
+\item{distance}{a vector of distance functions. Defaults to "euclidean". Can 
+use a custom distance function. See \code{\link{consensus_cluster}} for
+details.}
 
 \item{cons.funs}{consensus functions to use. Current options are "kmodes" 
 (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity 
