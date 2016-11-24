@@ -68,6 +68,7 @@ consensus_cluster_old <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                                   progress = TRUE, seed = 123456, seed.alg = 1,
                                   min.sd = 1, save = FALSE, file.name = "CCOutput",
                                   time.saved = FALSE) {
+  .Deprecated("consensus_cluster")
   if (is.null(algorithms))
     algorithms <- c("nmfDiv", "nmfEucl", "hcAEucl", "hcDianaEucl", "kmEucl",
                     "kmSpear", "pamEucl", "pamSpear", "apEucl", "scRbf",
