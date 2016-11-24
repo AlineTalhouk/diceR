@@ -98,7 +98,7 @@ agnes <- function(d, k) {
 }
 
 cc <- consensus_cluster(dat, reps = 5, algorithms = c("pam", "agnes"),
-distance = c("euclidean", "spear"))
+distance = c("euclidean", "manh"))
 str(cc)
 }
 \author{

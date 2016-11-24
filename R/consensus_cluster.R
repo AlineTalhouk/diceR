@@ -73,7 +73,7 @@
 #' }
 #' 
 #' cc <- consensus_cluster(dat, reps = 5, algorithms = c("pam", "agnes"),
-#' distance = c("euclidean", "spear"))
+#' distance = c("euclidean", "manh"))
 #' str(cc)
 consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                               algorithms = NULL, nmf.method = c("brunet", "lee"),
