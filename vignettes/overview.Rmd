@@ -48,14 +48,14 @@ The base function of this package is `consensus_cluster()`, which outputs cluste
 
 ```{r consensus_cluster, results='hide'}
 CC <- consensus_cluster(dat, nk = 2:4, pItem = 0.8, reps = 10, 
-                        algorithms = c("hcAEucl", "kmSpear", "pamSpear", "biclust"))
+                        algorithms = c("hc", "km", "pam", "block"), distance = "spear")
 ```
 
 The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each "box" (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the biclustering algorithm for k = 3.
 
 ```{r consensus_cluster_biclust}
 str(CC)
-kable(head(CC[, , "biclust", "3"]))
+kable(head(CC[, , "BLOCK", "3"]))
 ```
 
 Note the unavoidable presence of `NA`s because we used 80% subsampling. This can be problematic in certain downstream ensemble methods, so we can impute missing values using K-Nearest Neighbours beforehand. There might still be `NA`s after KNN because of how the decision threshold was set. The remaining missing values can be imputed using majority voting.
@@ -82,7 +82,7 @@ We can carry on the analysis using either `CC` or `CC_imputed`.
 The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one's. Suppose we wanted to compute the consensus matrix for PAM only, and visualize using `graph_heatmap()`:
 
 ```{r consensus_matrix}
-pam.2 <- CC[, , "pamSpear", "2", drop = FALSE]
+pam.2 <- CC[, , "PAM_Spear", "2", drop = FALSE]
 cm <- consensus_matrix(pam.2)
 dim(cm)
 ```
@@ -111,7 +111,7 @@ A situation might also arise where we initially decided on using 4 clustering al
 
 ```{r consensus_combine_2, results='hide'}
 CC2 <- consensus_cluster(dat, nk = 2:4, reps = 10, pItem = 0.8,
-                         algorithms = c("hcDianaEucl", "pamEucl"), save = FALSE)
+                         algorithms = "diana", save = FALSE)
 ccomb_class2 <- consensus_combine(CC, CC2, element = "class")
 ```
 
@@ -140,7 +140,7 @@ Some algorithms perform too poorly to deserve membership in the cluster ensemble
 After trimming, we can optionally choose to reweigh the algorithms based on the internal index magnitudes. Of course, we take into account the direction of optimality (higher is better is lower is better). Algorithms reweighed are then fed into the consensus functions. This is done by replicating each algorithm by a scalar factor that is proportional to its weight. For example, if we have two algorithms A and B, and A is given a weight of 80% and B is given a weight of 20%, then we make 4 copies of A and 1 copy of B. To minimize computational time, the total number of copies out of all algorithms has an upper bound of 100. Without reweighing, each algorithm is given equal weight.
 
 ```{r consensus_trim, results='hide'}
-ctrim <- consensus_trim(dat, CC, CC2, reweigh = TRUE)
+ctrim <- consensus_trim(dat, CC, CC2)
 ```
 
 ```{r consensus_trim_str}
