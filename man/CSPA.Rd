@@ -21,8 +21,8 @@ consensus class labels.
 \examples{
 data(hgsc)
 dat <- t(hgsc[, -1])[1:100, 1:50]
-x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("nmfEucl", 
-"hcAEucl", "hcDianaEucl"), progress = FALSE)
+x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("nmf", "hc",
+"diana"), nmf.method = "lee", progress = FALSE)
 CSPA(x, k = 4)
 }
 \author{

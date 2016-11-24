@@ -48,7 +48,7 @@
 #'   magrittr::use_series(Class) %>% 
 #'   factor() %>% 
 #'   as.integer()
-#' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hcAEucl", "pamEucl"),
+#' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hc", "pam"), 
 #' cons.funs = c("kmodes", "majority"), ref.cl = ref.cl)
 #' str(dice.obj, max.level = 2)
 dice <- function(data, nk, reps = 10, algorithms = NULL,
