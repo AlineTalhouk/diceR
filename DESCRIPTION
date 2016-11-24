@@ -2,7 +2,7 @@ Package: diceR
 Type: Package
 Title: Diverse Cluster Ensemble in R
 Version: 0.0.0.9012
-Date: 2016-11-23
+Date: 2016-11-24
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")),
     person("Aline", "Talhouk", , "atalhouk@bccrc.ca", "aut"),
@@ -43,7 +43,6 @@ Imports:
     klaR,
     grDevices,
     RColorBrewer,
-    foreach,
     doParallel
 Suggests:
     testthat,
