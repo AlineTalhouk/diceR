@@ -1,7 +1,7 @@
-#' Consensus clustering over samples and algorithms
+#' Consensus clustering
 #' 
-#' Generates multiple runs for consensus clustering among replicated subsamples 
-#' of a dataset as well as across different clustering algorithms.
+#' Runs consensus clustering across subsamples of the data, clustering 
+#' algorithms, and cluster sizes.
 #' 
 #' The clustering algorithms provided are:
 #' \itemize{
@@ -82,9 +82,12 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                               progress = TRUE, seed = 123456, seed.alg = 1,
                               min.sd = 1, save = FALSE, file.name = "CCOutput",
                               time.saved = FALSE) {
+  # Prepare data, check for invalid distance inputs
   data.prep <- prepare_data(data, min.sd = min.sd)
   nmf.arr <- other.arr <- dist.arr <- NULL
   check.dists <- distances(data.prep, distance)
+  
+  # Store consensus dimensions for calculating progress bar increments/offsets
   lnk <- length(nk)
   lnmf <- ifelse("nmf" %in% algorithms, length(nmf.method), 0)
   ldist <- sum(!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")) * length(distance)
@@ -95,15 +98,18 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
     pb <- NULL
   }
   
+  # Use all algorithms if none are specified
   if (is.null(algorithms))
     algorithms <- c("nmf", "hc", "diana", "km", "pam",
                     "ap", "sc", "gmm", "block")
   
+  # Cluster NMF-based algorithms
   if ("nmf" %in% algorithms) {
     nmf.arr <- cluster_nmf(data.prep, nk, pItem, reps, nmf.method,
                            seed, seed.alg, progress, pb)
   }
   
+  # Cluster distance-based algorithms
   dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")]
   if (length(dalgs) > 0) {
     dist.arr <- cluster_dist(data.prep, nk, pItem, reps, dalgs, distance,
@@ -111,6 +117,7 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                              offset = lnk * lnmf * reps)
   }
   
+  # Cluster other algorithms
   oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block")]
   if (length(oalgs) > 0) {
     other.arr <- cluster_other(data.prep, nk, pItem, reps, oalgs,
@@ -118,6 +125,7 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                                offset = lnk * (lnmf + ldist) * reps)
   }
   
+  # Combine on third dimension (algorithm) and (optionally) save
   all.arr <- abind::abind(nmf.arr, dist.arr, other.arr, along = 3)
   if (save) {
     if (time.saved) {
@@ -163,6 +171,8 @@ prepare_data <- function(data, min.sd = 1) {
 #' @noRd
 cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed, seed.alg,
                         progress, pb) {
+  # Transform to non-negative matrix by column-binding a negative replicate and
+  # then coercing all negatives to 0
   x.nmf <- data %>%
     cbind(-.) %>%
     apply(2, function(x) ifelse(x < 0, 0, x))
@@ -180,6 +190,8 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed, seed.alg,
       set.seed(seed.alg)
       for (i in 1:reps) {
         ind.new <- sample(n, n.new, replace = FALSE)
+        # Transpose since input for NMF::nmf uses rows as vars, cols as samples
+        # In case the subsample has all-zero vars, remove them to speed up comp
         x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
                                                function(x) all(x == 0)))])
         nmf.arr[ind.new, i, j, k] <- NMF::predict(NMF::nmf(
@@ -214,6 +226,7 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed, seed.alg,
       for (d in 1:ld) {
         set.seed(seed.alg)
         for (i in 1:reps) {
+          # Find custom functions use get()
           ind.new <- sample(n, n.new, replace = FALSE)
           dists <- distances(data[ind.new, ], distance[d])
           dist.arr[ind.new, i, (j - 1) * ld + d, k] <- get(dalgs[j])(dists[[1]], nk[k])

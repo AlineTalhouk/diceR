@@ -2,7 +2,7 @@
 % Please edit documentation in R/consensus_cluster.R
 \name{consensus_cluster}
 \alias{consensus_cluster}
-\title{Consensus clustering over samples and algorithms}
+\title{Consensus clustering}
 \usage{
 consensus_cluster(data, nk = 2:4, pItem = 0.8, reps = 1000,
   algorithms = NULL, nmf.method = c("brunet", "lee"),
@@ -57,8 +57,8 @@ An array of dimension \code{nrow(x)} by \code{reps} by
   membership.
 }
 \description{
-Generates multiple runs for consensus clustering among replicated subsamples 
-of a dataset as well as across different clustering algorithms.
+Runs consensus clustering across subsamples of the data, clustering 
+algorithms, and cluster sizes.
 }
 \details{
 The clustering algorithms provided are:
