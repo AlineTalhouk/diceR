@@ -7,3 +7,4 @@
 ^codecov\.yml$
 ^Example_runthrough\.R$
 ^deprecated\.R$
+^temp\.R$
