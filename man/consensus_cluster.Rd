@@ -7,7 +7,7 @@
 consensus_cluster(data, nk = 2:4, pItem = 0.8, reps = 1000,
   algorithms = NULL, nmf.method = c("brunet", "lee"),
   distance = "euclidean", progress = TRUE, seed = 123456, seed.alg = 1,
-  min.sd = 1, save = FALSE, file.name = "CCOutput", time.saved = FALSE)
+  save = FALSE, file.name = "CCOutput", time.saved = FALSE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -38,8 +38,6 @@ use a custom distance function. See example.}
 
 \item{seed.alg}{seed to use to ensure each algorithm operates on the same set
 of subsamples}
-
-\item{min.sd}{minimum standard deviation threshold. See details.}
 
 \item{save}{logical; if \code{TRUE}, the returned object will be saved at 
 each iteration as well as at the end.}
@@ -78,10 +76,6 @@ The clustering algorithms provided are:
 The \code{nmf.method} defaults are "brunet" (Kullback-Leibler divergence) and
 "lee" (Euclidean distance).
 
-The \code{min.sd} argument is used to filter the feature space for only 
-highly variable features. Only features with a standard deviation across all 
-samples greater than \code{min.sd} will be used.
-
 The progress bar increments for every unit of \code{reps}.
 }
 \examples{
@@ -105,4 +99,3 @@ str(cc)
 \author{
 Derek Chiu, Aline Talhouk
 }
-

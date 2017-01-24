@@ -28,4 +28,3 @@ str(cs)
 \author{
 Derek Chiu
 }
-

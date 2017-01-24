@@ -41,12 +41,11 @@ x <- replicate(100, rbinom(100, 4, 0.2))
 y <- consensus_matrix(x)
 PAC(y, lower = 0.05, upper = 0.95)
 }
-\author{
-Derek Chiu
-}
 \references{
 Senbabaoglu, Y., Michailidis, G., & Li, J. Z. (2014). Critical
   limitations of consensus clustering in class discovery. Scientific reports,
   4.
 }
-
+\author{
+Derek Chiu
+}

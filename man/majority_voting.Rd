@@ -31,11 +31,10 @@ subsamples.
 data(E_imputed)
 table(majority_voting(E_imputed, is.relabelled = FALSE))
 }
-\author{
-Aline Talhouk
-}
 \seealso{
 Other consensus functions: \code{\link{CSPA}},
   \code{\link{LCE}}, \code{\link{k_modes}}
 }
-
+\author{
+Aline Talhouk
+}

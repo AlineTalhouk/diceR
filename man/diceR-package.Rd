@@ -10,4 +10,3 @@ algorithm that pools together results from different clustering realizations.
 Each realization uses a unique combination of observations and diverse
 clustering algorithms.
 }
-

@@ -2,8 +2,8 @@
 % Please edit documentation in R/pcn.R
 \name{pcn}
 \alias{pcn}
-\alias{pcn_select}
 \alias{pcn_simulate}
+\alias{pcn_select}
 \title{Simulate and select null distributions on empirical gene-gene correlations}
 \usage{
 pcn_simulate(data, n.sim = 50)
@@ -52,4 +52,3 @@ pc.select <- pcn_select(pc.dat, cl, "rep")
 \author{
 Derek Chiu
 }
-

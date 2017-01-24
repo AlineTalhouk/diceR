@@ -25,11 +25,10 @@ x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("nmf", "hc",
 "diana"), nmf.method = "lee", progress = FALSE)
 CSPA(x, k = 4)
 }
-\author{
-Derek Chiu
-}
 \seealso{
 Other consensus functions: \code{\link{LCE}},
   \code{\link{k_modes}}, \code{\link{majority_voting}}
 }
-
+\author{
+Derek Chiu
+}

@@ -35,11 +35,10 @@ If the matrix contains \code{NA}s those are imputed by majority voting
 data(E_imputed)
 table(k_modes(E_imputed[1:100, , 1, drop = FALSE], is.relabelled = FALSE))
 }
-\author{
-Aline Talhouk
-}
 \seealso{
 Other consensus functions: \code{\link{CSPA}},
   \code{\link{LCE}}, \code{\link{majority_voting}}
 }
-
+\author{
+Aline Talhouk
+}

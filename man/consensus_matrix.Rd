@@ -43,4 +43,3 @@ cm2 <- consensus_matrix(x, weights = w)
 \author{
 Derek Chiu
 }
-

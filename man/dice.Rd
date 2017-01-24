@@ -6,9 +6,9 @@
 \usage{
 dice(data, nk, reps = 10, algorithms = NULL, nmf.method = c("brunet",
   "lee"), distance = "euclidean", cons.funs = c("kmodes", "CSPA",
-  "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"), trim = FALSE,
-  reweigh = FALSE, evaluate = TRUE, plot = FALSE, ref.cl = NULL,
-  progress = TRUE)
+  "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"), min.sd = 1,
+  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
+  ref.cl = NULL, progress = TRUE)
 }
 \arguments{
 \item{data}{matrix with rows as observations, columns as variables}
@@ -37,6 +37,8 @@ Partitioning Algorithm), "LCE" (linkage clustering ensemble)}
 
 \item{sim.mat}{type of similarity matrix. One of "cts", "srs", "asrs. See 
 \code{\link{LCE}} for details.}
+
+\item{min.sd}{minimum standard deviation threshold. See details.}
 
 \item{trim}{logical; if \code{TRUE}, the number of algorithms in 
 \code{algorithms} is reduced based on internal validity index performance 
@@ -68,6 +70,11 @@ A final clustering assignment from the diverse clustering ensemble
 Runs consensus clustering across subsamples, algorithms, and number of 
 clusters (k).
 }
+\details{
+The \code{min.sd} argument is used to filter the feature space for only 
+highly variable features. Only features with a standard deviation across all 
+samples greater than \code{min.sd} will be used.
+}
 \examples{
 library(dplyr)
 data(hgsc)
@@ -86,4 +93,3 @@ str(dice.obj, max.level = 2)
 \author{
 Aline Talhouk, Derek Chiu
 }
-

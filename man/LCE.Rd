@@ -42,11 +42,10 @@ LCE(E = x, k = 4, sim.mat = "asrs")
 x_imputed <- impute_missing(x, dat, nk = 4)$complete
 LCE(E = x_imputed, k = 4, sim.mat = "cts")
 }
-\author{
-Johnson Liu
-}
 \seealso{
 Other consensus functions: \code{\link{CSPA}},
   \code{\link{k_modes}}, \code{\link{majority_voting}}
 }
-
+\author{
+Johnson Liu
+}

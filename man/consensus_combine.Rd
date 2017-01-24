@@ -114,4 +114,3 @@ str(CC3, max.level = 2)
 \author{
 Derek Chiu
 }
-
