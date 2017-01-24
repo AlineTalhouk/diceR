@@ -3,6 +3,10 @@
 #' Runs consensus clustering across subsamples, algorithms, and number of 
 #' clusters (k).
 #' 
+#' The \code{min.sd} argument is used to filter the feature space for only 
+#' highly variable features. Only features with a standard deviation across all 
+#' samples greater than \code{min.sd} will be used.
+#' 
 #' @param data matrix with rows as observations, columns as variables
 #' @param nk number of clusters (k) requested; can specify a single integer or a
 #'   range of integers to compute multiple k
@@ -22,6 +26,7 @@
 #'   Partitioning Algorithm), "LCE" (linkage clustering ensemble)
 #' @param sim.mat type of similarity matrix. One of "cts", "srs", "asrs. See 
 #'   \code{\link{LCE}} for details.
+#' @param min.sd minimum standard deviation threshold. See details.
 #' @param trim logical; if \code{TRUE}, the number of algorithms in 
 #'   \code{algorithms} is reduced based on internal validity index performance 
 #'   prior to consensus clustering by \code{cons.funs}. Defaults to 
@@ -59,7 +64,7 @@
 dice <- function(data, nk, reps = 10, algorithms = NULL,
                  nmf.method = c("brunet", "lee"), distance = "euclidean",
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
-                 sim.mat = c("cts", "srs", "asrs"),
+                 sim.mat = c("cts", "srs", "asrs"), min.sd = 1,
                  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
                  ref.cl = NULL, progress = TRUE) {
   
@@ -67,6 +72,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   assertthat::assert_that(length(dim(data)) == 2)
   n <- nrow(data)
   ncf <- length(cons.funs)
+  data <- prepare_data(data, min.sd = min.sd)
   
   # Generate Diverse Cluster Ensemble
   E <- consensus_cluster(data = data, nk = nk, reps = reps,
@@ -119,4 +125,32 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   rownames(FinalR) <- rownames(data)
   
   return(list(clusters = FinalR, indices = eval.obj))
+}
+
+#' Prepare data for consensus clustering
+#'
+#' Remove variables with low signal and scale before consensus clustering
+#'
+#' The \code{min.sd} argument is used to filter the feature space for only
+#' highly variable features. Only features with a standard deviation across all
+#' samples greater than \code{min.sd} will be used.
+#'
+#' @param data data matrix with rows as samples and columns as variables
+#' @param min.sd minimum standard deviation threshold. See details.
+#' @return dataset prepared for usage in \code{consensus_cluster}
+#' @author Derek Chiu
+#' @export
+#' @examples
+#' set.seed(2)
+#' x <- replicate(10, rnorm(100))
+#' x.prep <- prepare_data(x)
+#' dim(x)
+#' dim(x.prep)
+prepare_data <- function(data, min.sd = 1) {
+  dat.out <- data %>%
+    magrittr::extract(apply(., 1, function(x) !any(is.na(x))),
+                      apply(., 2, function(x) stats::sd(x, na.rm = TRUE)) >
+                        min.sd) %>%
+    scale()
+  return(dat.out)
 }

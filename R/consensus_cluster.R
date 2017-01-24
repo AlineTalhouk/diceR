@@ -20,10 +20,6 @@
 #' The \code{nmf.method} defaults are "brunet" (Kullback-Leibler divergence) and
 #' "lee" (Euclidean distance).
 #' 
-#' The \code{min.sd} argument is used to filter the feature space for only 
-#' highly variable features. Only features with a standard deviation across all 
-#' samples greater than \code{min.sd} will be used.
-#' 
 #' The progress bar increments for every unit of \code{reps}.
 #' 
 #' @param data data matrix with rows as samples and columns as variables
@@ -45,7 +41,6 @@
 #' @param seed random seed to use for NMF-based algorithms
 #' @param seed.alg seed to use to ensure each algorithm operates on the same set
 #'   of subsamples
-#' @param min.sd minimum standard deviation threshold. See details.
 #' @param save logical; if \code{TRUE}, the returned object will be saved at 
 #'   each iteration as well as at the end.
 #' @param file.name file name of the written object
@@ -78,14 +73,12 @@
 #' str(cc)
 consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                               algorithms = NULL, nmf.method = c("brunet", "lee"),
-                              distance = "euclidean",
-                              progress = TRUE, seed = 123456, seed.alg = 1,
-                              min.sd = 1, save = FALSE, file.name = "CCOutput",
-                              time.saved = FALSE) {
-  # Prepare data, check for invalid distance inputs
-  data.prep <- prepare_data(data, min.sd = min.sd)
+                              distance = "euclidean", progress = TRUE,
+                              seed = 123456, seed.alg = 1, save = FALSE,
+                              file.name = "CCOutput", time.saved = FALSE) {
+  # Check for invalid distance inputs
   nmf.arr <- other.arr <- dist.arr <- NULL
-  check.dists <- distances(data.prep, distance)
+  check.dists <- distances(data, distance)
   
   # Store consensus dimensions for calculating progress bar increments/offsets
   lnk <- length(nk)
@@ -105,14 +98,14 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
   
   # Cluster NMF-based algorithms
   if ("nmf" %in% algorithms) {
-    nmf.arr <- cluster_nmf(data.prep, nk, pItem, reps, nmf.method,
+    nmf.arr <- cluster_nmf(data, nk, pItem, reps, nmf.method,
                            seed, seed.alg, progress, pb)
   }
   
   # Cluster distance-based algorithms
   dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")]
   if (length(dalgs) > 0) {
-    dist.arr <- cluster_dist(data.prep, nk, pItem, reps, dalgs, distance,
+    dist.arr <- cluster_dist(data, nk, pItem, reps, dalgs, distance,
                              seed, seed.alg, progress, pb,
                              offset = lnk * lnmf * reps)
   }
@@ -120,7 +113,7 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
   # Cluster other algorithms
   oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block")]
   if (length(oalgs) > 0) {
-    other.arr <- cluster_other(data.prep, nk, pItem, reps, oalgs,
+    other.arr <- cluster_other(data, nk, pItem, reps, oalgs,
                                seed, seed.alg, progress, pb,
                                offset = lnk * (lnmf + ldist) * reps)
   }
@@ -137,34 +130,6 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
     readr::write_rds(all.arr, path = path)
   }
   return(all.arr)
-}
-
-#' Prepare data for consensus clustering
-#'
-#' Remove variables with low signal and scale before consensus clustering
-#'
-#' The \code{min.sd} argument is used to filter the feature space for only
-#' highly variable features. Only features with a standard deviation across all
-#' samples greater than \code{min.sd} will be used.
-#'
-#' @param data data matrix with rows as samples and columns as variables
-#' @param min.sd minimum standard deviation threshold. See details.
-#' @return dataset prepared for usage in \code{consensus_cluster}
-#' @author Derek Chiu
-#' @export
-#' @examples
-#' set.seed(2)
-#' x <- replicate(10, rnorm(100))
-#' x.prep <- prepare_data(x)
-#' dim(x)
-#' dim(x.prep)
-prepare_data <- function(data, min.sd = 1) {
-  dat.out <- data %>%
-    magrittr::extract(apply(., 1, function(x) !any(is.na(x))),
-                      apply(., 2, function(x) stats::sd(x, na.rm = TRUE)) >
-                        min.sd) %>%
-    scale()
-  return(dat.out)
 }
 
 #' Cluster NMF-based algorithms
