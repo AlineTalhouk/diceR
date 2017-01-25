@@ -19,6 +19,12 @@
 #' @param weights a vector of weights for each algorithm used in meta-consensus
 #'   clustering. Must have \code{length(weights)} equal to \code{ncol(data)}.
 #' @return a consensus matrix
+#' @note When consensus is calculated over bootstrap samples, not every sample
+#'   is used in each replication. Thus, there will be scenarios where two
+#'   samples are never chosen together in any bootstrap samples. This typically 
+#'   happens when the number of replications is small. The coordinate in the
+#'   consensus matrix for such pairs of samples is \code{NaN} from a 0 / 0
+#'   computation. These entries are coerced to 0.
 #' @author Derek Chiu
 #' @export
 #' @examples
@@ -39,6 +45,7 @@ consensus_matrix <- function(data, weights = NULL) {
     sum.CM <- Reduce('+', all.CM)
   }
   cons.mat <- Reduce('/', list(sum.CM, sum.IM))
+  cons.mat[is.nan(cons.mat)] <- 0  
   return(cons.mat)
 }
 
