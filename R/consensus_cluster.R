@@ -38,7 +38,7 @@
 #' @param distance a vector of distance functions. Defaults to "euclidean". Can 
 #'   use a custom distance function. See example.
 #' @param progress logical; should a progress bar be displayed?
-#' @param seed random seed to use for NMF-based algorithms
+#' @param seed.nmf random seed to use for NMF-based algorithms
 #' @param seed.alg seed to use to ensure each algorithm operates on the same set
 #'   of subsamples
 #' @param save logical; if \code{TRUE}, the returned object will be saved at 
@@ -74,7 +74,7 @@
 consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                               algorithms = NULL, nmf.method = c("brunet", "lee"),
                               distance = "euclidean", progress = TRUE,
-                              seed = 123456, seed.alg = 1, save = FALSE,
+                              seed.nmf = 123456, seed.alg = 1, save = FALSE,
                               file.name = "CCOutput", time.saved = FALSE) {
   # Check for invalid distance inputs
   nmf.arr <- other.arr <- dist.arr <- NULL
@@ -99,14 +99,14 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
   # Cluster NMF-based algorithms
   if ("nmf" %in% algorithms) {
     nmf.arr <- cluster_nmf(data, nk, pItem, reps, nmf.method,
-                           seed, seed.alg, progress, pb)
+                           seed.nmf, seed.alg, progress, pb)
   }
   
   # Cluster distance-based algorithms
   dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")]
   if (length(dalgs) > 0) {
     dist.arr <- cluster_dist(data, nk, pItem, reps, dalgs, distance,
-                             seed, seed.alg, progress, pb,
+                             seed.alg, progress, pb,
                              offset = lnk * lnmf * reps)
   }
   
@@ -114,7 +114,7 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
   oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block")]
   if (length(oalgs) > 0) {
     other.arr <- cluster_other(data, nk, pItem, reps, oalgs,
-                               seed, seed.alg, progress, pb,
+                               seed.alg, progress, pb,
                                offset = lnk * (lnmf + ldist) * reps)
   }
   
@@ -134,7 +134,7 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
 
 #' Cluster NMF-based algorithms
 #' @noRd
-cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed, seed.alg,
+cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed.nmf, seed.alg,
                         progress, pb) {
   # Transform to non-negative matrix by column-binding a negative replicate and
   # then coercing all negatives to 0
@@ -154,14 +154,13 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed, seed.alg,
     for (j in 1:lnmf) {
       set.seed(seed.alg)
       for (i in 1:reps) {
-        set.seed(seed)
         ind.new <- sample(n, n.new, replace = FALSE)
         # Transpose since input for NMF::nmf uses rows as vars, cols as samples
         # In case the subsample has all-zero vars, remove them to speed up comp
         x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
                                                function(x) all(x == 0)))])
         nmf.arr[ind.new, i, j, k] <- NMF::predict(NMF::nmf(
-          x.nmf.samp, rank = nk[k], method = nmf.method[j], seed = seed))
+          x.nmf.samp, rank = nk[k], method = nmf.method[j], seed = seed.nmf))
         if (progress)
           utils::setTxtProgressBar(pb, (k - 1) * lnmf * reps + (j - 1) * reps + i)
       }
@@ -172,7 +171,7 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed, seed.alg,
 
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
-cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed, seed.alg,
+cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed.alg,
                          progress, pb, offset) {
   n <- nrow(data)
   n.new <- floor(n * pItem)
@@ -193,7 +192,6 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed, seed.alg,
         set.seed(seed.alg)
         for (i in 1:reps) {
           # Find custom functions use get()
-          set.seed(seed)
           ind.new <- sample(n, n.new, replace = FALSE)
           dists <- distances(data[ind.new, ], distance[d])
           dist.arr[ind.new, i, (j - 1) * ld + d, k] <- get(dalgs[j])(dists[[1]], nk[k])
@@ -210,7 +208,7 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed, seed.alg,
 
 #' Cluster other algorithms
 #' @noRd
-cluster_other <- function(data, nk, pItem, reps, oalgs, seed, seed.alg,
+cluster_other <- function(data, nk, pItem, reps, oalgs, seed.alg,
                           progress, pb, offset) {
   n <- nrow(data)
   n.new <- floor(n * pItem)
@@ -225,7 +223,6 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed, seed.alg,
     for (j in 1:lalg) {
       set.seed(seed.alg)
       for (i in 1:reps) {
-        set.seed(seed)
         ind.new <- sample(n, n.new, replace = FALSE)
         other.arr[ind.new, i, j, k] <- 
           switch(oalgs[j],

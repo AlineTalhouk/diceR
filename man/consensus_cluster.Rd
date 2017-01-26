@@ -6,8 +6,9 @@
 \usage{
 consensus_cluster(data, nk = 2:4, pItem = 0.8, reps = 1000,
   algorithms = NULL, nmf.method = c("brunet", "lee"),
-  distance = "euclidean", progress = TRUE, seed = 123456, seed.alg = 1,
-  save = FALSE, file.name = "CCOutput", time.saved = FALSE)
+  distance = "euclidean", progress = TRUE, seed.nmf = 123456,
+  seed.alg = 1, save = FALSE, file.name = "CCOutput",
+  time.saved = FALSE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -34,7 +35,7 @@ use a custom distance function. See example.}
 
 \item{progress}{logical; should a progress bar be displayed?}
 
-\item{seed}{random seed to use for NMF-based algorithms}
+\item{seed.nmf}{random seed to use for NMF-based algorithms}
 
 \item{seed.alg}{seed to use to ensure each algorithm operates on the same set
 of subsamples}
