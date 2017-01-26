@@ -154,6 +154,7 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed, seed.alg,
     for (j in 1:lnmf) {
       set.seed(seed.alg)
       for (i in 1:reps) {
+        set.seed(seed)
         ind.new <- sample(n, n.new, replace = FALSE)
         # Transpose since input for NMF::nmf uses rows as vars, cols as samples
         # In case the subsample has all-zero vars, remove them to speed up comp
@@ -192,6 +193,7 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed, seed.alg,
         set.seed(seed.alg)
         for (i in 1:reps) {
           # Find custom functions use get()
+          set.seed(seed)
           ind.new <- sample(n, n.new, replace = FALSE)
           dists <- distances(data[ind.new, ], distance[d])
           dist.arr[ind.new, i, (j - 1) * ld + d, k] <- get(dalgs[j])(dists[[1]], nk[k])
@@ -223,6 +225,7 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed, seed.alg,
     for (j in 1:lalg) {
       set.seed(seed.alg)
       for (i in 1:reps) {
+        set.seed(seed)
         ind.new <- sample(n, n.new, replace = FALSE)
         other.arr[ind.new, i, j, k] <- 
           switch(oalgs[j],
