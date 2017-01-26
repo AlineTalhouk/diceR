@@ -104,11 +104,15 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
 
   # Relabel Final Clustering using reference
   # Don't relabel if only one consensus function and no reference class
-  if (length(cons.funs) == 1 & is.null(ref.cl)) {
-    FinalR <- Final
+  if (is.null(ref.cl)) {
+    if (length(cons.funs) == 1) {
+      FinalR <- Final
+      # If no reference class, > 1 consensus function, use Final[, 1] as ref.cl
+    } else {
+      FinalR <- apply(Final, 2, relabel_class, ref.cl = Final[, 1])
+    }
   } else {
-    FinalR <- Final %>% 
-      apply(2, relabel_class, ref.cl = ref.cl)
+    FinalR <- apply(Final, 2, relabel_class, ref.cl = ref.cl)
   }
   
   # Return evaluation output including consensus function results
