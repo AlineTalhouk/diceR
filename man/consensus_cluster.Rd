@@ -7,7 +7,7 @@
 consensus_cluster(data, nk = 2:4, pItem = 0.8, reps = 1000,
   algorithms = NULL, nmf.method = c("brunet", "lee"),
   distance = "euclidean", progress = TRUE, seed.nmf = 123456,
-  seed.alg = 1, save = FALSE, file.name = "CCOutput",
+  seed.data = 1, save = FALSE, file.name = "CCOutput",
   time.saved = FALSE)
 }
 \arguments{
@@ -37,7 +37,7 @@ use a custom distance function. See example.}
 
 \item{seed.nmf}{random seed to use for NMF-based algorithms}
 
-\item{seed.alg}{seed to use to ensure each algorithm operates on the same set
+\item{seed.data}{seed to use to ensure each algorithm operates on the same set
 of subsamples}
 
 \item{save}{logical; if \code{TRUE}, the returned object will be saved at 
