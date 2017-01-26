@@ -192,9 +192,7 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed.data,
         set.seed(seed.data)
         for (i in 1:reps) {
           # Find custom functions use get()
-          # set.seed(i)
           ind.new <- sample(n, n.new, replace = FALSE)
-          print(ind.new)
           dists <- distances(data[ind.new, ], distance[d])
           dist.arr[ind.new, i, (j - 1) * ld + d, k] <- get(dalgs[j])(dists[[1]], nk[k])
           if (progress)
