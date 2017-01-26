@@ -70,8 +70,6 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   
   # Check that inputs are correct
   assertthat::assert_that(length(dim(data)) == 2)
-  n <- nrow(data)
-  ncf <- length(cons.funs)
   data <- prepare_data(data, min.sd = min.sd)
   
   # Generate Diverse Cluster Ensemble
@@ -106,11 +104,11 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
 
   # Relabel Final Clustering using reference
   # Don't relabel if only one consensus function and no reference class
-  if (!is.null(ref.cl)) {
+  if (length(cons.funs) == 1 & is.null(ref.cl)) {
+    FinalR <- Final
+  } else {
     FinalR <- Final %>% 
       apply(2, relabel_class, ref.cl = ref.cl)
-  } else {
-    FinalR <- Final
   }
   
   # Return evaluation output including consensus function results
