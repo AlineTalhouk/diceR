@@ -226,19 +226,22 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed.data,
         ind.new <- sample(n, n.new, replace = FALSE)
         other.arr[ind.new, i, j, k] <- 
           switch(oalgs[j],
-                 ap = stats::setNames(dplyr::dense_rank(suppressWarnings(
-                   apcluster::apclusterK(apcluster::negDistMat, data[ind.new, ],
-                                         nk[k], verbose = FALSE)@idx)),
-                   rownames(data[ind.new, ])),
+                 ap = {
+                   ap.cl <- lstats::setNames(dplyr::dense_rank(suppressWarnings(
+                     apcluster::apclusterK(apcluster::negDistMat, data[ind.new, ],
+                                           nk[k], verbose = FALSE)@idx)),
+                     rownames(data[ind.new, ]))
+                   if (length(ap.cl) == 0) NA else ap.cl
+                 },
                  sc = stats::setNames(kernlab::specc(data[ind.new, ], nk[k],
                                                      kernel = "rbfdot")@.Data,
                                       rownames(data[ind.new, ])),
                  gmm = mclust::Mclust(data[ind.new, ], nk[k])$classification,
                  block = {
-                   blk <- blockcluster::cocluster(
+                   blk.cl <- blockcluster::cocluster(
                      data[ind.new, ], "continuous",
                      nbcocluster = c(nk[k], nk[k]))@rowclass + 1
-                   if (length(blk) == 0) NA else blk
+                   if (length(blk.cl) == 0) NA else blk.cl
                  })
         if (progress)
           utils::setTxtProgressBar(pb, (k - 1) * lalg * reps +
