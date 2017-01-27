@@ -234,9 +234,12 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed.data,
                                                      kernel = "rbfdot")@.Data,
                                       rownames(data[ind.new, ])),
                  gmm = mclust::Mclust(data[ind.new, ], nk[k])$classification,
-                 block = blockcluster::cocluster(
-                   data[ind.new, ], "continuous",
-                   nbcocluster = c(nk[k], nk[k]))@rowclass + 1)
+                 block = {
+                   blk <- blockcluster::cocluster(
+                     data[ind.new, ], "continuous",
+                     nbcocluster = c(nk[k], nk[k]))@rowclass + 1
+                   if (length(blk) == 0) NA else blk
+                 })
         if (progress)
           utils::setTxtProgressBar(pb, (k - 1) * lalg * reps +
                                      (j - 1) * reps + i + offset)
