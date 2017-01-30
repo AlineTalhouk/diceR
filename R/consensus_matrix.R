@@ -35,6 +35,9 @@
 #' cm1 <- consensus_matrix(x)
 #' cm2 <- consensus_matrix(x, weights = w)
 consensus_matrix <- function(data, weights = NULL) {
+  if (is.null(dim(data))) {
+    data <- as.matrix(data, ncol = 1)
+  }
   all.IM <- plyr::alply(data, 2, indicator_matrix)
   all.CM <- plyr::alply(data, 2, connectivity_matrix)
   sum.IM <- Reduce('+', all.IM)
@@ -45,7 +48,7 @@ consensus_matrix <- function(data, weights = NULL) {
     sum.CM <- Reduce('+', all.CM)
   }
   cons.mat <- Reduce('/', list(sum.CM, sum.IM))
-  cons.mat[is.nan(cons.mat)] <- 0  
+  cons.mat[is.nan(cons.mat)] <- 0
   return(cons.mat)
 }
 
