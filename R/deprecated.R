@@ -63,6 +63,7 @@
 #'   a class membership.
 #' @author Derek Chiu, Aline Talhouk
 #' @import foreach mclust
+#' @noRd
 consensus_cluster_old <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                                   algorithms = NULL, parallel = NULL, ncores = NULL,
                                   progress = TRUE, seed = 123456, seed.alg = 1,
@@ -226,6 +227,7 @@ consensus_cluster_old <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
 #' @param k scalar indicating number of clusters to cut tree into
 #' @noRd
 hcAEucl <- function(d, k) {
+  .Deprecated("hc")
   return(as.integer(stats::cutree(stats::hclust(
     stats::dist(d), method = "average"), k)))
 }
@@ -235,6 +237,7 @@ hcAEucl <- function(d, k) {
 #' @inheritParams hcAEucl
 #' @noRd
 hcDianaEucl <- function(d, k) {
+  .Deprecated("diana")
   return(as.integer(stats::cutree(cluster::diana(
     stats::dist(d), diss = TRUE), k)))
 }
