@@ -227,7 +227,7 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed.data,
         other.arr[ind.new, i, j, k] <- 
           switch(oalgs[j],
                  ap = {
-                   ap.cl <- lstats::setNames(dplyr::dense_rank(suppressWarnings(
+                   ap.cl <- stats::setNames(dplyr::dense_rank(suppressWarnings(
                      apcluster::apclusterK(apcluster::negDistMat, data[ind.new, ],
                                            nk[k], verbose = FALSE)@idx)),
                      rownames(data[ind.new, ]))
