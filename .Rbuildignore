@@ -5,6 +5,6 @@
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^codecov\.yml$
-^Example_runthrough\.R$
-^deprecated\.R$
-^temp\.R$
+^R\Example_runthrough\.R$
+^R\deprecated\.R$
+^R\hypo_test_expt\.R$

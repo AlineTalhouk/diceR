@@ -1,15 +1,15 @@
 # Test hypothesis of unimodal distribution vs. k clusters
-library(diceR)
-library(sigclust)
-data(hgsc)
-dat <- t(hgsc[, -1])
-set.seed(1)
-nk <- 4
-label <- sample(seq_len(nk), nrow(dat), replace = TRUE)
-cc <- consensus_cluster(dat, nk = 4, algorithms = c("hc", "diana", "km", "pam"))
-cl.mat <- consensus_combine(cc, element = "class")
-pvalue <- my_sigclust(dat, k = nk, 1000, labflag = 1, label = cl.mat$`4`[, 4])
-plot(pvalue)
+# library(diceR)
+# library(sigclust)
+# data(hgsc)
+# dat <- t(hgsc[, -1])
+# set.seed(1)
+# nk <- 4
+# label <- sample(seq_len(nk), nrow(dat), replace = TRUE)
+# cc <- consensus_cluster(dat, nk = 4, algorithms = c("hc", "diana", "km", "pam"))
+# cl.mat <- consensus_combine(cc, element = "class")
+# pvalue <- my_sigclust(dat, k = nk, 1000, labflag = 1, label = cl.mat$`4`[, 4])
+# plot(pvalue)
 
 # Modified functions to account for k > 2
 my_sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0, icovest = 1) {
