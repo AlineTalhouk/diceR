@@ -26,6 +26,8 @@
 #'   Partitioning Algorithm), "LCE" (linkage clustering ensemble)
 #' @param sim.mat type of similarity matrix. One of "cts", "srs", "asrs. See 
 #'   \code{\link{LCE}} for details.
+#' @param prep.data Prepare the data on the "full" dataset (default), the
+#'   "sampled" dataset, or "none".
 #' @param min.sd minimum standard deviation threshold. See details.
 #' @param trim logical; if \code{TRUE}, the number of algorithms in 
 #'   \code{algorithms} is reduced based on internal validity index performance 
@@ -64,18 +66,20 @@
 dice <- function(data, nk, reps = 10, algorithms = NULL,
                  nmf.method = c("brunet", "lee"), distance = "euclidean",
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
-                 sim.mat = c("cts", "srs", "asrs"), min.sd = 1,
+                 sim.mat = c("cts", "srs", "asrs"),
+                 prep.data = c("full", "sampled", "none"), min.sd = 1,
                  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
                  ref.cl = NULL, progress = TRUE) {
   
   # Check that inputs are correct
   assertthat::assert_that(length(dim(data)) == 2)
-  data <- prepare_data(data, min.sd = min.sd)
+  prep.data <- match.arg(prep.data)
   
   # Generate Diverse Cluster Ensemble
   E <- consensus_cluster(data = data, nk = nk, reps = reps,
                          algorithms = algorithms, nmf.method = nmf.method,
-                         distance = distance, progress = progress)
+                         distance = distance, prep.data = prep.data,
+                         min.sd = min.sd, progress = progress)
   
   # Select k
   k <- consensus_evaluate(data = data, E, ref.cl = ref.cl, plot = FALSE)$k
