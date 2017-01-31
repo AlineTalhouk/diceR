@@ -35,8 +35,9 @@
 #' @param nmf.method specify NMF-based algorithms to run. By default the 
 #'   "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 #'   details.
-#' @param distance a vector of distance functions. Defaults to "euclidean". Can 
-#'   use a custom distance function. See example.
+#' @param distance a vector of distance functions. Defaults to "euclidean".
+#'   Other options are given in \code{\link[stats]{dist}}. See example for usage
+#'   of a custom distance function.
 #' @param prep.data Prepare the data on the "full" dataset (default), the
 #'   "sampled" dataset, or "none".
 #' @param min.sd minimum standard deviation threshold for \code{prep.data}

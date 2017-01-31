@@ -30,8 +30,9 @@ use a custom clustering algorithm. See example.}
 "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 details.}
 
-\item{distance}{a vector of distance functions. Defaults to "euclidean". Can 
-use a custom distance function. See example.}
+\item{distance}{a vector of distance functions. Defaults to "euclidean".
+Other options are given in \code{\link[stats]{dist}}. See example for usage
+of a custom distance function.}
 
 \item{prep.data}{Prepare the data on the "full" dataset (default), the
 "sampled" dataset, or "none".}
