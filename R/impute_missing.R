@@ -46,14 +46,14 @@ impute_missing <- function(E, data, nk, seed = 123456) {
   E_complete <- array(NaN, c(dim(E)[1], prod(dim(E)[2:3]), dim(E)[4]))
   for (k in seq_len(dim(E)[4])) {
     # Flatten the matrix
-    E_relabeled <- flatten_E(E_knn[, , , k], is.relabelled = FALSE)
+    E_relabeled <- flatten_E(E_knn[, , , k, drop = FALSE], is.relabelled = FALSE)
     E_complete[, , k] <- t(apply(E_relabeled, 1, function(x) {
       x[which(is.na(x))] <- names(which.max(table(x)))
       return(as.numeric(x))
     }))
   }
   idk <- match(nk, dimnames(E)[[4]])
-  E_complete <- E_complete[, , idk]
+  E_complete <- E_complete[, , idk, drop = FALSE]
   return(list(knn = E_knn, complete = E_complete))
 }
 
