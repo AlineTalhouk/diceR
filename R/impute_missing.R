@@ -52,8 +52,12 @@ impute_missing <- function(E, data, nk, seed = 123456) {
       return(as.numeric(x))
     }))
   }
-  idk <- match(nk, dimnames(E)[[4]])
-  E_complete <- E_complete[, , idk, drop = FALSE]
+  if (prod(dim(E_knn)[-1]) > 1) {
+    idk <- match(nk, dimnames(E)[[4]])
+    E_complete <- E_complete[, , idk]
+  } else {
+    E_complete <- abind::adrop(E_complete, 3)
+  }
   return(list(knn = E_knn, complete = E_complete))
 }
 
