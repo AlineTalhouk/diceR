@@ -137,8 +137,8 @@ graph_tracking <- function(x) {
     tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>%
     mutate(k = substring(k, first = 2),
            Class = factor(Class), Method = factor(Method)) %>% 
-    cbind(Samples = factor(colnames(x[, , 1, 1]),
-                           levels = colnames(x[, , 1, 1])))
+    cbind(Samples = factor(seq_len(dim(x)[1]),
+                           levels = seq_len(dim(x)[1])))
   p <- ggplot(dat, aes(Samples, k)) +
     geom_tile(aes(fill = Class)) +
     facet_wrap(~Method) +
