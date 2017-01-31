@@ -37,6 +37,9 @@
 #'   details.
 #' @param distance a vector of distance functions. Defaults to "euclidean". Can 
 #'   use a custom distance function. See example.
+#' @param prep.data Prepare the data on the "full" dataset (default), the
+#'   "sampled" dataset, or "none".
+#' @param min.sd minimum standard deviation threshold for \code{prep.data}
 #' @param progress logical; should a progress bar be displayed?
 #' @param seed.nmf random seed to use for NMF-based algorithms
 #' @param seed.data seed to use to ensure each algorithm operates on the same set
@@ -73,10 +76,15 @@
 #' str(cc)
 consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                               algorithms = NULL, nmf.method = c("brunet", "lee"),
-                              distance = "euclidean", progress = TRUE,
+                              distance = "euclidean",
+                              prep.data = c("full", "sampled", "none"),
+                              min.sd = 1, progress = TRUE,
                               seed.nmf = 123456, seed.data = 1, save = FALSE,
                               file.name = "CCOutput", time.saved = FALSE) {
   # Check for invalid distance inputs
+  prep.data <- match.arg(prep.data)
+  if (prep.data == "full")
+    data <- prepare_data(data, min.sd = min.sd)
   nmf.arr <- other.arr <- dist.arr <- NULL
   check.dists <- distances(data, distance)
   
@@ -99,14 +107,14 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
   # Cluster NMF-based algorithms
   if ("nmf" %in% algorithms) {
     nmf.arr <- cluster_nmf(data, nk, pItem, reps, nmf.method,
-                           seed.nmf, seed.data, progress, pb)
+                           seed.nmf, seed.data, prep.data, min.sd, progress, pb)
   }
   
   # Cluster distance-based algorithms
   dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")]
   if (length(dalgs) > 0) {
     dist.arr <- cluster_dist(data, nk, pItem, reps, dalgs, distance,
-                             seed.data, progress, pb,
+                             seed.data, prep.data, min.sd, progress, pb,
                              offset = lnk * lnmf * reps)
   }
   
@@ -114,7 +122,7 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
   oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block")]
   if (length(oalgs) > 0) {
     other.arr <- cluster_other(data, nk, pItem, reps, oalgs,
-                               seed.data, progress, pb,
+                               seed.data, prep.data, min.sd, progress, pb,
                                offset = lnk * (lnmf + ldist) * reps)
   }
   
@@ -135,7 +143,7 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
 #' Cluster NMF-based algorithms
 #' @noRd
 cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed.nmf, seed.data,
-                        progress, pb) {
+                        prep.data, min.sd, progress, pb) {
   # Transform to non-negative matrix by column-binding a negative replicate and
   # then coercing all negatives to 0
   x.nmf <- data %>%
@@ -159,8 +167,13 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed.nmf, seed.data,
         # In case the subsample has all-zero vars, remove them to speed up comp
         x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
                                                function(x) all(x == 0)))])
+        if (prep.data == "sampled") {
+          x <- prepare_data(x.nmf.samp, min.sd = min.sd)
+        } else if (prep.data %in% c("full", "none")) {
+          x <- x.nmf.samp
+        }
         nmf.arr[ind.new, i, j, k] <- NMF::predict(NMF::nmf(
-          x.nmf.samp, rank = nk[k], method = nmf.method[j], seed = seed.nmf))
+          x, rank = nk[k], method = nmf.method[j], seed = seed.nmf))
         if (progress)
           utils::setTxtProgressBar(pb, (k - 1) * lnmf * reps + (j - 1) * reps + i)
       }
@@ -172,7 +185,7 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed.nmf, seed.data,
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
 cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed.data,
-                         progress, pb, offset) {
+                         prep.data, min.sd, progress, pb, offset) {
   n <- nrow(data)
   n.new <- floor(n * pItem)
   ld <- length(distance)
@@ -193,7 +206,12 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed.data,
         for (i in 1:reps) {
           # Find custom functions use get()
           ind.new <- sample(n, n.new, replace = FALSE)
-          dists <- distances(data[ind.new, ], distance[d])
+          if (prep.data == "sampled") {
+            x <- prepare_data(data[ind.new, ], min.sd = min.sd)
+          } else if (prep.data %in% c("full", "none")) {
+            x <- data[ind.new, ]
+          }
+          dists <- distances(x, distance[d])
           dist.arr[ind.new, i, (j - 1) * ld + d, k] <- get(dalgs[j])(dists[[1]], nk[k])
           if (progress)
             utils::setTxtProgressBar(pb, (k - 1) * lalg * ld * reps +
@@ -209,7 +227,7 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed.data,
 #' Cluster other algorithms
 #' @noRd
 cluster_other <- function(data, nk, pItem, reps, oalgs, seed.data,
-                          progress, pb, offset) {
+                          prep.data, min.sd, progress, pb, offset) {
   n <- nrow(data)
   n.new <- floor(n * pItem)
   lalg <- length(oalgs)
@@ -224,22 +242,27 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed.data,
       set.seed(seed.data)
       for (i in 1:reps) {
         ind.new <- sample(n, n.new, replace = FALSE)
+        if (prep.data == "sampled") {
+          x <- prepare_data(data[ind.new, ], min.sd = min.sd)
+        } else if (prep.data %in% c("full", "none")) {
+          x <- data[ind.new, ]
+        }
         other.arr[ind.new, i, j, k] <- 
           switch(oalgs[j],
                  ap = {
                    ap.cl <- stats::setNames(dplyr::dense_rank(suppressWarnings(
-                     apcluster::apclusterK(apcluster::negDistMat, data[ind.new, ],
+                     apcluster::apclusterK(apcluster::negDistMat, x,
                                            nk[k], verbose = FALSE)@idx)),
                      rownames(data[ind.new, ]))
                    if (length(ap.cl) == 0) NA else ap.cl
                  },
-                 sc = stats::setNames(kernlab::specc(data[ind.new, ], nk[k],
+                 sc = stats::setNames(kernlab::specc(x, nk[k],
                                                      kernel = "rbfdot")@.Data,
                                       rownames(data[ind.new, ])),
-                 gmm = mclust::Mclust(data[ind.new, ], nk[k])$classification,
+                 gmm = mclust::Mclust(x, nk[k])$classification,
                  block = {
                    blk.cl <- blockcluster::cocluster(
-                     data[ind.new, ], "continuous",
+                     x, "continuous",
                      nbcocluster = c(nk[k], nk[k]))@rowclass + 1
                    if (length(blk.cl) == 0) NA else blk.cl
                  })

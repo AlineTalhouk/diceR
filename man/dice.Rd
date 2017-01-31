@@ -6,9 +6,10 @@
 \usage{
 dice(data, nk, reps = 10, algorithms = NULL, nmf.method = c("brunet",
   "lee"), distance = "euclidean", cons.funs = c("kmodes", "CSPA",
-  "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"), min.sd = 1,
-  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
-  ref.cl = NULL, progress = TRUE)
+  "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"),
+  prep.data = c("full", "sampled", "none"), min.sd = 1, trim = FALSE,
+  reweigh = FALSE, evaluate = TRUE, plot = FALSE, ref.cl = NULL,
+  progress = TRUE)
 }
 \arguments{
 \item{data}{matrix with rows as observations, columns as variables}
@@ -37,6 +38,9 @@ Partitioning Algorithm), "LCE" (linkage clustering ensemble)}
 
 \item{sim.mat}{type of similarity matrix. One of "cts", "srs", "asrs. See 
 \code{\link{LCE}} for details.}
+
+\item{prep.data}{Prepare the data on the "full" dataset (default), the
+"sampled" dataset, or "none".}
 
 \item{min.sd}{minimum standard deviation threshold. See details.}
 

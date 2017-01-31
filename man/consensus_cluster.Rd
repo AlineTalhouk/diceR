@@ -6,9 +6,9 @@
 \usage{
 consensus_cluster(data, nk = 2:4, pItem = 0.8, reps = 1000,
   algorithms = NULL, nmf.method = c("brunet", "lee"),
-  distance = "euclidean", progress = TRUE, seed.nmf = 123456,
-  seed.data = 1, save = FALSE, file.name = "CCOutput",
-  time.saved = FALSE)
+  distance = "euclidean", prep.data = c("full", "sampled", "none"),
+  min.sd = 1, progress = TRUE, seed.nmf = 123456, seed.data = 1,
+  save = FALSE, file.name = "CCOutput", time.saved = FALSE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -32,6 +32,11 @@ details.}
 
 \item{distance}{a vector of distance functions. Defaults to "euclidean". Can 
 use a custom distance function. See example.}
+
+\item{prep.data}{Prepare the data on the "full" dataset (default), the
+"sampled" dataset, or "none".}
+
+\item{min.sd}{minimum standard deviation threshold for \code{prep.data}}
 
 \item{progress}{logical; should a progress bar be displayed?}
 
