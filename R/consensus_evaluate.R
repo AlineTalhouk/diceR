@@ -32,15 +32,17 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   pac <- lapply(cons.mat, lapply, PAC) %>%
     plyr::ldply(unlist, .id = "k")
   
-  # If no reference, k is number of distinct classes
+  # If reference given, k is number of distinct classes
   if (!is.null(ref.cl)) {
-    k <- as.character(n_distinct(ref.cl))
+    k <- n_distinct(ref.cl)
     # Otherwise k is the maximum average PAC across algorithms
   } else {  
     k <- pac %>% 
       magrittr::use_series(k) %>% 
       magrittr::extract(apply(pac[, -1, drop = FALSE], 1, mean) %>% 
-                          which.max())
+                          which.max()) %>% 
+      as.character() %>% 
+      as.integer()
   }
   
   # If matrix of cluster assignments from cons.funs given, cbind to cl.mat
