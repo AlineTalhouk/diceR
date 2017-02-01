@@ -37,12 +37,12 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
     k <- n_distinct(ref.cl)
     # Otherwise k is the maximum average PAC across algorithms
   } else {  
-    k <- pac %>% 
-      magrittr::use_series(k) %>% 
-      magrittr::extract(apply(pac[, -1, drop = FALSE], 1, mean) %>% 
-                          which.max()) %>% 
-      as.character() %>% 
-      as.integer()
+    idx.k <- apply(pac[, -1, drop = FALSE], 2, which.max) %>% 
+      table() %>% 
+      which.max() %>% 
+      names() %>% 
+      as.numeric()
+    k <- as.integer(as.character(pac$k[idx.k]))
   }
   
   # If matrix of cluster assignments from cons.funs given, cbind to cl.mat
