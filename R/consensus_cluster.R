@@ -262,9 +262,10 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed.data,
                                       rownames(data[ind.new, ])),
                  gmm = mclust::Mclust(x, nk[k])$classification,
                  block = {
-                   blk.cl <- blockcluster::cocluster(
+                   blk.cl <- tryCatch(blockcluster::cocluster(
                      x, "continuous",
-                     nbcocluster = c(nk[k], nk[k]))@rowclass + 1
+                     nbcocluster = c(nk[k], nk[k]))@rowclass + 1,
+                     error = function(e) return(NA))
                    if (length(blk.cl) == 0) NA else blk.cl
                  })
         if (progress)
