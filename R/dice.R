@@ -29,6 +29,7 @@
 #' @param prep.data Prepare the data on the "full" dataset (default), the
 #'   "sampled" dataset, or "none".
 #' @param min.sd minimum standard deviation threshold. See details.
+#' @param seed seed used for imputation
 #' @param trim logical; if \code{TRUE}, the number of algorithms in 
 #'   \code{algorithms} is reduced based on internal validity index performance 
 #'   prior to consensus clustering by \code{cons.funs}. Defaults to 
@@ -68,6 +69,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
                  prep.data = c("full", "sampled", "none"), min.sd = 1,
+                 seed = 1,
                  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
                  ref.cl = NULL, progress = TRUE) {
   
@@ -80,6 +82,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
                          algorithms = algorithms, nmf.method = nmf.method,
                          distance = distance, prep.data = prep.data,
                          min.sd = min.sd, progress = progress)
+  # KNN imputation
+  E <- apply(E, 2:4, impute_knn, data = data, seed = seed)
   
   # Select k
   k <- consensus_evaluate(data = data, E, ref.cl = ref.cl, plot = FALSE)$k
@@ -90,9 +94,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
     E <- trim.obj$data.new
   }
   
-  # Impute Missing Values using KNN and majority vote
-  imp.obj <- impute_missing(E, data, k)
-  Ecomp <- imp.obj$complete
+  # Impute remaining missing cases
+  Ecomp <- impute_missing(E, data, k)
   
   # Consensus functions
   Final <- sapply(cons.funs, function(x) {

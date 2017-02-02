@@ -127,7 +127,8 @@ CSPA <- function(E, k) {
 #' LCE(E = x, k = 4, sim.mat = "asrs")
 #' }
 #' 
-#' x_imputed <- impute_missing(x, dat, nk = 4)$complete
+#' x <- apply(x, 2:4, impute_knn, data = dat, seed = 1)
+#' x_imputed <- impute_missing(x, dat, nk = 4)
 #' LCE(E = x_imputed, k = 4, sim.mat = "cts")
 LCE <- function(E, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
                 sim.mat = c("cts", "srs", "asrs")) {
