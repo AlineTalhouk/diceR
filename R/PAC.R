@@ -32,10 +32,14 @@
 #' y <- consensus_matrix(x)
 #' PAC(y, lower = 0.05, upper = 0.95)
 PAC <- function(cm, lower = 0, upper = 1) {
-  pac <- cm %>%
-    extract(lower.tri(.)) %>%
-    extract(. > lower & . < upper) %>% 
-    length() %>%
-    divide_by(., length(cm[lower.tri(cm)]))
+  if (all(cm == 0)) {
+    pac <- NA
+  } else {
+    pac <- cm %>%
+      extract(lower.tri(.)) %>%
+      extract(. > lower & . < upper) %>% 
+      length() %>%
+      divide_by(., length(cm[lower.tri(cm)]))
+  }
   return(pac)
 }
