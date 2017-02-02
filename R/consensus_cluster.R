@@ -38,9 +38,10 @@
 #' @param distance a vector of distance functions. Defaults to "euclidean".
 #'   Other options are given in \code{\link[stats]{dist}}. See example for usage
 #'   of a custom distance function.
-#' @param prep.data Prepare the data on the "full" dataset (default), the
-#'   "sampled" dataset, or "none".
-#' @param min.sd minimum standard deviation threshold for \code{prep.data}
+#' @param prep.data Prepare the data on the "full" dataset, the
+#'   "sampled" dataset, or "none" (default).
+#' @param min.sd minimum standard deviation threshold. See
+#'   \code{\link{prepare_data}}.
 #' @param progress logical; should a progress bar be displayed?
 #' @param seed.nmf random seed to use for NMF-based algorithms
 #' @param seed.data seed to use to ensure each algorithm operates on the same set
@@ -78,7 +79,7 @@
 consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                               algorithms = NULL, nmf.method = c("brunet", "lee"),
                               distance = "euclidean",
-                              prep.data = c("full", "sampled", "none"),
+                              prep.data = c("none", "full", "sampled"),
                               min.sd = 1, progress = TRUE,
                               seed.nmf = 123456, seed.data = 1, save = FALSE,
                               file.name = "CCOutput", time.saved = FALSE) {

@@ -7,7 +7,7 @@
 dice(data, nk, reps = 10, algorithms = NULL, nmf.method = c("brunet",
   "lee"), distance = "euclidean", cons.funs = c("kmodes", "CSPA",
   "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"),
-  prep.data = c("full", "sampled", "none"), min.sd = 1, seed = 1,
+  prep.data = c("none", "full", "sampled"), min.sd = 1, seed = 1,
   trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
   ref.cl = NULL, progress = TRUE)
 }
@@ -39,10 +39,11 @@ Partitioning Algorithm), "LCE" (linkage clustering ensemble)}
 \item{sim.mat}{type of similarity matrix. One of "cts", "srs", "asrs. See 
 \code{\link{LCE}} for details.}
 
-\item{prep.data}{Prepare the data on the "full" dataset (default), the
-"sampled" dataset, or "none".}
+\item{prep.data}{Prepare the data on the "full" dataset, the
+"sampled" dataset, or "none" (default). See Details.}
 
-\item{min.sd}{minimum standard deviation threshold. See details.}
+\item{min.sd}{minimum standard deviation threshold. See
+\code{\link{prepare_data}}.}
 
 \item{seed}{seed used for imputation}
 
@@ -77,9 +78,10 @@ Runs consensus clustering across subsamples, algorithms, and number of
 clusters (k).
 }
 \details{
-The \code{min.sd} argument is used to filter the feature space for only 
-highly variable features. Only features with a standard deviation across all 
-samples greater than \code{min.sd} will be used.
+There are three ways to handle the input data before clustering via argument
+\code{prep.data}. The default is to use the raw data as-is ("none"). Or, we
+can enact \code{\link{prepare_data}} on the full dataset ("full"), or the
+bootstrap sampled datasets ("sampled").
 }
 \examples{
 library(dplyr)

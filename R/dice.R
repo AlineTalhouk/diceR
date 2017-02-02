@@ -3,9 +3,10 @@
 #' Runs consensus clustering across subsamples, algorithms, and number of 
 #' clusters (k).
 #' 
-#' The \code{min.sd} argument is used to filter the feature space for only 
-#' highly variable features. Only features with a standard deviation across all 
-#' samples greater than \code{min.sd} will be used.
+#' There are three ways to handle the input data before clustering via argument
+#' \code{prep.data}. The default is to use the raw data as-is ("none"). Or, we
+#' can enact \code{\link{prepare_data}} on the full dataset ("full"), or the
+#' bootstrap sampled datasets ("sampled").
 #' 
 #' @param data matrix with rows as observations, columns as variables
 #' @param nk number of clusters (k) requested; can specify a single integer or a
@@ -26,9 +27,10 @@
 #'   Partitioning Algorithm), "LCE" (linkage clustering ensemble)
 #' @param sim.mat type of similarity matrix. One of "cts", "srs", "asrs. See 
 #'   \code{\link{LCE}} for details.
-#' @param prep.data Prepare the data on the "full" dataset (default), the
-#'   "sampled" dataset, or "none".
-#' @param min.sd minimum standard deviation threshold. See details.
+#' @param prep.data Prepare the data on the "full" dataset, the
+#'   "sampled" dataset, or "none" (default). See Details.
+#' @param min.sd minimum standard deviation threshold. See
+#'   \code{\link{prepare_data}}.
 #' @param seed seed used for imputation
 #' @param trim logical; if \code{TRUE}, the number of algorithms in 
 #'   \code{algorithms} is reduced based on internal validity index performance 
@@ -68,7 +70,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
                  nmf.method = c("brunet", "lee"), distance = "euclidean",
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
-                 prep.data = c("full", "sampled", "none"), min.sd = 1,
+                 prep.data = c("none", "full", "sampled"), min.sd = 1,
                  seed = 1,
                  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
                  ref.cl = NULL, progress = TRUE) {

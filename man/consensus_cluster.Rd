@@ -6,7 +6,7 @@
 \usage{
 consensus_cluster(data, nk = 2:4, pItem = 0.8, reps = 1000,
   algorithms = NULL, nmf.method = c("brunet", "lee"),
-  distance = "euclidean", prep.data = c("full", "sampled", "none"),
+  distance = "euclidean", prep.data = c("none", "full", "sampled"),
   min.sd = 1, progress = TRUE, seed.nmf = 123456, seed.data = 1,
   save = FALSE, file.name = "CCOutput", time.saved = FALSE)
 }
@@ -34,10 +34,11 @@ details.}
 Other options are given in \code{\link[stats]{dist}}. See example for usage
 of a custom distance function.}
 
-\item{prep.data}{Prepare the data on the "full" dataset (default), the
-"sampled" dataset, or "none".}
+\item{prep.data}{Prepare the data on the "full" dataset, the
+"sampled" dataset, or "none" (default).}
 
-\item{min.sd}{minimum standard deviation threshold for \code{prep.data}}
+\item{min.sd}{minimum standard deviation threshold. See
+\code{\link{prepare_data}}.}
 
 \item{progress}{logical; should a progress bar be displayed?}
 
