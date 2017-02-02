@@ -48,8 +48,7 @@ E <- consensus_cluster(data, nk = 3:4, reps = 10, algorithms = c("hc", "km",
 "sc"), progress = FALSE)
 sum(is.na(E))
 E_imputed <- impute_missing(E, data, 4)
-sum(is.na(E_imputed$knn))
-sum(is.na(E_imputed$complete))
+sum(is.na(E_imputed))
 }
 \author{
 Aline Talhouk

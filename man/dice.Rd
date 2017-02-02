@@ -7,9 +7,9 @@
 dice(data, nk, reps = 10, algorithms = NULL, nmf.method = c("brunet",
   "lee"), distance = "euclidean", cons.funs = c("kmodes", "CSPA",
   "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"),
-  prep.data = c("full", "sampled", "none"), min.sd = 1, trim = FALSE,
-  reweigh = FALSE, evaluate = TRUE, plot = FALSE, ref.cl = NULL,
-  progress = TRUE)
+  prep.data = c("full", "sampled", "none"), min.sd = 1, seed = 1,
+  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
+  ref.cl = NULL, progress = TRUE)
 }
 \arguments{
 \item{data}{matrix with rows as observations, columns as variables}
@@ -43,6 +43,8 @@ Partitioning Algorithm), "LCE" (linkage clustering ensemble)}
 "sampled" dataset, or "none".}
 
 \item{min.sd}{minimum standard deviation threshold. See details.}
+
+\item{seed}{seed used for imputation}
 
 \item{trim}{logical; if \code{TRUE}, the number of algorithms in 
 \code{algorithms} is reduced based on internal validity index performance 

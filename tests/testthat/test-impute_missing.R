@@ -8,13 +8,8 @@ E <- consensus_cluster(data, nk = 4, reps = 5,
                        progress = FALSE)
 E_imputed <- impute_missing(E, data, nk = 4)
 
-test_that("knn has less than or equal number of NA after imputation", {
-  E_knn <- E_imputed$knn
-  expect_lte(sum(is.na(E_knn)), sum(is.na(E)))
-})
-
 test_that("adding majority vote elimnates all missing values", {
-  E_complete <- E_imputed$complete
+  E_complete <- E_imputed
   expect_equal(sum(is.na(E_complete)), 0)
   expect_equal(nrow(E_complete), dim(E)[1])
   expect_equal(ncol(E_complete), prod(dim(E)[2], dim(E)[3]))
