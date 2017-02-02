@@ -37,7 +37,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
     k <- n_distinct(ref.cl)
     # Otherwise k is the maximum average PAC across algorithms
   } else {  
-    idx.k <- apply(pac[, -1, drop = FALSE], 2, which.max) %>% 
+    idx.k <- apply(pac[, -1, drop = FALSE], 2, which.min) %>% 
       table() %>% 
       which.max() %>% 
       names() %>% 
