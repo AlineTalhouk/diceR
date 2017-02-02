@@ -7,8 +7,9 @@
 consensus_cluster(data, nk = 2:4, pItem = 0.8, reps = 1000,
   algorithms = NULL, nmf.method = c("brunet", "lee"),
   distance = "euclidean", prep.data = c("none", "full", "sampled"),
-  min.sd = 1, progress = TRUE, seed.nmf = 123456, seed.data = 1,
-  save = FALSE, file.name = "CCOutput", time.saved = FALSE)
+  scale = TRUE, type = c("conventional", "robust"), min.var = 1,
+  progress = TRUE, seed.nmf = 123456, seed.data = 1, save = FALSE,
+  file.name = "CCOutput", time.saved = FALSE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -37,8 +38,19 @@ of a custom distance function.}
 \item{prep.data}{Prepare the data on the "full" dataset, the
 "sampled" dataset, or "none" (default).}
 
-\item{min.sd}{minimum standard deviation threshold. See
-\code{\link{prepare_data}}.}
+\item{scale}{logical; should the data be centered and scaled?}
+
+\item{type}{if we use "conventional" measures (default), then the mean and
+standard deviation are used for centering and scaling, respectively. If
+"robust" measures are specified, the median and median absolute deviation
+(MAD) are used.}
+
+\item{min.var}{minimum variability measure threshold used to filter the
+feature space for only highly variable features. Only features with a
+minimum variability measure across all samples greater than \code{min.var}
+will be used. If \code{type = "conventional"}, the standard deviation is
+the measure used, and if \code{type = "robust"}, the MAD is the measure
+used.}
 
 \item{progress}{logical; should a progress bar be displayed?}
 
