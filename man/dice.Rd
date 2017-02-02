@@ -7,7 +7,7 @@
 dice(data, nk, reps = 10, algorithms = NULL, nmf.method = c("brunet",
   "lee"), distance = "euclidean", cons.funs = c("kmodes", "CSPA",
   "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"),
-  prep.data = c("none", "full", "sampled"), min.sd = 1, seed = 1,
+  prep.data = c("none", "full", "sampled"), min.var = 1, seed = 1,
   trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
   ref.cl = NULL, progress = TRUE)
 }
@@ -42,7 +42,7 @@ Partitioning Algorithm), "LCE" (linkage clustering ensemble)}
 \item{prep.data}{Prepare the data on the "full" dataset, the
 "sampled" dataset, or "none" (default). See Details.}
 
-\item{min.sd}{minimum standard deviation threshold. See
+\item{min.var}{minimum variability measure threshold. See
 \code{\link{prepare_data}}.}
 
 \item{seed}{seed used for imputation}
