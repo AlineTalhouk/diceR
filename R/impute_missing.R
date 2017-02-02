@@ -66,8 +66,9 @@ impute_missing <- function(E, data, nk, seed = 123456) {
 #' @export
 impute_knn <- function(x, data, seed) {
   set.seed(seed)
-  ind <- is.na(x)
-  x[ind] <- class::knn(train = data[!ind, ], test = data[ind, ], cl = x[!ind],
-                       k = 5, l = 3)
+  ind <- !is.na(x)
+  if (any(ind))
+    x[!ind] <- class::knn(train = data[ind, ], test = data[!ind, ], cl = x[ind],
+                          k = 5, l = 3)
   return(x)
 }
