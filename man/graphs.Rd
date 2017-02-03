@@ -47,12 +47,6 @@ matrix heatmaps for each algorithm in \code{x}. \code{graph_tracking} tracks
 how cluster assignments change between algorithms. \code{graph_all} is a 
 wrapper that runs all graphing functions.
 }
-\note{
-The current implementations of \code{graph_delta_area} and 
-  \code{graph_tracking} do not compare between different number of clusters. 
-  Thus the interpretation of relative change is not natural, and the tracking
-  plot shows low concordance.
-}
 \examples{
 # Consensus clustering for 3 algorithms
 library(ggplot2)

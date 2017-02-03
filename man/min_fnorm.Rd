@@ -32,7 +32,6 @@ of a predicted class and want to compare to a reference class.
 
 A <- matrix(sample(1:25, size = 25, rep = FALSE), 5, 5)
 min_fnorm(A)
-
 }
 \author{
 Ravi Varadhan:
