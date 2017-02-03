@@ -22,7 +22,7 @@ consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   cc.obj <- abind::abind(list(...), along = 3)
   z <- consensus_evaluate(data = data, cc.obj, cons.cl = cons.cl,
                           ref.cl = ref.cl, plot = FALSE)
-  k <- as.character(z$k)
+  k <- as.character(min(z$k))
   alg.all <- z$internal[[k]]$Algorithms
   
   # Separate algorithms into those from clusterCrit (main), and (others)

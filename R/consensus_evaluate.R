@@ -39,7 +39,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   } else {  
     idx.k <- apply(pac[, -1, drop = FALSE], 2, which.min) %>% 
       table() %>% 
-      which.max() %>% 
+      extract(is_in(., max(.))) %>% 
       names() %>% 
       as.numeric()
     k <- as.integer(as.character(pac$k[idx.k]))
@@ -79,7 +79,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   # Only calculate external indices if a reference is given
   if (!is.null(ref.cl)) {
     cl.mat.ext <- cl.mat %>% 
-      extract2(match(k, names(.)))
+      extract2(match(min(k), names(.)))
     ind.ext <- data.frame(
       Algorithms = an,
       apply(cl.mat.ext, 2, function(cl)
