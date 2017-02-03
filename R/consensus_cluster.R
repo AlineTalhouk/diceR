@@ -38,9 +38,9 @@
 #' @param distance a vector of distance functions. Defaults to "euclidean".
 #'   Other options are given in \code{\link[stats]{dist}}. See example for usage
 #'   of a custom distance function.
-#' @param prep.data Prepare the data on the "full" dataset (default), the
-#'   "sampled" dataset, or "none".
-#' @param min.sd minimum standard deviation threshold for \code{prep.data}
+#' @param prep.data Prepare the data on the "full" dataset, the
+#'   "sampled" dataset, or "none" (default).
+#' @inheritParams prepare_data
 #' @param progress logical; should a progress bar be displayed?
 #' @param seed.nmf random seed to use for NMF-based algorithms
 #' @param seed.data seed to use to ensure each algorithm operates on the same set
@@ -78,14 +78,15 @@
 consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
                               algorithms = NULL, nmf.method = c("brunet", "lee"),
                               distance = "euclidean",
-                              prep.data = c("full", "sampled", "none"),
-                              min.sd = 1, progress = TRUE,
+                              prep.data = c("none", "full", "sampled"),
+                              scale = TRUE, type = c("conventional", "robust"),
+                              min.var = 1, progress = TRUE,
                               seed.nmf = 123456, seed.data = 1, save = FALSE,
                               file.name = "CCOutput", time.saved = FALSE) {
   # Check for invalid distance inputs
   prep.data <- match.arg(prep.data)
   if (prep.data == "full")
-    data <- prepare_data(data, min.sd = min.sd)
+    data <- prepare_data(data, scale = scale, type = type, min.var = min.var)
   nmf.arr <- other.arr <- dist.arr <- NULL
   check.dists <- distances(data, distance)
   
@@ -108,22 +109,24 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
   # Cluster NMF-based algorithms
   if ("nmf" %in% algorithms) {
     nmf.arr <- cluster_nmf(data, nk, pItem, reps, nmf.method,
-                           seed.nmf, seed.data, prep.data, min.sd, progress, pb)
+                           seed.nmf, seed.data, prep.data, scale, type, min.var,
+                           progress, pb)
   }
   
   # Cluster distance-based algorithms
   dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")]
   if (length(dalgs) > 0) {
     dist.arr <- cluster_dist(data, nk, pItem, reps, dalgs, distance,
-                             seed.data, prep.data, min.sd, progress, pb,
-                             offset = lnk * lnmf * reps)
+                             seed.data, prep.data, scale, type, min.var,
+                             progress, pb, offset = lnk * lnmf * reps)
   }
   
   # Cluster other algorithms
   oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block")]
   if (length(oalgs) > 0) {
     other.arr <- cluster_other(data, nk, pItem, reps, oalgs,
-                               seed.data, prep.data, min.sd, progress, pb,
+                               seed.data, prep.data, scale, type, min.var,
+                               progress, pb,
                                offset = lnk * (lnmf + ldist) * reps)
   }
   
@@ -144,7 +147,7 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
 #' Cluster NMF-based algorithms
 #' @noRd
 cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed.nmf, seed.data,
-                        prep.data, min.sd, progress, pb) {
+                        prep.data, scale, type, min.var, progress, pb) {
   # Transform to non-negative matrix by column-binding a negative replicate and
   # then coercing all negatives to 0
   x.nmf <- data %>%
@@ -169,7 +172,8 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed.nmf, seed.data,
         x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
                                                function(x) all(x == 0)))])
         if (prep.data == "sampled") {
-          x <- prepare_data(x.nmf.samp, min.sd = min.sd)
+          x <- prepare_data(x.nmf.samp, scale = scale, type = type,
+                            min.var = min.var)
         } else if (prep.data %in% c("full", "none")) {
           x <- x.nmf.samp
         }
@@ -186,7 +190,7 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed.nmf, seed.data,
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
 cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed.data,
-                         prep.data, min.sd, progress, pb, offset) {
+                         prep.data, scale, type, min.var, progress, pb, offset) {
   n <- nrow(data)
   n.new <- floor(n * pItem)
   ld <- length(distance)
@@ -208,7 +212,8 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed.data,
           # Find custom functions use get()
           ind.new <- sample(n, n.new, replace = FALSE)
           if (prep.data == "sampled") {
-            x <- prepare_data(data[ind.new, ], min.sd = min.sd)
+            x <- prepare_data(data[ind.new, ], scale = scale, type = type,
+                              min.var = min.var)
           } else if (prep.data %in% c("full", "none")) {
             x <- data[ind.new, ]
           }
@@ -228,7 +233,8 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed.data,
 #' Cluster other algorithms
 #' @noRd
 cluster_other <- function(data, nk, pItem, reps, oalgs, seed.data,
-                          prep.data, min.sd, progress, pb, offset) {
+                          prep.data, scale, type, min.var, progress, pb,
+                          offset) {
   n <- nrow(data)
   n.new <- floor(n * pItem)
   lalg <- length(oalgs)
@@ -244,7 +250,8 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed.data,
       for (i in 1:reps) {
         ind.new <- sample(n, n.new, replace = FALSE)
         if (prep.data == "sampled") {
-          x <- prepare_data(data[ind.new, ], min.sd = min.sd)
+          x <- prepare_data(data[ind.new, ], scale = scale, type = type,
+                            min.var = min.var)
         } else if (prep.data %in% c("full", "none")) {
           x <- data[ind.new, ]
         }
