@@ -4,23 +4,32 @@
 \alias{prepare_data}
 \title{Prepare data for consensus clustering}
 \usage{
-prepare_data(data, min.sd = 1)
+prepare_data(data, scale = TRUE, type = c("conventional", "robust"),
+  min.var = 1)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
 
-\item{min.sd}{minimum standard deviation threshold. See details.}
+\item{scale}{logical; should the data be centered and scaled?}
+
+\item{type}{if we use "conventional" measures (default), then the mean and
+standard deviation are used for centering and scaling, respectively. If
+"robust" measures are specified, the median and median absolute deviation
+(MAD) are used.}
+
+\item{min.var}{minimum variability measure threshold used to filter the
+feature space for only highly variable features. Only features with a
+minimum variability measure across all samples greater than \code{min.var}
+will be used. If \code{type = "conventional"}, the standard deviation is
+the measure used, and if \code{type = "robust"}, the MAD is the measure
+used.}
 }
 \value{
 dataset prepared for usage in \code{consensus_cluster}
 }
 \description{
-Remove variables with low signal and scale before consensus clustering
-}
-\details{
-The \code{min.sd} argument is used to filter the feature space for only
-highly variable features. Only features with a standard deviation across all
-samples greater than \code{min.sd} will be used.
+Remove variables with low signal and (optionally) scale before consensus
+clustering.
 }
 \examples{
 set.seed(2)

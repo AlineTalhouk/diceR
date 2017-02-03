@@ -3,9 +3,10 @@
 #' Runs consensus clustering across subsamples, algorithms, and number of 
 #' clusters (k).
 #' 
-#' The \code{min.sd} argument is used to filter the feature space for only 
-#' highly variable features. Only features with a standard deviation across all 
-#' samples greater than \code{min.sd} will be used.
+#' There are three ways to handle the input data before clustering via argument
+#' \code{prep.data}. The default is to use the raw data as-is ("none"). Or, we
+#' can enact \code{\link{prepare_data}} on the full dataset ("full"), or the
+#' bootstrap sampled datasets ("sampled").
 #' 
 #' @param data matrix with rows as observations, columns as variables
 #' @param nk number of clusters (k) requested; can specify a single integer or a
@@ -26,9 +27,10 @@
 #'   Partitioning Algorithm), "LCE" (linkage clustering ensemble)
 #' @param sim.mat type of similarity matrix. One of "cts", "srs", "asrs. See 
 #'   \code{\link{LCE}} for details.
-#' @param prep.data Prepare the data on the "full" dataset (default), the
-#'   "sampled" dataset, or "none".
-#' @param min.sd minimum standard deviation threshold. See details.
+#' @param prep.data Prepare the data on the "full" dataset, the
+#'   "sampled" dataset, or "none" (default). See Details.
+#' @param min.var minimum variability measure threshold. See
+#'   \code{\link{prepare_data}}.
 #' @param seed seed used for imputation
 #' @param trim logical; if \code{TRUE}, the number of algorithms in 
 #'   \code{algorithms} is reduced based on internal validity index performance 
@@ -68,7 +70,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
                  nmf.method = c("brunet", "lee"), distance = "euclidean",
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
-                 prep.data = c("full", "sampled", "none"), min.sd = 1,
+                 prep.data = c("none", "full", "sampled"), min.var = 1,
                  seed = 1,
                  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
                  ref.cl = NULL, progress = TRUE) {
@@ -81,7 +83,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   E <- consensus_cluster(data = data, nk = nk, reps = reps,
                          algorithms = algorithms, nmf.method = nmf.method,
                          distance = distance, prep.data = prep.data,
-                         min.sd = min.sd, progress = progress)
+                         min.var = min.var, progress = progress)
   # KNN imputation
   E <- apply(E, 2:4, impute_knn, data = data, seed = seed)
   
@@ -137,15 +139,22 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
 }
 
 #' Prepare data for consensus clustering
-#'
-#' Remove variables with low signal and scale before consensus clustering
-#'
-#' The \code{min.sd} argument is used to filter the feature space for only
-#' highly variable features. Only features with a standard deviation across all
-#' samples greater than \code{min.sd} will be used.
-#'
+#' 
+#' Remove variables with low signal and (optionally) scale before consensus
+#' clustering.
+#' 
 #' @param data data matrix with rows as samples and columns as variables
-#' @param min.sd minimum standard deviation threshold. See details.
+#' @param scale logical; should the data be centered and scaled?
+#' @param type if we use "conventional" measures (default), then the mean and
+#'   standard deviation are used for centering and scaling, respectively. If
+#'   "robust" measures are specified, the median and median absolute deviation
+#'   (MAD) are used.
+#' @param min.var minimum variability measure threshold used to filter the
+#'   feature space for only highly variable features. Only features with a
+#'   minimum variability measure across all samples greater than \code{min.var}
+#'   will be used. If \code{type = "conventional"}, the standard deviation is
+#'   the measure used, and if \code{type = "robust"}, the MAD is the measure
+#'   used.
 #' @return dataset prepared for usage in \code{consensus_cluster}
 #' @author Derek Chiu
 #' @export
@@ -155,11 +164,19 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
 #' x.prep <- prepare_data(x)
 #' dim(x)
 #' dim(x.prep)
-prepare_data <- function(data, min.sd = 1) {
-  dat.out <- data %>%
-    magrittr::extract(apply(., 1, function(x) !any(is.na(x))),
-                      apply(., 2, function(x) stats::sd(x, na.rm = TRUE)) >
-                        min.sd) %>%
-    scale()
-  return(dat.out)
+prepare_data <- function(data, scale = TRUE,
+                         type = c("conventional", "robust"),
+                         min.var = 1) {
+  type <- match.arg(type)
+  var.fun <- switch(type, conventional = stats::sd, robust = stats::mad)
+  dat <- data %>% 
+    magrittr::extract(stats::complete.cases(.),
+                      apply(., 2, var.fun, na.rm = TRUE) > min.var)
+  if (scale) {
+    sdat <- switch(type,
+                   conventional = scale(dat),
+                   robust = quantable::robustscale(dat))
+    return(sdat)
+  }
+  return(dat)
 }

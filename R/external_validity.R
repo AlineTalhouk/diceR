@@ -52,8 +52,9 @@ ev_confmat <- function(pred.lab, ref.lab) {
     stop("Error: Cluster labels should be the same in the prediction and reference classes.")
   }
   # Relabel predicted classes
-  pred.relab <- plyr::mapvalues(pred.lab, unique(pred.lab),
-                                min_fnorm(table(pred.lab, ref.lab))$ord)
+  pred.relab <- relabel_class(pred.lab, ref.lab) %>% 
+    factor(levels = sort(unique(ref.lab)))
+  
   # Confusion matrix, column/row sums, total, true/false positives/negatives
   CM <- table(pred.relab, ref.lab)
   clm <- colSums(CM)
