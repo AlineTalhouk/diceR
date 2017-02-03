@@ -1,8 +1,8 @@
 Package: diceR
 Type: Package
 Title: Diverse Cluster Ensemble in R
-Version: 0.0.0.9016
-Date: 2017-02-02
+Version: 0.0.0.9017
+Date: 2017-02-03
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")),
     person("Aline", "Talhouk", , "atalhouk@bccrc.ca", "aut"),
@@ -51,6 +51,8 @@ Suggests:
     rmarkdown,
     covr
 License: MIT + file LICENSE
+URL: https://github.com/AlineTalhouk/diceR
+BugReports: https://github.com/AlineTalhouk/diceR/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.0

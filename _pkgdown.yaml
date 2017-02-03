@@ -1,0 +1,45 @@
+templates:
+  params:
+    bootswatch: cerulean
+
+navbar:
+  title: ~
+  type: default
+  left:
+  - text: Reference
+    href: reference/index.html
+  - text: Articles
+    href: articles/index.html
+  right:
+  - icon: fa-github
+    href: https://github.com/AlineTalhouk/diceR
+    
+reference:
+- title: Functions
+  contents:
+  - starts_with("consensus_")
+  - starts_with("graph_")
+  - starts_with("ev_")
+  - starts_with("impute_")
+  - starts_with("pcn_")
+  - dice
+  - CSPA
+  - k_modes
+  - majority_voting
+  - LCE
+  - PAC
+  - cts
+  - srs
+  - asrs
+  - compactness
+  - prepare_data
+  - relabel_class
+  - min_fnorm
+- title: Data
+  contents:
+  - conClust_tcga
+  - E_imputed
+  - hgsc
+- title: Package Doc
+  contents:
+  - diceR-package
