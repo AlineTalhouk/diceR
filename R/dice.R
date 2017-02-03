@@ -105,8 +105,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
            kmodes = k_modes(Ecomp),
            majority = majority_voting(Ecomp),
            CSPA = CSPA(E, k),
-           LCE = LCE(drop(Ecomp), k = k,
-                     sim.mat = match.arg(sim.mat))
+           LCE = LCE(drop(Ecomp), k = k, sim.mat = sim.mat)
     )
   }) %>%
     apply(2, as.integer)
