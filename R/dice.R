@@ -176,6 +176,7 @@ prepare_data <- function(data, scale = TRUE,
     sdat <- switch(type,
                    conventional = scale(dat),
                    robust = quantable::robustscale(dat))
+    return(sdat)
   }
   return(dat)
 }
