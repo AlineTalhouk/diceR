@@ -17,10 +17,6 @@
 #'   \code{\link[gplots]{heatmap.2}}. Colours used in \code{graph_heatmap} and 
 #'   \code{graph_tracking} utilize \code{\link[RColorBrewer]{RColorBrewer}}
 #'   palettes.
-#' @note The current implementations of \code{graph_delta_area} and 
-#'   \code{graph_tracking} do not compare between different number of clusters. 
-#'   Thus the interpretation of relative change is not natural, and the tracking
-#'   plot shows low concordance.
 #' @name graphs
 #' @author Derek Chiu
 #' @export
@@ -69,14 +65,16 @@ graph_delta_area <- function(x) {
     group_by(Method, k) %>% 
     summarize(AUC = flux::auc(seq(0, 1, length.out = table(k)[1]), CDF)) %>% 
     mutate(da = c(AUC[1], diff(AUC) / AUC[-length(AUC)]))
-  p <- ggplot(dat, aes(k, da)) +
-    geom_line(group = 1) +
-    geom_point() +
-    facet_wrap(~Method) +
-    labs(y = "Relative change in Area under CDF curve",
-         title = "Delta Area")
-  print(p)
-  return(p)
+  if (length(unique(dat$k)) > 1) {
+    p <- ggplot(dat, aes(k, da)) +
+      geom_line(group = 1) +
+      geom_point() +
+      facet_wrap(~Method) +
+      labs(y = "Relative change in Area under CDF curve",
+           title = "Delta Area")
+    print(p)
+    return(p)
+  }
 }
 
 #' Calculate CDF for each clustering algorithm at each k
@@ -139,15 +137,17 @@ graph_tracking <- function(x) {
            Class = factor(Class), Method = factor(Method)) %>% 
     cbind(Samples = factor(seq_len(dim(x)[1]),
                            levels = seq_len(dim(x)[1])))
-  p <- ggplot(dat, aes(Samples, k)) +
-    geom_tile(aes(fill = Class)) +
-    facet_wrap(~Method) +
-    scale_fill_brewer(palette = "Set2") +
-    ggtitle("Tracking Cluster Assignments Across Algorithms") +
-    theme(axis.text.x = element_blank(),
-          axis.ticks.x = element_blank())
-  print(p)
-  return(p)
+  if (length(unique(dat$k)) > 1) {
+    p <- ggplot(dat, aes(Samples, k)) +
+      geom_tile(aes(fill = Class)) +
+      facet_wrap(~Method) +
+      scale_fill_brewer(palette = "Set2") +
+      ggtitle("Tracking Cluster Assignments Across k") +
+      theme(axis.text.x = element_blank(),
+            axis.ticks.x = element_blank())
+    print(p)
+    return(p)
+  }
 }
 
 #' @rdname graphs
