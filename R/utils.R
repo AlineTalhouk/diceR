@@ -58,9 +58,7 @@ min_fnorm <- function(A, B = diag(nrow(A))) {
 #' true <- sample(1:4, 100, replace = TRUE)
 #' relabel_class(pred, true)
 relabel_class <- function(pred.cl, ref.cl) {
-  perm <- pred.cl %>% 
-    factor(levels = sort(unique(ref.cl))) %>% 
-    table(., ref.cl) %>%
+  perm <- table(pred.cl, ref.cl) %>%
     min_fnorm() %>%
     use_series(perm)
   res <- factor(pred.cl, levels = perm, labels = levels(factor(ref.cl))) %>% 
