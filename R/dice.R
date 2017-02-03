@@ -170,7 +170,7 @@ prepare_data <- function(data, scale = TRUE,
   type <- match.arg(type)
   var.fun <- switch(type, conventional = stats::sd, robust = stats::mad)
   dat <- data %>% 
-    magrittr::extract(complete.cases(.),
+    magrittr::extract(stats::complete.cases(.),
                       apply(., 2, var.fun, na.rm = TRUE) > min.var)
   if (scale) {
     sdat <- switch(type,
