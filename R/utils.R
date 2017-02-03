@@ -24,12 +24,11 @@ globalVariables(".")
 #' @return Permuted matrix such that it is the permutation of A closest to B
 #' @author Ravi Varadhan:
 #' https://stat.ethz.ch/pipermail/r-help/2010-April/236664.html
+#' @export
 #' @examples
 #' 
 #' A <- matrix(sample(1:25, size = 25, rep = FALSE), 5, 5)
 #' min_fnorm(A)
-#' 
-#' @export min_fnorm
 min_fnorm <- function(A, B = diag(nrow(A))) {
   n <- nrow(A)
   D <- matrix(NA, n, n)
