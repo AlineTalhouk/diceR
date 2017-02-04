@@ -8,3 +8,5 @@
 ^R\Example_runthrough\.R$
 ^R\deprecated\.R$
 ^R\hypo_test_expt\.R$
+^_pkgdown\.yaml$
+^docs$
