@@ -63,7 +63,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
           crit = c("C_index", "Calinski_Harabasz",
                    "Davies_Bouldin", "Dunn", "McClain_Rao",
                    "PBM", "SD_Dis", "Ray_Turi", "Tau",
-                   "Gamma", "G_plus")) %>%
+                   "Gamma", "G_plus", "Silhouette", "S_Dbw")) %>%
           unlist()) %>% t(),
       Compactness = apply(m, 2, compactness, data = x),
       Connectivity = apply(m, 2, function(cl)

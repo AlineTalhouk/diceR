@@ -26,8 +26,12 @@ consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   alg.all <- z$internal[[k]]$Algorithms
   
   # Separate algorithms into those from clusterCrit (main), and (others)
-  z.main <- z$internal[[k]][, -c(1, 13:14)]
-  z.other <- z$internal[[k]][, -c(1:12)]
+  z.main <- z$internal[[k]] %>% 
+    extract(, setdiff(names(.),
+                      c("Algorithms", "Compactness", "Connectivity"))) %>% 
+    extract(apply(., 2, function(x) all(!is.nan(x))))
+  z.other <- z$internal[[k]] %>% 
+    extract(, c("Compactness", "Connectivity"))
   
   # Which algorithm is the best for each index?
   bests <- mapply(function(z, n) clusterCrit::bestCriterion(z, n),
