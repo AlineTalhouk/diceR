@@ -48,8 +48,15 @@
 #' @param ref.cl reference class; a vector of length equal to the number of 
 #'   observations.
 #' @param progress logical; if \code{TRUE} (default), progress bar is shown.
-#' @return A final clustering assignment from the diverse clustering ensemble 
-#'   method.
+#' @return A list with the following elements
+#' \item{E}{raw clustering ensemble object}
+#' \item{Eknn}{clustering ensemble object with knn imputation used on \code{E}}
+#' \item{Ecomp}{flattened ensemble object with remaining missing entries imputed
+#' by majority voting}
+#' \item{clusters}{final clustering assignment from the diverse clustering
+#' ensemble method}
+#' \item{indices}{if \code{evaluate = TRUE}, shows cluster evaluation indices;
+#' otherwise \code{NULL}}
 #' @author Aline Talhouk, Derek Chiu
 #' @export
 #' @examples 
@@ -85,19 +92,19 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
                          distance = distance, prep.data = prep.data,
                          min.var = min.var, progress = progress)
   # KNN imputation
-  E <- apply(E, 2:4, impute_knn, data = data, seed = seed)
+  Eknn <- apply(E, 2:4, impute_knn, data = data, seed = seed)
   
   # Select k
-  k <- consensus_evaluate(data = data, E, ref.cl = ref.cl, plot = FALSE)$k
+  k <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl, plot = FALSE)$k
   
   # Evaluate, trim, and reweigh
   if (length(algorithms) > 1 & trim) {
-    trim.obj <- consensus_trim(data, E, ref.cl = ref.cl, reweigh = reweigh)
-    E <- trim.obj$data.new
+    trim.obj <- consensus_trim(data, Eknn, ref.cl = ref.cl, reweigh = reweigh)
+    Eknn <- trim.obj$data.new
   }
   
   # Impute remaining missing cases
-  Ecomp <- impute_missing(E, data, k)
+  Ecomp <- impute_missing(Eknn, data, k)
   
   # Consensus functions
   Final <- sapply(cons.funs, function(x) {
@@ -137,7 +144,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   }
   rownames(FinalR) <- rownames(data)
   
-  return(list(clusters = FinalR, indices = eval.obj))
+  return(list(E = E, Eknn = Eknn, Ecomp = Ecomp,
+              clusters = FinalR, indices = eval.obj))
 }
 
 #' Prepare data for consensus clustering

@@ -70,8 +70,15 @@ observations.}
 \item{progress}{logical; if \code{TRUE} (default), progress bar is shown.}
 }
 \value{
-A final clustering assignment from the diverse clustering ensemble 
-  method.
+A list with the following elements
+\item{E}{raw clustering ensemble object}
+\item{Eknn}{clustering ensemble object with knn imputation used on \code{E}}
+\item{Ecomp}{flattened ensemble object with remaining missing entries imputed
+by majority voting}
+\item{clusters}{final clustering assignment from the diverse clustering
+ensemble method}
+\item{indices}{if \code{evaluate = TRUE}, shows cluster evaluation indices;
+otherwise \code{NULL}}
 }
 \description{
 Runs consensus clustering across subsamples, algorithms, and number of 
