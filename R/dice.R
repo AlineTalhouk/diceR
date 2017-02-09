@@ -124,10 +124,13 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   }
   
   # Return evaluation output including consensus function results
-  if (evaluate)
+  if (evaluate) {
     eval.obj <- consensus_evaluate(data, E, cons.cl = FinalR, ref.cl = ref.cl,
                                    plot = plot)
-  
+  } else {
+    eval.obj <- NULL
+  }
+
   # Add the reference class as the first column if provided
   if (!is.null(ref.cl)) {
     FinalR <- cbind(Reference = ref.cl, FinalR)

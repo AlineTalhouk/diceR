@@ -32,3 +32,9 @@ test_that("single algorithm and single consensus return same results", {
   ind.obj <- unname(dice.obj$indices$external)
   expect_identical(as.character(ind.obj[1, -1]), as.character(ind.obj[2, -1]))
 })
+
+test_that("indices slot returns NULL if evaluate specified as FALSE", {
+  dice.obj <- dice(dat, nk = 4, reps = 3, algorithms = "hc",
+                   cons.funs = "kmodes", ref.cl = ref.cl, evaluate = FALSE)
+  expect_null(dice.obj$indices)
+})
