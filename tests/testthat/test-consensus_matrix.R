@@ -25,3 +25,9 @@ test_that("missing entries are handled", {
   expect_equal(nrow(y3), 100)
   expect_equal(ncol(y3), 100)
 })
+
+test_that("single vector computation works", {
+  set.seed(1)
+  sv <- rbinom(100, 4, 0.2)
+  expect_error(consensus_matrix(sv), NA)
+})
