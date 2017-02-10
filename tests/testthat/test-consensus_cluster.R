@@ -38,3 +38,8 @@ test_that("Data preparation on bootstrap samples works", {
                           nmf.method = "lee", prep.data = "sampled")
   expect_error(x5, NA)
 })
+
+test_that("no scaling means only choose complete cases and high signal vars", {
+  x6 <- consensus_cluster(dat, nk = 2, reps = 2, algorithms = "hc", scale = FALSE)
+  expect_error(x6, NA)
+})

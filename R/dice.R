@@ -183,10 +183,9 @@ prepare_data <- function(data, scale = TRUE,
     magrittr::extract(stats::complete.cases(.),
                       apply(., 2, var.fun, na.rm = TRUE) > min.var)
   if (scale) {
-    sdat <- switch(type,
+    dat <- switch(type,
                    conventional = scale(dat),
                    robust = quantable::robustscale(dat))
-    return(sdat)
   }
   return(dat)
 }

@@ -38,3 +38,9 @@ test_that("indices slot returns NULL if evaluate specified as FALSE", {
                    cons.funs = "kmodes", ref.cl = ref.cl, evaluate = FALSE)
   expect_null(dice.obj$indices)
 })
+
+test_that("relabelling uses 1st col if more than 1 cons.funs and no ref.cl", {
+  dice.obj <- dice(dat, nk = 4, reps = 3, algorithms = "hc",
+                   cons.funs = c("kmodes", "majority"),  evaluate = FALSE)
+  expect_error(dice.obj, NA)
+})

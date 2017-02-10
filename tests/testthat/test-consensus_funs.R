@@ -27,6 +27,12 @@ test_that("k modes works with or without missing", {
   expect_false(anyNA(kmo.missing))
 })
 
+test_that("k modes only clusters if there are multiple assignment vectors", {
+  set.seed(1)
+  E <- matrix(sample(seq_len(6), 100, replace = TRUE), ncol = 1)
+  expect_identical(E, k_modes(E))
+})
+
 test_that("CSPA works", {
   expect_length(CSPA(x, k = 4), nrow(x))
   expect_equal(dplyr::n_distinct(CSPA(x, k = 4)), 4)
