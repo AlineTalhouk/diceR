@@ -56,6 +56,7 @@
 consensus_combine <- function(..., element = c("matrix", "class")) {
   # Combine ensemble arrays and reorganize into matrices and classes
   cs <- abind::abind(list(...), along = 3)
+  # Return a list of summaries for each algorithm
   obj <- consensus_summary(cs)
   switch(match.arg(element),
          matrix = {
@@ -70,5 +71,24 @@ consensus_combine <- function(..., element = c("matrix", "class")) {
              lapply(as.data.frame) %>% 
              lapply(function(x) apply(x, 1:2, as.integer))
          })
+  return(out)
+}
+
+#' Given an object from \code{\link{consensus_cluster}}, returns a list of
+#' consensus matrices and consensus classes for each clustering algorithm.
+#' @noRd
+consensus_summary <- function(E) {
+  con.mats <- plyr::alply(E, 3:4, consensus_matrix, .dims = TRUE) %>% 
+    utils::relist(stats::setNames(replicate(
+      dim(E)[4],
+      list(structure(1:dim(E)[3], names = dimnames(E)[[3]]))),
+      dimnames(E)[[4]]))
+  con.cls <- mapply(function(cm, k) lapply(cm, function(x) hc(stats::dist(x),
+                                                              k = k)),
+                    cm = con.mats, k = as.numeric(names(con.mats)),
+                    SIMPLIFY = FALSE)
+  out <- list(consensus_matrix = con.mats, consensus_class = con.cls) %>% 
+    purrr::transpose() %>% 
+    lapply(purrr::transpose)
   return(out)
 }
