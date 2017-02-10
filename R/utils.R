@@ -79,7 +79,8 @@ flatten_E <- function(E, is.relabelled) {
   # relabel using first clustering as reference
   if (!is.relabelled & ncol(flat_E) > 1) {
     flat_E <- cbind(flat_E[, 1],
-                    apply(flat_E[, -1], 2, relabel_class, ref.cl = flat_E[, 1]))
+                    apply(flat_E[, -1, drop = FALSE], 2, relabel_class,
+                          ref.cl = flat_E[, 1]))
   }
   return(flat_E)
 }

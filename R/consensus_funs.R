@@ -28,17 +28,21 @@ k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
   # flatten (and relabel) E
   flat_E <- flatten_E(E, is.relabelled = is.relabelled)
   # fill in missing values if any using majority voting
-  if (anyNA(flat_E)) {
+  if (anyNA(flat_E) & ncol(flat_E) > 1) {
     flat_E <- t(apply(flat_E, 1, function(x) {
       x[which(is.na(x))] <- names(which.max(table(x)))
       return(x)
     }))
   }
-  # k-modes clustering
-  k_modes <- klaR::kmodes(flat_E,
-                          modes = max(unlist(apply(flat_E, 2, function(x)
-                            length(names(table(x)))))))
-  return(k_modes$cluster)
+  # k-modes clustering if there are multiple columns of assignments
+  if (ncol(flat_E) > 1) {
+    k_modes <- klaR::kmodes(flat_E,
+                            modes = max(unlist(apply(flat_E, 2, function(x)
+                              length(names(table(x)))))))
+    return(k_modes$cluster)
+  } else {
+    return(flat_E)
+  }
 }
 
 #' Majority voting

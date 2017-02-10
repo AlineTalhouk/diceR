@@ -38,24 +38,20 @@ impute_missing <- function(E, data, nk, seed = 123456) {
   assertthat::assert_that(is.array(E), is.matrix(data),
                           dim(E)[1] == nrow(data),
                           as.character(nk) %in% dimnames(E)[[4]])
-
+  idk <- match(nk, dimnames(E)[[4]])
+  # Flatten the matrix
+  E_relabeled <- flatten_E(E[, , , idk, drop = FALSE], is.relabelled = FALSE) %>% 
+    extract(, apply(., 2, function(x) !all(is.na(x))), drop = FALSE)
   # Relabel and Majority vote
-  E_complete <- array(NaN, c(dim(E)[1], prod(dim(E)[2:3]), dim(E)[4]))
-  for (k in seq_len(dim(E)[4])) {
-    # Flatten the matrix
-    E_relabeled <- flatten_E(E[, , , k, drop = FALSE], is.relabelled = FALSE)
-    E_complete[, , k] <- t(apply(E_relabeled, 1, function(x) {
-      x[which(is.na(x))] <- names(which.max(table(x)))
-      return(as.numeric(x))
+  if (ncol(E_relabeled) > 1) {
+    E_complete <- t(apply(E_relabeled, 1, function(x) {
+      x[which(is.na(x))] <- as.numeric(names(which.max(table(x))))
+      return(x)
     }))
-  }
-  if (prod(dim(E)[-1]) > 1) {
-    idk <- match(nk, dimnames(E)[[4]])
-    E_complete <- E_complete[, , idk]
+    return(E_complete)
   } else {
-    E_complete <- abind::adrop(E_complete, 3)
+    return(E_relabeled)  
   }
-  return(E_complete)
 }
 
 #' K-Nearest Neighbours imputation
