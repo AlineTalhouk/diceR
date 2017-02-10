@@ -32,3 +32,9 @@ test_that("Able to call only spearman distance", {
                           distance = "spear")
   expect_error(x4, NA)
 })
+
+test_that("Data preparation on bootstrap samples works", {
+  x5 <- consensus_cluster(dat, nk = 3, reps = 3, algorithms = c("nmf", "hc", "ap"),
+                          nmf.method = "lee", prep.data = "sampled")
+  expect_error(x5, NA)
+})

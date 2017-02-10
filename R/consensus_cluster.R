@@ -152,7 +152,7 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed.nmf, seed.data,
   # then coercing all negatives to 0
   x.nmf <- data %>%
     cbind(-.) %>%
-    apply(2, function(x) ifelse(x < 0, 0, x))
+    apply(2, function(d) ifelse(d < 0, 0, d))
   n <- nrow(data)
   n.new <- floor(n * pItem)
   lnmf <- length(nmf.method)
@@ -169,16 +169,18 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed.nmf, seed.data,
         ind.new <- sample(n, n.new, replace = FALSE)
         # Transpose since input for NMF::nmf uses rows as vars, cols as samples
         # In case the subsample has all-zero vars, remove them to speed up comp
-        x.nmf.samp <- t(x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
-                                               function(x) all(x == 0)))])
+        x.nmf.samp <- x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
+                                               function(x) all(x == 0)))]
         if (prep.data == "sampled") {
           x <- prepare_data(x.nmf.samp, scale = scale, type = type,
-                            min.var = min.var)
+                            min.var = min.var) %>%
+            cbind(-.) %>%
+            apply(2, function(d) ifelse(d < 0, 0, d))
         } else if (prep.data %in% c("full", "none")) {
           x <- x.nmf.samp
         }
         nmf.arr[ind.new, i, j, k] <- NMF::predict(NMF::nmf(
-          x, rank = nk[k], method = nmf.method[j], seed = seed.nmf))
+          t(x), rank = nk[k], method = nmf.method[j], seed = seed.nmf))
         if (progress)
           utils::setTxtProgressBar(pb, (k - 1) * lnmf * reps + (j - 1) * reps + i)
       }
