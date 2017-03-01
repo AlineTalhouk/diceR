@@ -44,7 +44,8 @@ Imports:
     grDevices,
     RColorBrewer,
     doParallel,
-    quantable
+    quantable,
+    setter
 Suggests:
     testthat,
     knitr,
