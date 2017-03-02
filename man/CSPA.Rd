@@ -15,14 +15,14 @@ CSPA(E, k)
 cluster assignments for the consensus class
 }
 \description{
-Performs hierarchical clustering on a stack of consensus matrices to obtain
+Performs hierarchical clustering on a stack of consensus matrices to obtain 
 consensus class labels.
 }
 \examples{
 data(hgsc)
 dat <- t(hgsc[, -1])[1:100, 1:50]
-x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("nmf", "hc",
-"diana"), nmf.method = "lee", progress = FALSE)
+x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("hc", "diana"),
+progress = FALSE)
 CSPA(x, k = 4)
 }
 \seealso{
