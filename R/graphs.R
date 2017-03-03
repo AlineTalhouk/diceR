@@ -83,10 +83,10 @@ get_cdf <- function(x) {
   k <- Group <- CDF <- NULL
   assertthat::assert_that(inherits(x, "array"))
   dat <- consensus_combine(x, element = "matrix") %>% 
-    lapply(function(k) lapply(k, function(d) d[lower.tri(d, diag = TRUE)])) %>% 
+    purrr::at_depth(2, ~ .x[lower.tri(.x, diag = TRUE)]) %>% 
     as.data.frame() %>% 
-    tidyr::gather(key = Group, value = CDF, dplyr::everything()) %>% 
-    tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>% 
+    tidyr::gather(key = Group, value = CDF, everything()) %>%
+    tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>%
     mutate(k = substring(k, first = 2))
   return(dat)
 }
@@ -100,10 +100,10 @@ get_cdf <- function(x) {
 graph_heatmap <- function(x, main = NULL, ...) {
   assertthat::assert_that(inherits(x, "array"))
   dat <- consensus_combine(x, element = "matrix") %>% 
-    unlist(recursive = FALSE) %>% 
-    set_names(names(.) %>% 
-                stringr::str_split_fixed("\\.", n = 2) %>% 
-                apply(1, function(x) paste0(x[2], " k=", x[1])))
+    purrr::flatten() %>% 
+    set_names(dimnames(x)[3:4] %>% 
+                purrr::cross_n() %>% 
+                purrr::map_chr(paste, collapse = " k="))
   if (is.null(main)) {
     main <- names(dat)
   } else {
@@ -111,17 +111,15 @@ graph_heatmap <- function(x, main = NULL, ...) {
   }
   hm.col <- grDevices::colorRampPalette(
     RColorBrewer::brewer.pal(n = 9, "PuBuGn"))(256)
-  cc <- mapply(function(d, k) RColorBrewer::brewer.pal(8, "Set2")[
-    stats::cutree(stats::hclust(stats::dist(d), method = "average"), k = k)],
-    d = dat, k = rep(as.numeric(dimnames(x)[[4]]), each = dim(x)[3]),
-    SIMPLIFY = FALSE)
-  hm <- mapply(function(dat, main, cc)
+  cc <- purrr::map2(dat, rep(as.numeric(dimnames(x)[[4]]), each = dim(x)[3]),
+                    ~ RColorBrewer::brewer.pal(8, "Set2")[
+                      hc(stats::dist(.x), k = .y)])
+  purrr::pwalk(list(dat, main, cc), function(dat, main, cc)
     gplots::heatmap.2(x = dat, main = paste(main, "Consensus Matrix"),
-                      hclustfun = function(x) stats::hclust(x, method = "average"),
+                      hclustfun = function(x) stats::hclust(x, 
+                                                            method = "average"),
                       trace = "none", dendrogram = "column", col = hm.col,
-                      labRow = "", labCol = "", ColSideColors = cc, ...),
-    dat = dat, main = main, cc = cc)
-  return(hm)
+                      labRow = "", labCol = "", ColSideColors = cc, ...))
 }
 
 #' @rdname graphs
