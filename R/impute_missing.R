@@ -44,10 +44,10 @@ impute_missing <- function(E, data, nk, seed = 123456) {
     extract(, apply(., 2, function(x) !all(is.na(x))), drop = FALSE)
   # Relabel and Majority vote
   if (ncol(E_relabeled) > 1) {
-    E_complete <- t(apply(E_relabeled, 1, function(x) {
+    E_complete <- apply(E_relabeled, 1, function(x) {
       x[which(is.na(x))] <- as.numeric(names(which.max(table(x))))
       return(x)
-    }))
+    }) %>% t()
     return(E_complete)
   } else {
     return(E_relabeled)  
