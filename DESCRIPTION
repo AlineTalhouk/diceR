@@ -1,8 +1,8 @@
 Package: diceR
 Type: Package
 Title: Diverse Cluster Ensemble in R
-Version: 0.0.0.9019
-Date: 2017-02-10
+Version: 0.0.0.9020
+Date: 2017-03-03
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")),
     person("Aline", "Talhouk", , "atalhouk@bccrc.ca", "aut"),
@@ -15,7 +15,6 @@ Depends:
 Imports:
     abind,
     assertthat,
-    plyr,
     dplyr,
     readr,
     magrittr,
