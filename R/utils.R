@@ -34,10 +34,10 @@ min_fnorm <- function(A, B = diag(nrow(A))) {
   D <- matrix(NA, n, n)
   for (i in 1:n) {
     for (j in 1:n) {
-      D[j, i] <- (sum((B[j, ] - A[i, ]) ^ 2))
+      D[j, i] <- sum((B[j, ] - A[i, ]) ^ 2)
     }
   }
-  vec <- c(clue::solve_LSAP(D))
+  vec <- clue::solve_LSAP(D)
   return(list(pmat = A[vec, ], perm = vec, ord = order(vec)))
 }
 
