@@ -23,30 +23,32 @@ consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   z <- consensus_evaluate(data = data, cc.obj, cons.cl = cons.cl,
                           ref.cl = ref.cl, plot = FALSE)
   k <- as.character(min(z$k))
-  alg.all <- z$internal[[k]]$Algorithms
+  zk <- z$internal[[k]]
+  alg.all <- zk$Algorithms
   
   # Separate algorithms into those from clusterCrit (main), and (others)
-  z.main <- z$internal[[k]] %>% 
-    extract(, setdiff(names(.),
-                      c("Algorithms", "Compactness", "Connectivity"))) %>% 
-    extract(apply(., 2, function(x) all(!is.nan(x))))
-  z.other <- z$internal[[k]] %>% 
-    extract(, c("Compactness", "Connectivity"))
+  z.main <- zk %>% 
+    extract(!names(.) %in% c("Algorithms", "Compactness", "Connectivity") &
+              purrr::map_lgl(., ~ all(!is.nan(.x))))
+  z.other <- zk %>% 
+    extract(c("Compactness", "Connectivity"))
   
   # Which algorithm is the best for each index?
-  bests <- mapply(function(z, n) clusterCrit::bestCriterion(z, n),
-                  z = as.list(z.main), n = names(z.main))
+  bests <- purrr::map2_int(z.main, names(z.main), clusterCrit::bestCriterion)
   
   # Which indices are the best with the greatest/least value?
-  max.bests <- cbind(z.main[, apply(z.main, 2, which.max) == bests], z.other)
-  min.bests <- z.main[, apply(z.main, 2, which.min) == bests] %>% 
-    apply(2, function(y) sum(y) - y)
+  max.bests <- z.main %>% 
+    extract(purrr::map_int(., which.max) == bests) %>% 
+    cbind(z.other)
+  min.bests <- z.main %>% 
+    extract(purrr::map_int(., which.min) == bests) %>% 
+    purrr::map_df(~ sum(.x) - .x)
   all.bests <- cbind(max.bests, min.bests)
   
   # Rank indices, sum ranks, get quantile of rank from total, filter quantiles
-  ind.ranks <- apply(all.bests, 2, rank)
+  ind.ranks <- purrr::map_df(all.bests, rank)
   sum.ranks <- data.frame(Algorithms = alg.all,
-                          Sumrank = apply(ind.ranks, 1, sum)) %>% 
+                          Sumrank = rowSums(ind.ranks)) %>% 
     mutate(Quantile = Sumrank / max(Sumrank)) %>% 
     filter(Quantile >= quantile)
   
@@ -59,16 +61,16 @@ consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   if (reweigh && length(alg.keep) > 1) {
     
     # Filter after knowing which to keep
-    max.bests <- max.bests %>% 
-      extract(match(alg.keep, alg.all), ) 
-    min.bests <- z.main[, apply(z.main, 2, which.min) == bests] %>% 
-      extract(match(alg.keep, alg.all), ) %>% 
-      apply(2, function(y) sum(y) - y)
+    ak <- match(alg.keep, alg.all)
+    max.bests <- max.bests[ak, ]
+    min.bests <- z.main %>% 
+      extract(ak, purrr::map_int(., which.min) == bests) %>% 
+      purrr::map_df(~ sum(.x) - .x)
     
     # Create multiples of each algorithm proportion to weight
     # Divide multiples by greatest common divisor to minimize number of copies
-    multiples <- cbind(max.bests, min.bests) %>% 
-      apply(2, function(y) y / sum(y)) %>% 
+    multiples <- cbind(as.matrix(max.bests), as.matrix(min.bests)) %>% 
+      prop.table(2) %>% 
       rowMeans() %>% 
       multiply_by(100) %>% 
       round(0) %>% 
@@ -76,14 +78,16 @@ consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
       set_names(alg.keep)
     
     # Generate multiples for each algorithm, adding back dimnames metadata
-    cc.trimmed <- plyr::alply(cc.trimmed, 3, .dims = TRUE) %>% 
-      mapply(function(d, m) rep(list(d), m), d = ., m = multiples) %>%
-      lapply(abind::abind, along = 3) %>% 
-      Reduce(function(...) abind::abind(..., along = 3), .) %>% 
-      abind::abind(along = 4)
-    dimnames(cc.trimmed)[[3]] <- unname(unlist(
-      mapply(rep, names(multiples), multiples)))
-    dimnames(cc.trimmed)[[4]] <- k
+    cc.trimmed <- purrr::array_branch(cc.trimmed, c(3, 4)) %>% 
+      purrr::map2(., multiples, ~ rep(list(.x), .y)) %>% 
+      purrr::map(abind::abind, along = 3) %>% 
+      abind::abind(along = 3) %>% 
+      abind::abind(along = 4) %>% 
+      setter::set_dimnames(
+        list(NULL,
+             dimnames(cc.trimmed)[[2]],
+             purrr::flatten_chr(purrr::map2(names(multiples), multiples, rep)),
+             k))
   }
   # Show evaluation output
   if (show.eval) {

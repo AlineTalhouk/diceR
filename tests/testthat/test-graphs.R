@@ -26,7 +26,7 @@ test_that("graph_delta_area works", {
 test_that("graph_heatmap can have same plot but different titles", {
   phm1 <- graph_heatmap(CC1)
   phm2 <- graph_heatmap(CC1, main = paste0(LETTERS[1:3], rep(2:4, each = 3)))
-  expect_identical(phm1, phm2)
+  expect_identical(phm1[c(1, 3)], phm2[c(1, 3)])  # element 2 are titles
   file.remove(list.files(pattern = "Rplots"))
 })
 

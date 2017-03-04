@@ -29,8 +29,9 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   cons.mat <- consensus_combine(cc.obj, element = "matrix")
   
   # Calculate PAC
-  pac <- lapply(cons.mat, lapply, PAC) %>%
-    plyr::ldply(unlist, .id = "k")
+  pac <- cons.mat %>% 
+    purrr::at_depth(2, PAC) %>% 
+    purrr::map_df(data.frame, .id = "k")
   
   # If reference given, k is number of distinct classes
   if (!is.null(ref.cl)) {
@@ -42,34 +43,31 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
       extract(is_in(., max(.))) %>% 
       names() %>% 
       as.numeric()
-    k <- as.integer(as.character(pac$k[idx.k]))
+    k <- as.integer(pac$k[idx.k])
   }
   
   # If matrix of cluster assignments from cons.funs given, cbind to cl.mat
   an <- dimnames(cc.obj)[3][[1]]
   if (!is.null(cons.cl)) {
     assertthat::assert_that(is.matrix(cons.cl))
-    cl.mat <- lapply(cl.mat, cbind, cons.cl)
+    cl.mat <- purrr::map(cl.mat, cbind, cons.cl)
     an <- c(an, colnames(cons.cl))
   }
   
   # Internal indices
-  ind.int <- lapply(cl.mat, function(m) {
-    data.frame(
-      Algorithms = an,
-      apply(m, 2, function(cl)
-        clusterCrit::intCriteria(
-          traj = x, part = cl,
-          crit = c("C_index", "Calinski_Harabasz",
-                   "Davies_Bouldin", "Dunn", "McClain_Rao",
-                   "PBM", "SD_Dis", "Ray_Turi", "Tau",
-                   "Gamma", "G_plus", "Silhouette", "S_Dbw")) %>%
-          unlist()) %>% t(),
-      Compactness = apply(m, 2, compactness, data = x),
-      Connectivity = apply(m, 2, function(cl)
-        clValid::connectivity(Data = x, clusters = cl))) %>%
-      mutate_all(funs(structure(., names = an)))
-  })
+  ind.int <- purrr::map(cl.mat, ~ data.frame(
+    Algorithms = an,
+    apply(.x, 2, function(cl)
+      clusterCrit::intCriteria(
+        traj = x, part = cl,
+        crit = c("C_index", "Calinski_Harabasz", "Davies_Bouldin", "Dunn",
+                 "McClain_Rao", "PBM", "SD_Dis", "Ray_Turi", "Tau", "Gamma",
+                 "G_plus", "Silhouette", "S_Dbw")) %>%
+        unlist()) %>% t(),
+    Compactness = apply(.x, 2, compactness, data = x),
+    Connectivity = apply(.x, 2, function(cl)
+      clValid::connectivity(Data = x, clusters = cl))) %>%
+      mutate_all(funs(structure(., names = an))))
   
   # Graph all plotting functions
   if (plot) {

@@ -61,15 +61,15 @@ consensus_combine <- function(..., element = c("matrix", "class")) {
   switch(match.arg(element),
          matrix = {
            # Transpose list levels and extract matrices
-           out <- lapply(obj, purrr::transpose) %>% 
-             lapply("[[", "consensus_matrix")
+           out <- purrr::map(obj, purrr::transpose) %>% 
+             purrr::map("consensus_matrix")
          },
          class = {
            # Transpose list levels and extract classes, coercing to integer
-           out <- lapply(obj, purrr::transpose) %>% 
-             lapply("[[", "consensus_class") %>% 
-             lapply(as.data.frame) %>% 
-             lapply(function(x) apply(x, 1:2, as.integer))
+           out <- purrr::map(obj, purrr::transpose) %>% 
+             purrr::map("consensus_class") %>% 
+             purrr::map(as.data.frame) %>% 
+             purrr::map(~ apply(.x, 1:2, as.integer))
          })
   return(out)
 }
@@ -78,17 +78,16 @@ consensus_combine <- function(..., element = c("matrix", "class")) {
 #' consensus matrices and consensus classes for each clustering algorithm.
 #' @noRd
 consensus_summary <- function(E) {
-  con.mats <- plyr::alply(E, 3:4, consensus_matrix, .dims = TRUE) %>% 
-    utils::relist(stats::setNames(replicate(
-      dim(E)[4],
-      list(structure(1:dim(E)[3], names = dimnames(E)[[3]]))),
-      dimnames(E)[[4]]))
-  con.cls <- mapply(function(cm, k) lapply(cm, function(x) hc(stats::dist(x),
-                                                              k = k)),
-                    cm = con.mats, k = as.numeric(names(con.mats)),
-                    SIMPLIFY = FALSE)
+  con.mats <- E %>% 
+    purrr::array_tree(c(4, 3)) %>% 
+    purrr::at_depth(2, consensus_matrix) %>% 
+    purrr::map(magrittr::set_names, dimnames(E)[[3]]) %>% 
+    magrittr::set_names(dimnames(E)[[4]])
+  con.cls <- purrr::map2(con.mats, as.numeric(names(con.mats)),
+                         ~ purrr::map(.x, function(z)
+                           hc(stats::dist(z), k = .y)))
   out <- list(consensus_matrix = con.mats, consensus_class = con.cls) %>% 
     purrr::transpose() %>% 
-    lapply(purrr::transpose)
+    purrr::map(purrr::transpose)
   return(out)
 }

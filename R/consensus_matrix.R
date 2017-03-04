@@ -35,14 +35,12 @@
 #' cm1 <- consensus_matrix(x)
 #' cm2 <- consensus_matrix(x, weights = w)
 consensus_matrix <- function(data, weights = NULL) {
-  if (is.null(dim(data))) {
-    data <- as.matrix(data, ncol = 1)
-  }
-  all.IM <- plyr::alply(data, 2, indicator_matrix)
-  all.CM <- plyr::alply(data, 2, connectivity_matrix)
+  data <- as.data.frame(data)
+  all.IM <- purrr::map(data, indicator_matrix)
+  all.CM <- purrr::map(data, connectivity_matrix)
   sum.IM <- Reduce('+', all.IM)
   if (!is.null(weights)) {
-    weighted.CM <- mapply('*', all.CM, weights, SIMPLIFY = FALSE)
+    weighted.CM <- purrr::map2(all.CM, weights, `*`)
     sum.CM <- Reduce('+', weighted.CM) * length(weights)
   } else {
     sum.CM <- Reduce('+', all.CM)
@@ -56,17 +54,12 @@ consensus_matrix <- function(data, weights = NULL) {
 #' @noRd
 connectivity_matrix <- function(cls) {
   # cls is a vector of cluster assignments
-  cm <- cls %>%
-    rep(., length(.)) %>%
-    matrix(ncol = sqrt(length(.)))
-  for (j in 1:ncol(cm)) {
-    if (is.na(cm[j, j])) {
-      cm[, j] <- 0
-    } else {
-      cm[, j] <- ifelse(cm[j, j] != cm[, j] | is.na(cm[, j]), 0, 1)
-    }
+  cm <- replicate(length(cls), cls) %>% 
+    set_colnames(names(cls))
+  for (j in seq_len(length(cls))) {
+    cm[, j] <- ifelse(cm[j, j] != cm[, j] | is.na(cm[, j]) |
+                        is.na(cm[j, j]), 0, 1)
   }
-  rownames(cm) <- colnames(cm) <- names(cls)
   return(cm)
 }
 
@@ -74,16 +67,10 @@ connectivity_matrix <- function(cls) {
 #' @noRd
 indicator_matrix <- function(cls) {
   # cls is a vector of cluster assignments
-  im <- cls %>%
-    rep(., length(.)) %>%
-    matrix(ncol = sqrt(length(.)))
-  for (j in 1:ncol(im)) {
-    if (is.na(im[j, j])) {
-      im[, j] <- 0
-    } else {
-      im[, j] <- ifelse(is.na(im[, j]), 0, 1)
-    }
+  im <- replicate(length(cls), cls) %>% 
+    set_colnames(names(cls))
+  for (j in seq_len(length(cls))) {
+    im[, j] <- ifelse(is.na(im[, j]) | is.na(im[j, j]), 0, 1)
   }
-  rownames(im) <- colnames(im) <- names(cls)
   return(im)
 }

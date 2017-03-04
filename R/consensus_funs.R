@@ -36,9 +36,10 @@ k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
   }
   # k-modes clustering if there are multiple columns of assignments
   if (ncol(flat_E) > 1) {
-    k_modes <- klaR::kmodes(flat_E,
-                            modes = max(unlist(apply(flat_E, 2, function(x)
-                              length(names(table(x)))))))
+    k_modes <- flat_E %>% 
+      klaR::kmodes(modes = as.data.frame(.) %>% 
+                     purrr::map_int(n_distinct) %>% 
+                     max())
     return(k_modes$cluster)
   } else {
     return(flat_E)
@@ -78,10 +79,10 @@ majority_voting <- function(E, is.relabelled = TRUE) {
 }
 
 #' Cluster-based Similarity Partitioning Algorithm (CSPA)
-#'
-#' Performs hierarchical clustering on a stack of consensus matrices to obtain
+#' 
+#' Performs hierarchical clustering on a stack of consensus matrices to obtain 
 #' consensus class labels.
-#'
+#' 
 #' @param E is an array of clustering results.
 #' @param k number of clusters
 #' @return cluster assignments for the consensus class
@@ -91,8 +92,8 @@ majority_voting <- function(E, is.relabelled = TRUE) {
 #' @examples
 #' data(hgsc)
 #' dat <- t(hgsc[, -1])[1:100, 1:50]
-#' x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("nmf", "hc",
-#' "diana"), nmf.method = "lee", progress = FALSE)
+#' x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("hc", "diana"),
+#' progress = FALSE)
 #' CSPA(x, k = 4)
 CSPA <- function(E, k) {
   assertthat::assert_that(k %in% dimnames(E)[[4]])
