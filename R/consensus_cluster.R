@@ -139,7 +139,7 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
     } else {
       path <- paste0(file.name, ".rds")
     }
-    readr::write_rds(all.arr, path = path)
+    saveRDS(all.arr, file = path)
   }
   return(all.arr)
 }
