@@ -153,7 +153,8 @@ indices is not taken into account.</p>
 <span class='no'>CC1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>x</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>3</span>:<span class='fl'>4</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='st'>"ap"</span>,
 <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='no'>CC2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>x</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>3</span>:<span class='fl'>4</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='st'>"gmm"</span>,
-<span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><img src='consensus_combine-2.png' alt='' width='540' height='400' /><div class='input'>
+<span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
 <span class='co'># Combine and return either matrices or classes</span>
 <span class='no'>y1</span> <span class='kw'>&lt;-</span> <span class='fu'>consensus_combine</span>(<span class='no'>CC1</span>, <span class='no'>CC2</span>, <span class='kw'>element</span> <span class='kw'>=</span> <span class='st'>"matrix"</span>)
 <span class='fu'>str</span>(<span class='no'>y1</span>)</div><div class='output co'>#&gt; List of 2
