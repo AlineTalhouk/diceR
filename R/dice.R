@@ -62,15 +62,15 @@
 #' @examples 
 #' library(dplyr)
 #' data(hgsc)
-#' dat <- t(hgsc[, -1])
+#' dat <- t(hgsc[, -1])[1:100, 1:50]
 #' ref.cl <- data.frame(initCol = rownames(dat)) %>%
 #' tidyr::separate(initCol,
 #'                 into = c("patientID", "Class"),
-#'                 sep = "_") %>% 
-#'   magrittr::use_series(Class) %>% 
-#'   factor() %>% 
+#'                 sep = "_") %>%
+#'   magrittr::use_series(Class) %>%
+#'   factor() %>%
 #'   as.integer()
-#' dice.obj <- dice(dat, nk = 4, reps = 3, algorithms = "hc", cons.funs =
+#' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = "hc", cons.funs =
 #' "kmodes", ref.cl = ref.cl)
 #' str(dice.obj, max.level = 2)
 dice <- function(data, nk, reps = 10, algorithms = NULL,
