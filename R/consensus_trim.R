@@ -82,12 +82,12 @@ consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
       purrr::map2(., multiples, ~ rep(list(.x), .y)) %>% 
       purrr::map(abind::abind, along = 3) %>% 
       abind::abind(along = 3) %>% 
-      abind::abind(along = 4) %>% 
-      setter::set_dimnames(
-        list(NULL,
-             dimnames(cc.trimmed)[[2]],
-             purrr::flatten_chr(purrr::map2(names(multiples), multiples, rep)),
-             k))
+      abind::abind(along = 4)
+    dimnames(cc.trimmed) <-
+      list(NULL,
+           dimnames(cc.trimmed)[[2]],
+           purrr::flatten_chr(purrr::map2(names(multiples), multiples, rep)),
+           k)
   }
   # Show evaluation output
   if (show.eval) {

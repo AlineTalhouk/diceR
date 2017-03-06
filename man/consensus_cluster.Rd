@@ -100,7 +100,7 @@ The progress bar increments for every unit of \code{reps}.
 }
 \examples{
 data(hgsc)
-dat <- t(hgsc[, -1])
+dat <- t(hgsc[, -1])[1:100, 1:50]
 
 # Custom distance function
 manh <- function(x) {
@@ -112,7 +112,7 @@ agnes <- function(d, k) {
   return(as.integer(stats::cutree(cluster::agnes(d, diss = TRUE), k)))
 }
 
-cc <- consensus_cluster(dat, reps = 5, algorithms = c("pam", "agnes"),
+cc <- consensus_cluster(dat, reps = 6, algorithms = c("pam", "agnes"),
 distance = c("euclidean", "manh"))
 str(cc)
 }

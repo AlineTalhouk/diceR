@@ -60,7 +60,7 @@
 #' @export
 #' @examples 
 #' data(hgsc)
-#' dat <- t(hgsc[, -1])
+#' dat <- t(hgsc[, -1])[1:100, 1:50]
 #' 
 #' # Custom distance function
 #' manh <- function(x) {
@@ -72,7 +72,7 @@
 #'   return(as.integer(stats::cutree(cluster::agnes(d, diss = TRUE), k)))
 #' }
 #' 
-#' cc <- consensus_cluster(dat, reps = 5, algorithms = c("pam", "agnes"),
+#' cc <- consensus_cluster(dat, reps = 6, algorithms = c("pam", "agnes"),
 #' distance = c("euclidean", "manh"))
 #' str(cc)
 consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
@@ -139,7 +139,7 @@ consensus_cluster <- function(data, nk = 2:4, pItem = 0.8, reps = 1000,
     } else {
       path <- paste0(file.name, ".rds")
     }
-    readr::write_rds(all.arr, path = path)
+    saveRDS(all.arr, file = path)
   }
   return(all.arr)
 }
