@@ -94,15 +94,17 @@ colMin <- function(x, na.rm = TRUE) {
   return(apply(x, 2, min, na.rm = na.rm))
 }
 
-#' Find coordinates of matrix x that give element n
+#' Flattened row indices for upper triangular matrix elements of diag(n)
 #' @noRd
-coord <- function(x, n) {
-  assertthat::assert_that(is.matrix(x), is.numeric(x), is.numeric(n),
-                          n %in% x, length(n) == 1)
-  res <- which(x == n, arr.ind = TRUE)
-  return(stats::setNames(unlist(apply(res, 2, list), recursive = FALSE),
-                         c("rows", "cols")))
-}
+upper_tri_row <- function(n) unlist(lapply(seq_len(n - 1), seq_len))
+
+#' Flattened column indices for upper triangular matrix elements of diag(n)
+#' @noRd
+upper_tri_col <- function(n) rep(seq_len(n)[-1], seq_len(n - 1))
+
+#' Which rows of matrix x contain the value?
+#' @noRd
+which_row <- function(x, value) which(x == value, arr.ind = TRUE)[, "row"]
 
 #' Check if a single number is a positive integer
 #' @noRd

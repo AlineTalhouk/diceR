@@ -32,45 +32,25 @@ srs <- function(E, dc, R) {
   S <- diag(x = 1, nrow = n, ncol = n)
   C <- diag(x = 1, nrow = no_allcl, ncol = no_allcl)
   
-  for (r in 1:(R - 1)) {
-    S1 <- diag(x = 1, nrow = n, ncol = n)
-    for (i in 1:(n - 1)) {
-      Ni <- E[i, ]
-      for (ii in (i + 1):n) {
-        sum_sim <- 0
-        Nii <- E[ii, ]
-        for (k in 1:M) {
-          for (kk in 1:M) {
-            sum_sim <- sum_sim + C[Ni[k], Nii[kk]]
+  for (r in seq_len(R - 1)) {
+    S1 <- diag(x = 1, nrow = n, ncol = n) %>% 
+      inset(upper.tri(.), purrr::map2_dbl(
+        upper_tri_row(n), upper_tri_col(n),
+        ~ (dc / (M * M)) * sum(C[E[.x, ], E[.y, ]]))) %>% 
+      add(t(.)) %>% 
+      inset(row(.) == col(.), 1)
+    C1 <- diag(x = 1, nrow = no_allcl, ncol = no_allcl) %>% 
+      inset(upper.tri(.), purrr::map2_dbl(
+        upper_tri_row(no_allcl), upper_tri_col(no_allcl), ~ {
+          Ni <- which_row(E, .x)
+          Nii <- which_row(E, .y)
+          if (length(Ni) * length(Nii)) {
+            dc * sum(S[Ni, Nii]) / (length(Ni) * length(Nii))
           }
         }
-        S1[i, ii] <- (dc / (M * M)) * sum_sim
-      }
-    }
-    S1 <- S1 + t(S1)
-    S1[row(S1) == col(S1)] <- 1
-    C1 <- diag(x = 1, nrow = no_allcl, ncol = no_allcl)
-    for (i in 1:(no_allcl - 1)) {
-      Ni <- coord(E, i)$rows
-      col <- coord(E, i)$cols
-      nki <- length(Ni)
-      for (ii in (i + 1):no_allcl) {
-        sum_sim <- 0
-        Nii <- coord(E, ii)$rows
-        col <- coord(E, ii)$cols
-        nkii <- length(Nii)
-        for (k in 1:nki) {
-          for (kk in 1:nkii) {
-            sum_sim <- sum_sim + S[Ni[k], Nii[kk]]
-          }
-        }
-        if ((nki * nkii) > 0) {
-          C1[i, ii] <- dc * sum_sim / (nki * nkii)
-        }
-      }
-    }
-    C1 <- C1 + t(C1)
-    C1[row(C1) == col(C1)] <- 1
+      )) %>% 
+      add(t(.)) %>% 
+      inset(row(.) == col(.), 1)
     S <- S1
     C <- C1
   }
