@@ -15,39 +15,6 @@ test_that("flatten uses first clustering as reference if not relabelled", {
   expect_error(flatten_E(E4, is.relabelled = FALSE), NA)
 })
 
-a <- matrix(c(60, 17, 58, 62, 81, 11, 32, 7, 28, 85, 80, 15, 19, 50, 45, 40,
-              88, 31, 84, 30, 99, 94, 61, 55, 27), ncol = 5)
-
-test_that("Check coord works with a matrix without duplicated entry", {
-  expect_true(coord(a, 60)$rows == 1)
-  expect_true(coord(a, 60)$cols == 1)
-  expect_true(coord(a, 85)$rows == 5)
-  expect_true(coord(a, 85)$cols == 2)
-  expect_true(coord(a, 84)$rows == 4)
-  expect_true(coord(a, 84)$cols == 4)
-  expect_true(coord(a, 94)$rows == 2)
-  expect_true(coord(a, 94)$cols == 5)
-})
-
-a_wd <- matrix(c(60, 17, 58, 62, 81, 11, 32, 7, 28, 85, 80, 15, 19, 50, 45, 40,
-                 88, 32, 84, 30, 32, 94, 61, 85, 27), ncol = 5)
-
-test_that("Check getRowColNumbers works with matrix with duplicated values", {
-  expect_equal(coord(a_wd, 32)$rows, c(2, 3, 1))
-  expect_equal(coord(a_wd, 32)$cols, c(2, 4, 5))
-  expect_equal(coord(a_wd, 85)$rows, c(5, 4))
-  expect_equal(coord(a_wd, 85)$cols, c(2, 5))
-})
-
-test_that("Check getRowColNumbers throw error with wrong type of input", {
-  expect_error(coord(a, 101))
-  expect_error(coord(a, c(32, 80)))
-  expect_error(coord(a, "101"))
-  expect_error(coord(data.frame(val1 = c(1, 2, 3), val2 = c(4, 5, 6)), 1))
-  expect_error(coord(matrix(letters[1:25], ncol = 5), "a"))
-  expect_error(coord(matrix(letters[1:25], ncol = 5), 1))
-})
-
 test_that("Check is_pos_int works", {
   expect_true(is_pos_int(3))
   expect_false(is_pos_int(-3))
