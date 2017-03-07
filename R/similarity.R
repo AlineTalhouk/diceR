@@ -67,42 +67,34 @@ asrs <- function(E, dc) {
   E <- E.new$newE
   no_allcl <- E.new$no_allcl
   wcl <- weigh_clusters(E)
-  CS <- sapply(seq_len(no_allcl), function(j) {
-    sapply(seq_len(no_allcl), function(i) {
+  CS <- vapply(seq_len(no_allcl), function(j) {
+    vapply(seq_len(no_allcl), function(i) {
       if (i < no_allcl & i < j) {
         Ni <- wcl[i, ]
-        ni <- length(Ni[which(Ni > 0)])
+        ni <- length(Ni[Ni > 0])
         Nj <- wcl[j, ]
-        nj <- length(Nj[which(Nj > 0)])
-        if ((ni * nj > 0))
+        nj <- length(Nj[Nj > 0])
+        if (ni * nj)
           return((Ni %*% Nj) / (ni * nj))
       } else {
         return(0)
       }
-    })
-  })
-  if (max(CS) > 0) {
-    CS <- CS / max(CS)
-  }
-  CS <- CS + t(CS)
-  CS[row(CS) == col(CS)] <- 1
-  S <- matrix(rep(0, n * n), nrow = n)
-  for (i in 1:(n - 1)) {
-    for (ii in (i + 1):n) {
-      for (j in 1:M) {
-        for (jj in 1:M) {
-          if (CS[E[i, j], E[ii, jj]] == 1) {
-            S[i, ii] <- S[i, ii] + 1
-          } else {
-            S[i, ii] <- S[i, ii] + dc * CS[E[i, j], E[ii, jj]]
-          }
-        }
-      }
-    }
-  }
-  S <- S / (M * M)
-  S <- S + t(S)
-  S[row(S) == col(S)] <- 1
+    }, double(1))
+  }, double(no_allcl)) %>% 
+    inset(max(.) > 0, . / max(.)) %>% 
+    add(t(.)) %>% 
+    inset(row(.) == col(.), 1)
+  S <- matrix(rep(0, n * n), nrow = n) %>% 
+    inset(upper.tri(.), purrr::map(seq_len(n)[-1], function(i) {
+      purrr::map_dbl(seq_len(i - 1), function(ii) {
+        cse <- CS[E[i, ], E[ii, ]]
+        sum(dc * cse[cse != 1]) + sum(cse == 1)
+      })
+    }) %>% 
+      purrr::flatten_dbl()) %>% 
+    divide_by(M * M) %>% 
+    add(t(.)) %>% 
+    inset(row(.) == col(.), 1)
   return(S)
 }
 
