@@ -293,12 +293,11 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed.data,
 #' @noRd
 distances <- function(x, dist) {
   # Change partial matching distance methods from stats::dist to full names
-  METHODS <- c("euclidean", "maximum", "manhattan", "canberra",
-               "binary", "minkowski")
-  dist <- ifelse(dist %pin% METHODS, METHODS[pmatch(dist, METHODS)], dist)
+  M <- c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski")
+  dist <- ifelse(dist %pin% M, M[pmatch(dist, M)], dist)
   
   # Check if spearman distance is used (starts with string)
-  sp.idx <- sapply(paste0("^", dist), grepl, "spearman")
+  sp.idx <- purrr::map_lgl(paste0("^", dist), grepl, "spearman")
   if (any(sp.idx)) {
     spear <- stats::setNames(list(spearman_dist(x)), "spearman")
     d <- dist[!sp.idx]
@@ -312,17 +311,16 @@ distances <- function(x, dist) {
     return(spear)
   } else {
     # Identify custom distance functions from those found in stats::dist
-    check <- stats::setNames(lapply(d, function(d)
-      try(stats::dist(x = x, method = d), silent = TRUE)), d)
-    is.error <- sapply(check, inherits, "try-error")
+    check <- stats::setNames(lapply(d, function(.x)
+      try(stats::dist(x = x, method = .x), silent = TRUE)), d)
+    is.error <- purrr::map_lgl(check, inherits, "try-error")
     succeeded <- which(!is.error)
     failed <- which(is.error)
     
     # Search for custom function in parent environments
-    if (length(failed) > 0) {
-      custom <- stats::setNames(lapply(names(check[failed]),
-                                       function(d) get(d)(x)),
-                                names(failed))
+    if (length(failed)) {
+      custom <- stats::setNames(lapply(names(check[failed]), function(d)
+        get(d)(x)), names(failed))
     } else {
       custom <- NULL
     }
