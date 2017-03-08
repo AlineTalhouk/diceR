@@ -104,13 +104,13 @@ cts <- function(E, dc) {
   assertthat::assert_that(is.matrix(E), is.numeric(E), dc >= 0 && dc <= 1)
   n <- nrow(E)
   M <- ncol(E)
-  E.new <- diceR:::relabel_clusters(E)
+  E.new <- relabel_clusters(E)
   E <- E.new$newE
   no_allcl <- E.new$no_allcl
-  wcl <- diceR:::weigh_clusters(E)
+  wcl <- weigh_clusters(E)
   ind <- seq_len(no_allcl) %>% 
     split(ceiling(. / (no_allcl / M))) %>% 
-    purrr::map(combn, 2) %>% 
+    purrr::map(utils::combn, 2) %>% 
     do.call(cbind, .) %>% 
     t()
   wCT <- diag(0, no_allcl) %>% 
