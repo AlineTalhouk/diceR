@@ -123,7 +123,7 @@ compactness <- function(data, labels) {
   C <- sort(unique(labels))
   k <- length(C)
   cp <- 0
-  for (i in 1:k) {
+  for (i in seq_len(k)) {
     ind <- which(labels == C[i])
     nk <- length(ind)
     if (nk <= 1) {

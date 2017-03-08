@@ -32,8 +32,8 @@ globalVariables(".")
 min_fnorm <- function(A, B = diag(nrow(A))) {
   n <- nrow(A)
   D <- matrix(NA, n, n)
-  for (i in 1:n) {
-    for (j in 1:n) {
+  for (i in seq_len(n)) {
+    for (j in seq_len(n)) {
       D[j, i] <- sum((B[j, ] - A[i, ]) ^ 2)
     }
   }
@@ -125,7 +125,7 @@ is_pos_int <- function(x) {
 #' @noRd
 sortMatrixRowWise <- function(M, order = c("ascending", "descending")) {
   assertthat::assert_that(nrow(M) >= 1, is.matrix(M), is.numeric(M))
-  for (i in 1:nrow(M)) {
+  for (i in seq_len(nrow(M))) {
     temp <- M[i, ]
     temp <- switch(match.arg(order),
                    ascending = sort(temp),

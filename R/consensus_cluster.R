@@ -159,13 +159,13 @@ cluster_nmf <- function(data, nk, pItem, reps, nmf.method, seed.nmf, seed.data,
   lnk <- length(nk)
   nmf.arr <- array(NA, c(n, reps, lnmf, lnk),
                    dimnames = list(rownames(data),
-                                   paste0("R", 1:reps),
+                                   paste0("R", seq_len(reps)),
                                    paste0("NMF_", Hmisc::capitalize(nmf.method)),
                                    nk))
-  for (k in 1:lnk) {
-    for (j in 1:lnmf) {
+  for (k in seq_len(lnk)) {
+    for (j in seq_len(lnmf)) {
       set.seed(seed.data)
-      for (i in 1:reps) {
+      for (i in seq_len(reps)) {
         ind.new <- sample(n, n.new, replace = FALSE)
         # Transpose since input for NMF::nmf uses rows as vars, cols as samples
         # In case the subsample has all-zero vars, remove them to speed up comp
@@ -201,16 +201,16 @@ cluster_dist <- function(data, nk, pItem, reps, dalgs, distance, seed.data,
   lnk <- length(nk)
   dist.arr <- array(NA, c(n, reps, ldist, lnk),
                     dimnames = list(rownames(data),
-                                    paste0("R", 1:reps),
+                                    paste0("R", seq_len(reps)),
                                     apply(expand.grid(Hmisc::capitalize(distance),
                                                       toupper(dalgs)),
                                           1, function(x) paste0(x[2], "_", x[1])),
                                     nk))
-  for (k in 1:lnk) {
-    for (j in 1:lalg) {
-      for (d in 1:ld) {
+  for (k in seq_len(lnk)) {
+    for (j in seq_len(lalg)) {
+      for (d in seq_len(ld)) {
         set.seed(seed.data)
-        for (i in 1:reps) {
+        for (i in seq_len(reps)) {
           # Find custom functions use get()
           ind.new <- sample(n, n.new, replace = FALSE)
           if (prep.data == "sampled") {
@@ -243,13 +243,13 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed.data,
   lnk <- length(nk)
   other.arr <- array(NA, c(n, reps, lalg, lnk),
                      dimnames = list(rownames(data),
-                                     paste0("R", 1:reps),
+                                     paste0("R", seq_len(reps)),
                                      toupper(oalgs),
                                      nk))
-  for (k in 1:lnk) {
-    for (j in 1:lalg) {
+  for (k in seq_len(lnk)) {
+    for (j in seq_len(lalg)) {
       set.seed(seed.data)
-      for (i in 1:reps) {
+      for (i in seq_len(reps)) {
         ind.new <- sample(n, n.new, replace = FALSE)
         if (prep.data == "sampled") {
           x <- prepare_data(data[ind.new, ], scale = scale, type = type,
