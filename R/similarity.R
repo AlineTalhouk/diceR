@@ -29,17 +29,17 @@ srs <- function(E, dc, R) {
   E.new <- relabel_clusters(E)
   E <- E.new$newE
   no_allcl <- E.new$no_allcl
-  S <- diag(x = 1, nrow = n, ncol = n)
-  C <- diag(x = 1, nrow = no_allcl, ncol = no_allcl)
+  S <- diag(1, n)
+  C <- diag(1, no_allcl)
   
   for (r in seq_len(R - 1)) {
-    S1 <- diag(x = 1, nrow = n, ncol = n) %>% 
+    S1 <- diag(1, n) %>% 
       inset(upper.tri(.), purrr::map2_dbl(
         upper_tri_row(n), upper_tri_col(n),
         ~ (dc / (M * M)) * sum(C[E[.x, ], E[.y, ]]))) %>% 
       add(t(.)) %>% 
       inset(row(.) == col(.), 1)
-    C1 <- diag(x = 1, nrow = no_allcl, ncol = no_allcl) %>% 
+    C1 <- diag(1, no_allcl) %>% 
       inset(upper.tri(.), purrr::map2_dbl(
         upper_tri_row(no_allcl), upper_tri_col(no_allcl), ~ {
           Ni <- which_row(E, .x)
@@ -84,7 +84,7 @@ asrs <- function(E, dc) {
     inset(max(.) > 0, . / max(.)) %>% 
     add(t(.)) %>% 
     inset(row(.) == col(.), 1)
-  S <- matrix(rep(0, n * n), nrow = n) %>% 
+  S <- diag(0, n) %>% 
     inset(upper.tri(.), purrr::map(seq_len(n)[-1], function(i) {
       purrr::map_dbl(seq_len(i - 1), function(ii) {
         cse <- CS[E[i, ], E[ii, ]]
@@ -104,42 +104,34 @@ cts <- function(E, dc) {
   assertthat::assert_that(is.matrix(E), is.numeric(E), dc >= 0 && dc <= 1)
   n <- nrow(E)
   M <- ncol(E)
-  E.new <- relabel_clusters(E)
+  E.new <- diceR:::relabel_clusters(E)
   E <- E.new$newE
   no_allcl <- E.new$no_allcl
-  wcl <- weigh_clusters(E)
-  wCT <- matrix(rep(0, no_allcl * no_allcl), nrow = no_allcl)
-  maxCl <- apply(E, 2, max)
-  minCl <- apply(E, 2, min)
-  for (q in 1:M) {
-    for (i in minCl[q]:(maxCl[q] - 1)) {
-      Ni <- wcl[i, ]
-      for (j in (i + 1):(maxCl[q])) {
-        Nj <- wcl[j, ]
-        wCT[i, j] <- sum(colMin(rbind(Ni, Nj)))
-      }
-    }
-  }
-  if (max(wCT) > 0) {
-    wCT <- wCT / max(wCT)
-  }
-  wCT <- wCT + t(wCT)
-  wCT[row(wCT) == col(wCT)] <- 1
-  S <- matrix(rep(0, n * n), nrow = n)
-  for (m in 1:M) {
-    for (i in 1:(n - 1)) {
-      for (j in (i + 1):n) {
-        if (E[i, m] == E[j, m]) {
-          S[i, j] = S[i, j] + 1
-        } else {
-          S[i, j] = S[i, j] + dc * wCT[E[i, m], E[j, m]]
-        }
-      }
-    }
-  }
-  S <- S / M
-  S <- S + t(S)
-  S[row(S) == col(S)] <- 1
+  wcl <- diceR:::weigh_clusters(E)
+  ind <- seq_len(no_allcl) %>% 
+    split(ceiling(. / (no_allcl / M))) %>% 
+    purrr::map(combn, 2) %>% 
+    do.call(cbind, .) %>% 
+    t()
+  wCT <- diag(0, no_allcl) %>% 
+    inset(ind, ind %>% 
+            purrr::array_branch(margin = 2) %>% 
+            purrr::pmap_dbl(~ sum(colMin(wcl[c(.x, .y), ])))) %>% 
+    inset(max(.) > 0, . / max(.)) %>% 
+    add(t(.)) %>% 
+    inset(row(.) == col(.), 1)
+  S <- diag(0, n) %>% 
+    inset(upper.tri(.), purrr::map(seq_len(n)[-1], function(i) {
+      purrr::map_dbl(seq_len(i - 1), function(j) {
+        Ei <- E[i, ]
+        Ej <- E[j, ]
+        sum(dc * wCT[Ei, Ej][, Ei != Ej]) + sum(wCT[Ei, Ej][, Ei == Ej])
+      })
+    }) %>% 
+      purrr::flatten_dbl()) %>% 
+    divide_by(M) %>% 
+    add(t(.)) %>% 
+    inset(row(.) == col(.), 1)
   return(S)
 }
 
