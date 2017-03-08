@@ -145,26 +145,19 @@ cts <- function(E, dc) {
 #' @references MATLAB function relabelCl by Simon Garrett in LinkCluE package
 #' @noRd
 relabel_clusters <- function(E) {
-  if (!all(apply(E, 1:length(dim(E)), is_pos_int)))
+  if (!all(vapply(as.vector(E), is_pos_int, logical(1))))
     stop("Error: one of the entries in the input matrix is not a positive integer.")
   N <- nrow(E)
   M <- ncol(E)
-  newE <- matrix(rep(0, N * M), nrow = N)
-  ucl <- sort(unique(E[, 1]))
-  if (max(E[, 1] != length(ucl)) == 1) {
-    for (j in 1:length(ucl)) {
-      newE[which(E[, 1] == ucl[j]), 1] <- j
-    }
-  }
-  for (i in 2:M) {
+  newE <- matrix(0, nrow = N, ncol = M)
+  for (i in seq_len(M)) {
     ucl <- sort(unique(E[, i]))
-    prevCl <- length(sort(unique(c(newE[, 1:(i - 1)]))))
-    for (j in 1:length(ucl)) {
+    prevCl <- n_distinct(c(newE[, seq_len(i - 1)]))
+    for (j in seq_along(ucl)) {
       newE[E[, i] == ucl[j], i] <- prevCl + j
     }
   }
-  no_allcl <- max(newE)
-  return(list(no_allcl = no_allcl, newE = newE))
+  return(list(no_allcl = max(newE), newE = newE))
 }
 
 #' Compute weight for each pair of clusters using their shared members (Jaccard
@@ -176,23 +169,21 @@ relabel_clusters <- function(E) {
 #' @references MATLAB function weightCl by Simon Garrett in package LinkCluE   
 #' @noRd
 weigh_clusters <- function(E) {
-  if (!all(apply(E, 1:length(dim(E)), is_pos_int)))
+  if (!all(vapply(as.vector(E), is_pos_int, logical(1))))
     stop("Error: one of the entries in the input matrix is not a positive integer.")
   N <- nrow(E)
   no_allcl <- max(E)
-  pc <- matrix(rep(0, N * no_allcl), nrow = N)
-  for (i in 1:N) {
+  pc <- matrix(0, nrow = N, ncol = no_allcl)
+  for (i in seq_len(N)) {
     pc[i, E[i, ]] <- 1
   }
-  wcl <- matrix(rep(0, no_allcl ^ 2), nrow = no_allcl)
-  for (i in 1:(no_allcl - 1)) {
-    for (j in (i + 1):no_allcl) {
-      tmp <- sum(as.numeric((pc[, i] + pc[, j])) > 0)
-      if (tmp > 0) {
-        wcl[i, j] <- sum(as.numeric((pc[, i] + pc[, j])) == 2) / tmp
+  wcl <- diag(0, no_allcl) %>% 
+    inset(upper.tri(.), purrr::map2_dbl(
+      upper_tri_row(no_allcl), upper_tri_col(no_allcl), ~ {
+        tmp <- pc[, .x] + pc[, .y]
+        ifelse(sum(tmp) > 0, sum(tmp == 2) / sum(tmp > 0), 0)
       }
-    }
-  }
-  wcl <- wcl + t(wcl)
+    )) %>% 
+    add(t(.))
   return(wcl)
 }
