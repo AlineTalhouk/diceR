@@ -104,9 +104,10 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
 #' 
 #' @param data a dataset with rows as observations, columns as variables
 #' @param labels a vector of cluster labels from a clustering result
+#' @return the compactness score
+#' @author Derek Chiu
 #' @references MATLAB function \code{valid_compactness} by Simon Garrett in
 #'   LinkCluE
-#' @return the compactness score
 #' @export
 #' 
 #' @examples
@@ -119,20 +120,15 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
 compactness <- function(data, labels) {
   assertthat::assert_that(is.data.frame(data) || is.matrix(data),
                           length(labels) == nrow(data))
-  n <- length(labels)
   C <- sort(unique(labels))
-  k <- length(C)
   cp <- 0
-  for (i in seq_len(k)) {
+  for (i in seq_along(C)) {
     ind <- which(labels == C[i])
     nk <- length(ind)
-    if (nk <= 1) {
-      cp <- cp + 0
-    } else{
-      sum_d <- 0
+    if (nk > 1) {
       sum_d <- sum(stats::dist(data[ind, ], method = "euclidean"))
       cp <- cp + (nk * (sum_d / (nk * (nk - 1) / 2)))
     }
   }
-  return(cp / n)
+  return(cp / length(labels))
 }
