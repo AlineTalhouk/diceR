@@ -27,6 +27,7 @@ globalVariables(".")
 #' @export
 #' @examples
 #' 
+#' set.seed(1)
 #' A <- matrix(sample(1:25, size = 25, rep = FALSE), 5, 5)
 #' min_fnorm(A)
 min_fnorm <- function(A, B = diag(nrow(A))) {
@@ -119,18 +120,4 @@ is_pos_int <- function(x) {
       return(FALSE)
     }
   }
-}
-
-#' function to sort rows of a matrix
-#' @noRd
-sortMatrixRowWise <- function(M, order = c("ascending", "descending")) {
-  assertthat::assert_that(nrow(M) >= 1, is.matrix(M), is.numeric(M))
-  for (i in seq_len(nrow(M))) {
-    temp <- M[i, ]
-    temp <- switch(match.arg(order),
-                   ascending = sort(temp),
-                   descending = sort(temp, decreasing = TRUE))
-    M[i, ] <- temp
-  }
-  return(M)
 }
