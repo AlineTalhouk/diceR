@@ -41,5 +41,5 @@ MATLAB functions srs, cts, asrs in package LinkCluE by Simon
   Garrett
 }
 \author{
-Johnson Liu
+Johnson Liu, Derek Chiu
 }

@@ -9,7 +9,7 @@
 #' @param R number of iterations for \code{srs}
 #' @return an N by N SRS, ASRS, or CTS matrix
 #' @name similarity
-#' @author Johnson Liu
+#' @author Johnson Liu, Derek Chiu
 #' @references MATLAB functions srs, cts, asrs in package LinkCluE by Simon
 #'   Garrett
 #' @export
@@ -141,7 +141,7 @@ cts <- function(E, dc) {
 #' @return A list with elements
 #' \item{newE}{N by M relabelled cluster ensemble matrix}
 #' \item{no_allcl}{total number of clusters in the ensemble}
-#' @author Johnson Liu
+#' @author Johnson Liu, Derek Chiu
 #' @references MATLAB function relabelCl by Simon Garrett in LinkCluE package
 #' @noRd
 relabel_clusters <- function(E) {
@@ -165,7 +165,7 @@ relabel_clusters <- function(E) {
 #' 
 #' @param E N by M cluster ensemble matrix
 #' @return a p by p weighted cluster matrix where p denotes number of classes
-#' @author Johnson Liu
+#' @author Johnson Liu, Derek Chiu
 #' @references MATLAB function weightCl by Simon Garrett in package LinkCluE   
 #' @noRd
 weigh_clusters <- function(E) {
