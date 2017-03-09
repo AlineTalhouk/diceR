@@ -33,3 +33,6 @@ compactness(dat, E[, 1])
 MATLAB function \code{valid_compactness} by Simon Garrett in
   LinkCluE
 }
+\author{
+Derek Chiu
+}
