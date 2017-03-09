@@ -24,22 +24,18 @@
 #' data(E_imputed)
 #' table(k_modes(E_imputed[1:100, , 1, drop = FALSE], is.relabelled = FALSE))
 k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
-  set.seed(seed)
-  # flatten (and relabel) E
-  flat_E <- flatten_E(E, is.relabelled = is.relabelled)
-  # fill in missing values if any using majority voting
-  if (anyNA(flat_E) & ncol(flat_E) > 1) {
-    flat_E <- t(apply(flat_E, 1, function(x) {
-      x[which(is.na(x))] <- names(which.max(table(x)))
-      return(x)
-    }))
-  }
+  # Flatten and fill in remaining missing entries with majority voting
+  mv <- majority_voting(E, is.relabelled = is.relabelled)
+  flat_E <- flatten_E(E, is.relabelled = is.relabelled) %>% 
+    purrr::array_branch(margin = 1) %>% 
+    purrr::map2(mv, ~ .x %>% inset(is.na(.), .y)) %>% 
+    do.call(rbind, .) %>% 
+    as.data.frame()
   # k-modes clustering if there are multiple columns of assignments
   if (ncol(flat_E) > 1) {
-    k_modes <- flat_E %>% 
-      klaR::kmodes(modes = as.data.frame(.) %>% 
-                     purrr::map_int(n_distinct) %>% 
-                     max())
+    set.seed(seed)
+    k_modes <- klaR::kmodes(flat_E,
+                            modes = max(purrr::map_int(flat_E, n_distinct)))
     return(k_modes$cluster)
   } else {
     return(flat_E)
@@ -69,13 +65,11 @@ k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
 #' data(E_imputed)
 #' table(majority_voting(E_imputed, is.relabelled = FALSE))
 majority_voting <- function(E, is.relabelled = TRUE) {
-  # flatten (and relabel) E
-  flat_E <- flatten_E(E, is.relabelled = is.relabelled)
-  
-  # majority vote
-  maj.vote <- apply(flat_E, 1, function(x)
-    as.numeric(names(which.max(table(x)))))
-  return(maj.vote)
+  # Flatten (and relabel) E then find most common element in every row
+  mv <- E %>% 
+    flatten_E(is.relabelled = is.relabelled) %>% 
+    apply(1, function(x) as.numeric(names(which.max(table(x)))))
+  return(mv)
 }
 
 #' Cluster-based Similarity Partitioning Algorithm (CSPA)
