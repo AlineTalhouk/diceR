@@ -107,9 +107,7 @@ CSPA <- function(E, k) {
 #' @param E is an array of clustering results. An error is thrown if there are 
 #'   missing values. \code{\link{impute_missing}} can be used beforehand.
 #' @param k requested number of clusters
-#' @param dcCTS decay constant for CTS matrix
-#' @param dcSRS decay constant for SRS matrix
-#' @param dcASRS decay constant for ASRS matrix
+#' @param dc decay constant for CTS, SRS, or ASRS matrix
 #' @param R number of repetitions for SRS matrix
 #' @param sim.mat similarity matrix; choices are "cts", "srs", "asrs".
 #' @family consensus functions
@@ -129,18 +127,15 @@ CSPA <- function(E, k) {
 #' x <- apply(x, 2:4, impute_knn, data = dat, seed = 1)
 #' x_imputed <- impute_missing(x, dat, nk = 4)
 #' LCE(E = x_imputed, k = 4, sim.mat = "cts")
-LCE <- function(E, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
-                sim.mat = c("cts", "srs", "asrs")) {
-  assertthat::assert_that(is.array(E),
-                          dcCTS >= 0 && dcCTS <= 1,
-                          dcSRS >= 0 && dcSRS <= 1,
-                          dcASRS >= 0 && dcASRS <= 1)
+LCE <- function(E, k, dc = 0.8, R = 10, sim.mat = c("cts", "srs", "asrs")) {
+  assertthat::assert_that(is.array(E), dc >= 0 && dc <= 1)
+                          
   # Check that the Cluster matrix is complete otherwise return Error
   if (anyNA(E)) stop("'E' must be complete for LCE algorithm.")
   S <- switch(match.arg(sim.mat, c("cts", "asrs", "srs")),
-              cts = cts(E = E, dc = dcCTS),
-              srs = srs(E = E, dc = dcSRS, R = R),
-              asrs = asrs(E = E, dc = dcSRS))
+              cts = cts(E = E, dc = dc),
+              srs = srs(E = E, dc = dc, R = R),
+              asrs = asrs(E = E, dc = dc))
   LCE_cl <- hc(stats::dist(S), k)
   return(LCE_cl)
 }

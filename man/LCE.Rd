@@ -4,8 +4,7 @@
 \alias{LCE}
 \title{Linkage Clustering Ensemble}
 \usage{
-LCE(E, k, dcCTS = 0.8, dcSRS = 0.8, dcASRS = 0.8, R = 10,
-  sim.mat = c("cts", "srs", "asrs"))
+LCE(E, k, dc = 0.8, R = 10, sim.mat = c("cts", "srs", "asrs"))
 }
 \arguments{
 \item{E}{is an array of clustering results. An error is thrown if there are 
@@ -13,11 +12,7 @@ missing values. \code{\link{impute_missing}} can be used beforehand.}
 
 \item{k}{requested number of clusters}
 
-\item{dcCTS}{decay constant for CTS matrix}
-
-\item{dcSRS}{decay constant for SRS matrix}
-
-\item{dcASRS}{decay constant for ASRS matrix}
+\item{dc}{decay constant for CTS, SRS, or ASRS matrix}
 
 \item{R}{number of repetitions for SRS matrix}
 
