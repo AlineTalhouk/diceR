@@ -58,7 +58,7 @@
 </h1>
                         <h4 class="author">Derek Chiu</h4>
             
-            <h4 class="date">2017-03-08</h4>
+            <h4 class="date">2017-03-09</h4>
           </div>
 
     
@@ -83,18 +83,18 @@ dat &lt;-<span class="st"> </span><span class="kw">t</span>(hgsc[, -<span class=
 <h2 class="hasAnchor">
 <html><body><a href="#consensus-clustering" class="anchor"> </a></body></html>Consensus Clustering</h2>
 <p>When Monti et al. (2003) first introduced consensus clustering, the idea was to use one clustering algorithm on bootstrapped subsamples of the data. We implement some extensions where a consensus is reached across subsamples <em>and</em> across algorithms. The final cluster assignment is then computed using statistical transformations on the ensemble cluster.</p>
-<p>The base function of this package is <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>, which outputs cluster assignments across subsamples and algorithms, for different k (number of clusters). For example, let’s say we were interested in clustering the <code>hgsc</code> data into 2, 3, or 4 clusters, using 80% resampling on 10 replicates, for these clustering algorithms: K-Means (Spearman distance), PAM (Spearman distance), Spectral Clustering using Radial-Basis kernel function, and Biclustering using a latent block model.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(dat, <span class="dt">nk =</span> <span class="dv">2</span>:<span class="dv">4</span>, <span class="dt">pItem =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">10</span>, 
-                        <span class="dt">algorithms =</span> <span class="kw">c</span>(<span class="st">"hc"</span>, <span class="st">"km"</span>, <span class="st">"pam"</span>, <span class="st">"block"</span>), <span class="dt">distance =</span> <span class="st">"spear"</span>)</code></pre></div>
-<p>The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each “box” (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the biclustering algorithm for k = 3.</p>
+<p>The base function of this package is <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>, which outputs cluster assignments across subsamples and algorithms, for different k (number of clusters). For example, let’s say we were interested in clustering the <code>hgsc</code> data into 3 or 4 clusters, using 80% resampling on 5 replicates, for these clustering algorithms: Hierarchical Clustering, PAM, and DIvisive ANAlysis Clustering (DIANA). Euclidean distance is used for all algorithms.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(dat, <span class="dt">nk =</span> <span class="dv">3</span>:<span class="dv">4</span>, <span class="dt">pItem =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>, 
+                        <span class="dt">algorithms =</span> <span class="kw">c</span>(<span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span>))</code></pre></div>
+<p>The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each “box” (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the DIANA algorithm for k = 3.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(CC)
-<span class="co">#&gt;  num [1:489, 1:10, 1:4, 1:3] NA NA NA NA 1 1 1 NA 1 1 ...</span>
+<span class="co">#&gt;  int [1:489, 1:5, 1:3, 1:2] NA NA NA NA 1 1 1 NA 1 1 ...</span>
 <span class="co">#&gt;  - attr(*, "dimnames")=List of 4</span>
 <span class="co">#&gt;   ..$ : chr [1:489] "TCGA.04.1331_PRO.C5" "TCGA.04.1332_MES.C1" "TCGA.04.1336_DIF.C4" "TCGA.04.1337_MES.C1" ...</span>
-<span class="co">#&gt;   ..$ : chr [1:10] "R1" "R2" "R3" "R4" ...</span>
-<span class="co">#&gt;   ..$ : chr [1:4] "HC_Spear" "KM_Spear" "PAM_Spear" "BLOCK"</span>
-<span class="co">#&gt;   ..$ : chr [1:3] "2" "3" "4"</span>
-<span class="kw">kable</span>(<span class="kw">head</span>(CC[, , <span class="st">"BLOCK"</span>, <span class="st">"3"</span>]))</code></pre></div>
+<span class="co">#&gt;   ..$ : chr [1:5] "R1" "R2" "R3" "R4" ...</span>
+<span class="co">#&gt;   ..$ : chr [1:3] "HC_Euclidean" "PAM_Euclidean" "DIANA_Euclidean"</span>
+<span class="co">#&gt;   ..$ : chr [1:2] "3" "4"</span>
+<span class="kw">kable</span>(<span class="kw">head</span>(CC[, , <span class="st">"DIANA_Euclidean"</span>, <span class="st">"3"</span>]))</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -103,90 +103,55 @@ dat &lt;-<span class="st"> </span><span class="kw">t</span>(hgsc[, -<span class=
 <th align="right">R3</th>
 <th align="right">R4</th>
 <th align="right">R5</th>
-<th align="right">R6</th>
-<th align="right">R7</th>
-<th align="right">R8</th>
-<th align="right">R9</th>
-<th align="right">R10</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td>TCGA.04.1331_PRO.C5</td>
 <td align="right">NA</td>
 <td align="right">1</td>
-<td align="right">3</td>
-<td align="right">3</td>
 <td align="right">1</td>
-<td align="right">1</td>
-<td align="right">3</td>
 <td align="right">2</td>
-<td align="right">1</td>
-<td align="right">1</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
 <td>TCGA.04.1332_MES.C1</td>
 <td align="right">NA</td>
-<td align="right">3</td>
-<td align="right">NA</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">NA</td>
 <td align="right">1</td>
-<td align="right">3</td>
+<td align="right">1</td>
 <td align="right">2</td>
-<td align="right">3</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
 <td>TCGA.04.1336_DIF.C4</td>
 <td align="right">NA</td>
 <td align="right">2</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="right">3</td>
-<td align="right">NA</td>
-<td align="right">1</td>
-<td align="right">NA</td>
 <td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td>TCGA.04.1337_MES.C1</td>
 <td align="right">NA</td>
-<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">1</td>
 <td align="right">2</td>
 <td align="right">2</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">NA</td>
-<td align="right">3</td>
-<td align="right">2</td>
-<td align="right">NA</td>
 </tr>
 <tr class="odd">
 <td>TCGA.04.1338_MES.C1</td>
 <td align="right">2</td>
-<td align="right">3</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">2</td>
 <td align="right">1</td>
-<td align="right">3</td>
-<td align="right">NA</td>
-<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
 <td>TCGA.04.1341_PRO.C5</td>
-<td align="right">3</td>
-<td align="right">NA</td>
-<td align="right">3</td>
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">3</td>
 <td align="right">2</td>
 <td align="right">1</td>
 <td align="right">1</td>
+<td align="right">2</td>
+<td align="right">NA</td>
 </tr>
 </tbody>
 </table>
@@ -194,7 +159,7 @@ dat &lt;-<span class="st"> </span><span class="kw">t</span>(hgsc[, -<span class=
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw">apply</span>(CC, <span class="dv">2</span>:<span class="dv">4</span>, impute_knn, <span class="dt">data =</span> dat, <span class="dt">seed =</span> <span class="dv">1</span>)
 CC_imputed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/impute_missing.html">impute_missing</a></span>(CC, dat, <span class="dt">nk =</span> <span class="dv">4</span>)
 <span class="kw">sum</span>(<span class="kw">is.na</span>(CC))
-<span class="co">#&gt; [1] 466</span>
+<span class="co">#&gt; [1] 30</span>
 <span class="kw">sum</span>(<span class="kw">is.na</span>(CC_imputed))
 <span class="co">#&gt; [1] 0</span></code></pre></div>
 <p>We can carry on the analysis using either <code>CC</code> or <code>CC_imputed</code>.</p>
@@ -213,12 +178,12 @@ CC_imputed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <h3 class="hasAnchor">
 <html><body><a href="#compute-consensus-matrix-with-consensus_matrix" class="anchor"> </a></body></html>Compute consensus matrix with <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code>
 </h3>
-<p>The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one’s. Suppose we wanted to compute the consensus matrix for PAM only, and visualize using <code><a href="../reference/graphs.html">graph_heatmap()</a></code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pam<span class="fl">.2</span> &lt;-<span class="st"> </span>CC[, , <span class="st">"PAM_Spear"</span>, <span class="st">"2"</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]
-cm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(pam<span class="fl">.2</span>)
+<p>The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one’s. Suppose we wanted to compute the consensus matrix for PAM, k = 4, and visualize using <code><a href="../reference/graphs.html">graph_heatmap()</a></code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pam<span class="fl">.4</span> &lt;-<span class="st"> </span>CC[, , <span class="st">"PAM_Euclidean"</span>, <span class="st">"4"</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]
+cm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(pam<span class="fl">.4</span>)
 <span class="kw">dim</span>(cm)
 <span class="co">#&gt; [1] 489 489</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/graphs.html">graph_heatmap</a></span>(pam<span class="fl">.2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/graphs.html">graph_heatmap</a></span>(pam<span class="fl">.4</span>)</code></pre></div>
 <p><img src="overview_files/figure-html/graph_heatmap-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="combine-consensus-summaries-with-consensus_combine" class="section level3">
@@ -229,81 +194,20 @@ cm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensu
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ccomb_matrix &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, <span class="dt">element =</span> <span class="st">"matrix"</span>)
 ccomb_class &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, <span class="dt">element =</span> <span class="st">"class"</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(ccomb_matrix, <span class="dt">max.level =</span> <span class="dv">2</span>)
-<span class="co">#&gt; List of 3</span>
-<span class="co">#&gt;  $ 2:List of 4</span>
-<span class="co">#&gt;   ..$ HC_Spear : num [1:489, 1:489] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#&gt;   ..$ KM_Spear : num [1:489, 1:489] 1 1 0.9 0 0 1 1 1 1 0.9 ...</span>
-<span class="co">#&gt;   ..$ PAM_Spear: num [1:489, 1:489] 1 0.8 0.6 0.6 0.1 0.4 0.9 0.6 0.6 0.7 ...</span>
-<span class="co">#&gt;   ..$ BLOCK    : num [1:489, 1:489] 1 1 0 1 1 0.1 1 1 0 0 ...</span>
-<span class="co">#&gt;  $ 3:List of 4</span>
-<span class="co">#&gt;   ..$ HC_Spear : num [1:489, 1:489] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#&gt;   ..$ KM_Spear : num [1:489, 1:489] 1 0.9 0.7 0 0 1 1 0.875 0.9 0.5 ...</span>
-<span class="co">#&gt;   ..$ PAM_Spear: num [1:489, 1:489] 1 1 0.889 0 0 ...</span>
-<span class="co">#&gt;   ..$ BLOCK    : num [1:489, 1:489] 1 0.3 0 0 0 1 1 0.9 0.7 0 ...</span>
-<span class="co">#&gt;  $ 4:List of 4</span>
-<span class="co">#&gt;   ..$ HC_Spear : num [1:489, 1:489] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#&gt;   ..$ KM_Spear : num [1:489, 1:489] 1 1 0.6 0 0 ...</span>
-<span class="co">#&gt;   ..$ PAM_Spear: num [1:489, 1:489] 1 0.778 0.667 0.222 0 ...</span>
-<span class="co">#&gt;   ..$ BLOCK    : num [1:489, 1:489] 1 0.111 0 0 0 ...</span>
+<span class="co">#&gt; List of 2</span>
+<span class="co">#&gt;  $ 3:List of 3</span>
+<span class="co">#&gt;   ..$ HC_Euclidean   : num [1:489, 1:489] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:489, 1:489] 1 0.4 0.4 0.2 0.2 0.6 0.6 0.2 0.4 0.4 ...</span>
+<span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:489, 1:489] 1 1 0 1 1 1 1 1 0 0 ...</span>
+<span class="co">#&gt;  $ 4:List of 3</span>
+<span class="co">#&gt;   ..$ HC_Euclidean   : num [1:489, 1:489] 1 1 1 1 1 1 1 1 1 0.8 ...</span>
+<span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:489, 1:489] 1 0.4 0.4 0.2 0.2 0.6 0.6 0.2 0 0.2 ...</span>
+<span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:489, 1:489] 1 1 0 1 1 1 1 1 0 0 ...</span>
 <span class="kw">kable</span>(<span class="kw">head</span>(ccomb_class$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
 <table class="table">
 <thead><tr class="header">
-<th align="right">HC_Spear</th>
-<th align="right">KM_Spear</th>
-<th align="right">PAM_Spear</th>
-<th align="right">BLOCK</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">3</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">3</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="right">3</td>
-<td align="right">3</td>
-</tr>
-</tbody>
-</table>
-<p>One can feed in <code>ccomb_class</code> into <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code> to obtain a consensus matrix across both subsamples <strong>and</strong> algorithms.</p>
-<p>A situation might also arise where we initially decided on using 4 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> takes in any number of ensemble objects (e.g. <code>CC</code> and <code>CC2</code>) and combines the results.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(dat, <span class="dt">nk =</span> <span class="dv">2</span>:<span class="dv">4</span>, <span class="dt">reps =</span> <span class="dv">10</span>, <span class="dt">pItem =</span> <span class="fl">0.8</span>,
-                         <span class="dt">algorithms =</span> <span class="st">"diana"</span>, <span class="dt">save =</span> <span class="ot">FALSE</span>)
-ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, CC2, <span class="dt">element =</span> <span class="st">"class"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kable</span>(<span class="kw">head</span>(ccomb_class2$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="right">HC_Spear</th>
-<th align="right">KM_Spear</th>
-<th align="right">PAM_Spear</th>
-<th align="right">BLOCK</th>
+<th align="right">HC_Euclidean</th>
+<th align="right">PAM_Euclidean</th>
 <th align="right">DIANA_Euclidean</th>
 </tr></thead>
 <tbody>
@@ -311,12 +215,8 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">1</td>
@@ -324,29 +224,73 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">1</td>
-<td align="right">3</td>
 <td align="right">2</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
-<td align="right">2</td>
-<td align="right">2</td>
 <td align="right">2</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">2</td>
-<td align="right">3</td>
-<td align="right">2</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>One can feed in <code>ccomb_class</code> (instead of <code>CC</code>) into <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code> to obtain a consensus matrix across both subsamples <strong>and</strong> algorithms.</p>
+<p>A situation might also arise where we initially decided on using 3 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> takes in any number of ensemble objects (e.g. <code>CC</code> and <code>CC2</code>) and combines the results.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(dat, <span class="dt">nk =</span> <span class="dv">3</span>:<span class="dv">4</span>, <span class="dt">pItem =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>, 
+                         <span class="dt">algorithms =</span> <span class="st">"km"</span>)
+ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, CC2, <span class="dt">element =</span> <span class="st">"class"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kable</span>(<span class="kw">head</span>(ccomb_class2$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">HC_Euclidean</th>
+<th align="right">PAM_Euclidean</th>
+<th align="right">DIANA_Euclidean</th>
+<th align="right">KM_Euclidean</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
 <td align="right">3</td>
-<td align="right">3</td>
-<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
 <td align="right">1</td>
 </tr>
 </tbody>
@@ -382,94 +326,76 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">HC_Spear</td>
-<td align="right">0.5516903</td>
-<td align="right">1.199420</td>
-<td align="right">0.8947119</td>
-<td align="right">0.4346364</td>
-<td align="right">0.9382360</td>
-<td align="right">98.730461</td>
-<td align="right">0.1008726</td>
-<td align="right">0.8286285</td>
-<td align="right">0.0255108</td>
-<td align="right">0.2826421</td>
-<td align="right">0.0029220</td>
+<td align="left">HC_Euclidean</td>
+<td align="right">0.2537068</td>
+<td align="right">5.495742</td>
+<td align="right">2.316219</td>
+<td align="right">0.4040506</td>
+<td align="right">0.7744601</td>
+<td align="right">46.92632</td>
+<td align="right">0.1317616</td>
+<td align="right">1.816446</td>
+<td align="right">0.1995945</td>
+<td align="right">0.7540120</td>
+<td align="right">0.0086184</td>
+<td align="right">0.0533441</td>
 <td align="right">NaN</td>
-<td align="right">0.5000006</td>
-<td align="right">25.02390</td>
-<td align="right">2.928968</td>
+<td align="right">24.88551</td>
+<td align="right">21.58294</td>
 </tr>
 <tr class="even">
-<td align="left">KM_Spear</td>
-<td align="right">0.4480542</td>
-<td align="right">8.102332</td>
-<td align="right">7.6243314</td>
-<td align="right">0.2666956</td>
-<td align="right">0.9668719</td>
-<td align="right">5.471927</td>
-<td align="right">0.4313450</td>
-<td align="right">14.9405098</td>
-<td align="right">0.0986108</td>
-<td align="right">0.1394571</td>
-<td align="right">0.2151346</td>
-<td align="right">0.0249059</td>
+<td align="left">PAM_Euclidean</td>
+<td align="right">0.1654657</td>
+<td align="right">73.774979</td>
+<td align="right">2.497152</td>
+<td align="right">0.3318324</td>
+<td align="right">0.8082901</td>
+<td align="right">57.76943</td>
+<td align="right">0.1408872</td>
+<td align="right">1.435213</td>
+<td align="right">0.4293746</td>
+<td align="right">0.6197688</td>
+<td align="right">0.0912496</td>
+<td align="right">0.1244924</td>
 <td align="right">NaN</td>
-<td align="right">24.77038</td>
-<td align="right">270.085317</td>
-</tr>
-<tr class="odd">
-<td align="left">PAM_Spear</td>
-<td align="right">0.4841708</td>
-<td align="right">3.510465</td>
-<td align="right">11.5566203</td>
-<td align="right">0.2615316</td>
-<td align="right">0.9899148</td>
-<td align="right">2.354780</td>
-<td align="right">0.6539747</td>
-<td align="right">34.6644636</td>
-<td align="right">0.0388279</td>
-<td align="right">0.0549108</td>
-<td align="right">0.2362737</td>
-<td align="right">0.0106873</td>
-<td align="right">NaN</td>
-<td align="right">24.94227</td>
-<td align="right">391.800397</td>
-</tr>
-<tr class="even">
-<td align="left">BLOCK</td>
-<td align="right">0.2644807</td>
-<td align="right">83.729113</td>
-<td align="right">2.3734705</td>
-<td align="right">0.2609921</td>
-<td align="right">0.8587794</td>
-<td align="right">56.226689</td>
-<td align="right">0.1442904</td>
-<td align="right">1.4502934</td>
-<td align="right">0.3145290</td>
-<td align="right">0.4448094</td>
-<td align="right">0.1387988</td>
-<td align="right">0.1290880</td>
-<td align="right">NaN</td>
-<td align="right">23.24983</td>
-<td align="right">255.562698</td>
+<td align="right">22.15103</td>
+<td align="right">203.61190</td>
 </tr>
 <tr class="odd">
 <td align="left">DIANA_Euclidean</td>
-<td align="right">0.2283060</td>
-<td align="right">101.520151</td>
-<td align="right">2.1508624</td>
-<td align="right">0.3127262</td>
-<td align="right">0.8387167</td>
-<td align="right">68.327768</td>
-<td align="right">0.1327705</td>
-<td align="right">1.1908385</td>
-<td align="right">0.3600726</td>
-<td align="right">0.5092239</td>
-<td align="right">0.1226920</td>
-<td align="right">0.1515236</td>
+<td align="right">0.2144179</td>
+<td align="right">54.635818</td>
+<td align="right">3.531413</td>
+<td align="right">0.3345569</td>
+<td align="right">0.8334737</td>
+<td align="right">33.22098</td>
+<td align="right">0.2133493</td>
+<td align="right">2.971263</td>
+<td align="right">0.3682909</td>
+<td align="right">0.5228514</td>
+<td align="right">0.1183721</td>
+<td align="right">0.0728286</td>
 <td align="right">NaN</td>
-<td align="right">22.93711</td>
-<td align="right">144.394048</td>
+<td align="right">22.80893</td>
+<td align="right">205.22500</td>
+</tr>
+<tr class="even">
+<td align="left">KM_Euclidean</td>
+<td align="right">0.1390453</td>
+<td align="right">78.130202</td>
+<td align="right">2.524237</td>
+<td align="right">0.2825585</td>
+<td align="right">0.7938484</td>
+<td align="right">71.22816</td>
+<td align="right">0.1513320</td>
+<td align="right">1.422120</td>
+<td align="right">0.4691427</td>
+<td align="right">0.6802796</td>
+<td align="right">0.0760283</td>
+<td align="right">0.1228779</td>
+<td align="right">NaN</td>
+<td align="right">21.97707</td>
+<td align="right">189.27540</td>
 </tr>
 </tbody>
 </table>
@@ -496,208 +422,76 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">HC_Spear</td>
-<td align="right">0.6627400</td>
-<td align="right">0.9884433</td>
-<td align="right">4.668260</td>
-<td align="right">0.2962163</td>
-<td align="right">1.0695984</td>
-<td align="right">45.204808</td>
-<td align="right">0.3080730</td>
-<td align="right">7.570398</td>
-<td align="right">-0.0397348</td>
-<td align="right">-0.1693501</td>
-<td align="right">0.0321874</td>
+<td align="left">HC_Euclidean</td>
+<td align="right">0.2466140</td>
+<td align="right">4.724811</td>
+<td align="right">2.207399</td>
+<td align="right">0.4315581</td>
+<td align="right">0.7786802</td>
+<td align="right">42.02530</td>
+<td align="right">0.1108028</td>
+<td align="right">1.426764</td>
+<td align="right">0.2219521</td>
+<td align="right">0.7314687</td>
+<td align="right">0.0123621</td>
+<td align="right">0.0461401</td>
 <td align="right">NaN</td>
-<td align="right">0.554755</td>
-<td align="right">25.01298</td>
-<td align="right">32.87579</td>
+<td align="right">24.84100</td>
+<td align="right">28.56032</td>
 </tr>
 <tr class="even">
-<td align="left">KM_Spear</td>
-<td align="right">0.3860493</td>
-<td align="right">9.8826807</td>
-<td align="right">5.465131</td>
-<td align="right">0.2462102</td>
-<td align="right">0.9401596</td>
-<td align="right">7.511457</td>
-<td align="right">0.3445822</td>
-<td align="right">10.993622</td>
-<td align="right">0.1431398</td>
-<td align="right">0.2102544</td>
-<td align="right">0.1830156</td>
-<td align="right">0.0072148</td>
+<td align="left">PAM_Euclidean</td>
+<td align="right">0.1599347</td>
+<td align="right">60.517162</td>
+<td align="right">2.116693</td>
+<td align="right">0.3479236</td>
+<td align="right">0.8058790</td>
+<td align="right">48.62919</td>
+<td align="right">0.1537296</td>
+<td align="right">1.673367</td>
+<td align="right">0.4222175</td>
+<td align="right">0.6259260</td>
+<td align="right">0.0851048</td>
+<td align="right">0.1223419</td>
 <td align="right">NaN</td>
-<td align="right">24.47740</td>
-<td align="right">356.82659</td>
-</tr>
-<tr class="odd">
-<td align="left">PAM_Spear</td>
-<td align="right">0.4380780</td>
-<td align="right">7.9660877</td>
-<td align="right">6.102424</td>
-<td align="right">0.2550387</td>
-<td align="right">0.9754864</td>
-<td align="right">4.411659</td>
-<td align="right">0.3279148</td>
-<td align="right">12.420838</td>
-<td align="right">0.0628285</td>
-<td align="right">0.0938050</td>
-<td align="right">0.2032608</td>
-<td align="right">0.0066019</td>
-<td align="right">NaN</td>
-<td align="right">24.61816</td>
-<td align="right">449.38849</td>
-</tr>
-<tr class="even">
-<td align="left">BLOCK</td>
-<td align="right">0.2249674</td>
-<td align="right">67.2248282</td>
-<td align="right">3.191133</td>
-<td align="right">0.2671491</td>
-<td align="right">0.8439523</td>
-<td align="right">59.832970</td>
-<td align="right">0.2217584</td>
-<td align="right">2.532256</td>
-<td align="right">0.3298924</td>
-<td align="right">0.4943632</td>
-<td align="right">0.1125800</td>
-<td align="right">0.0740507</td>
-<td align="right">NaN</td>
-<td align="right">22.31306</td>
-<td align="right">311.17698</td>
+<td align="right">21.61560</td>
+<td align="right">225.40476</td>
 </tr>
 <tr class="odd">
 <td align="left">DIANA_Euclidean</td>
-<td align="right">0.2034680</td>
-<td align="right">57.2564688</td>
-<td align="right">1.606303</td>
-<td align="right">0.3352598</td>
-<td align="right">0.8260476</td>
-<td align="right">71.903777</td>
-<td align="right">0.1170323</td>
-<td align="right">1.148836</td>
-<td align="right">0.3887542</td>
-<td align="right">0.5499627</td>
-<td align="right">0.1124352</td>
-<td align="right">0.1447351</td>
+<td align="right">0.1635526</td>
+<td align="right">49.981284</td>
+<td align="right">3.531413</td>
+<td align="right">0.3345569</td>
+<td align="right">0.8075430</td>
+<td align="right">38.08753</td>
+<td align="right">0.2147582</td>
+<td align="right">2.779883</td>
+<td align="right">0.4263474</td>
+<td align="right">0.6204408</td>
+<td align="right">0.0896140</td>
+<td align="right">0.0768258</td>
 <td align="right">NaN</td>
-<td align="right">22.74426</td>
-<td align="right">147.49643</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table class="table">
-<thead><tr class="header">
-<th align="left">Algorithms</th>
-<th align="right">c_index</th>
-<th align="right">calinski_harabasz</th>
-<th align="right">davies_bouldin</th>
-<th align="right">dunn</th>
-<th align="right">mcclain_rao</th>
-<th align="right">pbm</th>
-<th align="right">sd_dis</th>
-<th align="right">ray_turi</th>
-<th align="right">tau</th>
-<th align="right">gamma</th>
-<th align="right">g_plus</th>
-<th align="right">silhouette</th>
-<th align="right">s_dbw</th>
-<th align="right">Compactness</th>
-<th align="right">Connectivity</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">HC_Spear</td>
-<td align="right">0.6563183</td>
-<td align="right">0.9357969</td>
-<td align="right">5.058104</td>
-<td align="right">0.2884723</td>
-<td align="right">1.0710988</td>
-<td align="right">26.337254</td>
-<td align="right">0.4789073</td>
-<td align="right">14.508819</td>
-<td align="right">-0.0694037</td>
-<td align="right">-0.1776517</td>
-<td align="right">0.0898698</td>
-<td align="right">NaN</td>
-<td align="right">NaN</td>
-<td align="right">25.00136</td>
-<td align="right">77.52183</td>
+<td align="right">22.13289</td>
+<td align="right">251.09405</td>
 </tr>
 <tr class="even">
-<td align="left">KM_Spear</td>
-<td align="right">0.3891924</td>
-<td align="right">8.5081220</td>
-<td align="right">4.948727</td>
-<td align="right">0.2463400</td>
-<td align="right">0.9515427</td>
-<td align="right">5.982285</td>
-<td align="right">0.6732226</td>
-<td align="right">35.168019</td>
-<td align="right">0.1112681</td>
-<td align="right">0.1810387</td>
-<td align="right">0.1546794</td>
-<td align="right">-0.0132847</td>
+<td align="left">KM_Euclidean</td>
+<td align="right">0.1548628</td>
+<td align="right">61.454435</td>
+<td align="right">2.050659</td>
+<td align="right">0.2608547</td>
+<td align="right">0.8028583</td>
+<td align="right">52.58123</td>
+<td align="right">0.1896767</td>
+<td align="right">2.074078</td>
+<td align="right">0.4068519</td>
+<td align="right">0.6385264</td>
+<td align="right">0.0733772</td>
+<td align="right">0.0772370</td>
 <td align="right">NaN</td>
-<td align="right">24.31766</td>
-<td align="right">493.65833</td>
-</tr>
-<tr class="odd">
-<td align="left">PAM_Spear</td>
-<td align="right">0.4048818</td>
-<td align="right">9.8546664</td>
-<td align="right">4.209128</td>
-<td align="right">0.2615316</td>
-<td align="right">0.9614407</td>
-<td align="right">6.528464</td>
-<td align="right">0.5093436</td>
-<td align="right">21.548792</td>
-<td align="right">0.0805052</td>
-<td align="right">0.1300469</td>
-<td align="right">0.1666915</td>
-<td align="right">0.0002378</td>
-<td align="right">NaN</td>
-<td align="right">24.32021</td>
-<td align="right">560.22540</td>
-</tr>
-<tr class="even">
-<td align="left">BLOCK</td>
-<td align="right">0.1755757</td>
-<td align="right">51.7429362</td>
-<td align="right">2.978208</td>
-<td align="right">0.2609921</td>
-<td align="right">0.8152013</td>
-<td align="right">39.783655</td>
-<td align="right">0.2100927</td>
-<td align="right">2.602966</td>
-<td align="right">0.3755653</td>
-<td align="right">0.6006883</td>
-<td align="right">0.0780467</td>
-<td align="right">0.0495859</td>
-<td align="right">NaN</td>
-<td align="right">21.92328</td>
-<td align="right">351.61825</td>
-</tr>
-<tr class="odd">
-<td align="left">DIANA_Euclidean</td>
-<td align="right">0.2076213</td>
-<td align="right">40.2421367</td>
-<td align="right">1.606415</td>
-<td align="right">0.3352598</td>
-<td align="right">0.8292861</td>
-<td align="right">47.212144</td>
-<td align="right">0.1839914</td>
-<td align="right">2.425901</td>
-<td align="right">0.3792898</td>
-<td align="right">0.5376238</td>
-<td align="right">0.1150670</td>
-<td align="right">0.0827677</td>
-<td align="right">NaN</td>
-<td align="right">22.64088</td>
-<td align="right">179.73413</td>
+<td align="right">21.54069</td>
+<td align="right">330.88175</td>
 </tr>
 </tbody>
 </table>
@@ -714,13 +508,13 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ctrim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_trim</a></span>(dat, CC, CC2)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(ctrim, <span class="dt">max.level =</span> <span class="dv">2</span>)
 <span class="co">#&gt; List of 4</span>
-<span class="co">#&gt;  $ alg.keep  : chr [1:3] "HC_Spear" "BLOCK" "DIANA_Euclidean"</span>
-<span class="co">#&gt;  $ alg.remove: chr [1:2] "KM_Spear" "PAM_Spear"</span>
+<span class="co">#&gt;  $ alg.keep  : chr [1:3] "HC_Euclidean" "PAM_Euclidean" "KM_Euclidean"</span>
+<span class="co">#&gt;  $ alg.remove: chr "DIANA_Euclidean"</span>
 <span class="co">#&gt;  $ eval      :List of 3</span>
-<span class="co">#&gt;   ..$ k       : int 2</span>
-<span class="co">#&gt;   ..$ pac     :'data.frame': 3 obs. of  6 variables:</span>
-<span class="co">#&gt;   ..$ internal:List of 3</span>
-<span class="co">#&gt;  $ data.new  : num [1:489, 1:10, 1:3, 1] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;   ..$ k       : int 4</span>
+<span class="co">#&gt;   ..$ pac     :'data.frame': 2 obs. of  5 variables:</span>
+<span class="co">#&gt;   ..$ internal:List of 2</span>
+<span class="co">#&gt;  $ data.new  : int [1:489, 1:5, 1:3, 1] 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 4</span></code></pre></div>
 <p>The return value shows which algorithms were kept, removed (if any), and the trimmed (and potentially reweighed) cluster ensemble.</p>
 </div>
