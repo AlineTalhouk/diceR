@@ -107,14 +107,14 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   Ecomp <- impute_missing(Eknn, data, k)
   
   # Consensus functions
-  Final <- sapply(cons.funs, function(x) {
+  Final <- vapply(cons.funs, function(x) {
     switch(x,
            kmodes = k_modes(Ecomp),
            majority = majority_voting(Ecomp),
            CSPA = CSPA(E, k),
            LCE = LCE(drop(Ecomp), k = k, sim.mat = sim.mat)
     )
-  }) %>%
+  }, double(nrow(Ecomp))) %>%
     apply(2, as.integer)
 
   # Relabel Final Clustering using reference
