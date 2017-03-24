@@ -311,16 +311,19 @@ distances <- function(x, dist) {
     return(spear)
   } else {
     # Identify custom distance functions from those found in stats::dist
-    check <- stats::setNames(lapply(d, function(.x)
-      try(stats::dist(x = x, method = .x), silent = TRUE)), d)
+    check <- d %>% 
+      purrr::map(~ try(stats::dist(x = x, method = .x), silent = TRUE)) %>% 
+      purrr::set_names(d)
     is.error <- purrr::map_lgl(check, inherits, "try-error")
     succeeded <- which(!is.error)
     failed <- which(is.error)
     
     # Search for custom function in parent environments
     if (length(failed)) {
-      custom <- stats::setNames(lapply(names(check[failed]), function(d)
-        get(d)(x)), names(failed))
+      custom <- check[failed] %>% 
+        names() %>% 
+        purrr::map(~ get(.x)(x)) %>% 
+        purrr::set_names(names(failed))
     } else {
       custom <- NULL
     }
