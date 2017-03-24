@@ -29,12 +29,13 @@ the approximated simrank based similarity matrix, and \code{cts} computes the
 connected triple based similarity matrix.
 }
 \examples{
+library(purrr)
 set.seed(1)
 E <- matrix(rep(sample(1:4, 800, replace = TRUE)), nrow = 100)
 SRS <- srs(E = E, dc = 0.8, R = 3)
 ASRS <- asrs(E = E, dc = 0.8)
 CTS <- cts(E = E, dc = 0.8)
-str_out <- sapply(list(SRS, ASRS, CTS), str)
+walk(list(SRS, ASRS, CTS), str)
 }
 \references{
 MATLAB functions srs, cts, asrs in package LinkCluE by Simon
