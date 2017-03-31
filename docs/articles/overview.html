@@ -58,7 +58,7 @@
 </h1>
                         <h4 class="author">Derek Chiu</h4>
             
-            <h4 class="date">2017-03-09</h4>
+            <h4 class="date">2017-03-31</h4>
           </div>
 
     
@@ -66,7 +66,7 @@
 <div class="contents">
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#introduction" class="anchor"> </a></body></html>Introduction</h2>
+<a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>Cluster analysis is a way of “slicing and dicing” data such that we group together similar entities and separate dissimilar ones. The trouble is that there is a diverse number of clustering algorithms, each with different techniques and inputs. Thus, an automated cluster analysis pipeline is not feasible. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels are obtained after considering a variety of methods. We currently implement about 15 clustering algorithms. Although the results are relatively dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering ideologies and reach a consensus class.</p>
 <p><code>diceR</code> is currently only available on GitHub (<em>the second line below will be uncommented once the repository becomes public</em>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
@@ -81,7 +81,7 @@ dat &lt;-<span class="st"> </span><span class="kw">t</span>(hgsc[, -<span class=
 </div>
 <div id="consensus-clustering" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#consensus-clustering" class="anchor"> </a></body></html>Consensus Clustering</h2>
+<a href="#consensus-clustering" class="anchor"></a>Consensus Clustering</h2>
 <p>When Monti et al. (2003) first introduced consensus clustering, the idea was to use one clustering algorithm on bootstrapped subsamples of the data. We implement some extensions where a consensus is reached across subsamples <em>and</em> across algorithms. The final cluster assignment is then computed using statistical transformations on the ensemble cluster.</p>
 <p>The base function of this package is <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>, which outputs cluster assignments across subsamples and algorithms, for different k (number of clusters). For example, let’s say we were interested in clustering the <code>hgsc</code> data into 3 or 4 clusters, using 80% resampling on 5 replicates, for these clustering algorithms: Hierarchical Clustering, PAM, and DIvisive ANAlysis Clustering (DIANA). Euclidean distance is used for all algorithms.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(dat, <span class="dt">nk =</span> <span class="dv">3</span>:<span class="dv">4</span>, <span class="dt">pItem =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>, 
@@ -166,7 +166,7 @@ CC_imputed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 </div>
 <div id="consensus-functions" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#consensus-functions" class="anchor"> </a></body></html>Consensus Functions</h2>
+<a href="#consensus-functions" class="anchor"></a>Consensus Functions</h2>
 <p><code>diceR</code> provides functions for retrieving useful summaries and other results for consensus clustering.</p>
 <ul>
 <li><a href="#compute-consensus-matrix-with-consensus_matrix"><code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code></a></li>
@@ -176,7 +176,7 @@ CC_imputed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 </ul>
 <div id="compute-consensus-matrix-with-consensus_matrix" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#compute-consensus-matrix-with-consensus_matrix" class="anchor"> </a></body></html>Compute consensus matrix with <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code>
+<a href="#compute-consensus-matrix-with-consensus_matrix" class="anchor"></a>Compute consensus matrix with <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code>
 </h3>
 <p>The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one’s. Suppose we wanted to compute the consensus matrix for PAM, k = 4, and visualize using <code><a href="../reference/graphs.html">graph_heatmap()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pam<span class="fl">.4</span> &lt;-<span class="st"> </span>CC[, , <span class="st">"PAM_Euclidean"</span>, <span class="st">"4"</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]
@@ -188,7 +188,7 @@ cm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensu
 </div>
 <div id="combine-consensus-summaries-with-consensus_combine" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#combine-consensus-summaries-with-consensus_combine" class="anchor"> </a></body></html>Combine consensus summaries with <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code>
+<a href="#combine-consensus-summaries-with-consensus_combine" class="anchor"></a>Combine consensus summaries with <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code>
 </h3>
 <p>If we wish to separately extract consensus matrices and consensus classes for every algorithm, <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> is a convenient wrapper to do so. Setting <code>element = "matrix"</code> returns a list of consensus matrices. On the other hand, setting <code>element = "class"</code> returns a matrix with rows as samples, and columns as clustering assignments for each algorithm.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ccomb_matrix &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, <span class="dt">element =</span> <span class="st">"matrix"</span>)
@@ -298,7 +298,7 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 </div>
 <div id="compare-algortihms-with-consensus_evaluate" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#compare-algortihms-with-consensus_evaluate" class="anchor"> </a></body></html>Compare algortihms with <code><a href="../reference/consensus_combine.html">consensus_evaluate()</a></code>
+<a href="#compare-algortihms-with-consensus_evaluate" class="anchor"></a>Compare algortihms with <code><a href="../reference/consensus_combine.html">consensus_evaluate()</a></code>
 </h3>
 <p>Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between <code>lower</code> (defaults to 0) and <code>upper</code> (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each <code>k</code>, and choose the <code>k</code> with the greatest average PAC. If there <em>is</em> a reference class, <code>k</code> is the number of distinct classes in the reference.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ccomp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_evaluate</a></span>(dat, CC, CC2, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</code></pre></div>
@@ -501,7 +501,7 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 </div>
 <div id="trim-and-reweigh-algorithms-with-consensus_trim" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#trim-and-reweigh-algorithms-with-consensus_trim" class="anchor"> </a></body></html>Trim and reweigh algorithms with <code><a href="../reference/consensus_combine.html">consensus_trim()</a></code>
+<a href="#trim-and-reweigh-algorithms-with-consensus_trim" class="anchor"></a>Trim and reweigh algorithms with <code><a href="../reference/consensus_combine.html">consensus_trim()</a></code>
 </h3>
 <p>Some algorithms perform too poorly to deserve membership in the cluster ensemble. We consider the relative ranks of each algorithm across all internal indices, and compute their sum. All algorithms below a certain quantile for the sum rank are trimmed (removed). By default this quantile is 75%.</p>
 <p>After trimming, we can optionally choose to reweigh the algorithms based on the internal index magnitudes. Of course, we take into account the direction of optimality (higher is better is lower is better). Algorithms reweighed are then fed into the consensus functions. This is done by replicating each algorithm by a scalar factor that is proportional to its weight. For example, if we have two algorithms A and B, and A is given a weight of 80% and B is given a weight of 20%, then we make 4 copies of A and 1 copy of B. To minimize computational time, the total number of copies out of all algorithms has an upper bound of 100. Without reweighing, each algorithm is given equal weight.</p>

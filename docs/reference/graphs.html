@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -93,16 +95,23 @@ under CDF curves, heatmaps, and cluster assignment tracking plots.</p>
 <span class='fu'>graph_all</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>an object from <code><a href='consensus_cluster.html'>consensus_cluster</a></code>, or a list of multiple objects
-from <code><a href='consensus_cluster.html'>consensus_cluster</a></code></dd>
-      <dt>main</dt>
-      <dd>heatmap title. If <code>NULL</code> (default), the titles will be taken
-from names in <code>x</code></dd>
-      <dt>...</dt>
-      <dd>additional arguments to <code><a href='http://www.rdocumentation.org/packages/gplots/topics/heatmap.2'>heatmap.2</a></code></dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>an object from <code><a href='consensus_cluster.html'>consensus_cluster</a></code>, or a list of multiple objects
+from <code><a href='consensus_cluster.html'>consensus_cluster</a></code></p></td>
+    </tr>
+    <tr>
+      <th>main</th>
+      <td><p>heatmap title. If <code>NULL</code> (default), the titles will be taken
+from names in <code>x</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>additional arguments to <code><a href='http://www.rdocumentation.org/packages/gplots/topics/heatmap.2'>heatmap.2</a></code></p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

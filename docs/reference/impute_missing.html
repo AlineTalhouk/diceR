@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -81,42 +83,48 @@
     <p>Impute missing values from bootstrapped subsampling</p>
     
 
-    <pre><span class='fu'>impute_missing</span>(<span class='no'>E</span>, <span class='no'>data</span>, <span class='no'>nk</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123456</span>)</pre>
+    <pre><span class='fu'>impute_missing</span>(<span class='no'>E</span>, <span class='no'>data</span>, <span class='no'>nk</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>E</dt>
-      <dd>4D array of clusterings from <code>consensus_cluster</code>. The number of rows is 
-equal to the number of cases to be clustered, number of columns is equal to
-the clusterings obtained by different resamplings of the data, the third 
-dimension are the different algorithms and the fourth dimension are cluster
-sizes.</dd>
-      <dt>data</dt>
-      <dd>data matrix with samples as rows and genes/features as columns</dd>
-      <dt>nk</dt>
-      <dd>cluster size to extract data for (single value)</dd>
-      <dt>seed</dt>
-      <dd>random seed for KNN reproducibility</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>E</th>
+      <td><p>4D array of clusterings from <code>consensus_cluster</code>. The number of
+rows is equal to the number of cases to be clustered, number of columns is
+equal to the clusterings obtained by different resamplings of the data, the
+third dimension are the different algorithms and the fourth dimension are
+cluster sizes.</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>data matrix with samples as rows and genes/features as columns</p></td>
+    </tr>
+    <tr>
+      <th>nk</th>
+      <td><p>cluster size to extract data for (single value)</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with the following elements</p>
+    <p>If flattened matrix consists of more than one repetition, i.e. it
+  isn't a column vector, then the function returns a matrix of clusterings 
+  with complete cases imputed using majority voting, and relabelled, for
+  chosen <code>k</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The default output from <code>consensus_cluster</code> will undoubtedly contain <code>NA</code> 
-entries because each replicate chooses a random subset (with replacement) of 
-all samples. Missing values are first imputed using KNN (K-Nearest 
-Neighbours), with the non-missing cases indicating the training set, and
-missing cases indicating the test set. Not all missing values are guaranteed
-to be imputed by KNN. See <code><a href='http://www.rdocumentation.org/packages/class/topics/knn'>knn</a></code> for details. Thus, any
-remaining missing values are imputed using majority voting.</p>
+    <p>The default output from <code>consensus_cluster</code> will undoubtedly contain
+<code>NA</code> entries because each replicate chooses a random subset (with
+replacement) of all samples. Missing values should first be imputed using
+<code><a href='impute_knn.html'>impute_knn</a></code>. Not all missing values are guaranteed to be imputed
+by KNN. See <code><a href='http://www.rdocumentation.org/packages/class/topics/knn'>knn</a></code> for details. Thus, any remaining missing
+values are imputed using majority voting.</p>
     
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>We consider 5 nearest neighbours and the minimum vote for definite 
-  decision is 3.</p>
+    <p>Other imputation functions: <code><a href='impute_knn.html'>impute_knn</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -136,7 +144,7 @@ remaining missing values are imputed using majority voting.</p>
 
       <li><a href="#details">Details</a></li>
 
-      <li><a href="#note">Note</a></li>
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -85,15 +87,22 @@ This is a robust way to assess clustering performance.</p>
     <pre><span class='fu'>PAC</span>(<span class='no'>cm</span>, <span class='kw'>lower</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>upper</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>cm</dt>
-      <dd>consensus matrix. Should be symmetric and values between 0
-and 1.</dd>
-      <dt>lower</dt>
-      <dd>the lower bound that determines what is ambiguous</dd>
-      <dt>upper</dt>
-      <dd>the upper bound that determines what is ambiguous</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>cm</th>
+      <td><p>consensus matrix. Should be symmetric and values between 0
+and 1.</p></td>
+    </tr>
+    <tr>
+      <th>lower</th>
+      <td><p>the lower bound that determines what is ambiguous</p></td>
+    </tr>
+    <tr>
+      <th>upper</th>
+      <td><p>the upper bound that determines what is ambiguous</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -108,7 +117,7 @@ and <code>upper</code> is the PAC. In a perfect clustering, the consensus matrix
 would consist of only 0s and 1s, and the PAC assessed on the (0, 1) interval
 would have a perfect score of 0. Using a (0.1, 0.9) interval for defining
 ambiguity is common as well.</p>
-    <p>The PAC is not, strictly speaking, an internal validity index. Originally
+<p>The PAC is not, strictly speaking, an internal validity index. Originally
 used to choose the optimal number of clusters, here we use it to assess
 cluster stability. However, PAC is still agnostic any gold standard
 clustering result so we use it like an internal validity index.</p>

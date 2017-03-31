@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>K-Nearest Neighbours imputation
- — impute_knn • diceR</title>
+<title>K-Nearest Neighbours imputation — impute_knn • diceR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -32,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -75,26 +76,46 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>K-Nearest Neighbours imputation
-</h1>
+    <h1>K-Nearest Neighbours imputation</h1>
     </div>
 
     
-    <p>K-Nearest Neighbours imputation
-Set NA cases as test, otherwise training; neighbours = 5, min vote = 3</p>
+    <p>The non-missing cases indicate the training set, and missing cases indicate
+the test set.</p>
     
 
-    <pre><span class='fu'>impute_knn</span>(<span class='no'>x</span>, <span class='no'>data</span>, <span class='no'>seed</span>)</pre>
+    <pre><span class='fu'>impute_knn</span>(<span class='no'>x</span>, <span class='no'>data</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123456</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>clustering object</dd>
-      <dt>data</dt>
-      <dd>data matrix</dd>
-      <dt>seed</dt>
-      <dd>random seed for knn imputation</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>clustering object</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>data matrix</p></td>
+    </tr>
+    <tr>
+      <th>seed</th>
+      <td><p>random seed for knn imputation reproducibility</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object with (potentially not all) missing values imputed with
+  K-Nearest Neighbours.</p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>We consider 5 nearest neighbours and the minimum vote for definite 
+  decision is 3.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p>Other imputation functions: <code><a href='impute_missing.html'>impute_missing</a></code></p>
     
 
   </div>
@@ -102,7 +123,17 @@ Set NA cases as test, otherwise training; neighbours = 5, min vote = 3</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
+
+    <h2>Author</h2>
+    
+Aline Talhouk
 
   </div>
 </div>

@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -84,16 +86,21 @@
     <pre><span class='fu'>majority_voting</span>(<span class='no'>E</span>, <span class='kw'>is.relabelled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>E</dt>
-      <dd>a matrix of clusterings with number of rows equal to the number of
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>E</th>
+      <td><p>a matrix of clusterings with number of rows equal to the number of
 cases to be clustered, number of columns equal to the clustering obtained by
 different resampling of the data, and the third dimension are the different
-algorithms. Matrix may already be two-dimensional.</dd>
-      <dt>is.relabelled</dt>
-      <dd>logical; if <code>FALSE</code> the data will be relabelled
-using the first clustering as the reference.</dd>
-    </dl>
+algorithms. Matrix may already be two-dimensional.</p></td>
+    </tr>
+    <tr>
+      <th>is.relabelled</th>
+      <td><p>logical; if <code>FALSE</code> the data will be relabelled
+using the first clustering as the reference.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

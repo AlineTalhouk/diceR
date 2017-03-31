@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -84,13 +86,18 @@
     <pre><span class='fu'>consensus_matrix</span>(<span class='no'>data</span>, <span class='kw'>weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>data</dt>
-      <dd>data matrix has rows as samples, columns as replicates</dd>
-      <dt>weights</dt>
-      <dd>a vector of weights for each algorithm used in meta-consensus
-clustering. Must have <code>length(weights)</code> equal to <code>ncol(data)</code>.</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>data matrix has rows as samples, columns as replicates</p></td>
+    </tr>
+    <tr>
+      <th>weights</th>
+      <td><p>a vector of weights for each algorithm used in meta-consensus
+clustering. Must have <code>length(weights)</code> equal to <code>ncol(data)</code>.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -106,7 +113,7 @@ algorithm, and 0 otherwise. Summation of connectivity matrices and indicator
 matrices is performed over different subsamples of the data. The consensus
 matrix is calculated by dividing the aggregated connectivity matrices by the
 aggregated indicator matrices.</p>
-    <p>If a meta-consensus matrix is desired, where consensus classes of different
+<p>If a meta-consensus matrix is desired, where consensus classes of different
 clustering algorithms are aggregated, we can construct a weighted
 meta-consensus matrix using <code>weights</code>.</p>
     

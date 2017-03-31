@@ -1,4 +1,4 @@
-templates:
+template:
   params:
     bootswatch: cerulean
 
@@ -42,4 +42,4 @@ reference:
   - hgsc
 - title: Package Doc
   contents:
-  - diceR-package
+  - matches("diceR-package")

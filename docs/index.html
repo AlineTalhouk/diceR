@@ -61,19 +61,19 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <div id="dicer" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#dicer" class="anchor"> </a>diceR</h1></div>
+<a href="#dicer" class="anchor"></a>diceR</h1></div>
 
 <p>The goal of <code>diceR</code> is to provide pipelines for generating diverse cluster ensembles in R.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"> </a>Installation</h2>
+<a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install <code>diceR</code> from github with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 <span class="co"># devtools::install_github("AlineTalhouk/diceR")</span></code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"> </a>Example</h2>
+<a href="#example" class="anchor"></a>Example</h2>
 <p>This basic example shows you how to use the main function of the package, <code><a href="reference/dice.html">dice()</a></code>. A data matrix <code>dat</code> is partitioned into (a range of) <code>nk</code> clusters over <code>reps</code> bootstrap subsamples using each of the clustering <code>algorithms</code>. Clustering assignments are aggregated by the <code>cons.funs</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(diceR)
 <span class="kw">data</span>(hgsc)
@@ -220,7 +220,7 @@ obj &lt;-<span class="st"> </span><span class="kw"><a href="reference/dice.html"
 </div>
 <div id="pipeline" class="section level2">
 <h2 class="hasAnchor">
-<a href="#pipeline" class="anchor"> </a>Pipeline</h2>
+<a href="#pipeline" class="anchor"></a>Pipeline</h2>
 <p>This figure is a visual schematic of the pipeline that <code><a href="reference/dice.html">dice()</a></code> implements.</p>
 <div class="figure">
 <img src="inst/img/pipeline.png" alt="Caption for the picture."><p class="caption">Caption for the picture.</p>
@@ -246,13 +246,13 @@ obj &lt;-<span class="st"> </span><span class="kw"><a href="reference/dice.html"
 <li>Aline Talhouk <br><small class="roles"> Author </small> </li>
 <li>Johnson Liu <br><small class="roles"> Author </small> </li>
 </ul>
-<html><body>
+<div>
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.com/AlineTalhouk/diceR"><img src="https://travis-ci.com/AlineTalhouk/diceR.svg?token=R9saDTyWyg3zsFXfoa1H&amp;branch=master" alt="Travis-CI Build Status"></a></li>
 <li><a href="https://codecov.io/gh/AlineTalhouk/diceR?branch=master"><img src="https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg" alt="Coverage Status"></a></li>
 </ul>
-</body></html>
+</div>
 </div>
 
 </div>
