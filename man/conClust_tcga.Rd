@@ -3,12 +3,14 @@
 \docType{data}
 \name{conClust_tcga}
 \alias{conClust_tcga}
-\title{Output of diceR::ConClust using HGSC TCGA data with all 12 default algorithms and 50 repetitions}
+\title{Output of deprecated function ConClust using HGSC TCGA data with all 12
+default algorithms and 50 repetitions}
 \format{An arrary of dimension 489 by 50 by 12 by 1}
 \usage{
 conClust_tcga
 }
 \description{
-The 1st dimension indicates number of samples (489), second dimension is number of repetitions (50), third dimension is number of algorithms
+The 1st dimension indicates number of samples (489), second dimension is 
+number of repetitions (50), third dimension is number of algorithms
 }
 \keyword{datasets}
