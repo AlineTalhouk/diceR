@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -86,24 +88,33 @@ clustering.</p>
   <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>data</dt>
-      <dd>data matrix with rows as samples and columns as variables</dd>
-      <dt>scale</dt>
-      <dd>logical; should the data be centered and scaled?</dd>
-      <dt>type</dt>
-      <dd>if we use &quot;conventional&quot; measures (default), then the mean and
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>data matrix with rows as samples and columns as variables</p></td>
+    </tr>
+    <tr>
+      <th>scale</th>
+      <td><p>logical; should the data be centered and scaled?</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>if we use "conventional" measures (default), then the mean and
 standard deviation are used for centering and scaling, respectively. If
-&quot;robust&quot; measures are specified, the median and median absolute deviation
-(MAD) are used.</dd>
-      <dt>min.var</dt>
-      <dd>minimum variability measure threshold used to filter the
+"robust" measures are specified, the median and median absolute deviation
+(MAD) are used.</p></td>
+    </tr>
+    <tr>
+      <th>min.var</th>
+      <td><p>minimum variability measure threshold used to filter the
 feature space for only highly variable features. Only features with a
 minimum variability measure across all samples greater than <code>min.var</code>
-will be used. If <code>type = &quot;conventional&quot;</code>, the standard deviation is
-the measure used, and if <code>type = &quot;robust&quot;</code>, the MAD is the measure
-used.</dd>
-    </dl>
+will be used. If <code>type = "conventional"</code>, the standard deviation is
+the measure used, and if <code>type = "robust"</code>, the MAD is the measure
+used.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
