@@ -1,6 +1,6 @@
-#' @param quantile if an algorithm's sum of ranks across indices is in the 
-#'   \code{quantile} quantile, the algorithm is kept. Otherwise it is removed 
-#'   (trimmed).
+#' @param n an integer specifying the top \code{n} algorithms to keep after 
+#'   trimming off the poor performing ones using Rank Aggregation. If the total
+#'   number of algorithms is less than \code{n} no trimming is done.
 #' @param reweigh logical; if \code{TRUE}, after trimming out poor performing
 #'   algorithms, each algorithm is reweighed depending on its internal indices.
 #' @param show.eval logical; if \code{TRUE} (default), show the evaluation 
@@ -12,13 +12,12 @@
 #'   \item{eval}{if \code{show.eval = TRUE}, the evaluation output is returned, 
 #'   otherwise \code{NULL}}
 #'   \item{data.new}{A new version of a \code{consensus_cluster} data object.
-#'   Potentially no trimming depending on \code{quantile}} value.
+#'   Potentially no trimming depending on \code{n}}.
 #' @rdname consensus_combine
 #' @export
 consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
-                           quantile = 0.75, reweigh = FALSE, show.eval = TRUE) {
+                           n = 5, reweigh = FALSE, show.eval = TRUE) {
   # Evaluate and extract chosen k
-  Sumrank <- Quantile <- NULL
   cc.obj <- abind::abind(list(...), along = 3)
   z <- consensus_evaluate(data = data, cc.obj, cons.cl = cons.cl,
                           ref.cl = ref.cl, plot = FALSE)
@@ -41,19 +40,22 @@ consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
     extract(purrr::map_int(., which.max) == bests) %>% 
     cbind(z.other)
   min.bests <- z.main %>% 
-    extract(purrr::map_int(., which.min) == bests) %>% 
-    purrr::map_df(~ sum(.x) - .x)
-  all.bests <- cbind(max.bests, min.bests)
+    extract(purrr::map_int(., which.min) == bests)
   
-  # Rank indices, sum ranks, get quantile of rank from total, filter quantiles
-  ind.ranks <- purrr::map_df(all.bests, rank)
-  sum.ranks <- data.frame(Algorithms = alg.all,
-                          Sumrank = rowSums(ind.ranks)) %>% 
-    mutate(Quantile = Sumrank / max(Sumrank)) %>% 
-    filter(Quantile >= quantile)
-  
-  # Which algorithms are kept and which are removed? Create trimmed ensemble
-  alg.keep <- as.character(sum.ranks$Algorithms)
+  # Determine trimmed ensemble using rank aggregation, only if there are more
+  # algorithms than we want to keep
+  if (length(alg.all) <= n) {
+    alg.keep <- alg.all
+  } else {
+    max.ranks <- purrr::map_df(max.bests, ~rank(-.x))
+    min.ranks <- purrr::map_df(min.bests, rank)
+    rank.agg <- cbind(max.ranks, min.ranks) %>% 
+      t() %>% 
+      apply(1, function(x) alg.all[x]) %>% 
+      t() %>% 
+      RankAggreg::RankAggreg(., ncol(.), rho = 0.5, verbose = FALSE)
+    alg.keep <- rank.agg$top.list[seq_len(n)]
+  }
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
   cc.trimmed <- cc.obj[, , alg.keep, k, drop = FALSE]
   

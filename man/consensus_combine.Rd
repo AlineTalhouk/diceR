@@ -11,7 +11,7 @@ consensus_combine(..., element = c("matrix", "class"))
 
 consensus_evaluate(data, ..., cons.cl = NULL, ref.cl = NULL, plot = FALSE)
 
-consensus_trim(data, ..., cons.cl = NULL, ref.cl = NULL, quantile = 0.75,
+consensus_trim(data, ..., cons.cl = NULL, ref.cl = NULL, n = 5,
   reweigh = FALSE, show.eval = TRUE)
 }
 \arguments{
@@ -30,9 +30,9 @@ as \code{kmodes} and \code{majority_voting}}
 
 \item{plot}{logical; if \code{TRUE}, \code{graph_all} is called}
 
-\item{quantile}{if an algorithm's sum of ranks across indices is in the 
-\code{quantile} quantile, the algorithm is kept. Otherwise it is removed 
-(trimmed).}
+\item{n}{an integer specifying the top \code{n} algorithms to keep after 
+trimming off the poor performing ones using Rank Aggregation. If the total
+number of algorithms is less than \code{n} no trimming is done.}
 
 \item{reweigh}{logical; if \code{TRUE}, after trimming out poor performing
 algorithms, each algorithm is reweighed depending on its internal indices.}
@@ -61,7 +61,7 @@ output from \code{consensus_evaluate}}
   \item{eval}{if \code{show.eval = TRUE}, the evaluation output is returned, 
   otherwise \code{NULL}}
   \item{data.new}{A new version of a \code{consensus_cluster} data object.
-  Potentially no trimming depending on \code{quantile}} value.
+  Potentially no trimming depending on \code{n}}.
 }
 \description{
 \code{consensus_combine} combines results for multiple objects from
@@ -108,7 +108,7 @@ ref.cl <- sample(1:4, 50, replace = TRUE)
 z <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, plot = FALSE)
 
 # Trim algorithms: remove those that rank low on internal indices
-CC3 <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, quantile = 0.8)
+CC3 <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, n = 1)
 str(CC3, max.level = 2)
 }
 \author{

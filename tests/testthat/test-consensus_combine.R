@@ -31,20 +31,18 @@ test_that("compactness measure works with singleton clusters", {
 
 test_that("trimming (potentially) removes algorithms", {
   CC3.combined <- abind::abind(list(CC1, CC2), along = 3)
-  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl,
-                                quantile = 0.8)$data.new
+  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, n = 1)$data.new
   expect_lte(dim(CC3.trimmed)[3], dim(CC3.combined)[3])
 })
 
 test_that("reweighing (potentially) replicates each slice of algorithm", {
   CC3.combined <- abind::abind(list(CC1, CC2), along = 3)
-  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl,
-                                reweigh = TRUE)
+  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, reweigh = TRUE)
   expect_error(CC3.trimmed, NA)
 })
 
 test_that("trimming doesn't have to show evaluation", {
-  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl,
-                                quantile = 0.8, show.eval = FALSE)
+  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, n = 1,
+                                show.eval = FALSE)
   expect_null(CC3.trimmed$eval)
 })

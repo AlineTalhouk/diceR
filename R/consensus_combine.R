@@ -51,7 +51,7 @@
 #' z <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, plot = FALSE)
 #' 
 #' # Trim algorithms: remove those that rank low on internal indices
-#' CC3 <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, quantile = 0.8)
+#' CC3 <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, n = 1)
 #' str(CC3, max.level = 2)
 consensus_combine <- function(..., element = c("matrix", "class")) {
   # Combine ensemble arrays and reorganize into matrices and classes

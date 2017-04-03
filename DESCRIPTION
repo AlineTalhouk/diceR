@@ -1,8 +1,8 @@
 Package: diceR
 Type: Package
 Title: Diverse Cluster Ensemble in R
-Version: 0.0.0.9023
-Date: 2017-03-24
+Version: 0.0.0.9024
+Date: 2017-04-03
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")),
     person("Aline", "Talhouk", , "atalhouk@bccrc.ca", "aut"),
@@ -38,7 +38,8 @@ Imports:
     clValid,
     klaR,
     RColorBrewer,
-    quantable
+    quantable,
+    RankAggreg
 Suggests:
     testthat,
     knitr,
