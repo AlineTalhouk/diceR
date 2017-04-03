@@ -72,7 +72,6 @@
 #'   return(as.integer(stats::cutree(cluster::agnes(d, diss = TRUE), k)))
 #' }
 #' 
-#' assign("pam", pam)
 #' assign("agnes", agnes)
 #' 
 #' cc <- consensus_cluster(dat, reps = 6, algorithms = c("pam", "agnes"),
