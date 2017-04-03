@@ -63,4 +63,4 @@ Pipeline
 
 This figure is a visual schematic of the pipeline that `dice()` implements.
 
-![Caption for the picture.](inst/img/pipeline.png)
+![Ensemble Clustering pipeline.](man/figures/pipeline.png)

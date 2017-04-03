@@ -71,7 +71,7 @@
 #'   factor() %>%
 #'   as.integer()
 #' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = "hc", cons.funs =
-#' "kmodes", ref.cl = ref.cl)
+#' "kmodes", ref.cl = ref.cl, progress = FALSE)
 #' str(dice.obj, max.level = 2)
 dice <- function(data, nk, reps = 10, algorithms = NULL,
                  nmf.method = c("brunet", "lee"), distance = "euclidean",

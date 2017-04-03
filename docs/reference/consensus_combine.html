@@ -93,7 +93,7 @@ indices before using in consensus functions.</p>
 
 <span class='fu'>consensus_evaluate</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>cons.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>consensus_trim</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>cons.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quantile</span> <span class='kw'>=</span> <span class='fl'>0.75</span>,
+<span class='fu'>consensus_trim</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>cons.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>,
   <span class='kw'>reweigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.eval</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -127,10 +127,10 @@ as <code>kmodes</code> and <code>majority_voting</code></p></td>
       <td><p>logical; if <code>TRUE</code>, <code>graph_all</code> is called</p></td>
     </tr>
     <tr>
-      <th>quantile</th>
-      <td><p>if an algorithm's sum of ranks across indices is in the 
-<code>quantile</code> quantile, the algorithm is kept. Otherwise it is removed 
-(trimmed).</p></td>
+      <th>n</th>
+      <td><p>an integer specifying the top <code>n</code> algorithms to keep after 
+trimming off the poor performing ones using Rank Aggregation. If the total
+number of algorithms is less than <code>n</code> no trimming is done.</p></td>
     </tr>
     <tr>
       <th>reweigh</th>
@@ -166,7 +166,7 @@ consensus_trim returns a list with three elements
   <dt>eval</dt><dd><p>if <code>show.eval = TRUE</code>, the evaluation output is returned, 
   otherwise <code>NULL</code></p></dd>
   <dt>data.new</dt><dd><p>A new version of a <code>consensus_cluster</code> data object.
-  Potentially no trimming depending on <code>quantile</code></p></dd> value.
+  Potentially no trimming depending on <code>n</code></p></dd>.
 
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -217,16 +217,16 @@ indices is not taken into account.</p>
 <span class='no'>z</span> <span class='kw'>&lt;-</span> <span class='fu'>consensus_evaluate</span>(<span class='no'>x</span>, <span class='no'>CC1</span>, <span class='no'>CC2</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='no'>ref.cl</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># Trim algorithms: remove those that rank low on internal indices</span>
-<span class='no'>CC3</span> <span class='kw'>&lt;-</span> <span class='fu'>consensus_trim</span>(<span class='no'>x</span>, <span class='no'>CC1</span>, <span class='no'>CC2</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='no'>ref.cl</span>, <span class='kw'>quantile</span> <span class='kw'>=</span> <span class='fl'>0.8</span>)
+<span class='no'>CC3</span> <span class='kw'>&lt;-</span> <span class='fu'>consensus_trim</span>(<span class='no'>x</span>, <span class='no'>CC1</span>, <span class='no'>CC2</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='no'>ref.cl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='fu'>str</span>(<span class='no'>CC3</span>, <span class='kw'>max.level</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; List of 4
-#&gt;  $ alg.keep  : chr [1:2] "AP" "GMM"
-#&gt;  $ alg.remove: chr(0) 
+#&gt;  $ alg.keep  : chr "GMM"
+#&gt;  $ alg.remove: chr "AP"
 #&gt;  $ eval      :List of 4
 #&gt;   ..$ k       : int 4
 #&gt;   ..$ pac     :'data.frame':	2 obs. of  3 variables:
 #&gt;   ..$ internal:List of 2
 #&gt;   ..$ external:'data.frame':	2 obs. of  19 variables:
-#&gt;  $ data.new  : num [1:50, 1:10, 1:2, 1] 2 2 1 3 2 NA 4 1 4 3 ...
+#&gt;  $ data.new  : num [1:50, 1:10, 1, 1] 1 2 2 4 1 NA 2 2 2 2 ...
 #&gt;   ..- attr(*, "dimnames")=List of 4</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
