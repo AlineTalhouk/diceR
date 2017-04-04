@@ -4,12 +4,12 @@
 \alias{dice}
 \title{Diverse Clustering Ensemble}
 \usage{
-dice(data, nk, reps = 10, algorithms = NULL, nmf.method = c("brunet",
-  "lee"), distance = "euclidean", cons.funs = c("kmodes", "CSPA",
-  "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"),
-  prep.data = c("none", "full", "sampled"), min.var = 1, seed = 1,
-  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
-  ref.cl = NULL, progress = TRUE)
+dice(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
+  nmf.method = c("brunet", "lee"), distance = "euclidean",
+  cons.funs = c("kmodes", "CSPA", "majority", "LCE"), sim.mat = c("cts",
+  "srs", "asrs"), prep.data = c("none", "full", "sampled"), min.var = 1,
+  seed = 1, trim = FALSE, reweigh = FALSE, evaluate = TRUE,
+  plot = FALSE, ref.cl = NULL, progress = TRUE)
 }
 \arguments{
 \item{data}{matrix with rows as observations, columns as variables}
@@ -23,6 +23,12 @@ range of integers to compute multiple k}
 \item{algorithms}{clustering algorithms to be used in the ensemble. Current 
 options are "nmf", "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block".
 See \code{\link{consensus_cluster}} for details.}
+
+\item{k.method}{how is k chosen? The default is to use the PAC to choose the 
+best k. Specifying an integer as a user-desired k will override the best k 
+chosen by PAC. Finally, specifying "all" will produce consensus
+results for all k. The "all" method is implicitly performed when the 
+number of k used is one.}
 
 \item{nmf.method}{specify NMF-based algorithms to run. By default the 
 "brunet" and "lee" algorithms are called. See

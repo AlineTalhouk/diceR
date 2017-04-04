@@ -24,6 +24,12 @@ test_that("evaluation works with reference class and can plot", {
                 4)
 })
 
+test_that("there are different ways to choose k", {
+  expect_error(consensus_evaluate(x, CC1, CC2, k.method = "all"), NA)
+  expect_error(consensus_evaluate(x, CC1, CC2, k.method = 3), NA)
+  expect_error(consensus_evaluate(x, CC1, CC2, k.method = 2:3))
+})
+
 test_that("compactness measure works with singleton clusters", {
   ref.cl <- c(sample(1:3, 99, replace = TRUE), 4)
   expect_error(compactness(x, ref.cl), NA)

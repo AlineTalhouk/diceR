@@ -9,7 +9,8 @@
 \usage{
 consensus_combine(..., element = c("matrix", "class"))
 
-consensus_evaluate(data, ..., cons.cl = NULL, ref.cl = NULL, plot = FALSE)
+consensus_evaluate(data, ..., cons.cl = NULL, ref.cl = NULL,
+  k.method = NULL, plot = FALSE)
 
 consensus_trim(data, ..., cons.cl = NULL, ref.cl = NULL, n = 5,
   reweigh = FALSE, show.eval = TRUE)
@@ -27,6 +28,14 @@ consensus class, respectively.}
 as \code{kmodes} and \code{majority_voting}}
 
 \item{ref.cl}{reference class}
+
+\item{k.method}{determines the method to choose k when no reference class is 
+given. When \code{ref.cl} is not \code{NULL}, k is the number of distinct
+classes of \code{ref.cl}. Otherwise the input from \code{k.method} chooses
+k. The default is to use the PAC to choose the best k(s). Specifying an 
+integer as a user-desired k will override the best k chosen by PAC. 
+Finally, specifying "all" will produce consensus results for all k. The 
+"all" method is implicitly performed when there is only one k used.}
 
 \item{plot}{logical; if \code{TRUE}, \code{graph_all} is called}
 

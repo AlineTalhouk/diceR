@@ -16,6 +16,11 @@
 #' @param algorithms clustering algorithms to be used in the ensemble. Current 
 #'   options are "nmf", "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block".
 #'   See \code{\link{consensus_cluster}} for details.
+#' @param k.method how is k chosen? The default is to use the PAC to choose the 
+#'   best k. Specifying an integer as a user-desired k will override the best k 
+#'   chosen by PAC. Finally, specifying "all" will produce consensus
+#'   results for all k. The "all" method is implicitly performed when the 
+#'   number of k used is one.
 #' @param nmf.method specify NMF-based algorithms to run. By default the 
 #'   "brunet" and "lee" algorithms are called. See
 #'   \code{\link{consensus_cluster}} for details.
@@ -73,7 +78,7 @@
 #' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = "hc", cons.funs =
 #' "kmodes", ref.cl = ref.cl, progress = FALSE)
 #' str(dice.obj, max.level = 2)
-dice <- function(data, nk, reps = 10, algorithms = NULL,
+dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                  nmf.method = c("brunet", "lee"), distance = "euclidean",
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
@@ -95,7 +100,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   Eknn <- apply(E, 2:4, impute_knn, data = data, seed = seed)
   
   # Select k
-  k <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl, plot = FALSE)$k
+  k <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl,
+                          k.method = k.method, plot = FALSE)$k
   
   # Evaluate, trim, and reweigh
   if (length(algorithms) > 1 & trim) {

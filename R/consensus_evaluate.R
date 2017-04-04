@@ -1,7 +1,14 @@
 #' @param data data matrix with rows as samples and columns as variables
-#' @param ref.cl reference class
 #' @param cons.cl matrix of cluster assignments from consensus functions such
 #'   as \code{kmodes} and \code{majority_voting}
+#' @param ref.cl reference class
+#' @param k.method determines the method to choose k when no reference class is 
+#'   given. When \code{ref.cl} is not \code{NULL}, k is the number of distinct
+#'   classes of \code{ref.cl}. Otherwise the input from \code{k.method} chooses
+#'   k. The default is to use the PAC to choose the best k(s). Specifying an 
+#'   integer as a user-desired k will override the best k chosen by PAC. 
+#'   Finally, specifying "all" will produce consensus results for all k. The 
+#'   "all" method is implicitly performed when there is only one k used.
 #' @param plot logical; if \code{TRUE}, \code{graph_all} is called
 #' @inheritParams consensus_combine
 #' @return \code{consensus_evaluate} returns a list with the following elements
@@ -17,7 +24,7 @@
 #' @rdname consensus_combine
 #' @export
 consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
-                               plot = FALSE) {
+                               k.method = NULL, plot = FALSE) {
   # Assertions
   if (!is.null(ref.cl))
     assertthat::assert_that(is.integer(ref.cl), nrow(data) == length(ref.cl))
@@ -36,14 +43,22 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   # If reference given, k is number of distinct classes
   if (!is.null(ref.cl)) {
     k <- n_distinct(ref.cl)
-    # Otherwise k is the maximum average PAC across algorithms
-  } else {  
-    idx.k <- apply(pac[, -1, drop = FALSE], 2, which.min) %>% 
-      table() %>% 
-      extract(is_in(., max(.))) %>% 
-      names() %>% 
-      as.numeric()
-    k <- as.integer(pac$k[idx.k])
+    # Otherwise k is chosen using the following methods
+  } else if (is.null(k.method)) {
+    k <- pac %>% 
+      use_series("k") %>% 
+      extract(apply(pac[, -1, drop = FALSE], 2, which.min) %>% 
+                table() %>% 
+                extract(is_in(., max(.))) %>% 
+                names() %>% 
+                as.numeric()) %>% 
+      as.integer()
+  } else if (length(cons.mat) == 1 || k.method == "all") {
+    k <- as.integer(dimnames(cc.obj)[[4]])
+  } else if (length(k.method) == 1 & is.numeric(k.method)) {
+    k <- k.method
+  } else {
+    stop("Invalid input. Check documentation for possible options.")
   }
   
   # If matrix of cluster assignments from cons.funs given, cbind to cl.mat
@@ -77,22 +92,22 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   # Only calculate external indices if a reference is given
   if (!is.null(ref.cl)) {
     cl.mat.ext <- cl.mat %>% 
-      extract2(match(min(k), names(.)))
-    ind.ext <- data.frame(
+      extract(match(k, names(.)))
+    ind.ext <- purrr::map(cl.mat.ext, ~ data.frame(
       Algorithms = an,
-      apply(cl.mat.ext, 2, function(cl)
+      apply(.x, 2, function(cl)
         clusterCrit::extCriteria(
           part1 = cl, part2 = ref.cl,
-          crit = c("Hubert", "Jaccard", "McNemar",
-                   "Precision", "Rand", "Recall")) %>%
+          crit = c("Hubert", "Jaccard", "McNemar", "Precision", "Rand",
+                   "Recall")) %>%
           unlist()) %>% t(),
-      NMI = apply(cl.mat.ext, 2, ev_nmi, ref.lab = ref.cl)) %>%
-      cbind(t(apply(cl.mat.ext, 2, ev_confmat, ref.lab = ref.cl))) %>%
-      mutate_all(funs(structure(., names = an)))
-    return(list(k = k, pac = pac, internal = ind.int, external = ind.ext))
+      NMI = apply(.x, 2, ev_nmi, ref.lab = ref.cl)) %>%
+        cbind(t(apply(.x, 2, ev_confmat, ref.lab = ref.cl))) %>%
+        mutate_all(funs(structure(., names = an))))
   } else {
-    return(list(k = k, pac = pac, internal = ind.int))
+    ind.ext <- NULL
   }
+  return(list(k = k, pac = pac, internal = ind.int, external = ind.ext))
 }
 
 #' Compactness Measure
