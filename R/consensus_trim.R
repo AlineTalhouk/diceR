@@ -1,3 +1,4 @@
+#' @param E consensus object from \code{consensus_evaluate}
 #' @param n an integer specifying the top \code{n} algorithms to keep after 
 #'   trimming off the poor performing ones using Rank Aggregation. If the total
 #'   number of algorithms is less than \code{n} no trimming is done.
@@ -15,15 +16,10 @@
 #'   Potentially no trimming depending on \code{n}}.
 #' @rdname consensus_combine
 #' @export
-consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
-                           n = 5, reweigh = FALSE, show.eval = TRUE) {
-  # Evaluate and extract chosen k
-  cc.obj <- abind::abind(list(...), along = 3)
-  z <- consensus_evaluate(data = data, cc.obj, cons.cl = cons.cl,
-                          ref.cl = ref.cl, plot = FALSE)
-  k <- as.character(min(z$k))
-  zk <- z$internal[[k]]
-  alg.all <- zk$Algorithms
+consensus_trim <- function(E, ii, k, n = 5, reweigh = FALSE) {
+  k <- as.character(min(k))
+  zk <- ii[[k]]
+  alg.all <- dimnames(E)[[3]]
   
   # Separate algorithms into those from clusterCrit (main), and (others)
   z.main <- zk %>% 
@@ -57,7 +53,7 @@ consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
     alg.keep <- rank.agg$top.list[seq_len(n)]
   }
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
-  cc.trimmed <- cc.obj[, , alg.keep, k, drop = FALSE]
+  E.trim <- E[, , alg.keep, k, drop = FALSE]
   
   # Reweigh only if specified and more than 1 algorithm is kept
   if (reweigh && length(alg.keep) > 1) {
@@ -80,27 +76,20 @@ consensus_trim <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
       set_names(alg.keep)
     
     # Generate multiples for each algorithm, adding back dimnames metadata
-    cc.trimmed <- purrr::array_branch(cc.trimmed, c(3, 4)) %>% 
+    E.trim <- purrr::array_branch(E.trim, c(3, 4)) %>% 
       purrr::map2(., multiples, ~ rep(list(.x), .y)) %>% 
       purrr::map(abind::abind, along = 3) %>% 
       abind::abind(along = 3) %>% 
       abind::abind(along = 4)
-    dimnames(cc.trimmed) <-
+    dimnames(E.trim) <-
       list(NULL,
-           dimnames(cc.trimmed)[[2]],
+           dimnames(E.trim)[[2]],
            purrr::flatten_chr(purrr::map2(names(multiples), multiples, rep)),
            k)
   }
-  # Show evaluation output
-  if (show.eval) {
-    eval <- z
-  } else {
-    eval <- NULL
-  }
   return(list(alg.keep = alg.keep,
               alg.remove = alg.remove,
-              eval = eval,
-              data.new = cc.trimmed))
+              data.new = E.trim))
 }
 
 #' Recursively find the greater common divisor of two numbers

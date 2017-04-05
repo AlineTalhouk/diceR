@@ -10,6 +10,10 @@
 #'   Finally, specifying "all" will produce consensus results for all k. The 
 #'   "all" method is implicitly performed when there is only one k used.
 #' @param plot logical; if \code{TRUE}, \code{graph_all} is called
+#' @param trim logical; if \code{TRUE}, algorithms that score low on internal 
+#'   indices will be trimmed out
+#' @param reweigh logical; if \code{TRUE}, the remaining algorithms after 
+#'   trimming are reweighed based on average performance across internal indices
 #' @inheritParams consensus_combine
 #' @return \code{consensus_evaluate} returns a list with the following elements
 #'   \item{k}{if \code{ref.cl} is not NULL, this is the number of distinct
@@ -24,16 +28,17 @@
 #' @rdname consensus_combine
 #' @export
 consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
-                               k.method = NULL, plot = FALSE) {
+                               k.method = NULL, plot = FALSE, trim = FALSE,
+                               reweigh = FALSE, n = 5) {
   # Assertions
   if (!is.null(ref.cl))
     assertthat::assert_that(is.integer(ref.cl), nrow(data) == length(ref.cl))
   
   # Extract classes and matrices separately
   x <- as.matrix(data)
-  cc.obj <- abind::abind(list(...), along = 3)
-  cl.mat <- consensus_combine(cc.obj, element = "class")
-  cons.mat <- consensus_combine(cc.obj, element = "matrix")
+  E <- abind::abind(list(...), along = 3)
+  cl.mat <- consensus_combine(E, element = "class")
+  cons.mat <- consensus_combine(E, element = "matrix")
   
   # Calculate PAC
   pac <- cons.mat %>% 
@@ -54,7 +59,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                 as.numeric()) %>% 
       as.integer()
   } else if (length(cons.mat) == 1 || k.method == "all") {
-    k <- as.integer(dimnames(cc.obj)[[4]])
+    k <- as.integer(dimnames(E)[[4]])
   } else if (length(k.method) == 1 & is.numeric(k.method)) {
     k <- k.method
   } else {
@@ -62,7 +67,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   }
   
   # If matrix of cluster assignments from cons.funs given, cbind to cl.mat
-  an <- dimnames(cc.obj)[3][[1]]
+  an <- dimnames(E)[[3]]
   if (!is.null(cons.cl)) {
     assertthat::assert_that(is.matrix(cons.cl))
     cl.mat <- purrr::map(cl.mat, cbind, cons.cl)
@@ -86,7 +91,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   
   # Graph all plotting functions
   if (plot) {
-    graph_all(cc.obj)
+    graph_all(E)
   }
   
   # Only calculate external indices if a reference is given
@@ -107,7 +112,19 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   } else {
     ind.ext <- NULL
   }
-  return(list(k = k, pac = pac, internal = ind.int, external = ind.ext))
+  
+  # Only trim if specified and more than one algorithm
+  if (dim(E)[3] > 1 & trim) {
+    trim.obj <- consensus_trim(E = E, ii = ind.int, k = k, n = n,
+                               reweigh = reweigh)
+  } else {
+    trim.obj <- list(alg.keep = an,
+                     alg.remove = character(0),
+                     data.new = E)
+  }
+  
+  return(list(k = k, pac = pac, internal = ind.int, external = ind.ext,
+              trim = trim.obj))
 }
 
 #' Compactness Measure

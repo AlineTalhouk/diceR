@@ -99,15 +99,17 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   # KNN imputation
   Eknn <- apply(E, 2:4, impute_knn, data = data, seed = seed)
   
-  # Select k
-  k <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl,
-                          k.method = k.method, plot = FALSE)$k
-  
-  # Evaluate, trim, and reweigh
-  if (length(algorithms) > 1 & trim) {
-    trim.obj <- consensus_trim(data, Eknn, ref.cl = ref.cl, reweigh = reweigh)
-    Eknn <- trim.obj$data.new
-  }
+  # Select k and new (trimmed and reweighed) data
+  eval.obj <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl,
+                                 k.method = k.method, trim = trim,
+                                 reweigh = reweigh)
+  Eknn <- eval.obj$trim$data.new
+  k <- eval.obj$k
+  # # Evaluate, trim, and reweigh
+  # if (length(algorithms) > 1 & trim) {
+  #   trim.obj <- consensus_trim(data, Eknn, ref.cl = ref.cl, reweigh = reweigh)
+  #   Eknn <- trim.obj$data.new
+  # }
   
   # Impute remaining missing cases
   Ecomp <- impute_missing(Eknn, data, k)
