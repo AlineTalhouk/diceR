@@ -8,7 +8,7 @@ dice(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   nmf.method = c("brunet", "lee"), distance = "euclidean",
   cons.funs = c("kmodes", "CSPA", "majority", "LCE"), sim.mat = c("cts",
   "srs", "asrs"), prep.data = c("none", "full", "sampled"), min.var = 1,
-  seed = 1, trim = FALSE, reweigh = FALSE, evaluate = TRUE,
+  seed = 1, trim = FALSE, reweigh = FALSE, n = 5, evaluate = TRUE,
   plot = FALSE, ref.cl = NULL, progress = TRUE)
 }
 \arguments{
@@ -62,6 +62,10 @@ prior to consensus clustering by \code{cons.funs}. Defaults to
 internal validity index performance after trimming. Well-performing 
 algorithms are given higher weight prior to consensus clustering by 
 \code{cons.funs}. Defaults to \code{FALSE}. Ignored if \code{trim = FALSE}.}
+
+\item{n}{an integer specifying the top \code{n} algorithms to keep after 
+trimming off the poor performing ones using Rank Aggregation. If the total
+number of algorithms is less than \code{n} no trimming is done.}
 
 \item{evaluate}{logical; if \code{TRUE} (default), validity indices are 
 returned. Internal validity indices are always computed. If \code{ref.cl} 

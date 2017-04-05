@@ -85,7 +85,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                  sim.mat = c("cts", "srs", "asrs"),
                  prep.data = c("none", "full", "sampled"), min.var = 1,
                  seed = 1,
-                 trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
+                 trim = FALSE, reweigh = FALSE, n = 5, 
+                 evaluate = TRUE, plot = FALSE,
                  ref.cl = NULL, progress = TRUE) {
   
   # Check that inputs are correct
