@@ -53,6 +53,7 @@
 #' @param ref.cl reference class; a vector of length equal to the number of 
 #'   observations.
 #' @param progress logical; if \code{TRUE} (default), progress bar is shown.
+#' @inheritParams consensus_evaluate
 #' @return A list with the following elements
 #' \item{E}{raw clustering ensemble object}
 #' \item{Eknn}{clustering ensemble object with knn imputation used on \code{E}}
@@ -102,15 +103,10 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   # Select k and new (trimmed and reweighed) data
   eval.obj <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl,
                                  k.method = k.method, trim = trim,
-                                 reweigh = reweigh)
+                                 reweigh = reweigh, n = n)
   Eknn <- eval.obj$trim$data.new
   k <- eval.obj$k
-  # # Evaluate, trim, and reweigh
-  # if (length(algorithms) > 1 & trim) {
-  #   trim.obj <- consensus_trim(data, Eknn, ref.cl = ref.cl, reweigh = reweigh)
-  #   Eknn <- trim.obj$data.new
-  # }
-  
+
   # Impute remaining missing cases
   Ecomp <- impute_missing(Eknn, data, k)
   
