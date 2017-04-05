@@ -53,15 +53,11 @@ Partitioning Algorithm), "LCE" (linkage clustering ensemble)}
 
 \item{seed}{seed used for imputation}
 
-\item{trim}{logical; if \code{TRUE}, the number of algorithms in 
-\code{algorithms} is reduced based on internal validity index performance 
-prior to consensus clustering by \code{cons.funs}. Defaults to 
-\code{FALSE}.}
+\item{trim}{logical; if \code{TRUE}, algorithms that score low on internal 
+indices will be trimmed out}
 
-\item{reweigh}{logical; if \code{TRUE}, algorithms are reweighted based on 
-internal validity index performance after trimming. Well-performing 
-algorithms are given higher weight prior to consensus clustering by 
-\code{cons.funs}. Defaults to \code{FALSE}. Ignored if \code{trim = FALSE}.}
+\item{reweigh}{logical; if \code{TRUE}, after trimming out poor performing
+algorithms, each algorithm is reweighed depending on its internal indices.}
 
 \item{n}{an integer specifying the top \code{n} algorithms to keep after 
 trimming off the poor performing ones using Rank Aggregation. If the total

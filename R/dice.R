@@ -37,14 +37,6 @@
 #' @param min.var minimum variability measure threshold. See
 #'   \code{\link{prepare_data}}.
 #' @param seed seed used for imputation
-#' @param trim logical; if \code{TRUE}, the number of algorithms in 
-#'   \code{algorithms} is reduced based on internal validity index performance 
-#'   prior to consensus clustering by \code{cons.funs}. Defaults to 
-#'   \code{FALSE}.
-#' @param reweigh logical; if \code{TRUE}, algorithms are reweighted based on 
-#'   internal validity index performance after trimming. Well-performing 
-#'   algorithms are given higher weight prior to consensus clustering by 
-#'   \code{cons.funs}. Defaults to \code{FALSE}. Ignored if \code{trim = FALSE}.
 #' @param evaluate logical; if \code{TRUE} (default), validity indices are 
 #'   returned. Internal validity indices are always computed. If \code{ref.cl} 
 #'   is not \code{NULL}, then external validity indices will also be computed.
@@ -84,10 +76,9 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
                  prep.data = c("none", "full", "sampled"), min.var = 1,
-                 seed = 1,
-                 trim = FALSE, reweigh = FALSE, n = 5, 
-                 evaluate = TRUE, plot = FALSE,
-                 ref.cl = NULL, progress = TRUE) {
+                 seed = 1, trim = FALSE, reweigh = FALSE, n = 5, 
+                 evaluate = TRUE, plot = FALSE, ref.cl = NULL,
+                 progress = TRUE) {
   
   # Check that inputs are correct
   assertthat::assert_that(length(dim(data)) == 2)
