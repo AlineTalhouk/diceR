@@ -42,9 +42,9 @@
 #'   \code{k}}
 #'   \item{trim}{A list with 3 elements}
 #'   \itemize{
-#'     \item{alg.keep}{algorithms kept}
-#'     \item{alg.remove}{algorithms removed}
-#'     \item{data.new}{A new version of a \code{consensus_cluster} data object.}
+#'     \item{\code{alg.keep} }{algorithms kept}
+#'     \item{\code{alg.remove} }{algorithms removed}
+#'     \item{\code{data.new} }{A new version of a \code{consensus_cluster} data object.}
 #'   }
 #' @export
 #' @examples 
