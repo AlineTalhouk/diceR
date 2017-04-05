@@ -31,8 +31,12 @@ Finally, specifying "all" will produce consensus results for all k. The
 \item{trim}{logical; if \code{TRUE}, algorithms that score low on internal 
 indices will be trimmed out}
 
-\item{reweigh}{logical; if \code{TRUE}, the remaining algorithms after 
-trimming are reweighed based on average performance across internal indices}
+\item{reweigh}{logical; if \code{TRUE}, after trimming out poor performing
+algorithms, each algorithm is reweighed depending on its internal indices.}
+
+\item{n}{an integer specifying the top \code{n} algorithms to keep after 
+trimming off the poor performing ones using Rank Aggregation. If the total
+number of algorithms is less than \code{n} no trimming is done.}
 }
 \value{
 \code{consensus_evaluate} returns a list with the following elements

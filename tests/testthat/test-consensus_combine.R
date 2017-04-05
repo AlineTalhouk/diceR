@@ -24,7 +24,7 @@ test_that("evaluation works with reference class and can plot", {
   expect_error(consensus_evaluate(x, CC1, CC2, cons.cl = cons.cl, plot = TRUE),
                NA)
   expect_length(consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, plot = FALSE),
-                4)
+                5)
 })
 
 test_that("there are different ways to choose k", {

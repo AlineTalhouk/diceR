@@ -24,8 +24,11 @@
 #' @param plot logical; if \code{TRUE}, \code{graph_all} is called
 #' @param trim logical; if \code{TRUE}, algorithms that score low on internal 
 #'   indices will be trimmed out
-#' @param reweigh logical; if \code{TRUE}, the remaining algorithms after 
-#'   trimming are reweighed based on average performance across internal indices
+#' @param reweigh logical; if \code{TRUE}, after trimming out poor performing
+#'   algorithms, each algorithm is reweighed depending on its internal indices.
+#' @param n an integer specifying the top \code{n} algorithms to keep after 
+#'   trimming off the poor performing ones using Rank Aggregation. If the total
+#'   number of algorithms is less than \code{n} no trimming is done.
 #' @inheritParams consensus_combine
 #' @return \code{consensus_evaluate} returns a list with the following elements
 #'   \item{k}{if \code{ref.cl} is not NULL, this is the number of distinct
@@ -145,8 +148,8 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   
   # Only trim if specified and more than one algorithm
   if (dim(E)[3] > 1 & trim) {
-    trim.obj <- consensus_trim(E = E, ii = ind.int, k = k, n = n,
-                               reweigh = reweigh)
+    trim.obj <- consensus_trim(E = E, ii = ind.int, k = k, reweigh = reweigh,
+                               n = n)
   } else {
     trim.obj <- list(alg.keep = an,
                      alg.remove = character(0),
@@ -160,13 +163,8 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
 #' @param E consensus object from \code{consensus_evaluate}
 #' @param ii internal indices object from \code{consensus_evaluate}
 #' @param k chosen value(s) of k from \code{consensus_evaluate}
-#' @param n an integer specifying the top \code{n} algorithms to keep after 
-#'   trimming off the poor performing ones using Rank Aggregation. If the total
-#'   number of algorithms is less than \code{n} no trimming is done.
-#' @param reweigh logical; if \code{TRUE}, after trimming out poor performing
-#'   algorithms, each algorithm is reweighed depending on its internal indices.
 #' @noRd
-consensus_trim <- function(E, ii, k, n = 5, reweigh = FALSE) {
+consensus_trim <- function(E, ii, k, reweigh, n) {
   k <- as.character(min(k))
   zk <- ii[[k]]
   alg.all <- dimnames(E)[[3]]
