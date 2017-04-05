@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Combine, evaluate, trim, and reweigh algorithms — consensus_combine • diceR</title>
+<title>Combine algorithms — consensus_combine • diceR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -76,112 +76,43 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Combine, evaluate, trim, and reweigh algorithms</h1>
+    <h1>Combine algorithms</h1>
     </div>
 
     
-    <p><code>consensus_combine</code> combines results for multiple objects from
-<code>consensus_cluster()</code> and outputs either the consensus
-matrices or consensus classes for all algorithms. <code>consensus_evaluate</code>
-evaluates algorithms on internal/external validation indices.
-<code>consensus_weigh</code> weighs clustering algorithms based on these two
-indices. <code>consensus_trim</code> removes algorithms that rank low on internal
-indices before using in consensus functions.</p>
+    <p>Combines results for multiple objects from <code>consensus_cluster()</code> and
+outputs either the consensus matrices or consensus classes for all
+algorithms.</p>
     
 
-    <pre><span class='fu'>consensus_combine</span>(<span class='no'>...</span>, <span class='kw'>element</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"matrix"</span>, <span class='st'>"class"</span>))
-
-<span class='fu'>consensus_evaluate</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>cons.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='fu'>consensus_trim</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>cons.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>reweigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.eval</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre><span class='fu'>consensus_combine</span>(<span class='no'>...</span>, <span class='kw'>element</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"matrix"</span>, <span class='st'>"class"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>any number of objects outputted from
+      <td><p>any number of objects outputted from 
 <code><a href='consensus_cluster.html'>consensus_cluster</a></code></p></td>
     </tr>
     <tr>
       <th>element</th>
-      <td><p>either "matrix" or "class" to extract the consensus matrix or
+      <td><p>either "matrix" or "class" to extract the consensus matrix or 
 consensus class, respectively.</p></td>
-    </tr>
-    <tr>
-      <th>data</th>
-      <td><p>data matrix with rows as samples and columns as variables</p></td>
-    </tr>
-    <tr>
-      <th>cons.cl</th>
-      <td><p>matrix of cluster assignments from consensus functions such
-as <code>kmodes</code> and <code>majority_voting</code></p></td>
-    </tr>
-    <tr>
-      <th>ref.cl</th>
-      <td><p>reference class</p></td>
-    </tr>
-    <tr>
-      <th>plot</th>
-      <td><p>logical; if <code>TRUE</code>, <code>graph_all</code> is called</p></td>
-    </tr>
-    <tr>
-      <th>n</th>
-      <td><p>an integer specifying the top <code>n</code> algorithms to keep after 
-trimming off the poor performing ones using Rank Aggregation. If the total
-number of algorithms is less than <code>n</code> no trimming is done.</p></td>
-    </tr>
-    <tr>
-      <th>reweigh</th>
-      <td><p>logical; if <code>TRUE</code>, after trimming out poor performing
-algorithms, each algorithm is reweighed depending on its internal indices.</p></td>
-    </tr>
-    <tr>
-      <th>show.eval</th>
-      <td><p>logical; if <code>TRUE</code> (default), show the evaluation 
-output from <code>consensus_evaluate</code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>consensus_combine</code> returns either a list of all consensus
-  matrices or a data frame showing all the consensus classes
-
-<code>consensus_evaluate</code> returns a list with the following elements</p>
-<dt>k</dt><dd><p>if <code>ref.cl</code> is not NULL, this is the number of distinct
-  classes in the reference; otherwise the chosen <code>k</code> is determined by
-  the one giving the largest mean PAC across algorithms</p></dd>
-  <dt>pac</dt><dd><p>a data frame showing the PAC for each combination of algorithm
-  and cluster size</p></dd>
-  <dt>internal</dt><dd><p>a list of data frames for all k showing internal evaluation
-  indices</p></dd>
-  <dt>external</dt><dd><p>a data frame showing external evaluation indices for
-  <code>k</code></p></dd>
-
-consensus_trim returns a list with three elements 
-  <dt>alg.keep</dt><dd><p>algorithms kept</p></dd>
-  <dt>alg.remove</dt><dd><p>algorithms removed</p></dd>
-  <dt>eval</dt><dd><p>if <code>show.eval = TRUE</code>, the evaluation output is returned, 
-  otherwise <code>NULL</code></p></dd>
-  <dt>data.new</dt><dd><p>A new version of a <code>consensus_cluster</code> data object.
-  Potentially no trimming depending on <code>n</code></p></dd>.
-
+    <p><code>consensus_combine</code> returns either a list of all consensus 
+  matrices or a data frame showing all the consensus classes</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>consensus_combine</code> is useful for generating summaries because the
-results have been combined into a single object. For example, if
-<code>element = "class"</code>, then the resulting object can be used to create a
-consensus matrix across algorithms, which can be visualized as a heatmap.
-    <code>consensus_evaluate</code> always shows internal indices. If <code>ref.cl</code> is
-not <code>NULL</code>, external indices are shown in addition to internal indices.
-Relevant graphical displays are also outputted.
-    <code>consensus_trim</code> ranks algorithms by internal indices used in
-<code>consensus_evaluate</code>. The sum of the ranks for each algorithm is used as
-the measure of comparison. This also means the magnitude of the internal
-indices is not taken into account.</p>
+    <p>This function is useful for collecting summaries because the original results
+from <code>consensus_cluster</code> were combined to a single object. For example,
+setting <code>element = "class"</code> returns a matrix of consensus cluster
+assignments, which can be visualized as a consensus matrix heatmap.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -210,24 +141,7 @@ indices is not taken into account.</p>
 #&gt;  $ 4: int [1:50, 1:2] 1 2 3 2 1 2 3 2 4 3 ...
 #&gt;   ..- attr(*, "dimnames")=List of 2
 #&gt;   .. ..$ : NULL
-#&gt;   .. ..$ : chr [1:2] "AP" "GMM"</div><div class='input'>
-<span class='co'># Evaluate algorithms on internal and external indices and make plots</span>
-<span class='fu'>set.seed</span>(<span class='fl'>1</span>)
-<span class='no'>ref.cl</span> <span class='kw'>&lt;-</span> <span class='fu'>sample</span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='fl'>50</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>z</span> <span class='kw'>&lt;-</span> <span class='fu'>consensus_evaluate</span>(<span class='no'>x</span>, <span class='no'>CC1</span>, <span class='no'>CC2</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='no'>ref.cl</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='co'># Trim algorithms: remove those that rank low on internal indices</span>
-<span class='no'>CC3</span> <span class='kw'>&lt;-</span> <span class='fu'>consensus_trim</span>(<span class='no'>x</span>, <span class='no'>CC1</span>, <span class='no'>CC2</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='no'>ref.cl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='fu'>str</span>(<span class='no'>CC3</span>, <span class='kw'>max.level</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; List of 4
-#&gt;  $ alg.keep  : chr "GMM"
-#&gt;  $ alg.remove: chr "AP"
-#&gt;  $ eval      :List of 4
-#&gt;   ..$ k       : int 4
-#&gt;   ..$ pac     :'data.frame':	2 obs. of  3 variables:
-#&gt;   ..$ internal:List of 2
-#&gt;   ..$ external:'data.frame':	2 obs. of  19 variables:
-#&gt;  $ data.new  : num [1:50, 1:10, 1, 1] 1 2 2 4 1 NA 2 2 2 2 ...
-#&gt;   ..- attr(*, "dimnames")=List of 4</div></pre>
+#&gt;   .. ..$ : chr [1:2] "AP" "GMM"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
