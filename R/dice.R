@@ -122,44 +122,36 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                          ~ set_colnames(.x, paste0(colnames(.), " k=", .y)))
   }
 
-  # Relabel Final Clustering using reference
-  # Don't relabel if only one consensus function and no reference class
+  # Relabel Final Clustering using reference (or first column if no reference)
   if (is.null(ref.cl)) {
-    if (length(cons.funs) == 1) {
-      FinalR <- Final %>% 
-        magrittr::extract2(1)
-      # If no reference class, > 1 consensus function, use Final[, 1] as ref.cl
-    } else {
-      FinalR <- Final %>% 
-        purrr::map(~ apply(.x, 2, relabel_class, ref.cl = .x[, 1])) %>% 
-        purrr::invoke(cbind, .)
-    }
+    FinalR <- purrr::map(Final, ~ apply(.x, 2, relabel_class, ref.cl = .x[, 1]))
   } else {
-    FinalR <- Final %>% 
-      purrr::map(~ apply(.x, 2, relabel_class, ref.cl = ref.cl)) %>% 
-      magrittr::extract2(1)
+    FinalR <- purrr::map(Final, ~ apply(.x, 2, relabel_class, ref.cl = ref.cl))
   }
+  FinalR <- FinalR %>% 
+    purrr::invoke(cbind, .) %>% 
+    magrittr::set_rownames(rownames(data))
   
   # Return evaluation output including consensus function results
   if (evaluate) {
-    eval.obj <- consensus_evaluate(data, E, cons.cl = FinalR, ref.cl = ref.cl,
-                                   plot = plot)
+    eval.obj2 <- consensus_evaluate(data, E, cons.cl = FinalR, ref.cl = ref.cl,
+                                    plot = plot)
+    indices <- eval.obj2[1:4]
   } else {
-    eval.obj <- NULL
+    indices <- NULL
   }
 
   # Add the reference class as the first column if provided
   if (!is.null(ref.cl)) {
     FinalR <- cbind(Reference = ref.cl, FinalR)
   }
-  rownames(FinalR) <- rownames(data)
   
   # Remove list structure
   Eknn <- abind::abind(Eknn, along = 3)
   Ecomp <- abind::abind(Ecomp, along = 3)
   
-  return(list(E = E, Eknn = Eknn, Ecomp = Ecomp,
-              clusters = FinalR, indices = eval.obj))
+  return(list(E = E, Eknn = Eknn, Ecomp = Ecomp, clusters = FinalR,
+              indices = indices, trim = eval.obj["trim"]))
 }
 
 #' Prepare data for consensus clustering
