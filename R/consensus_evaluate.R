@@ -149,25 +149,20 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   
   # Only trim if specified and more than one algorithm
   if (dim(E)[3] > 1 & trim) {
-    # trim.obj <- consensus_trim(E = E, ii = ind.int, k = k, reweigh = reweigh,
-    #                            n = n)
     trim.obj <- purrr::map(k, ~ consensus_trim(E = E, ii = ind.int, k = .x,
                                                reweigh = reweigh, n = n)) %>% 
       purrr::transpose() %>% 
       purrr::map_at(c("alg.keep", "alg.remove"), ~ unlist(unique(.x))) %>% 
       purrr::map_at("data.new", ~ {
-        dn <- purrr::map(.x, function(n) {
+        purrr::map(.x, function(n) {
           dimnames(n)[[3]] <- paste0(dimnames(n)[[3]], " k=", dimnames(n)[[4]])
           n
-        }) #%>% 
-          #abind::abind(along = 3)
-       # dimnames(dn)[[4]] <- paste(k, collapse = ",")
-        dn
+        })
       })
   } else {
     trim.obj <- list(alg.keep = an,
                      alg.remove = character(0),
-                     data.new = E)
+                     data.new = list(E))
   }
   return(list(k = k, pac = pac, internal = ind.int, external = ind.ext,
               trim = trim.obj))

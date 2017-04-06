@@ -41,7 +41,7 @@ test_that("compactness measure works with singleton clusters", {
 test_that("trimming (potentially) removes algorithms", {
   CC3.trimmed <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, n = 1,
                                     trim = TRUE)$trim$data.new
-  expect_lte(dim(CC3.trimmed)[3], dim(CC3.combined)[3])
+  expect_lte(dim(CC3.trimmed[[1]])[3], dim(CC3.combined)[3])
 })
 
 test_that("reweighing (potentially) replicates each slice of algorithm", {
