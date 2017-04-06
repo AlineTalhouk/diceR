@@ -154,6 +154,10 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   }
   rownames(FinalR) <- rownames(data)
   
+  # Remove list structure
+  Eknn <- abind::abind(Eknn, along = 3)
+  Ecomp <- abind::abind(Ecomp, along = 3)
+  
   return(list(E = E, Eknn = Eknn, Ecomp = Ecomp,
               clusters = FinalR, indices = eval.obj))
 }
