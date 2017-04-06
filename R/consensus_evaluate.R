@@ -153,13 +153,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                                                k.method = k.method,
                                                reweigh = reweigh, n = n)) %>% 
       purrr::transpose() %>% 
-      purrr::map_at(c("alg.keep", "alg.remove"), ~ unlist(unique(.x))) %>% 
-      purrr::map_at("data.new", ~ {
-        purrr::map(.x, function(n) {
-          dimnames(n)[[3]] <- paste0(dimnames(n)[[3]], " k=", dimnames(n)[[4]])
-          n
-        })
-      })
+      purrr::map_at(c("alg.keep", "alg.remove"), ~ unlist(unique(.x)))
   } else {
     trim.obj <- list(alg.keep = an,
                      alg.remove = character(0),
@@ -241,7 +235,8 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
     dimnames(E.trim) <-
       list(NULL,
            dimnames(E.trim)[[2]],
-           purrr::flatten_chr(purrr::map2(names(multiples), multiples, rep)),
+           purrr::map2(names(multiples), multiples, rep) %>% 
+             purrr::flatten_chr(),
            k)
   }
   
@@ -249,6 +244,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   if (k.method == "all") {
     alg.keep <- paste0(alg.keep, " k=", k)
     alg.remove <- paste0(alg.remove, " k=", k)
+    dimnames(E.trim)[[3]] <- paste0(dimnames(E.trim)[[3]], " k=", k)
   }
   return(list(alg.keep = alg.keep,
               alg.remove = alg.remove,
