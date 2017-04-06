@@ -100,18 +100,27 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   k <- eval.obj$k
 
   # Impute remaining missing cases
-  Ecomp <- impute_missing(Eknn, data, k)
+  # Ecomp <- impute_missing(Eknn, data, k)
+  Ecomp <- purrr::map2(Eknn, k, impute_missing, data = data)
   
   # Consensus functions
-  Final <- vapply(cons.funs, function(x) {
-    switch(x,
-           kmodes = k_modes(Ecomp),
-           majority = majority_voting(Ecomp),
-           CSPA = CSPA(E, k),
-           LCE = LCE(drop(Ecomp), k = k, sim.mat = sim.mat)
-    )
-  }, double(nrow(Ecomp))) %>%
-    apply(2, as.integer)
+  Final <- purrr::map2(Ecomp, k, ~ {
+    vapply(cons.funs, function(x) {
+      switch(x,
+             kmodes = k_modes(.x),
+             majority = majority_voting(.x),
+             CSPA = CSPA(E, .y),
+             LCE = LCE(drop(.x), k = .y, sim.mat = sim.mat)
+      )
+    }, double(nrow(.x))) %>%
+      apply(2, as.integer)
+    })
+  
+  #  If more than one k, need to prepend "k=" labels
+  if (length(Ecomp) > 1) {
+    Final <- purrr::map2(Final, k,
+                         ~ set_colnames(.x, paste0(colnames(.), " k=", .y)))
+  }
 
   # Relabel Final Clustering using reference
   # Don't relabel if only one consensus function and no reference class
@@ -120,7 +129,9 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
       FinalR <- Final
       # If no reference class, > 1 consensus function, use Final[, 1] as ref.cl
     } else {
-      FinalR <- apply(Final, 2, relabel_class, ref.cl = Final[, 1])
+      FinalR <- Final %>% 
+        purrr::map(~ apply(.x, 2, relabel_class, ref.cl = .x[, 1])) %>% 
+        purrr::invoke(cbind, .)
     }
   } else {
     FinalR <- apply(Final, 2, relabel_class, ref.cl = ref.cl)
