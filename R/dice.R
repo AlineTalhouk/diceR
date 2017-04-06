@@ -136,7 +136,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   if (evaluate) {
     eval.obj2 <- consensus_evaluate(data, E, cons.cl = FinalR, ref.cl = ref.cl,
                                     plot = plot)
-    indices <- c(k = eval.obj[["k"]], eval.obj2[2:4],
+    indices <- c(k = list(eval.obj[["k"]]), eval.obj2[2:4],
                  trim = list(eval.obj[["trim"]]))
   } else {
     indices <- NULL
