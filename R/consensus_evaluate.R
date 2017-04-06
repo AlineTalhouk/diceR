@@ -90,7 +90,8 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                 extract(is_in(., max(.))) %>% 
                 names() %>% 
                 as.numeric()) %>% 
-      as.integer()
+      as.integer() %>% 
+      min()
   } else if (length(cons.mat) == 1 || k.method == "all") {
     k <- as.integer(dimnames(E)[[4]])
   } else if (length(k.method) == 1 & is.numeric(k.method)) {
@@ -148,14 +149,26 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   
   # Only trim if specified and more than one algorithm
   if (dim(E)[3] > 1 & trim) {
-    trim.obj <- consensus_trim(E = E, ii = ind.int, k = k, reweigh = reweigh,
-                               n = n)
+    # trim.obj <- consensus_trim(E = E, ii = ind.int, k = k, reweigh = reweigh,
+    #                            n = n)
+    trim.obj <- purrr::map(k, ~ consensus_trim(E = E, ii = ind.int, k = .x,
+                                               reweigh = reweigh, n = n)) %>% 
+      purrr::transpose() %>% 
+      purrr::map_at(c("alg.keep", "alg.remove"), ~ unlist(unique(.x))) %>% 
+      purrr::map_at("data.new", ~ {
+        dn <- purrr::map(.x, function(n) {
+          dimnames(n)[[3]] <- paste0(dimnames(n)[[3]], " k=", dimnames(n)[[4]])
+          n
+        }) #%>% 
+          #abind::abind(along = 3)
+       # dimnames(dn)[[4]] <- paste(k, collapse = ",")
+        dn
+      })
   } else {
     trim.obj <- list(alg.keep = an,
                      alg.remove = character(0),
                      data.new = E)
   }
-  
   return(list(k = k, pac = pac, internal = ind.int, external = ind.ext,
               trim = trim.obj))
 }
@@ -165,7 +178,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
 #' @param k chosen value(s) of k from \code{consensus_evaluate}
 #' @noRd
 consensus_trim <- function(E, ii, k, reweigh, n) {
-  k <- as.character(min(k))
+  k <- as.character(k)
   zk <- ii[[k]]
   alg.all <- dimnames(E)[[3]]
   
