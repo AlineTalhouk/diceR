@@ -126,7 +126,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   # Don't relabel if only one consensus function and no reference class
   if (is.null(ref.cl)) {
     if (length(cons.funs) == 1) {
-      FinalR <- Final
+      FinalR <- Final %>% 
+        magrittr::extract2(1)
       # If no reference class, > 1 consensus function, use Final[, 1] as ref.cl
     } else {
       FinalR <- Final %>% 
@@ -134,7 +135,9 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
         purrr::invoke(cbind, .)
     }
   } else {
-    FinalR <- apply(Final, 2, relabel_class, ref.cl = ref.cl)
+    FinalR <- Final %>% 
+      purrr::map(~ apply(.x, 2, relabel_class, ref.cl = ref.cl)) %>% 
+      magrittr::extract2(1)
   }
   
   # Return evaluation output including consensus function results
