@@ -13,7 +13,7 @@ ref.cl <- data.frame(initCol = rownames(dat)) %>%
 
 test_that("dice works with one algorithm, one consensus funs", {
   dice.obj <- dice(dat, nk = 4, algorithms = "hc", cons.funs = "kmodes")
-  expect_length(dice.obj, 5)
+  expect_length(dice.obj, 6)
   expect_equal(dim(dice.obj$clusters), c(nrow(dat), 1))
 })
 
@@ -22,7 +22,7 @@ test_that("dice works with multiple algorithms, consensus funs, trimming, and re
                    algorithms = c("hc", "diana", "pam"),
                    cons.funs = c("kmodes", "majority"),
                    trim = TRUE, n = 2, ref.cl = ref.cl)
-  expect_length(dice.obj, 5)
+  expect_length(dice.obj, 6)
   expect_is(dice.obj$clusters, "matrix")
 })
 
