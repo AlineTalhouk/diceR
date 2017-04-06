@@ -150,6 +150,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   # Only trim if specified and more than one algorithm
   if (dim(E)[3] > 1 & trim) {
     trim.obj <- purrr::map(k, ~ consensus_trim(E = E, ii = ind.int, k = .x,
+                                               k.method = k.method,
                                                reweigh = reweigh, n = n)) %>% 
       purrr::transpose() %>% 
       purrr::map_at(c("alg.keep", "alg.remove"), ~ unlist(unique(.x))) %>% 
@@ -172,7 +173,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
 #' @param ii internal indices object from \code{consensus_evaluate}
 #' @param k chosen value(s) of k from \code{consensus_evaluate}
 #' @noRd
-consensus_trim <- function(E, ii, k, reweigh, n) {
+consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   k <- as.character(k)
   zk <- ii[[k]]
   alg.all <- dimnames(E)[[3]]
@@ -242,6 +243,12 @@ consensus_trim <- function(E, ii, k, reweigh, n) {
            dimnames(E.trim)[[2]],
            purrr::flatten_chr(purrr::map2(names(multiples), multiples, rep)),
            k)
+  }
+  
+  # If k.method is to select "all", need to add suffixes to algorithms
+  if (k.method == "all") {
+    alg.keep <- paste0(alg.keep, " k=", k)
+    alg.remove <- paste0(alg.remove, " k=", k)
   }
   return(list(alg.keep = alg.keep,
               alg.remove = alg.remove,
