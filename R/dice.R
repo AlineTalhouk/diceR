@@ -136,7 +136,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   if (evaluate) {
     eval.obj2 <- consensus_evaluate(data, E, cons.cl = FinalR, ref.cl = ref.cl,
                                     plot = plot)
-    indices <- eval.obj2[1:4]
+    indices <- c(k = eval.obj[["k"]], eval.obj2[2:4],
+                 trim = list(eval.obj[["trim"]]))
   } else {
     indices <- NULL
   }
@@ -151,7 +152,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   Ecomp <- abind::abind(Ecomp, along = 3)
   
   return(list(E = E, Eknn = Eknn, Ecomp = Ecomp, clusters = FinalR,
-              indices = indices, trim = eval.obj[["trim"]]))
+              indices = indices))
 }
 
 #' Prepare data for consensus clustering
