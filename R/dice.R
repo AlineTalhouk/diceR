@@ -151,7 +151,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   Ecomp <- abind::abind(Ecomp, along = 3)
   
   return(list(E = E, Eknn = Eknn, Ecomp = Ecomp, clusters = FinalR,
-              indices = indices, trim = eval.obj["trim"]))
+              indices = indices, trim = eval.obj[["trim"]]))
 }
 
 #' Prepare data for consensus clustering
