@@ -40,11 +40,12 @@
 #'   indices}
 #'   \item{external}{a data frame showing external evaluation indices for
 #'   \code{k}}
-#'   \item{trim}{A list with 3 elements}
+#'   \item{trim}{A list with 4 elements}
 #'   \itemize{
 #'     \item{\code{alg.keep} }{algorithms kept}
 #'     \item{\code{alg.remove} }{algorithms removed}
-#'     \item{\code{data.new} }{A new version of a \code{consensus_cluster} data object.}
+#'     \item{\code{rank.agg} }{a matrix of ranked algorithms for every internal evaluation index}
+#'     \item{\code{data.new} }{A new version of a \code{consensus_cluster} data object}
 #'   }
 #' @export
 #' @examples 
@@ -182,26 +183,28 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   # Which algorithm is the best for each index?
   bests <- purrr::map2_int(z.main, names(z.main), clusterCrit::bestCriterion)
   
-  # Which indices are the best with the greatest/least value?
   max.bests <- z.main %>% 
     extract(purrr::map_int(., which.max) == bests) %>% 
-    cbind(z.other)
+    cbind(z.other) %>% 
+    multiply_by(-1)
   min.bests <- z.main %>% 
     extract(purrr::map_int(., which.min) == bests)
   
   # Determine trimmed ensemble using rank aggregation, only if there are more
   # algorithms than we want to keep
   if (length(alg.all) <= n) {
+    rank.agg <- NULL
     alg.keep <- alg.all
   } else {
-    max.ranks <- purrr::map_df(max.bests, ~rank(-.x))
-    min.ranks <- purrr::map_df(min.bests, rank)
-    rank.agg <- cbind(max.ranks, min.ranks) %>% 
-      t() %>% 
-      apply(1, function(x) alg.all[x]) %>% 
-      t() %>% 
-      RankAggreg::RankAggreg(., ncol(.), rho = 0.5, verbose = FALSE)
-    alg.keep <- rank.agg$top.list[seq_len(n)]
+    rank.agg <- cbind(max.bests, min.bests) %>% 
+      scale(center = FALSE, scale = TRUE) %>% 
+      as.data.frame() %>% 
+      purrr::map_df(~ alg.all[rank(.x)]) %>% 
+      t()
+    alg.keep <- rank.agg %>% 
+      RankAggreg::RankAggreg(., ncol(.), method = "GA", verbose = FALSE) %>% 
+      use_series("top.list") %>% 
+      extract(seq_len(n))
   }
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
   E.trim <- E[, , alg.keep, k, drop = FALSE]
@@ -248,6 +251,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   }
   return(list(alg.keep = alg.keep,
               alg.remove = alg.remove,
+              rank.agg = rank.agg
               data.new = E.trim))
 }
 
