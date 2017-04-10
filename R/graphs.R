@@ -119,10 +119,10 @@ graph_heatmap <- function(mat, main = NULL, ...) {
   }
   hm.col <- grDevices::colorRampPalette(
     RColorBrewer::brewer.pal(n = 9, "PuBuGn"))(256)
+  cs.col <- RColorBrewer::brewer.pal(8, "Set2")
   cc <- purrr::map2(dat, rep(as.numeric(names(mat)),
                              each = unique(purrr::map_int(mat, length))),
-                    ~ RColorBrewer::brewer.pal(8, "Set2")[
-                      hc(stats::dist(.x), k = .y)])
+                    ~ sample(cs.col)[hc(stats::dist(.x), k = .y)])
   purrr::pwalk(list(dat, main, cc), function(dat, main, cc)
     gplots::heatmap.2(x = dat, main = paste(main, "Consensus Matrix"),
                       hclustfun = function(d)
