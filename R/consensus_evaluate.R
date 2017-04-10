@@ -163,9 +163,11 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   }
   
   # Reorder ind.int (and ind.ext if not NULL) by alg.keep order
-  ind.int <- purrr::map(ind.int, ~ arrange(.x, match(alg.keep, Algorithms)))
+  ind.int <- ind.int %>% 
+    purrr::map(~ arrange(.x, match(trim.obj$alg.keep, Algorithms)))
   if (!is.null(ind.ext))
-    ind.ext <- purrr::map(ind.ext, ~ arrange(.x, match(alg.keep, Algorithms)))
+    ind.ext <- ind.ext %>% 
+    purrr::map(~ arrange(.x, match(trim.obj$alg.keep, Algorithms)))
   
   return(list(k = k, pac = pac, internal = ind.int, external = ind.ext,
               trim = trim.obj))
@@ -258,7 +260,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   }
   return(list(alg.keep = alg.keep,
               alg.remove = alg.remove,
-              rank.agg = rank.agg
+              rank.agg = rank.agg,
               data.new = E.trim))
 }
 
