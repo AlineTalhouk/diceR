@@ -164,11 +164,11 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   }
   
   # Reorder ind.int (and ind.ext if not NULL) by top.list order
-  ind.int <- ind.int %>% 
-    purrr::map(~ arrange(.x, match(trim.obj$top.list[[1]], Algorithms)))
+  ind.int <- purrr::map2(ind.int, trim.obj$top.list,
+                         ~ arrange(.x, match(.y, Algorithms)))
   if (!is.null(ind.ext))
-    ind.ext <- ind.ext %>% 
-    purrr::map(~ arrange(.x, match(trim.obj$top.list[[1]], Algorithms)))
+    ind.ext <- purrr::map2(ind.ext, trim.obj$top.list,
+                           ~ arrange(.x, match(.y, Algorithms)))
   
   return(list(k = k, pac = pac, internal = ind.int, external = ind.ext,
               trim = trim.obj))
