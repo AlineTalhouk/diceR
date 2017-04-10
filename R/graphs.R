@@ -144,8 +144,8 @@ graph_tracking <- function(cl) {
     tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>%
     mutate(k = substring(k, first = 2),
            Class = factor(Class), Method = factor(Method)) %>% 
-    cbind(Samples = factor(seq_len(unique(unlist(purrr::at_depth(mat, 2, nrow)))),
-                           levels = seq_len(unique(unlist(purrr::at_depth(mat, 2, nrow))))))
+    cbind(Samples = factor(seq_len(unique(purrr::map_int(cl, nrow)))),
+                           levels = seq_len(unique(purrr::map_int(cl, nrow))))
   if (length(unique(dat$k)) > 1) {
     p <- ggplot(dat, aes(Samples, k)) +
       geom_tile(aes(fill = Class)) +
