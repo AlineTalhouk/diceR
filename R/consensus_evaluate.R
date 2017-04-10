@@ -45,6 +45,7 @@
 #'     \item{\code{alg.keep} }{algorithms kept}
 #'     \item{\code{alg.remove} }{algorithms removed}
 #'     \item{\code{rank.agg} }{a matrix of ranked algorithms for every internal evaluation index}
+#'     \item{\code{top.list} }{final order of ranked algorithms}
 #'     \item{\code{data.new} }{A new version of a \code{consensus_cluster} data object}
 #'   }
 #' @export
@@ -162,12 +163,12 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                      data.new = list(E))
   }
   
-  # Reorder ind.int (and ind.ext if not NULL) by alg.keep order
+  # Reorder ind.int (and ind.ext if not NULL) by top.list order
   ind.int <- ind.int %>% 
-    purrr::map(~ arrange(.x, match(trim.obj$alg.keep, Algorithms)))
+    purrr::map(~ arrange(.x, match(trim.obj$top.list[[1]], Algorithms)))
   if (!is.null(ind.ext))
     ind.ext <- ind.ext %>% 
-    purrr::map(~ arrange(.x, match(trim.obj$alg.keep, Algorithms)))
+    purrr::map(~ arrange(.x, match(trim.obj$top.list[[1]], Algorithms)))
   
   return(list(k = k, pac = pac, internal = ind.int, external = ind.ext,
               trim = trim.obj))
@@ -203,6 +204,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   # algorithms than we want to keep
   if (length(alg.all) <= n) {
     rank.agg <- NULL
+    top.list <- NULL
     alg.keep <- alg.all
   } else {
     rank.agg <- cbind(max.bests, min.bests) %>% 
@@ -210,10 +212,10 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
       as.data.frame() %>% 
       purrr::map_df(~ alg.all[rank(.x)]) %>% 
       t()
-    alg.keep <- rank.agg %>% 
+    top.list <- rank.agg %>% 
       RankAggreg::RankAggreg(., ncol(.), method = "GA", verbose = FALSE) %>% 
-      use_series("top.list") %>% 
-      extract(seq_len(n))
+      use_series("top.list")
+    alg.keep <- top.list[seq_len(n)]
   }
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
   E.trim <- E[, , alg.keep, k, drop = FALSE]
@@ -261,6 +263,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   return(list(alg.keep = alg.keep,
               alg.remove = alg.remove,
               rank.agg = rank.agg,
+              top.list = top.list,
               data.new = E.trim))
 }
 

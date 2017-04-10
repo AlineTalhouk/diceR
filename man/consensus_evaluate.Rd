@@ -54,6 +54,7 @@ number of algorithms is less than \code{n} no trimming is done.}
     \item{\code{alg.keep} }{algorithms kept}
     \item{\code{alg.remove} }{algorithms removed}
     \item{\code{rank.agg} }{a matrix of ranked algorithms for every internal evaluation index}
+    \item{\code{top.list} }{final order of ranked algorithms}
     \item{\code{data.new} }{A new version of a \code{consensus_cluster} data object}
   }
 }
