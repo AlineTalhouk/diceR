@@ -4,12 +4,12 @@
 \alias{dice}
 \title{Diverse Clustering Ensemble}
 \usage{
-dice(data, nk, reps = 10, algorithms = NULL, nmf.method = c("brunet",
-  "lee"), distance = "euclidean", cons.funs = c("kmodes", "CSPA",
-  "majority", "LCE"), sim.mat = c("cts", "srs", "asrs"),
-  prep.data = c("none", "full", "sampled"), min.var = 1, seed = 1,
-  trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
-  ref.cl = NULL, progress = TRUE)
+dice(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
+  nmf.method = c("brunet", "lee"), distance = "euclidean",
+  cons.funs = c("kmodes", "CSPA", "majority", "LCE"), sim.mat = c("cts",
+  "srs", "asrs"), prep.data = c("none", "full", "sampled"), min.var = 1,
+  seed = 1, trim = FALSE, reweigh = FALSE, n = 5, evaluate = TRUE,
+  plot = FALSE, ref.cl = NULL, progress = TRUE)
 }
 \arguments{
 \item{data}{matrix with rows as observations, columns as variables}
@@ -23,6 +23,12 @@ range of integers to compute multiple k}
 \item{algorithms}{clustering algorithms to be used in the ensemble. Current 
 options are "nmf", "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block".
 See \code{\link{consensus_cluster}} for details.}
+
+\item{k.method}{how is k chosen? The default is to use the PAC to choose the 
+best k. Specifying an integer as a user-desired k will override the best k 
+chosen by PAC. Finally, specifying "all" will produce consensus
+results for all k. The "all" method is implicitly performed when the 
+number of k used is one.}
 
 \item{nmf.method}{specify NMF-based algorithms to run. By default the 
 "brunet" and "lee" algorithms are called. See
@@ -47,15 +53,15 @@ Partitioning Algorithm), "LCE" (linkage clustering ensemble)}
 
 \item{seed}{seed used for imputation}
 
-\item{trim}{logical; if \code{TRUE}, the number of algorithms in 
-\code{algorithms} is reduced based on internal validity index performance 
-prior to consensus clustering by \code{cons.funs}. Defaults to 
-\code{FALSE}.}
+\item{trim}{logical; if \code{TRUE}, algorithms that score low on internal 
+indices will be trimmed out}
 
-\item{reweigh}{logical; if \code{TRUE}, algorithms are reweighted based on 
-internal validity index performance after trimming. Well-performing 
-algorithms are given higher weight prior to consensus clustering by 
-\code{cons.funs}. Defaults to \code{FALSE}. Ignored if \code{trim = FALSE}.}
+\item{reweigh}{logical; if \code{TRUE}, after trimming out poor performing
+algorithms, each algorithm is reweighed depending on its internal indices.}
+
+\item{n}{an integer specifying the top \code{n} algorithms to keep after 
+trimming off the poor performing ones using Rank Aggregation. If the total
+number of algorithms is less than \code{n} no trimming is done.}
 
 \item{evaluate}{logical; if \code{TRUE} (default), validity indices are 
 returned. Internal validity indices are always computed. If \code{ref.cl} 

@@ -76,7 +76,6 @@ We can carry on the analysis using either `CC` or `CC_imputed`.
 - [`consensus_matrix()`](#compute-consensus-matrix-with-consensus_matrix)
 - [`consensus_combine()`](#combine-consensus-summaries-with-consensus_combine)
 - [`consensus_evaluate()`](#compare-algortihms-with-consensus_evaluate)
-- [`consensus_trim()`](#trim-and-reweigh-algorithms-with-consensus-trim)
 
 ### Compute consensus matrix with `consensus_matrix()`
 
@@ -120,7 +119,7 @@ ccomb_class2 <- consensus_combine(CC, CC2, element = "class")
 kable(head(ccomb_class2$`4`))
 ```
 
-### Compare algortihms with `consensus_evaluate()`
+### Evaluate, trim, and reweigh algortihms with `consensus_evaluate()`
 
 Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between `lower` (defaults to 0) and `upper` (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each `k`, and choose the `k` with the greatest average PAC. If there *is* a reference class, `k` is the number of distinct classes in the reference.
 
@@ -134,17 +133,15 @@ kable(ccomp$internal)
 
 We see that the biclustering algorithm is the least ambiguous and also most well-clustered (high compactness and separability).
 
-### Trim and reweigh algorithms with `consensus_trim()`
-
 Some algorithms perform too poorly to deserve membership in the cluster ensemble. We consider the relative ranks of each algorithm across all internal indices, and compute their sum. All algorithms below a certain quantile for the sum rank are trimmed (removed). By default this quantile is 75%.
 
 After trimming, we can optionally choose to reweigh the algorithms based on the internal index magnitudes. Of course, we take into account the direction of optimality (higher is better is lower is better). Algorithms reweighed are then fed into the consensus functions. This is done by replicating each algorithm by a scalar factor that is proportional to its weight. For example, if we have two algorithms A and B, and A is given a weight of 80% and B is given a weight of 20%, then we make 4 copies of A and 1 copy of B. To minimize computational time, the total number of copies out of all algorithms has an upper bound of 100. Without reweighing, each algorithm is given equal weight.
 
-```{r consensus_trim, results='hide'}
-ctrim <- consensus_trim(dat, CC, CC2)
+```{r consensus_evaluate_trim, results='hide'}
+ctrim <- consensus_evaluate(dat, CC, CC2, trim = TRUE, reweigh = FALSE, n = 2)
 ```
 
-```{r consensus_trim_str}
+```{r consensus_evaluate_trim_str}
 str(ctrim, max.level = 2)
 ```
 

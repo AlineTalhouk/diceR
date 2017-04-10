@@ -16,6 +16,11 @@
 #' @param algorithms clustering algorithms to be used in the ensemble. Current 
 #'   options are "nmf", "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block".
 #'   See \code{\link{consensus_cluster}} for details.
+#' @param k.method how is k chosen? The default is to use the PAC to choose the 
+#'   best k. Specifying an integer as a user-desired k will override the best k 
+#'   chosen by PAC. Finally, specifying "all" will produce consensus
+#'   results for all k. The "all" method is implicitly performed when the 
+#'   number of k used is one.
 #' @param nmf.method specify NMF-based algorithms to run. By default the 
 #'   "brunet" and "lee" algorithms are called. See
 #'   \code{\link{consensus_cluster}} for details.
@@ -32,14 +37,6 @@
 #' @param min.var minimum variability measure threshold. See
 #'   \code{\link{prepare_data}}.
 #' @param seed seed used for imputation
-#' @param trim logical; if \code{TRUE}, the number of algorithms in 
-#'   \code{algorithms} is reduced based on internal validity index performance 
-#'   prior to consensus clustering by \code{cons.funs}. Defaults to 
-#'   \code{FALSE}.
-#' @param reweigh logical; if \code{TRUE}, algorithms are reweighted based on 
-#'   internal validity index performance after trimming. Well-performing 
-#'   algorithms are given higher weight prior to consensus clustering by 
-#'   \code{cons.funs}. Defaults to \code{FALSE}. Ignored if \code{trim = FALSE}.
 #' @param evaluate logical; if \code{TRUE} (default), validity indices are 
 #'   returned. Internal validity indices are always computed. If \code{ref.cl} 
 #'   is not \code{NULL}, then external validity indices will also be computed.
@@ -48,6 +45,7 @@
 #' @param ref.cl reference class; a vector of length equal to the number of 
 #'   observations.
 #' @param progress logical; if \code{TRUE} (default), progress bar is shown.
+#' @inheritParams consensus_evaluate
 #' @return A list with the following elements
 #' \item{E}{raw clustering ensemble object}
 #' \item{Eknn}{clustering ensemble object with knn imputation used on \code{E}}
@@ -73,14 +71,14 @@
 #' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = "hc", cons.funs =
 #' "kmodes", ref.cl = ref.cl, progress = FALSE)
 #' str(dice.obj, max.level = 2)
-dice <- function(data, nk, reps = 10, algorithms = NULL,
+dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                  nmf.method = c("brunet", "lee"), distance = "euclidean",
                  cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
                  prep.data = c("none", "full", "sampled"), min.var = 1,
-                 seed = 1,
-                 trim = FALSE, reweigh = FALSE, evaluate = TRUE, plot = FALSE,
-                 ref.cl = NULL, progress = TRUE) {
+                 seed = 1, trim = FALSE, reweigh = FALSE, n = 5, 
+                 evaluate = TRUE, plot = FALSE, ref.cl = NULL,
+                 progress = TRUE) {
   
   # Check that inputs are correct
   assertthat::assert_that(length(dim(data)) == 2)
@@ -94,58 +92,67 @@ dice <- function(data, nk, reps = 10, algorithms = NULL,
   # KNN imputation
   Eknn <- apply(E, 2:4, impute_knn, data = data, seed = seed)
   
-  # Select k
-  k <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl, plot = FALSE)$k
-  
-  # Evaluate, trim, and reweigh
-  if (length(algorithms) > 1 & trim) {
-    trim.obj <- consensus_trim(data, Eknn, ref.cl = ref.cl, reweigh = reweigh)
-    Eknn <- trim.obj$data.new
-  }
-  
+  # Select k and new (trimmed and reweighed) data
+  eval.obj <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl,
+                                 k.method = k.method, trim = trim,
+                                 reweigh = reweigh, n = n)
+  Eknn <- eval.obj$trim$data.new
+  k <- eval.obj$k
+
   # Impute remaining missing cases
-  Ecomp <- impute_missing(Eknn, data, k)
+  # Ecomp <- impute_missing(Eknn, data, k)
+  Ecomp <- purrr::map2(Eknn, k, impute_missing, data = data)
   
   # Consensus functions
-  Final <- vapply(cons.funs, function(x) {
-    switch(x,
-           kmodes = k_modes(Ecomp),
-           majority = majority_voting(Ecomp),
-           CSPA = CSPA(E, k),
-           LCE = LCE(drop(Ecomp), k = k, sim.mat = sim.mat)
-    )
-  }, double(nrow(Ecomp))) %>%
-    apply(2, as.integer)
-
-  # Relabel Final Clustering using reference
-  # Don't relabel if only one consensus function and no reference class
-  if (is.null(ref.cl)) {
-    if (length(cons.funs) == 1) {
-      FinalR <- Final
-      # If no reference class, > 1 consensus function, use Final[, 1] as ref.cl
-    } else {
-      FinalR <- apply(Final, 2, relabel_class, ref.cl = Final[, 1])
-    }
-  } else {
-    FinalR <- apply(Final, 2, relabel_class, ref.cl = ref.cl)
+  Final <- purrr::map2(Ecomp, k, ~ {
+    vapply(cons.funs, function(x) {
+      switch(x,
+             kmodes = k_modes(.x),
+             majority = majority_voting(.x),
+             CSPA = CSPA(E, .y),
+             LCE = LCE(drop(.x), k = .y, sim.mat = sim.mat)
+      )
+    }, double(nrow(.x))) %>%
+      apply(2, as.integer)
+    })
+  
+  #  If more than one k, need to prepend "k=" labels
+  if (length(Ecomp) > 1) {
+    Final <- purrr::map2(Final, k,
+                         ~ set_colnames(.x, paste0(colnames(.), " k=", .y)))
   }
+
+  # Relabel Final Clustering using reference (or first column if no reference)
+  if (is.null(ref.cl)) {
+    FinalR <- purrr::map(Final, ~ apply(.x, 2, relabel_class, ref.cl = .x[, 1]))
+  } else {
+    FinalR <- purrr::map(Final, ~ apply(.x, 2, relabel_class, ref.cl = ref.cl))
+  }
+  FinalR <- FinalR %>% 
+    purrr::invoke(cbind, .) %>% 
+    magrittr::set_rownames(rownames(data))
   
   # Return evaluation output including consensus function results
   if (evaluate) {
-    eval.obj <- consensus_evaluate(data, E, cons.cl = FinalR, ref.cl = ref.cl,
-                                   plot = plot)
+    eval.obj2 <- consensus_evaluate(data, E, cons.cl = FinalR, ref.cl = ref.cl,
+                                    plot = plot)
+    indices <- c(k = list(eval.obj[["k"]]), eval.obj2[2:4],
+                 trim = list(eval.obj[["trim"]]))
   } else {
-    eval.obj <- NULL
+    indices <- NULL
   }
 
   # Add the reference class as the first column if provided
   if (!is.null(ref.cl)) {
     FinalR <- cbind(Reference = ref.cl, FinalR)
   }
-  rownames(FinalR) <- rownames(data)
   
-  return(list(E = E, Eknn = Eknn, Ecomp = Ecomp,
-              clusters = FinalR, indices = eval.obj))
+  # Remove list structure
+  Eknn <- abind::abind(Eknn, along = 3)
+  Ecomp <- abind::abind(Ecomp, along = 3)
+  
+  return(list(E = E, Eknn = Eknn, Ecomp = Ecomp, clusters = FinalR,
+              indices = indices))
 }
 
 #' Prepare data for consensus clustering

@@ -84,12 +84,12 @@
 clusters (k).</p>
     
 
-    <pre><span class='fu'>dice</span>(<span class='no'>data</span>, <span class='no'>nk</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"brunet"</span>,
-  <span class='st'>"lee"</span>), <span class='kw'>distance</span> <span class='kw'>=</span> <span class='st'>"euclidean"</span>, <span class='kw'>cons.funs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"kmodes"</span>, <span class='st'>"CSPA"</span>,
-  <span class='st'>"majority"</span>, <span class='st'>"LCE"</span>), <span class='kw'>sim.mat</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"cts"</span>, <span class='st'>"srs"</span>, <span class='st'>"asrs"</span>),
-  <span class='kw'>prep.data</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"none"</span>, <span class='st'>"full"</span>, <span class='st'>"sampled"</span>), <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reweigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>evaluate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre><span class='fu'>dice</span>(<span class='no'>data</span>, <span class='no'>nk</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>k.method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"brunet"</span>, <span class='st'>"lee"</span>), <span class='kw'>distance</span> <span class='kw'>=</span> <span class='st'>"euclidean"</span>,
+  <span class='kw'>cons.funs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"kmodes"</span>, <span class='st'>"CSPA"</span>, <span class='st'>"majority"</span>, <span class='st'>"LCE"</span>), <span class='kw'>sim.mat</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"cts"</span>,
+  <span class='st'>"srs"</span>, <span class='st'>"asrs"</span>), <span class='kw'>prep.data</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"none"</span>, <span class='st'>"full"</span>, <span class='st'>"sampled"</span>), <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reweigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>evaluate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -113,6 +113,14 @@ range of integers to compute multiple k</p></td>
       <td><p>clustering algorithms to be used in the ensemble. Current 
 options are "nmf", "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block".
 See <code><a href='consensus_cluster.html'>consensus_cluster</a></code> for details.</p></td>
+    </tr>
+    <tr>
+      <th>k.method</th>
+      <td><p>how is k chosen? The default is to use the PAC to choose the 
+best k. Specifying an integer as a user-desired k will override the best k 
+chosen by PAC. Finally, specifying "all" will produce consensus
+results for all k. The "all" method is implicitly performed when the 
+number of k used is one.</p></td>
     </tr>
     <tr>
       <th>nmf.method</th>
@@ -153,17 +161,19 @@ Partitioning Algorithm), "LCE" (linkage clustering ensemble)</p></td>
     </tr>
     <tr>
       <th>trim</th>
-      <td><p>logical; if <code>TRUE</code>, the number of algorithms in 
-<code>algorithms</code> is reduced based on internal validity index performance 
-prior to consensus clustering by <code>cons.funs</code>. Defaults to 
-<code>FALSE</code>.</p></td>
+      <td><p>logical; if <code>TRUE</code>, algorithms that score low on internal 
+indices will be trimmed out</p></td>
     </tr>
     <tr>
       <th>reweigh</th>
-      <td><p>logical; if <code>TRUE</code>, algorithms are reweighted based on 
-internal validity index performance after trimming. Well-performing 
-algorithms are given higher weight prior to consensus clustering by 
-<code>cons.funs</code>. Defaults to <code>FALSE</code>. Ignored if <code>trim = FALSE</code>.</p></td>
+      <td><p>logical; if <code>TRUE</code>, after trimming out poor performing
+algorithms, each algorithm is reweighed depending on its internal indices.</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>an integer specifying the top <code>n</code> algorithms to keep after 
+trimming off the poor performing ones using Rank Aggregation. If the total
+number of algorithms is less than <code>n</code> no trimming is done.</p></td>
     </tr>
     <tr>
       <th>evaluate</th>
@@ -229,11 +239,12 @@ bootstrap sampled datasets ("sampled").</p>
 #&gt;  $ Ecomp   : num [1:100, 1:5] 1 4 1 4 1 1 1 1 1 1 ...
 #&gt;  $ clusters: int [1:100, 1:2] 4 3 1 3 3 4 1 3 2 4 ...
 #&gt;   ..- attr(*, "dimnames")=List of 2
-#&gt;  $ indices :List of 4
+#&gt;  $ indices :List of 5
 #&gt;   ..$ k       : int 4
 #&gt;   ..$ pac     :'data.frame':	1 obs. of  2 variables:
 #&gt;   ..$ internal:List of 1
-#&gt;   ..$ external:'data.frame':	2 obs. of  19 variables:</div></pre>
+#&gt;   ..$ external:List of 1
+#&gt;   ..$ trim    :List of 3</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

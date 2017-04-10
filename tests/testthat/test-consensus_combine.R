@@ -2,9 +2,12 @@
 context("Consensus combine, evaluate, trim, and weigh")
 
 set.seed(911)
-x <- matrix(rnorm(1000), nrow = 100)
-CC1 <- consensus_cluster(x, nk = 2:4, reps = 5, algorithms = "ap", progress = FALSE)
-CC2 <- consensus_cluster(x, nk = 2:4, reps = 5, algorithms = "gmm", progress = FALSE)
+x <- matrix(rnorm(300), nrow = 100)
+CC1 <- consensus_cluster(x, nk = 2:4, reps = 5, algorithms = "ap",
+                         progress = FALSE)
+CC2 <- consensus_cluster(x, nk = 2:4, reps = 5, algorithms = "gmm",
+                         progress = FALSE)
+CC3.combined <- abind::abind(list(CC1, CC2), along = 3)
 ref.cl <- sample(1:4, 100, replace = TRUE)
 
 test_that("combining results has expected lengths", {
@@ -21,7 +24,13 @@ test_that("evaluation works with reference class and can plot", {
   expect_error(consensus_evaluate(x, CC1, CC2, cons.cl = cons.cl, plot = TRUE),
                NA)
   expect_length(consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, plot = FALSE),
-                4)
+                5)
+})
+
+test_that("there are different ways to choose k", {
+  expect_error(consensus_evaluate(x, CC1, CC2, k.method = "all"), NA)
+  expect_error(consensus_evaluate(x, CC1, CC2, k.method = 3), NA)
+  expect_error(consensus_evaluate(x, CC1, CC2, k.method = 2:3))
 })
 
 test_that("compactness measure works with singleton clusters", {
@@ -30,19 +39,13 @@ test_that("compactness measure works with singleton clusters", {
 })
 
 test_that("trimming (potentially) removes algorithms", {
-  CC3.combined <- abind::abind(list(CC1, CC2), along = 3)
-  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, n = 1)$data.new
-  expect_lte(dim(CC3.trimmed)[3], dim(CC3.combined)[3])
+  CC3.trimmed <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, n = 1,
+                                    trim = TRUE)$trim$data.new
+  expect_lte(dim(CC3.trimmed[[1]])[3], dim(CC3.combined)[3])
 })
 
 test_that("reweighing (potentially) replicates each slice of algorithm", {
-  CC3.combined <- abind::abind(list(CC1, CC2), along = 3)
-  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, reweigh = TRUE)
+  CC3.trimmed <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl,
+                                    trim = TRUE, reweigh = TRUE)
   expect_error(CC3.trimmed, NA)
-})
-
-test_that("trimming doesn't have to show evaluation", {
-  CC3.trimmed <- consensus_trim(x, CC1, CC2, ref.cl = ref.cl, n = 1,
-                                show.eval = FALSE)
-  expect_null(CC3.trimmed$eval)
 })
