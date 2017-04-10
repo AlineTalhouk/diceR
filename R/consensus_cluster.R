@@ -51,8 +51,9 @@
 #' @param time.saved logical; if \code{TRUE}, the date saved is appended to the 
 #'   file name. Only applicable when \code{dir} is not \code{NULL}.
 #' @return An array of dimension \code{nrow(x)} by \code{reps} by 
-#'   \code{length(algorithms)} Each slice of the array is a matrix showing 
-#'   consensus clustering results for algorithms. The matrices have a row for
+#'   \code{length(algorithms)} by \code{length(nk)}. Each cube of the array
+#'   represents a different k. Each slice of a cube is a matrix showing 
+#'   consensus clustering results for algorithms. The matrices have a row for 
 #'   each sample, and a column for each subsample. Each entry represents a class
 #'   membership.
 #' @author Derek Chiu, Aline Talhouk
