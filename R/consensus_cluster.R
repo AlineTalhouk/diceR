@@ -73,7 +73,7 @@
 #'   return(as.integer(stats::cutree(cluster::agnes(d, diss = TRUE), k)))
 #' }
 #' 
-#' assign("agnes", agnes)
+#' assign("agnes", agnes, 1)
 #' 
 #' cc <- consensus_cluster(dat, reps = 6, algorithms = c("pam", "agnes"),
 #' distance = c("euclidean", "manh"), progress = FALSE)
