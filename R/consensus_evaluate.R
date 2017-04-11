@@ -40,11 +40,13 @@
 #'   indices}
 #'   \item{external}{a data frame showing external evaluation indices for
 #'   \code{k}}
-#'   \item{trim}{A list with 3 elements}
+#'   \item{trim}{A list with 4 elements}
 #'   \itemize{
 #'     \item{\code{alg.keep} }{algorithms kept}
 #'     \item{\code{alg.remove} }{algorithms removed}
-#'     \item{\code{data.new} }{A new version of a \code{consensus_cluster} data object.}
+#'     \item{\code{rank.agg} }{a matrix of ranked algorithms for every internal evaluation index}
+#'     \item{\code{top.list} }{final order of ranked algorithms}
+#'     \item{\code{data.new} }{A new version of a \code{consensus_cluster} data object}
 #'   }
 #' @export
 #' @examples 
@@ -157,8 +159,20 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   } else {
     trim.obj <- list(alg.keep = an,
                      alg.remove = character(0),
+                     rank.agg = list(NULL),
+                     top.list = list(NULL),
                      data.new = list(E))
   }
+  
+  # Reorder ind.int (and ind.ext if not NULL) by top.list order if trimmed
+  if (all(purrr::map_lgl(trim.obj$top.list, ~ !is.null(.x)))) {
+    ind.int <- purrr::map2(ind.int, trim.obj$top.list,
+                           ~ arrange(.x, match(.y, Algorithms)))
+    if (!is.null(ind.ext))
+      ind.ext <- purrr::map2(ind.ext, trim.obj$top.list,
+                             ~ arrange(.x, match(.y, Algorithms)))
+  }
+  
   return(list(k = k, pac = pac, internal = ind.int, external = ind.ext,
               trim = trim.obj))
 }
@@ -182,32 +196,35 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   # Which algorithm is the best for each index?
   bests <- purrr::map2_int(z.main, names(z.main), clusterCrit::bestCriterion)
   
-  # Which indices are the best with the greatest/least value?
   max.bests <- z.main %>% 
     extract(purrr::map_int(., which.max) == bests) %>% 
-    cbind(z.other)
+    cbind(z.other) %>% 
+    multiply_by(-1)
   min.bests <- z.main %>% 
     extract(purrr::map_int(., which.min) == bests)
   
   # Determine trimmed ensemble using rank aggregation, only if there are more
   # algorithms than we want to keep
   if (length(alg.all) <= n) {
+    rank.agg <- NULL
+    top.list <- NULL
     alg.keep <- alg.all
   } else {
-    max.ranks <- purrr::map_df(max.bests, ~rank(-.x))
-    min.ranks <- purrr::map_df(min.bests, rank)
-    rank.agg <- cbind(max.ranks, min.ranks) %>% 
-      t() %>% 
-      apply(1, function(x) alg.all[x]) %>% 
-      t() %>% 
-      RankAggreg::RankAggreg(., ncol(.), rho = 0.5, verbose = FALSE)
-    alg.keep <- rank.agg$top.list[seq_len(n)]
+    rank.agg <- cbind(max.bests, min.bests) %>% 
+      scale(center = FALSE, scale = TRUE) %>% 
+      as.data.frame() %>% 
+      purrr::map_df(~ alg.all[rank(.x)]) %>% 
+      t()
+    top.list <- rank.agg %>% 
+      RankAggreg::RankAggreg(., ncol(.), method = "GA", verbose = FALSE) %>% 
+      use_series("top.list")
+    alg.keep <- top.list[seq_len(n)]
   }
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
   E.trim <- E[, , alg.keep, k, drop = FALSE]
   
-  # Reweigh only if specified and more than 1 algorithm is kept
-  if (reweigh && length(alg.keep) > 1) {
+  # Reweigh only if specified, more than 1 algorithm is kept, trimming done
+  if (reweigh && length(alg.keep) > 1 && !is.null(top.list)) {
     
     # Filter after knowing which to keep
     ak <- match(alg.keep, alg.all)
@@ -248,6 +265,8 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   }
   return(list(alg.keep = alg.keep,
               alg.remove = alg.remove,
+              rank.agg = rank.agg,
+              top.list = top.list,
               data.new = E.trim))
 }
 

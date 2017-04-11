@@ -49,11 +49,13 @@ number of algorithms is less than \code{n} no trimming is done.}
   indices}
   \item{external}{a data frame showing external evaluation indices for
   \code{k}}
-  \item{trim}{A list with 3 elements}
+  \item{trim}{A list with 4 elements}
   \itemize{
     \item{\code{alg.keep} }{algorithms kept}
     \item{\code{alg.remove} }{algorithms removed}
-    \item{\code{data.new} }{A new version of a \code{consensus_cluster} data object.}
+    \item{\code{rank.agg} }{a matrix of ranked algorithms for every internal evaluation index}
+    \item{\code{top.list} }{final order of ranked algorithms}
+    \item{\code{data.new} }{A new version of a \code{consensus_cluster} data object}
   }
 }
 \description{
