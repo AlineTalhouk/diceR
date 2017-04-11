@@ -188,8 +188,9 @@ file name. Only applicable when <code>dir</code> is not <code>NULL</code>.</p></
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An array of dimension <code>nrow(x)</code> by <code>reps</code> by 
-  <code>length(algorithms)</code> Each slice of the array is a matrix showing 
-  consensus clustering results for algorithms. The matrices have a row for
+  <code>length(algorithms)</code> by <code>length(nk)</code>. Each cube of the array
+  represents a different k. Each slice of a cube is a matrix showing 
+  consensus clustering results for algorithms. The matrices have a row for 
   each sample, and a column for each subsample. Each entry represents a class
   membership.</p>
     
@@ -226,7 +227,7 @@ file name. Only applicable when <code>dir</code> is not <code>NULL</code>.</p></
   <span class='fu'>return</span>(<span class='fu'>as.integer</span>(<span class='kw'>stats</span><span class='kw'>::</span><span class='fu'>cutree</span>(<span class='kw'>cluster</span><span class='kw'>::</span><span class='fu'>agnes</span>(<span class='no'>d</span>, <span class='kw'>diss</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='no'>k</span>)))
 }
 
-<span class='fu'>assign</span>(<span class='st'>"agnes"</span>, <span class='no'>agnes</span>)
+<span class='fu'>assign</span>(<span class='st'>"agnes"</span>, <span class='no'>agnes</span>, <span class='fl'>1</span>)
 
 <span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='fu'>consensus_cluster</span>(<span class='no'>dat</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"pam"</span>, <span class='st'>"agnes"</span>),
 <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"euclidean"</span>, <span class='st'>"manh"</span>), <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)

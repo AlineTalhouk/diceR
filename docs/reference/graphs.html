@@ -84,13 +84,13 @@
 under CDF curves, heatmaps, and cluster assignment tracking plots.</p>
     
 
-    <pre><span class='fu'>graph_cdf</span>(<span class='no'>x</span>)
+    <pre><span class='fu'>graph_cdf</span>(<span class='no'>mat</span>)
 
-<span class='fu'>graph_delta_area</span>(<span class='no'>x</span>)
+<span class='fu'>graph_delta_area</span>(<span class='no'>mat</span>)
 
-<span class='fu'>graph_heatmap</span>(<span class='no'>x</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'>graph_heatmap</span>(<span class='no'>mat</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
-<span class='fu'>graph_tracking</span>(<span class='no'>x</span>)
+<span class='fu'>graph_tracking</span>(<span class='no'>cl</span>)
 
 <span class='fu'>graph_all</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
@@ -98,18 +98,27 @@ under CDF curves, heatmaps, and cluster assignment tracking plots.</p>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>an object from <code><a href='consensus_cluster.html'>consensus_cluster</a></code>, or a list of multiple objects
-from <code><a href='consensus_cluster.html'>consensus_cluster</a></code></p></td>
+      <th>mat</th>
+      <td><p>same as <code>x</code>, or a list of consensus matrices computed from
+<code>x</code> for faster results</p></td>
     </tr>
     <tr>
       <th>main</th>
       <td><p>heatmap title. If <code>NULL</code> (default), the titles will be taken
-from names in <code>x</code></p></td>
+from names in <code>mat</code></p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>additional arguments to <code><a href='http://www.rdocumentation.org/packages/gplots/topics/heatmap.2'>heatmap.2</a></code></p></td>
+    </tr>
+    <tr>
+      <th>cl</th>
+      <td><p>same as <code>x</code>, or a matrix of consensus classes computed from
+<code>x</code> for faster results</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>an object from <code><a href='consensus_cluster.html'>consensus_cluster</a></code></p></td>
     </tr>
     </table>
     
@@ -118,7 +127,7 @@ from names in <code>x</code></p></td>
     <p>Various plots from <code>graph_*{}</code> functions. All plots are 
   generated using <code>ggplot</code>, except for <code>graph_heatmap</code>, which uses 
   <code><a href='http://www.rdocumentation.org/packages/gplots/topics/heatmap.2'>heatmap.2</a></code>. Colours used in <code>graph_heatmap</code> and 
-  <code>graph_tracking</code> utilize <code><a href='http://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer'>RColorBrewer</a></code>
+  <code>graph_tracking</code> utilize <code><a href='http://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer'>RColorBrewer</a></code> 
   palettes.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -147,7 +156,8 @@ wrapper that runs all graphing functions.</p>
 <span class='co'># Delta Area</span>
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>graph_delta_area</span>(<span class='no'>CC1</span>)</div><img src='graphs-6.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'># Heatmaps with column side colours corresponding to clusters</span>
-<span class='no'>CC2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>x</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='st'>"ap"</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>CC2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>x</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='st'>"ap"</span>, <span class='kw'>progress</span> <span class='kw'>=</span>
+<span class='fl'>FALSE</span>)
 <span class='fu'>graph_heatmap</span>(<span class='no'>CC2</span>)</div><img src='graphs-8.png' alt='' width='540' height='400' /><div class='input'>
 <span class='co'># Track how cluster assignments change between algorithms</span>
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>graph_tracking</span>(<span class='no'>CC1</span>)</div><img src='graphs-10.png' alt='' width='540' height='400' /></pre>
