@@ -165,7 +165,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   }
   
   # Reorder ind.int (and ind.ext if not NULL) by top.list order if trimmed
-  if (!is.null(trim.obj$top.list)) {
+  if (all(purrr::map_lgl(trim.obj$top.list, ~ !is.null(.x)))) {
     ind.int <- purrr::map2(ind.int, trim.obj$top.list,
                            ~ arrange(.x, match(.y, Algorithms)))
     if (!is.null(ind.ext))
