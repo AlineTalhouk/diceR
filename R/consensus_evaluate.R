@@ -159,8 +159,8 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   } else {
     trim.obj <- list(alg.keep = an,
                      alg.remove = character(0),
-                     rank.agg = NULL,
-                     top.list = NULL,
+                     rank.agg = list(NULL),
+                     top.list = list(NULL),
                      data.new = list(E))
   }
   
