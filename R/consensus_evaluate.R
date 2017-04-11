@@ -223,8 +223,8 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
   E.trim <- E[, , alg.keep, k, drop = FALSE]
   
-  # Reweigh only if specified and more than 1 algorithm is kept
-  if (reweigh && length(alg.keep) > 1) {
+  # Reweigh only if specified, more than 1 algorithm is kept, trimming done
+  if (reweigh && length(alg.keep) > 1 && !is.null(top.list)) {
     
     # Filter after knowing which to keep
     ak <- match(alg.keep, alg.all)
