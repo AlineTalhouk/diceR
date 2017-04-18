@@ -39,7 +39,9 @@ Imports:
     klaR,
     RColorBrewer,
     quantable,
-    RankAggreg
+    RankAggreg,
+    sigclust,
+    methods
 Suggests:
     testthat,
     knitr,
