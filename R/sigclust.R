@@ -3,9 +3,9 @@
 #' Uses the SigClust K-Means algorithm to assess significance of clustering
 #' results.
 #' 
-#' This function is a wrapper around the original
-#' \code{\link[sigclust]{sigclust}}, except that an additional param \code{k} is
-#' added for the case when k > 2.
+#' This function is a wrapper for the original \code{\link[sigclust]{sigclust}},
+#' except that an additional parameter \code{k} is allows testing against any
+#' number of clusters.
 #' 
 #' @param x data matrix, samples are rows and features are columns
 #' @param k cluster size to test against
@@ -17,6 +17,12 @@
 #'   
 #' @return An object of class \code{sigclust}. See
 #'   \code{\link[sigclust]{sigclust}} for details.
+#' @author Hanwen Huang: \email{hanwenh@email.unc.edu}; Yufeng Liu:
+#'   \email{yfliu@email.unc.edu}; J. S. Marron: \email{marron@email.unc.edu}
+#' @references Liu, Yufeng, Hayes, David Neil, Nobel, Andrew and Marron, J. S,
+#'   2008, \emph{Statistical Significance of Clustering for High-Dimension,
+#'   Low-Sample Size Data}, \emph{Journal of the American Statistical
+#'   Association} \bold{103}(483) 1281--1293.
 #' @export
 #' 
 #' @examples
@@ -28,19 +34,19 @@
 #' cc <- consensus_cluster(dat, nk = 4, reps = 5, algorithms = "pam", progress =
 #' FALSE)
 #' cl.mat <- consensus_combine(cc, element = "class")
-#' pvalue <- my_sigclust(x = dat, k = nk, nsim = 1000, labflag = 1, label =
+#' pvalue <- sigclust(x = dat, k = nk, nsim = 1000, labflag = 1, label =
 #' cl.mat$`4`[, 1], icovest = 2)
 #' str(pvalue)
-my_sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
-                        icovest = 2) {
+sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
+                     icovest = 2) {
   n <- dim(x)[1]
   p <- dim(x)[2]
   if (n > 1) {
     x <- as.matrix(x)
     if (labflag == 0) {
-      xclust <- my_.cluster(x, n, p, k)
+      xclust <- .cluster(x, n, p, k)
       for (i in 1:nrep) {
-        clust.temp <- my_.cluster(x, n, p, k)
+        clust.temp <- .cluster(x, n, p, k)
         if (clust.temp$cindex < xclust$cindex)
           xclust <- clust.temp
         xcindex <- xclust$cindex
@@ -49,7 +55,7 @@ my_sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
     xvareigen <- sigclust::.vareigen(x, n, p, icovest)
     simcindex <- rep(0, nsim)
     for (i in 1:nsim) {
-      xsim <- my_.simnull(xvareigen$vsimeigval, n, p, k)
+      xsim <- .simnull(xvareigen$vsimeigval, n, p, k)
       simcindex[i] <- xsim$cindex
     }
     if (labflag == 0) {
@@ -93,7 +99,7 @@ my_sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
 }
 
 #' @noRd
-my_.cluster <- function(x, n, p, k) {
+.cluster <- function(x, n, p, k) {
   if (n > 1) {
     x <- as.matrix(x)
     if (dim(x)[1] == n & dim(x)[2] == p) {
@@ -118,11 +124,11 @@ my_.cluster <- function(x, n, p, k) {
 }
 
 #' @noRd
-my_.simnull <- function(vsimeigval, n, p, k) {
+.simnull <- function(vsimeigval, n, p, k) {
   simnorm <- matrix(0, n, p)
   for (i in 1:n) {
     simnorm[i, ] <- stats::rnorm(p, sd = sqrt(vsimeigval))
   }
-  simclust <- my_.cluster(simnorm, n, p, k)
+  simclust <- .cluster(simnorm, n, p, k)
   list(cindex = simclust$cindex)
 }
