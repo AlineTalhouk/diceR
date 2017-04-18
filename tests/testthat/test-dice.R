@@ -44,3 +44,9 @@ test_that("relabelling uses 1st col if more than 1 cons.funs and no ref.cl", {
                    cons.funs = c("kmodes", "majority"),  evaluate = FALSE)
   expect_error(dice.obj, NA)
 })
+
+test_that("cluster size prepended when multiple k requested", {
+  dice.obj <- dice(dat, nk = 3:4, reps = 3, algorithms = "hc",
+                   cons.funs = "kmodes", k.method = "all", evaluate = FALSE)
+  expect_true(all(grepl("k=", colnames(dice.obj$clusters))))
+})

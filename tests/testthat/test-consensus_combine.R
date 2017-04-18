@@ -7,7 +7,8 @@ CC1 <- consensus_cluster(x, nk = 2:4, reps = 5, algorithms = "ap",
                          progress = FALSE)
 CC2 <- consensus_cluster(x, nk = 2:4, reps = 5, algorithms = "gmm",
                          progress = FALSE)
-CC3.combined <- abind::abind(list(CC1, CC2), along = 3)
+CC3 <- consensus_cluster(x, nk = 2:4, reps = 5, algorithms = "hc",
+                         progress = FALSE)
 ref.cl <- sample(1:4, 100, replace = TRUE)
 
 test_that("combining results has expected lengths", {
@@ -39,13 +40,18 @@ test_that("compactness measure works with singleton clusters", {
 })
 
 test_that("trimming (potentially) removes algorithms", {
-  CC3.trimmed <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, n = 1,
-                                    trim = TRUE)$trim$data.new
-  expect_lte(dim(CC3.trimmed[[1]])[3], dim(CC3.combined)[3])
+  CC.trimmed <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, n = 1,
+                                   trim = TRUE)$trim$data.new
+  expect_lte(dim(CC.trimmed[[1]])[3],
+             dim(abind::abind(list(CC1, CC2), along = 3))[3])
 })
 
 test_that("reweighing (potentially) replicates each slice of algorithm", {
-  CC3.trimmed <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl,
-                                    trim = TRUE, reweigh = TRUE)
-  expect_error(CC3.trimmed, NA)
+  CC.trimmed1 <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl,
+                                    trim = TRUE, reweigh = TRUE,
+                                    k.method = "all")
+  CC.trimmed2 <- consensus_evaluate(x, CC1, CC2, CC3, ref.cl = ref.cl,
+                                    trim = TRUE, reweigh = TRUE, n = 2)
+  expect_error(CC.trimmed1, NA)
+  expect_error(CC.trimmed2, NA)
 })
