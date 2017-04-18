@@ -260,7 +260,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   # If k.method is to select "all", need to add suffixes to algorithms
   if (!is.null(k.method) && k.method == "all") {
     alg.keep <- paste0(alg.keep, " k=", k)
-    alg.remove <- paste0(alg.remove, " k=", k)
+    if (length(alg.remove) > 0) alg.remove <- paste0(alg.remove, " k=", k)
     dimnames(E.trim)[[3]] <- paste0(dimnames(E.trim)[[3]], " k=", k)
   }
   return(list(alg.keep = alg.keep,
