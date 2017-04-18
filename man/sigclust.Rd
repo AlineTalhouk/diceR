@@ -13,11 +13,12 @@ sigclust(x, k, nsim, nrep = 1, labflag = 0, label = 0, icovest = 2)
 
 \item{nsim}{number of simulations}
 
-\item{nrep}{number of replicates}
+\item{nrep}{See \code{\link[sigclust]{sigclust}} for details.}
 
 \item{labflag}{See \code{\link[sigclust]{sigclust}} for details.}
 
-\item{label}{true class label}
+\item{label}{true class label. See \code{\link[sigclust]{sigclust}} for
+details.}
 
 \item{icovest}{type of covariance matrix estimation}
 }
@@ -32,7 +33,8 @@ results.
 \details{
 This function is a wrapper for the original \code{\link[sigclust]{sigclust}},
 except that an additional parameter \code{k} is allows testing against any
-number of clusters.
+number of clusters. In addition, the default type of covariance estimation is
+also different.
 }
 \examples{
 data(hgsc)

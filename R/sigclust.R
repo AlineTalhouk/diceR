@@ -5,14 +5,16 @@
 #' 
 #' This function is a wrapper for the original \code{\link[sigclust]{sigclust}},
 #' except that an additional parameter \code{k} is allows testing against any
-#' number of clusters.
+#' number of clusters. In addition, the default type of covariance estimation is
+#' also different.
 #' 
 #' @param x data matrix, samples are rows and features are columns
 #' @param k cluster size to test against
 #' @param nsim number of simulations
-#' @param nrep number of replicates
+#' @param nrep See \code{\link[sigclust]{sigclust}} for details.
 #' @param labflag See \code{\link[sigclust]{sigclust}} for details.
-#' @param label true class label
+#' @param label true class label. See \code{\link[sigclust]{sigclust}} for
+#'   details.
 #' @param icovest type of covariance matrix estimation
 #'   
 #' @return An object of class \code{sigclust}. See
