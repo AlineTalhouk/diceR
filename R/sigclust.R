@@ -30,14 +30,13 @@
 #' @examples
 #' data(hgsc)
 #' dat <- t(hgsc[, -1])[1:100, 1:50]
-#' set.seed(1)
 #' nk <- 4
-#' label <- sample(seq_len(nk), nrow(dat), replace = TRUE)
-#' cc <- consensus_cluster(dat, nk = 4, reps = 5, algorithms = "pam", progress =
-#' FALSE)
+#' cc <- consensus_cluster(dat, nk = nk, reps = 5, algorithms = "pam",
+#' progress = FALSE)
 #' cl.mat <- consensus_combine(cc, element = "class")
-#' pvalue <- sigclust(x = dat, k = nk, nsim = 1000, labflag = 1, label =
-#' cl.mat$`4`[, 1], icovest = 2)
+#' set.seed(1)
+#' pvalue <- sigclust(x = dat, k = nk, nsim = 50, labflag = 1, label =
+#' cl.mat$`4`[, 1])
 #' str(pvalue)
 sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
                      icovest = 2) {
@@ -69,7 +68,7 @@ sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
     }
     if (labflag == 1) {
       meanpl <- vapply(sort(unique(label)),
-                       function(y) colMeans(x[label == y, ]),
+                       function(y) colMeans(x[label == y, , drop = FALSE]),
                        FUN.VALUE = double(p))
       txdiffl <- lapply(sort(unique(label)),
                         function(y) t(x[label == y, ]) - meanpl[, y])
