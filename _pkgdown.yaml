@@ -35,6 +35,7 @@ reference:
   - prepare_data
   - relabel_class
   - min_fnorm
+  - sigclust
 - title: Data
   contents:
   - conClust_tcga
