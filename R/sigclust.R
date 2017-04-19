@@ -114,10 +114,7 @@ sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
 
 #' @noRd
 .simnull <- function(vsimeigval, n, p, k) {
-  simnorm <- matrix(0, n, p)
-  for (i in 1:n) {
-    simnorm[i, ] <- stats::rnorm(p, sd = sqrt(vsimeigval))
-  }
+  simnorm <- t(replicate(n, stats::rnorm(p, sd = sqrt(vsimeigval))))
   simclust <- .cluster(simnorm, k)
   list(cindex = simclust$cindex)
 }
