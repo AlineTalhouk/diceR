@@ -46,9 +46,9 @@ sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
   if (n > 1) {
     x <- as.matrix(x)
     if (labflag == 0) {
-      xclust <- .cluster(x, n, p, k)
+      xclust <- .cluster(x, k)
       for (i in 1:nrep) {
-        clust.temp <- .cluster(x, n, p, k)
+        clust.temp <- .cluster(x, k)
         if (clust.temp$cindex < xclust$cindex)
           xclust <- clust.temp
         xcindex <- xclust$cindex
@@ -101,28 +101,15 @@ sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
 }
 
 #' @noRd
-.cluster <- function(x, n, p, k) {
-  if (n > 1) {
-    x <- as.matrix(x)
-    if (dim(x)[1] == n & dim(x)[2] == p) {
-      clust <- stats::kmeans(x, k)
-      withinsum <- sum(clust$withinss)
-      meanp <- colMeans(x)
-      tx <- t(x)
-      txdiff <- tx - meanp
-      totalsum <- sum(txdiff ^ 2)
-      cindex <- withinsum / totalsum
-      list(clust = clust, cindex = cindex)
-    }
-    else {
-      print("Wrong size of matrix x!")
-      return(0)
-    }
-  }
-  else {
-    print("Only one sample left, no need for clustering!")
-    return(0)
-  }
+.cluster <- function(x, k) {
+  clust <- stats::kmeans(x, k)
+  withinsum <- sum(clust$withinss)
+  meanp <- colMeans(x)
+  tx <- t(x)
+  txdiff <- tx - meanp
+  totalsum <- sum(txdiff ^ 2)
+  cindex <- withinsum / totalsum
+  list(clust = clust, cindex = cindex)
 }
 
 #' @noRd
@@ -131,6 +118,6 @@ sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
   for (i in 1:n) {
     simnorm[i, ] <- stats::rnorm(p, sd = sqrt(vsimeigval))
   }
-  simclust <- .cluster(simnorm, n, p, k)
+  simclust <- .cluster(simnorm, k)
   list(cindex = simclust$cindex)
 }
