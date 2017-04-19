@@ -43,10 +43,9 @@ nk <- 4
 cc <- consensus_cluster(dat, nk = nk, reps = 5, algorithms = "pam",
 progress = FALSE)
 cl.mat <- consensus_combine(cc, element = "class")
+lab <- cl.mat$`4`[, 1]
 set.seed(1)
-pvalue <- sigclust(x = dat, k = nk, nsim = 50, labflag = 1, label =
-cl.mat$`4`[, 1])
-str(pvalue)
+str(sigclust(x = dat, k = nk, nsim = 50, labflag = 1, label = lab))
 }
 \references{
 Liu, Yufeng, Hayes, David Neil, Nobel, Andrew and Marron, J. S,
