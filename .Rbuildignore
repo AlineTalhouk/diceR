@@ -5,7 +5,6 @@
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^codecov\.yml$
-^R\hypo_test_expt\.R$
 ^_pkgdown\.yaml$
 ^docs$
 ^LCE$
