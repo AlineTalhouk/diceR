@@ -61,30 +61,30 @@ sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
       simcindex[i] <- xsim$cindex
     }
     if (labflag == 0) {
-      index <- (simcindex <= xclust$cindex)
+      index <- simcindex <= xclust$cindex
       mindex <- mean(simcindex)
       sindex <- stats::sd(simcindex)
-      pval <- sum(index)/nsim
+      pval <- sum(index) / nsim
       pvalnorm <- stats::pnorm(xclust$cindex, mindex, sindex)
     }
     if (labflag == 1) {
-      meanpl <- sapply(sort(unique(label)), function(y) colMeans(x[label == y, ]))
-      txdiffl <- sapply(sort(unique(label)), function(y) t(x[label == y, ]) - meanpl[, y])
-      withinsum <- sum(sapply(txdiffl, function(y) sum(y^2)))
-      # meanp1 <- colMeans(x[label == 1, ])
-      # txdiff1 <- t(x[label == 1, ]) - meanp1
-      # meanp2 <- colMeans(x[label == 2, ])
-      # txdiff2 <- t(x[label == 2, ]) - meanp2
-      # withinsum <- sum(txdiff1^2) + sum(txdiff2^2)
+      meanpl <- vapply(sort(unique(label)),
+                       function(y) colMeans(x[label == y, ]),
+                       FUN.VALUE = double(p))
+      txdiffl <- lapply(sort(unique(label)),
+                        function(y) t(x[label == y, ]) - meanpl[, y])
+      withinsum <- sum(vapply(txdiffl,
+                              function(y) sum(y ^ 2),
+                              FUN.VALUE = double(1)))
       meanp <- colMeans(x)
       tx <- t(x)
       txdiff <- tx - meanp
-      totalsum <- sum(txdiff^2)
-      cindexlab <- withinsum/totalsum
-      index <- (simcindex <= cindexlab)
+      totalsum <- sum(txdiff ^ 2)
+      cindexlab <- withinsum / totalsum
+      index <- simcindex <= cindexlab
       mindex <- mean(simcindex)
       sindex <- stats::sd(simcindex)
-      pval <- sum(index)/nsim
+      pval <- sum(index) / nsim
       pvalnorm <- stats::pnorm(cindexlab, mindex, sindex)
       xcindex <- cindexlab
     }
@@ -110,7 +110,7 @@ sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
       meanp <- colMeans(x)
       tx <- t(x)
       txdiff <- tx - meanp
-      totalsum <- sum(txdiff^2)
+      totalsum <- sum(txdiff ^ 2)
       cindex <- withinsum / totalsum
       list(clust = clust, cindex = cindex)
     }
