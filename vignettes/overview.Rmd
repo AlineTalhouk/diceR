@@ -35,10 +35,9 @@ library(dplyr)
 library(ggplot2)
 library(knitr)
 data(hgsc)
-dat <- t(hgsc[, -1])
 ```
 
-We load an expression data set from TCGA of `r nrow(dat)` high grade serous carcinoma samples measured on `r ncol(dat)` genes.
+We load an expression data set from TCGA of `r nrow(hgsc)` high grade serous carcinoma samples measured on `r ncol(hgsc)` genes.
 
 ## Consensus Clustering
 
@@ -47,7 +46,7 @@ When Monti et al. (2003) first introduced consensus clustering, the idea was to 
 The base function of this package is `consensus_cluster()`, which outputs cluster assignments across subsamples and algorithms, for different k (number of clusters). For example, let's say we were interested in clustering the `hgsc` data into 3 or 4 clusters, using 80% resampling on 5 replicates, for these clustering algorithms: Hierarchical Clustering, PAM, and DIvisive ANAlysis Clustering (DIANA). Euclidean distance is used for all algorithms.
 
 ```{r consensus_cluster, results='hide'}
-CC <- consensus_cluster(dat, nk = 3:4, pItem = 0.8, reps = 5, 
+CC <- consensus_cluster(hgsc, nk = 3:4, pItem = 0.8, reps = 5, 
                         algorithms = c("hc", "pam", "diana"))
 ```
 
@@ -61,8 +60,8 @@ kable(head(CC[, , "DIANA_Euclidean", "3"]))
 Note the unavoidable presence of `NA`s because we used 80% subsampling. This can be problematic in certain downstream ensemble methods, so we can impute missing values using K-Nearest Neighbours beforehand. There might still be `NA`s after KNN because of how the decision threshold was set. The remaining missing values can be imputed using majority voting.
 
 ```{r impute_knn}
-CC <- apply(CC, 2:4, impute_knn, data = dat, seed = 1)
-CC_imputed <- impute_missing(CC, dat, nk = 4)
+CC <- apply(CC, 2:4, impute_knn, data = hgsc, seed = 1)
+CC_imputed <- impute_missing(CC, hgsc, nk = 4)
 sum(is.na(CC))
 sum(is.na(CC_imputed))
 ```
@@ -110,7 +109,7 @@ One can feed in `ccomb_class` (instead of `CC`) into `consensus_matrix()` to obt
 A situation might also arise where we initially decided on using 3 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. `consensus_combine()` takes in any number of ensemble objects (e.g. `CC` and `CC2`) and combines the results.
 
 ```{r consensus_combine_2, results='hide'}
-CC2 <- consensus_cluster(dat, nk = 3:4, pItem = 0.8, reps = 5, 
+CC2 <- consensus_cluster(hgsc, nk = 3:4, pItem = 0.8, reps = 5, 
                          algorithms = "km")
 ccomb_class2 <- consensus_combine(CC, CC2, element = "class")
 ```
@@ -124,7 +123,7 @@ kable(head(ccomb_class2$`4`))
 Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between `lower` (defaults to 0) and `upper` (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each `k`, and choose the `k` with the greatest average PAC. If there *is* a reference class, `k` is the number of distinct classes in the reference.
 
 ```{r consensus_evaluate, results='hide'}
-ccomp <- consensus_evaluate(dat, CC, CC2, plot = FALSE)
+ccomp <- consensus_evaluate(hgsc, CC, CC2, plot = FALSE)
 ```
 
 ```{r consensus_evaluate_kable}
@@ -138,7 +137,7 @@ Some algorithms perform too poorly to deserve membership in the cluster ensemble
 After trimming, we can optionally choose to reweigh the algorithms based on the internal index magnitudes. Of course, we take into account the direction of optimality (higher is better is lower is better). Algorithms reweighed are then fed into the consensus functions. This is done by replicating each algorithm by a scalar factor that is proportional to its weight. For example, if we have two algorithms A and B, and A is given a weight of 80% and B is given a weight of 20%, then we make 4 copies of A and 1 copy of B. To minimize computational time, the total number of copies out of all algorithms has an upper bound of 100. Without reweighing, each algorithm is given equal weight.
 
 ```{r consensus_evaluate_trim, results='hide'}
-ctrim <- consensus_evaluate(dat, CC, CC2, trim = TRUE, reweigh = FALSE, n = 2)
+ctrim <- consensus_evaluate(hgsc, CC, CC2, trim = TRUE, reweigh = FALSE, n = 2)
 ```
 
 ```{r consensus_evaluate_trim_str}
