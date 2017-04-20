@@ -3,12 +3,16 @@
 \docType{data}
 \name{hgsc}
 \alias{hgsc}
-\title{High grade serous cancer data from TCGA used to classify subtypes}
-\format{A data frame with 321 rows and 490 variables}
+\title{Gene expression data for High Grade Serous Carcinoma from TCGA}
+\format{A data frame with 489 rows and 321 columns.}
 \usage{
 hgsc
 }
 \description{
-There are 321 genes and 489 samples. The first column is a gene identifier.
+There are 489 samples measured on 321 genes. Sample IDs are in the row names 
+and gene names are in the column names. This data set is used for clustering 
+HGSC into subtypes with prognostic significance. The cluster assignments 
+obtained by TCGA are indicated by the last six characters of each row name in
+\code{hgsc}: \code{MES.C1}, \code{IMM.C2}, \code{DIF.C4}, and \code{PRO.C5"}
 }
 \keyword{datasets}
