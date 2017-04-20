@@ -120,10 +120,13 @@ subsamples.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>E_imputed</span>)
-<span class='fu'>table</span>(<span class='fu'>majority_voting</span>(<span class='no'>E_imputed</span>, <span class='kw'>is.relabelled</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='output co'>#&gt; 
-#&gt;   1   2   3   4 
-#&gt; 177  81 155  76 </div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>hgsc</span>)
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='no'>hgsc</span>[<span class='fl'>1</span>:<span class='fl'>100</span>, <span class='fl'>1</span>:<span class='fl'>50</span>]
+<span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>dat</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='st'>"pam"</span>, <span class='kw'>progress</span> <span class='kw'>=</span>
+<span class='fl'>FALSE</span>)
+<span class='fu'>table</span>(<span class='fu'>majority_voting</span>(<span class='no'>cc</span>[, , <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>], <span class='kw'>is.relabelled</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='output co'>#&gt; 
+#&gt;  1  2  3  4 
+#&gt; 20 25 17 38 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

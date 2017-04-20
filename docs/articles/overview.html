@@ -58,7 +58,7 @@
 </h1>
                         <h4 class="author">Derek Chiu</h4>
             
-            <h4 class="date">2017-04-19</h4>
+            <h4 class="date">2017-04-20</h4>
           </div>
 
     
@@ -75,8 +75,7 @@
 <span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(knitr)
-<span class="kw">data</span>(hgsc)
-dat &lt;-<span class="st"> </span><span class="kw">t</span>(hgsc[, -<span class="dv">1</span>])</code></pre></div>
+<span class="kw">data</span>(hgsc)</code></pre></div>
 <p>We load an expression data set from TCGA of 489 high grade serous carcinoma samples measured on 321 genes.</p>
 </div>
 <div id="consensus-clustering" class="section level2">
@@ -84,7 +83,7 @@ dat &lt;-<span class="st"> </span><span class="kw">t</span>(hgsc[, -<span class=
 <a href="#consensus-clustering" class="anchor"></a>Consensus Clustering</h2>
 <p>When Monti et al. (2003) first introduced consensus clustering, the idea was to use one clustering algorithm on bootstrapped subsamples of the data. We implement some extensions where a consensus is reached across subsamples <em>and</em> across algorithms. The final cluster assignment is then computed using statistical transformations on the ensemble cluster.</p>
 <p>The base function of this package is <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>, which outputs cluster assignments across subsamples and algorithms, for different k (number of clusters). For example, let’s say we were interested in clustering the <code>hgsc</code> data into 3 or 4 clusters, using 80% resampling on 5 replicates, for these clustering algorithms: Hierarchical Clustering, PAM, and DIvisive ANAlysis Clustering (DIANA). Euclidean distance is used for all algorithms.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(dat, <span class="dt">nk =</span> <span class="dv">3</span>:<span class="dv">4</span>, <span class="dt">pItem =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span>:<span class="dv">4</span>, <span class="dt">pItem =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>, 
                         <span class="dt">algorithms =</span> <span class="kw">c</span>(<span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span>))</code></pre></div>
 <p>The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each “box” (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the DIANA algorithm for k = 3.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(CC)
@@ -156,8 +155,8 @@ dat &lt;-<span class="st"> </span><span class="kw">t</span>(hgsc[, -<span class=
 </tbody>
 </table>
 <p>Note the unavoidable presence of <code>NA</code>s because we used 80% subsampling. This can be problematic in certain downstream ensemble methods, so we can impute missing values using K-Nearest Neighbours beforehand. There might still be <code>NA</code>s after KNN because of how the decision threshold was set. The remaining missing values can be imputed using majority voting.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw">apply</span>(CC, <span class="dv">2</span>:<span class="dv">4</span>, impute_knn, <span class="dt">data =</span> dat, <span class="dt">seed =</span> <span class="dv">1</span>)
-CC_imputed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/impute_missing.html">impute_missing</a></span>(CC, dat, <span class="dt">nk =</span> <span class="dv">4</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw">apply</span>(CC, <span class="dv">2</span>:<span class="dv">4</span>, impute_knn, <span class="dt">data =</span> hgsc, <span class="dt">seed =</span> <span class="dv">1</span>)
+CC_imputed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/impute_missing.html">impute_missing</a></span>(CC, hgsc, <span class="dt">nk =</span> <span class="dv">4</span>)
 <span class="kw">sum</span>(<span class="kw">is.na</span>(CC))
 <span class="co">#&gt; [1] 30</span>
 <span class="kw">sum</span>(<span class="kw">is.na</span>(CC_imputed))
@@ -244,7 +243,7 @@ ccomb_class &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 </table>
 <p>One can feed in <code>ccomb_class</code> (instead of <code>CC</code>) into <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code> to obtain a consensus matrix across both subsamples <strong>and</strong> algorithms.</p>
 <p>A situation might also arise where we initially decided on using 3 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> takes in any number of ensemble objects (e.g. <code>CC</code> and <code>CC2</code>) and combines the results.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(dat, <span class="dt">nk =</span> <span class="dv">3</span>:<span class="dv">4</span>, <span class="dt">pItem =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span>:<span class="dv">4</span>, <span class="dt">pItem =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>, 
                          <span class="dt">algorithms =</span> <span class="st">"km"</span>)
 ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, CC2, <span class="dt">element =</span> <span class="st">"class"</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kable</span>(<span class="kw">head</span>(ccomb_class2$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
@@ -300,7 +299,7 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <a href="#evaluate-trim-and-reweigh-algortihms-with-consensus_evaluate" class="anchor"></a>Evaluate, trim, and reweigh algortihms with <code><a href="../reference/consensus_evaluate.html">consensus_evaluate()</a></code>
 </h3>
 <p>Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between <code>lower</code> (defaults to 0) and <code>upper</code> (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each <code>k</code>, and choose the <code>k</code> with the greatest average PAC. If there <em>is</em> a reference class, <code>k</code> is the number of distinct classes in the reference.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ccomp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(dat, CC, CC2, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ccomp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kable</span>(ccomp$internal)</code></pre></div>
 <table class="table"><tbody><tr>
 <td>
@@ -499,7 +498,7 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <p>We see that the biclustering algorithm is the least ambiguous and also most well-clustered (high compactness and separability).</p>
 <p>Some algorithms perform too poorly to deserve membership in the cluster ensemble. We consider the relative ranks of each algorithm across all internal indices, and compute their sum. All algorithms below a certain quantile for the sum rank are trimmed (removed). By default this quantile is 75%.</p>
 <p>After trimming, we can optionally choose to reweigh the algorithms based on the internal index magnitudes. Of course, we take into account the direction of optimality (higher is better is lower is better). Algorithms reweighed are then fed into the consensus functions. This is done by replicating each algorithm by a scalar factor that is proportional to its weight. For example, if we have two algorithms A and B, and A is given a weight of 80% and B is given a weight of 20%, then we make 4 copies of A and 1 copy of B. To minimize computational time, the total number of copies out of all algorithms has an upper bound of 100. Without reweighing, each algorithm is given equal weight.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ctrim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(dat, CC, CC2, <span class="dt">trim =</span> <span class="ot">TRUE</span>, <span class="dt">reweigh =</span> <span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ctrim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">trim =</span> <span class="ot">TRUE</span>, <span class="dt">reweigh =</span> <span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(ctrim, <span class="dt">max.level =</span> <span class="dv">2</span>)
 <span class="co">#&gt; List of 5</span>
 <span class="co">#&gt;  $ k       : int 4</span>

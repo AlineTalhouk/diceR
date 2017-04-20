@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>High grade serous cancer data from TCGA used to classify subtypes — hgsc • diceR</title>
+<title>Gene expression data for High Grade Serous Carcinoma from TCGA — hgsc • diceR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -76,18 +76,22 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>High grade serous cancer data from TCGA used to classify subtypes</h1>
+    <h1>Gene expression data for High Grade Serous Carcinoma from TCGA</h1>
     </div>
 
     
-    <p>There are 321 genes and 489 samples. The first column is a gene identifier.</p>
+    <p>There are 489 samples measured on 321 genes. Sample IDs are in the row names 
+and gene names are in the column names. This data set is used for clustering 
+HGSC into subtypes with prognostic significance. The cluster assignments 
+obtained by TCGA are indicated by the last six characters of each row name in
+<code>hgsc</code>: <code>MES.C1</code>, <code>IMM.C2</code>, <code>DIF.C4</code>, and <code>PRO.C5</code></p>
     
 
     <pre><span class='no'>hgsc</span></pre>
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 321 rows and 490 variables</p>
+    <p>A data frame with 489 rows and 321 columns.</p>
     
 
   </div>
