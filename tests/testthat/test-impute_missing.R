@@ -21,5 +21,5 @@ test_that("errors thrown with incorrect inputs", {
 test_that("majority completion not performed for a single assignment", {
   E1 <- consensus_cluster(hgsc, nk = 4, reps = 1, algorithms = "hc",
                           progress = FALSE)
-  expect_equal(ncol(impute_missing(E1, data, nk = 4)), 1)
+  expect_equal(ncol(impute_missing(E1, hgsc, nk = 4)), 1)
 })
