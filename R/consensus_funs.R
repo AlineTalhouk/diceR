@@ -20,9 +20,11 @@
 #' @author Aline Talhouk
 #' @export
 #' @examples
-#' # Calculate for a fraction of first algorithm
-#' data(E_imputed)
-#' table(k_modes(E_imputed[1:100, , 1, drop = FALSE], is.relabelled = FALSE))
+#' data(hgsc)
+#' dat <- hgsc[1:100, 1:50]
+#' cc <- consensus_cluster(dat, nk = 4, reps = 6, algorithms = "pam", progress =
+#' FALSE)
+#' table(k_modes(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
   # Flatten and fill in remaining missing entries with majority voting
   mv <- majority_voting(E, is.relabelled = is.relabelled)
@@ -62,8 +64,11 @@ k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
 #' @author Aline Talhouk
 #' @export
 #' @examples
-#' data(E_imputed)
-#' table(majority_voting(E_imputed, is.relabelled = FALSE))
+#' data(hgsc)
+#' dat <- hgsc[1:100, 1:50]
+#' cc <- consensus_cluster(dat, nk = 4, reps = 6, algorithms = "pam", progress =
+#' FALSE)
+#' table(majority_voting(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 majority_voting <- function(E, is.relabelled = TRUE) {
   # Flatten (and relabel) E then find most common element in every row
   mv <- E %>% 
@@ -85,7 +90,7 @@ majority_voting <- function(E, is.relabelled = TRUE) {
 #' @export
 #' @examples
 #' data(hgsc)
-#' dat <- t(hgsc[, -1])[1:100, 1:50]
+#' dat <- hgsc[1:100, 1:50]
 #' x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("hc", "diana"),
 #' progress = FALSE)
 #' CSPA(x, k = 4)
@@ -117,7 +122,7 @@ CSPA <- function(E, k) {
 #' @export
 #' @examples
 #' data(hgsc)
-#' dat <- t(hgsc[, -1])[1:100, 1:50]
+#' dat <- hgsc[1:100, 1:50]
 #' x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("km", "hc",
 #' "diana"), progress = FALSE)
 #' \dontrun{

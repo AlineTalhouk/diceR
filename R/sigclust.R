@@ -29,7 +29,7 @@
 #' 
 #' @examples
 #' data(hgsc)
-#' dat <- t(hgsc[, -1])[1:100, 1:50]
+#' dat <- hgsc[1:100, 1:50]
 #' nk <- 4
 #' cc <- consensus_cluster(dat, nk = nk, reps = 5, algorithms = "pam",
 #' progress = FALSE)

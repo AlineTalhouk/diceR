@@ -31,9 +31,11 @@ If the matrix contains \code{NA}s those are imputed by majority voting
 (after class relabeling).
 }
 \examples{
-# Calculate for a fraction of first algorithm
-data(E_imputed)
-table(k_modes(E_imputed[1:100, , 1, drop = FALSE], is.relabelled = FALSE))
+data(hgsc)
+dat <- hgsc[1:100, 1:50]
+cc <- consensus_cluster(dat, nk = 4, reps = 6, algorithms = "pam", progress =
+FALSE)
+table(k_modes(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 }
 \seealso{
 Other consensus functions: \code{\link{CSPA}},

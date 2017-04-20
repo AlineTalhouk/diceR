@@ -25,11 +25,11 @@
 #' @export
 #' @examples
 #' data(hgsc)
-#' data <- t(hgsc[, -1])[1:100, 1:50]
-#' E <- consensus_cluster(data, nk = 3:4, reps = 10, algorithms = c("hc", "km",
+#' dat <- hgsc[1:100, 1:50]
+#' E <- consensus_cluster(dat, nk = 3:4, reps = 10, algorithms = c("hc", "km",
 #' "sc"), progress = FALSE)
 #' sum(is.na(E))
-#' E_imputed <- impute_missing(E, data, 4)
+#' E_imputed <- impute_missing(E, dat, 4)
 #' sum(is.na(E_imputed))
 impute_missing <- function(E, data, nk) {
   assertthat::assert_that(is.array(E),
