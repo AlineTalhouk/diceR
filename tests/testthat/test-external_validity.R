@@ -1,4 +1,3 @@
-
 context("External validity indices")
 
 set.seed(1)

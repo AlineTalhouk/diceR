@@ -1,4 +1,3 @@
-
 context("Utility functions")
 
 test_that("relabelling outputs a integer", {

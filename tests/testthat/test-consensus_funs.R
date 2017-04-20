@@ -1,12 +1,10 @@
-
 context("Consensus functions")
 
 data(hgsc)
-dat <- t(hgsc[, -1])[1:200, 1:100]
 k <- 4
-x <- consensus_cluster(dat, nk = k, reps = 4, progress = FALSE,
+x <- consensus_cluster(hgsc, nk = k, reps = 4, progress = FALSE,
                        algorithms = c("nmf", "hc", "diana"), nmf.method = "lee")
-x_imputed <- impute_missing(x, dat, nk = k)
+x_imputed <- impute_missing(x, hgsc, nk = k)
 
 test_that("majority voting works", {
   dt <- array(c(2, 3, 2, 2, 2, 3, 1, 1, 2, 3, 2, 2, 2, 3, 1, 1), c(2, 4, 2))

@@ -1,4 +1,3 @@
-
 context("Proportion of Ambiguous Clusterings")
 
 test_that("PAC can have different bounds", {

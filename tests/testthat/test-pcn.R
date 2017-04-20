@@ -1,4 +1,3 @@
-
 context("Principal component Normal procedure")
 
 test_that("pcn simulation and selection works", {
