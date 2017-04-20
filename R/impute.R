@@ -32,7 +32,7 @@
 #' E_imputed <- impute_missing(E, data, 4)
 #' sum(is.na(E_imputed))
 impute_missing <- function(E, data, nk) {
-  assertthat::assert_that(is.array(E), is.matrix(data),
+  assertthat::assert_that(is.array(E),
                           dim(E)[1] == nrow(data),
                           as.character(nk) %in% dimnames(E)[[4]])
   idk <- match(nk, dimnames(E)[[4]])
