@@ -22,7 +22,6 @@ environment:
 
 build_script:
   - travis-tool.sh install_deps
-  - travis-tool.sh install_bioc bioDist
 
 test_script:
   - travis-tool.sh run_tests

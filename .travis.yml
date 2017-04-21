@@ -7,12 +7,12 @@ r:
  - release
  - devel
 
-bioc_packages:
- - bioDist
-
 env:
  global:
    - RGL_USE_NULL=TRUE
+   
+before_install:
+ - Rscript -e 'update.packages(ask = FALSE)'
 
 after_success:
  - travis_wait Rscript -e 'covr::codecov()'
