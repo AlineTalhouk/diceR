@@ -3,7 +3,7 @@
 diceR
 =====
 
-[![Travis-CI Build Status](https://travis-ci.com/AlineTalhouk/diceR.svg?token=R9saDTyWyg3zsFXfoa1H&branch=master)](https://travis-ci.com/AlineTalhouk/diceR) [![Coverage Status](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg)](https://codecov.io/gh/AlineTalhouk/diceR?branch=master)
+[![Travis-CI Build Status](https://travis-ci.com/AlineTalhouk/diceR.svg?token=R9saDTyWyg3zsFXfoa1H&branch=master)](https://travis-ci.com/AlineTalhouk/diceR) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?branch=master&svg=true)](https://ci.appveyor.com/project/dchiu911/diceR) [![Coverage Status](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg)](https://codecov.io/gh/AlineTalhouk/diceR?branch=master)
 
 The goal of `diceR` is to provide pipelines for generating diverse cluster ensembles in R.
 
@@ -14,7 +14,7 @@ You can install `diceR` from github with:
 
 ``` r
 # install.packages("devtools")
-# devtools::install_github("AlineTalhouk/diceR")
+devtools::install_github("AlineTalhouk/diceR")
 ```
 
 Example
