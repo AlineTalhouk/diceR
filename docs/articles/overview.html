@@ -58,7 +58,7 @@
 </h1>
                         <h4 class="author">Derek Chiu</h4>
             
-            <h4 class="date">2017-04-20</h4>
+            <h4 class="date">2017-04-21</h4>
           </div>
 
     
@@ -68,10 +68,10 @@
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>Cluster analysis is a way of “slicing and dicing” data such that we group together similar entities and separate dissimilar ones. The trouble is that there is a diverse number of clustering algorithms, each with different techniques and inputs. Thus, an automated cluster analysis pipeline is not feasible. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels are obtained after considering a variety of methods. We currently implement about 15 clustering algorithms. Although the results are relatively dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering ideologies and reach a consensus class.</p>
-<p><code>diceR</code> is currently only available on GitHub (<em>the second line below will be uncommented once the repository becomes public</em>).</p>
+<p><code>diceR</code> is currently only available on GitHub.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-<span class="co"># devtools::install_github("AlineTalhouk/diceR")</span>
-<span class="kw">library</span>(diceR)
+devtools::<span class="kw">install_github</span>(<span class="st">"AlineTalhouk/diceR"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(diceR)
 <span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(knitr)
