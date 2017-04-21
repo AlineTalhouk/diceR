@@ -25,11 +25,14 @@ knitr::opts_chunk$set(
 
 Cluster analysis is a way of "slicing and dicing" data such that we group together similar entities and separate dissimilar ones. The trouble is that there is a diverse number of clustering algorithms, each with different techniques and inputs. Thus, an automated cluster analysis pipeline is not feasible. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels are obtained after considering a variety of methods. We currently implement about 15 clustering algorithms. Although the results are relatively dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering ideologies and reach a consensus class.
 
-`diceR` is currently only available on GitHub (*the second line below will be uncommented once the repository becomes public*).
+`diceR` is currently only available on GitHub.
+
+```{r install, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("AlineTalhouk/diceR")
+```
 
 ```{r load}
-# install.packages("devtools")
-# devtools::install_github("AlineTalhouk/diceR")
 library(diceR)
 library(dplyr)
 library(ggplot2)
