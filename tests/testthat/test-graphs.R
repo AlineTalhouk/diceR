@@ -1,11 +1,9 @@
-
 context("Graphical displays")
 
 set.seed(911)
 x <- matrix(rnorm(1000), nrow = 10)
 CC1 <- consensus_cluster(x, nk = 2:4, reps = 10,
-                         algorithms = c("hc", "ap", "gmm"),
-                         progress = FALSE)
+                         algorithms = c("hc", "ap", "gmm"), progress = FALSE)
 p1 <- graph_cdf(CC1)
 
 test_that("graph_cdf object can have added/modified ggplot layers", {

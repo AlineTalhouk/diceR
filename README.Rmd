@@ -30,13 +30,12 @@ You can install `diceR` from github with:
 
 ## Example
 
-This basic example shows you how to use the main function of the package, `dice()`. A data matrix `dat` is partitioned into (a range of) `nk` clusters over `reps` bootstrap subsamples using each of the clustering `algorithms`. Clustering assignments are aggregated by the `cons.funs`.
+This basic example shows you how to use the main function of the package, `dice()`. A data matrix `hgsc` is partitioned into (a range of) `nk` clusters over `reps` bootstrap subsamples using each of the clustering `algorithms`. Clustering assignments are aggregated by the `cons.funs`.
 
 ```{r, results='hide'}
 library(diceR)
 data(hgsc)
-dat <- t(hgsc[, -1])
-obj <- dice(dat, nk = 4, reps = 5, algorithms = c("hc", "diana"),
+obj <- dice(hgsc, nk = 4, reps = 5, algorithms = c("hc", "diana"),
             cons.funs = c("kmodes", "majority"))
 ```
 

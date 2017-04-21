@@ -1,8 +1,7 @@
-
 context("Consensus functions")
 
 data(hgsc)
-dat <- t(hgsc[, -1])[1:200, 1:100]
+dat <- hgsc[1:200, 1:100]
 k <- 4
 x <- consensus_cluster(dat, nk = k, reps = 4, progress = FALSE,
                        algorithms = c("nmf", "hc", "diana"), nmf.method = "lee")

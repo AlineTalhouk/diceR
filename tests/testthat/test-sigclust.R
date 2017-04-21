@@ -1,8 +1,7 @@
-
 context("sigclust")
 
 data(hgsc)
-dat <- t(hgsc[, -1])[1:100, 1:50]
+dat <- hgsc[1:100, 1:50]
 nk <- 4
 cc <- consensus_cluster(dat, nk = 4, reps = 2, algorithms = "hc",
                         progress = FALSE)

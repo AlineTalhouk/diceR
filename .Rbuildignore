@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^data-raw$
 ^README\.Rmd$
 ^README-.*\.png$
 ^\.travis\.yml$
@@ -7,4 +8,3 @@
 ^codecov\.yml$
 ^_pkgdown\.yaml$
 ^docs$
-^LCE$

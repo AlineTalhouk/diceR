@@ -99,7 +99,7 @@ bootstrap sampled datasets ("sampled").
 \examples{
 library(dplyr)
 data(hgsc)
-dat <- t(hgsc[, -1])[1:100, 1:50]
+dat <- hgsc[1:100, 1:50]
 ref.cl <- data.frame(initCol = rownames(dat)) \%>\%
 tidyr::separate(initCol,
                 into = c("patientID", "Class"),

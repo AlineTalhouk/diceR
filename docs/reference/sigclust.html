@@ -142,7 +142,7 @@ also different.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>hgsc</span>)
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'>t</span>(<span class='no'>hgsc</span>[, -<span class='fl'>1</span>])[<span class='fl'>1</span>:<span class='fl'>100</span>, <span class='fl'>1</span>:<span class='fl'>50</span>]
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='no'>hgsc</span>[<span class='fl'>1</span>:<span class='fl'>100</span>, <span class='fl'>1</span>:<span class='fl'>50</span>]
 <span class='no'>nk</span> <span class='kw'>&lt;-</span> <span class='fl'>4</span>
 <span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>dat</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='no'>nk</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='st'>"pam"</span>,
 <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -153,7 +153,7 @@ also different.</p>
 #&gt;   ..@ raw.data  : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ...
 #&gt;   .. ..- attr(*, "dimnames")=List of 2
 #&gt;   .. .. ..$ : chr [1:100] "TCGA.04.1331_PRO.C5" "TCGA.04.1332_MES.C1" "TCGA.04.1336_DIF.C4" "TCGA.04.1337_MES.C1" ...
-#&gt;   .. .. ..$ : NULL
+#&gt;   .. .. ..$ : chr [1:50] "ABAT" "ABHD2" "ACTB" "ACTR2" ...
 #&gt;   ..@ veigval   : num [1:50] 11.81 4.51 2.66 2.29 1.84 ...
 #&gt;   ..@ vsimeigval: num [1:50] 11.81 4.51 2.66 2.29 1.84 ...
 #&gt;   ..@ simbackvar: num 0.42

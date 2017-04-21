@@ -1,4 +1,3 @@
-
 context("Similarity matrices")
 
 set.seed(1)

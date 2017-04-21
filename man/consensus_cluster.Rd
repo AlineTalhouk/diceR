@@ -101,7 +101,7 @@ The progress bar increments for every unit of \code{reps}.
 }
 \examples{
 data(hgsc)
-dat <- t(hgsc[, -1])[1:100, 1:50]
+dat <- hgsc[1:100, 1:50]
 
 # Custom distance function
 manh <- function(x) {

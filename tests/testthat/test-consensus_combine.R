@@ -1,4 +1,3 @@
-
 context("Consensus combine, evaluate, trim, and weigh")
 
 set.seed(911)

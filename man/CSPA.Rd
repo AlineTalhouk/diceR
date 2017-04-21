@@ -20,7 +20,7 @@ consensus class labels.
 }
 \examples{
 data(hgsc)
-dat <- t(hgsc[, -1])[1:100, 1:50]
+dat <- hgsc[1:100, 1:50]
 x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("hc", "diana"),
 progress = FALSE)
 CSPA(x, k = 4)

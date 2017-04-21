@@ -61,7 +61,7 @@
 #' @export
 #' @examples 
 #' data(hgsc)
-#' dat <- t(hgsc[, -1])[1:100, 1:50]
+#' dat <- hgsc[1:100, 1:50]
 #' 
 #' # Custom distance function
 #' manh <- function(x) {
@@ -269,7 +269,7 @@ cluster_other <- function(data, nk, pItem, reps, oalgs, seed.data,
                      rownames(data[ind.new, ]))
                    if (length(ap.cl) == 0) NA else ap.cl
                  },
-                 sc = stats::setNames(kernlab::specc(x, nk[k],
+                 sc = stats::setNames(kernlab::specc(as.matrix(x), nk[k],
                                                      kernel = "rbfdot")@.Data,
                                       rownames(data[ind.new, ])),
                  gmm = mclust::Mclust(x, nk[k])$classification,

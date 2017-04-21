@@ -1,4 +1,3 @@
-
 context("Consensus matrix")
 
 set.seed(1)

@@ -1,22 +1,10 @@
-#' Example data for imputation
-#'
-#' The data set is used as an example to test imputation
-#'
-#' @format An array with 489 rows, 10 columns, 12 slices
-"E_imputed"
-
-#' High grade serous cancer data from TCGA used to classify subtypes
-#'
-#' There are 321 genes and 489 samples. The first column is a gene identifier.
-#'
-#' @format A data frame with 321 rows and 490 variables
+#' Gene expression data for High Grade Serous Carcinoma from TCGA
+#' 
+#' There are 489 samples measured on 321 genes. Sample IDs are in the row names 
+#' and gene names are in the column names. This data set is used for clustering 
+#' HGSC into subtypes with prognostic significance. The cluster assignments 
+#' obtained by TCGA are indicated by the last six characters of each row name in
+#' \code{hgsc}: \code{MES.C1}, \code{IMM.C2}, \code{DIF.C4}, and \code{PRO.C5}
+#' 
+#' @format A data frame with 489 rows and 321 columns.
 "hgsc"
-
-#' Output of deprecated function ConClust using HGSC TCGA data with all 12
-#' default algorithms and 50 repetitions
-#' 
-#' The 1st dimension indicates number of samples (489), second dimension is 
-#' number of repetitions (50), third dimension is number of algorithms
-#' 
-#' @format An arrary of dimension 489 by 50 by 12 by 1
-"conClust_tcga"

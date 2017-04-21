@@ -38,8 +38,6 @@ reference:
   - sigclust
 - title: Data
   contents:
-  - conClust_tcga
-  - E_imputed
   - hgsc
 - title: Package Doc
   contents:
