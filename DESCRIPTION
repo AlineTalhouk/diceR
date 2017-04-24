@@ -7,11 +7,14 @@ Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")),
     person("Aline", "Talhouk", , "atalhouk@bccrc.ca", "aut"),
     person("Johnson", "Liu", , "gliu@bccrc.ca", "aut"))
-Description: Cluster analysis using ensemble/consensus clustering concepts.
-    Results from different algorithms are pooled using methods such as majority
-    voting, K modes, LinkCluE, etc.
+Description: Performs cluster analysis using an ensemble clustering framework.
+    Results from a diverse set of algorithms are pooled together using methods
+    such as majority voting, K-Modes, LinkCluE, and CSPA. There are options to
+    compare cluster assignments across algorithms using internal and external
+    indices, visualizations such as heatmaps, and significance testing for the
+    existence of clusters.
 Depends:
-    R (>= 3.2.3)
+    R (>= 3.3.3)
 Imports:
     abind,
     assertthat,
