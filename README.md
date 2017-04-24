@@ -5,12 +5,12 @@ diceR
 
 [![Travis-CI Build Status](https://travis-ci.org/AlineTalhouk/diceR.svg?branch=master)](https://travis-ci.org/AlineTalhouk/diceR) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?branch=master&svg=true)](https://ci.appveyor.com/project/dchiu911/diceR) [![Coverage Status](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg)](https://codecov.io/gh/AlineTalhouk/diceR?branch=master)
 
-The goal of `diceR` is to provide pipelines for generating diverse cluster ensembles in R.
+The goal of `diceR` is to provide a semi-automated framework for generating diverse cluster ensembles in R. There are a lot of nuances in cluster analysis to consider, including cluster size, choice of algorithm, and how to handle missing values. We implemented a wrapper function `dice()` that allows the user to obtain results without meddling over statistical details.
 
 Installation
 ------------
 
-You can install `diceR` from github with:
+You can install `diceR` from GitHub with:
 
 ``` r
 # install.packages("devtools")
@@ -20,7 +20,7 @@ devtools::install_github("AlineTalhouk/diceR")
 Example
 -------
 
-This basic example shows you how to use the main function of the package, `dice()`. A data matrix `hgsc` is partitioned into (a range of) `nk` clusters over `reps` bootstrap subsamples using each of the clustering `algorithms`. Clustering assignments are aggregated by the `cons.funs`.
+The following example shows how to use the main function of the package, `dice()`. A data matrix `hgsc` contains samples as rows, features as columns. It is partitioned into (a range of) `nk` clusters over `reps` bootstrap subsamples using each of the clustering `algorithms`. Clustering assignments are aggregated by the `cons.funs`.
 
 ``` r
 library(diceR)
