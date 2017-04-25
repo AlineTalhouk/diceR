@@ -30,6 +30,7 @@
 #' @author Aline Talhouk, Derek Chiu
 #' @export
 #' @examples 
+#' library(dplyr)
 #' data(hgsc)
 #' dat <- hgsc[1:100, 1:50]
 #' ref.cl <- strsplit(rownames(dat), "_") %>% 

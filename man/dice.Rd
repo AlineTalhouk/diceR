@@ -100,6 +100,7 @@ can enact \code{\link{prepare_data}} on the full dataset ("full"), or the
 bootstrap sampled datasets ("sampled").
 }
 \examples{
+library(dplyr)
 data(hgsc)
 dat <- hgsc[1:100, 1:50]
 ref.cl <- strsplit(rownames(dat), "_") \%>\% 

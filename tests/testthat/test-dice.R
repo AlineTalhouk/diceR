@@ -1,5 +1,6 @@
 context("Diverse Cluster Ensemble")
 
+library(dplyr)
 data(hgsc)
 ref.cl <- strsplit(rownames(hgsc), "_") %>% 
   purrr::map_chr(2) %>% 
