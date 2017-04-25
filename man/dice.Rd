@@ -102,7 +102,7 @@ bootstrap sampled datasets ("sampled").
 \examples{
 data(hgsc)
 dat <- hgsc[1:100, 1:50]
-ref.cl <- strsplit(rownames(hgsc), "_") \%>\% 
+ref.cl <- strsplit(rownames(dat), "_") \%>\% 
   purrr::map_chr(2) \%>\% 
   factor() \%>\% 
   as.integer()
