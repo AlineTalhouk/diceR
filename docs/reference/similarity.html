@@ -119,13 +119,12 @@ connected triple based similarity matrix.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>purrr</span>)
-<span class='fu'>set.seed</span>(<span class='fl'>1</span>)
+    <pre class="examples"><div class='input'><span class='fu'>set.seed</span>(<span class='fl'>1</span>)
 <span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rep</span>(<span class='fu'>sample</span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='fl'>800</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>100</span>)
 <span class='no'>SRS</span> <span class='kw'>&lt;-</span> <span class='fu'>srs</span>(<span class='kw'>E</span> <span class='kw'>=</span> <span class='no'>E</span>, <span class='kw'>dc</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>R</span> <span class='kw'>=</span> <span class='fl'>3</span>)
 <span class='no'>ASRS</span> <span class='kw'>&lt;-</span> <span class='fu'>asrs</span>(<span class='kw'>E</span> <span class='kw'>=</span> <span class='no'>E</span>, <span class='kw'>dc</span> <span class='kw'>=</span> <span class='fl'>0.8</span>)
 <span class='no'>CTS</span> <span class='kw'>&lt;-</span> <span class='fu'>cts</span>(<span class='kw'>E</span> <span class='kw'>=</span> <span class='no'>E</span>, <span class='kw'>dc</span> <span class='kw'>=</span> <span class='fl'>0.8</span>)
-<span class='fu'>walk</span>(<span class='fu'>list</span>(<span class='no'>SRS</span>, <span class='no'>ASRS</span>, <span class='no'>CTS</span>), <span class='no'>str</span>)</div><div class='output co'>#&gt;  num [1:100, 1:100] 1 0.0558 0.0307 0.0309 0.0307 ...
+<span class='kw'>purrr</span><span class='kw'>::</span><span class='fu'>walk</span>(<span class='fu'>list</span>(<span class='no'>SRS</span>, <span class='no'>ASRS</span>, <span class='no'>CTS</span>), <span class='no'>str</span>)</div><div class='output co'>#&gt;  num [1:100, 1:100] 1 0.0558 0.0307 0.0309 0.0307 ...
 #&gt;  num [1:100, 1:100] 1 0.66 0.609 0.646 0.646 ...
 #&gt;  num [1:100, 1:100] 1 0.848 0.767 0.794 0.78 ...</div></pre>
   </div>

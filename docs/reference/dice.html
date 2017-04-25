@@ -86,7 +86,7 @@ clusters (k).</p>
 
     <pre><span class='fu'>dice</span>(<span class='no'>data</span>, <span class='no'>nk</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>k.method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"brunet"</span>, <span class='st'>"lee"</span>), <span class='kw'>distance</span> <span class='kw'>=</span> <span class='st'>"euclidean"</span>,
-  <span class='kw'>cons.funs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"kmodes"</span>, <span class='st'>"CSPA"</span>, <span class='st'>"majority"</span>, <span class='st'>"LCE"</span>), <span class='kw'>sim.mat</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"cts"</span>,
+  <span class='kw'>cons.funs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"kmodes"</span>, <span class='st'>"majority"</span>, <span class='st'>"CSPA"</span>, <span class='st'>"LCE"</span>), <span class='kw'>sim.mat</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"cts"</span>,
   <span class='st'>"srs"</span>, <span class='st'>"asrs"</span>), <span class='kw'>prep.data</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"none"</span>, <span class='st'>"full"</span>, <span class='st'>"sampled"</span>), <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reweigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>evaluate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
@@ -96,7 +96,7 @@ clusters (k).</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>matrix with rows as observations, columns as variables</p></td>
+      <td><p>data matrix with rows as samples and columns as variables</p></td>
     </tr>
     <tr>
       <th>nk</th>
@@ -105,34 +105,36 @@ range of integers to compute multiple k</p></td>
     </tr>
     <tr>
       <th>reps</th>
-      <td><p>number of data subsamples to generate. See 
-<code><a href='consensus_cluster.html'>consensus_cluster</a></code> for details.</p></td>
+      <td><p>number of subsamples</p></td>
     </tr>
     <tr>
       <th>algorithms</th>
-      <td><p>clustering algorithms to be used in the ensemble. Current 
-options are "nmf", "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block".
-See <code><a href='consensus_cluster.html'>consensus_cluster</a></code> for details.</p></td>
+      <td><p>vector of clustering algorithms for performing consensus 
+clustering. Must be any number of the following: "nmf", "hc", "diana", 
+"km", "pam", "ap", "sc", "gmm", "block". A custom clustering algorithm can
+be used.</p></td>
     </tr>
     <tr>
       <th>k.method</th>
-      <td><p>how is k chosen? The default is to use the PAC to choose the 
-best k. Specifying an integer as a user-desired k will override the best k 
-chosen by PAC. Finally, specifying "all" will produce consensus
-results for all k. The "all" method is implicitly performed when the 
-number of k used is one.</p></td>
+      <td><p>determines the method to choose k when no reference class is 
+given. When <code>ref.cl</code> is not <code>NULL</code>, k is the number of distinct
+classes of <code>ref.cl</code>. Otherwise the input from <code>k.method</code> chooses
+k. The default is to use the PAC to choose the best k(s). Specifying an 
+integer as a user-desired k will override the best k chosen by PAC. 
+Finally, specifying "all" will produce consensus results for all k. The 
+"all" method is implicitly performed when there is only one k used.</p></td>
     </tr>
     <tr>
       <th>nmf.method</th>
       <td><p>specify NMF-based algorithms to run. By default the 
-"brunet" and "lee" algorithms are called. See
-<code><a href='consensus_cluster.html'>consensus_cluster</a></code> for details.</p></td>
+"brunet" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NMF/topics/nmf'>nmf</a></code> for
+details.</p></td>
     </tr>
     <tr>
       <th>distance</th>
-      <td><p>a vector of distance functions. Defaults to "euclidean". Can 
-use a custom distance function. See <code><a href='consensus_cluster.html'>consensus_cluster</a></code> for
-details.</p></td>
+      <td><p>a vector of distance functions. Defaults to "euclidean". 
+Other options are given in <code><a href='http://www.rdocumentation.org/packages/stats/topics/dist'>dist</a></code>. A custom distance 
+function can be used.</p></td>
     </tr>
     <tr>
       <th>cons.funs</th>
@@ -142,22 +144,25 @@ Partitioning Algorithm), "LCE" (linkage clustering ensemble)</p></td>
     </tr>
     <tr>
       <th>sim.mat</th>
-      <td><p>type of similarity matrix. One of "cts", "srs", "asrs. See 
-<code><a href='LCE.html'>LCE</a></code> for details.</p></td>
+      <td><p>similarity matrix; choices are "cts", "srs", "asrs".</p></td>
     </tr>
     <tr>
       <th>prep.data</th>
       <td><p>Prepare the data on the "full" dataset, the
-"sampled" dataset, or "none" (default). See Details.</p></td>
+"sampled" dataset, or "none" (default).</p></td>
     </tr>
     <tr>
       <th>min.var</th>
-      <td><p>minimum variability measure threshold. See
-<code><a href='prepare_data.html'>prepare_data</a></code>.</p></td>
+      <td><p>minimum variability measure threshold used to filter the
+feature space for only highly variable features. Only features with a
+minimum variability measure across all samples greater than <code>min.var</code>
+will be used. If <code>type = "conventional"</code>, the standard deviation is
+the measure used, and if <code>type = "robust"</code>, the MAD is the measure
+used.</p></td>
     </tr>
     <tr>
       <th>seed</th>
-      <td><p>seed used for imputation</p></td>
+      <td><p>random seed for knn imputation reproducibility</p></td>
     </tr>
     <tr>
       <th>trim</th>
@@ -183,17 +188,15 @@ is not <code>NULL</code>, then external validity indices will also be computed.<
     </tr>
     <tr>
       <th>plot</th>
-      <td><p>logical; if <code>TRUE</code>, <code><a href='graphs.html'>graph_all</a></code> is called and 
-relevant graphs are outputted. Ignored if <code>evaluate = FALSE</code>.</p></td>
+      <td><p>logical; if <code>TRUE</code>, <code>graph_all</code> is called</p></td>
     </tr>
     <tr>
       <th>ref.cl</th>
-      <td><p>reference class; a vector of length equal to the number of 
-observations.</p></td>
+      <td><p>reference class</p></td>
     </tr>
     <tr>
       <th>progress</th>
-      <td><p>logical; if <code>TRUE</code> (default), progress bar is shown.</p></td>
+      <td><p>logical; should a progress bar be displayed?</p></td>
     </tr>
     </table>
     
@@ -219,14 +222,10 @@ bootstrap sampled datasets ("sampled").</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)
-<span class='fu'>data</span>(<span class='no'>hgsc</span>)
+    <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>hgsc</span>)
 <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='no'>hgsc</span>[<span class='fl'>1</span>:<span class='fl'>100</span>, <span class='fl'>1</span>:<span class='fl'>50</span>]
-<span class='no'>ref.cl</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>initCol</span> <span class='kw'>=</span> <span class='fu'>rownames</span>(<span class='no'>dat</span>)) <span class='kw'>%&gt;%</span>
-<span class='kw'>tidyr</span><span class='kw'>::</span><span class='fu'>separate</span>(<span class='no'>initCol</span>,
-                <span class='kw'>into</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"patientID"</span>, <span class='st'>"Class"</span>),
-                <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>) <span class='kw'>%&gt;%</span>
-  <span class='kw'>magrittr</span><span class='kw'>::</span><span class='fu'>use_series</span>(<span class='no'>Class</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>ref.cl</span> <span class='kw'>&lt;-</span> <span class='fu'>strsplit</span>(<span class='fu'>rownames</span>(<span class='no'>dat</span>), <span class='st'>"_"</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw'>purrr</span><span class='kw'>::</span><span class='fu'>map_chr</span>(<span class='fl'>2</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>factor</span>() <span class='kw'>%&gt;%</span>
   <span class='fu'>as.integer</span>()
 <span class='no'>dice.obj</span> <span class='kw'>&lt;-</span> <span class='fu'>dice</span>(<span class='no'>dat</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='st'>"hc"</span>, <span class='kw'>cons.funs</span> <span class='kw'>=</span>

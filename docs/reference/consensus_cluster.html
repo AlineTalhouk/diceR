@@ -115,9 +115,9 @@ algorithm</p></td>
     <tr>
       <th>algorithms</th>
       <td><p>vector of clustering algorithms for performing consensus 
-clustering. Must be any number of the following: "nmf", 
-"hc", "diana", "km", "pam", "ap", "sc", "gmm", "block". See details. Can
-use a custom clustering algorithm. See example.</p></td>
+clustering. Must be any number of the following: "nmf", "hc", "diana", 
+"km", "pam", "ap", "sc", "gmm", "block". A custom clustering algorithm can
+be used.</p></td>
     </tr>
     <tr>
       <th>nmf.method</th>
@@ -127,9 +127,9 @@ details.</p></td>
     </tr>
     <tr>
       <th>distance</th>
-      <td><p>a vector of distance functions. Defaults to "euclidean".
-Other options are given in <code><a href='http://www.rdocumentation.org/packages/stats/topics/dist'>dist</a></code>. See example for usage
-of a custom distance function.</p></td>
+      <td><p>a vector of distance functions. Defaults to "euclidean". 
+Other options are given in <code><a href='http://www.rdocumentation.org/packages/stats/topics/dist'>dist</a></code>. A custom distance 
+function can be used.</p></td>
     </tr>
     <tr>
       <th>prep.data</th>
@@ -196,7 +196,8 @@ file name. Only applicable when <code>dir</code> is not <code>NULL</code>.</p></
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The clustering algorithms provided are:</p><ul>
+    <p>See examples for how to use custom algorithms and distance functions. The
+default clustering algorithms provided are:</p><ul>
 <li><p>"nmf": Nonnegative Matrix Factorization using Kullback-Leibler Divergence</p></li>
 <li><p>"nmfEucl": Nonnegative Matrix Factorization using Euclidean distance</p></li>
 <li><p>"hc": Hierarchical Clustering</p></li>

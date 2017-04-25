@@ -63,18 +63,18 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#dicer" class="anchor"></a>diceR</h1></div>
 
-<p>The goal of <code>diceR</code> is to provide pipelines for generating diverse cluster ensembles in R.</p>
+<p>The goal of <code>diceR</code> is to provide a semi-automated framework for generating diverse cluster ensembles in R. There are a lot of nuances in cluster analysis to consider, including cluster size, choice of algorithm, and how to handle missing values. We implemented a wrapper function <code><a href="reference/dice.html">dice()</a></code> that allows the user to obtain results without meddling over statistical details.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install <code>diceR</code> from github with:</p>
+<p>You can install <code>diceR</code> from GitHub with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 devtools::<span class="kw">install_github</span>(<span class="st">"AlineTalhouk/diceR"</span>)</code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<p>This basic example shows you how to use the main function of the package, <code><a href="reference/dice.html">dice()</a></code>. A data matrix <code>hgsc</code> is partitioned into (a range of) <code>nk</code> clusters over <code>reps</code> bootstrap subsamples using each of the clustering <code>algorithms</code>. Clustering assignments are aggregated by the <code>cons.funs</code>.</p>
+<p>The following example shows how to use the main function of the package, <code><a href="reference/dice.html">dice()</a></code>. A data matrix <code>hgsc</code> contains samples as rows, features as columns. It is partitioned into (a range of) <code>nk</code> clusters over <code>reps</code> bootstrap subsamples using each of the clustering <code>algorithms</code>. Clustering assignments are aggregated by the <code>cons.funs</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(diceR)
 <span class="kw">data</span>(hgsc)
 obj &lt;-<span class="st"> </span><span class="kw"><a href="reference/dice.html">dice</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">4</span>, <span class="dt">reps =</span> <span class="dv">5</span>, <span class="dt">algorithms =</span> <span class="kw">c</span>(<span class="st">"hc"</span>, <span class="st">"diana"</span>),
