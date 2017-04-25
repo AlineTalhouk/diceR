@@ -41,7 +41,7 @@
 #' str(dice.obj, max.level = 2)
 dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                  nmf.method = c("brunet", "lee"), distance = "euclidean",
-                 cons.funs = c("kmodes", "CSPA", "majority", "LCE"),
+                 cons.funs = c("kmodes", "majority", "CSPA", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
                  prep.data = c("none", "full", "sampled"), min.var = 1,
                  seed = 1, trim = FALSE, reweigh = FALSE, n = 5, 
