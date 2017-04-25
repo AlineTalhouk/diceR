@@ -100,15 +100,11 @@ can enact \code{\link{prepare_data}} on the full dataset ("full"), or the
 bootstrap sampled datasets ("sampled").
 }
 \examples{
-library(dplyr)
 data(hgsc)
 dat <- hgsc[1:100, 1:50]
-ref.cl <- data.frame(initCol = rownames(dat)) \%>\%
-tidyr::separate(initCol,
-                into = c("patientID", "Class"),
-                sep = "_") \%>\%
-  magrittr::use_series(Class) \%>\%
-  factor() \%>\%
+ref.cl <- strsplit(rownames(hgsc), "_") \%>\% 
+  purrr::map_chr(2) \%>\% 
+  factor() \%>\% 
   as.integer()
 dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = "hc", cons.funs =
 "kmodes", ref.cl = ref.cl, progress = FALSE)

@@ -1,11 +1,8 @@
 context("Diverse Cluster Ensemble")
 
 data(hgsc)
-ref.cl <- data.frame(initCol = rownames(hgsc)) %>%
-  tidyr::separate(initCol,
-                  into = c("patientID", "Class"),
-                  sep = "_") %>% 
-  use_series(Class) %>% 
+ref.cl <- strsplit(rownames(hgsc), "_") %>% 
+  purrr::map_chr(2) %>% 
   factor() %>% 
   as.integer()
 
