@@ -3,7 +3,8 @@
 #' Runs consensus clustering across subsamples of the data, clustering 
 #' algorithms, and cluster sizes.
 #' 
-#' The clustering algorithms provided are:
+#' See examples for how to use custom algorithms and distance functions. The
+#' default clustering algorithms provided are:
 #' \itemize{
 #'   \item{"nmf": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence} 
 #'   \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
@@ -29,15 +30,15 @@
 #'   algorithm
 #' @param reps number of subsamples
 #' @param algorithms vector of clustering algorithms for performing consensus 
-#'   clustering. Must be any number of the following: "nmf", 
-#'   "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block". See details. Can
-#'   use a custom clustering algorithm. See example.
+#'   clustering. Must be any number of the following: "nmf", "hc", "diana", 
+#'   "km", "pam", "ap", "sc", "gmm", "block". A custom clustering algorithm can
+#'   be used.
 #' @param nmf.method specify NMF-based algorithms to run. By default the 
 #'   "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 #'   details.
-#' @param distance a vector of distance functions. Defaults to "euclidean".
-#'   Other options are given in \code{\link[stats]{dist}}. See example for usage
-#'   of a custom distance function.
+#' @param distance a vector of distance functions. Defaults to "euclidean". 
+#'   Other options are given in \code{\link[stats]{dist}}. A custom distance 
+#'   function can be used.
 #' @param prep.data Prepare the data on the "full" dataset, the
 #'   "sampled" dataset, or "none" (default).
 #' @inheritParams prepare_data

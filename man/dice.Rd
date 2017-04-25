@@ -20,9 +20,9 @@ range of integers to compute multiple k}
 \item{reps}{number of subsamples}
 
 \item{algorithms}{vector of clustering algorithms for performing consensus 
-clustering. Must be any number of the following: "nmf", 
-"hc", "diana", "km", "pam", "ap", "sc", "gmm", "block". See details. Can
-use a custom clustering algorithm. See example.}
+clustering. Must be any number of the following: "nmf", "hc", "diana", 
+"km", "pam", "ap", "sc", "gmm", "block". A custom clustering algorithm can
+be used.}
 
 \item{k.method}{determines the method to choose k when no reference class is 
 given. When \code{ref.cl} is not \code{NULL}, k is the number of distinct
@@ -36,9 +36,9 @@ Finally, specifying "all" will produce consensus results for all k. The
 "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 details.}
 
-\item{distance}{a vector of distance functions. Defaults to "euclidean".
-Other options are given in \code{\link[stats]{dist}}. See example for usage
-of a custom distance function.}
+\item{distance}{a vector of distance functions. Defaults to "euclidean". 
+Other options are given in \code{\link[stats]{dist}}. A custom distance 
+function can be used.}
 
 \item{cons.funs}{consensus functions to use. Current options are "kmodes" 
 (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity 
