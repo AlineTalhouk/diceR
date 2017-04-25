@@ -8,44 +8,16 @@
 #' can enact \code{\link{prepare_data}} on the full dataset ("full"), or the
 #' bootstrap sampled datasets ("sampled").
 #' 
-#' @param data matrix with rows as observations, columns as variables
-#' @param nk number of clusters (k) requested; can specify a single integer or a
-#'   range of integers to compute multiple k
-#' @param reps number of data subsamples to generate. See 
-#'   \code{\link{consensus_cluster}} for details.
-#' @param algorithms clustering algorithms to be used in the ensemble. Current 
-#'   options are "nmf", "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block".
-#'   See \code{\link{consensus_cluster}} for details.
-#' @param k.method how is k chosen? The default is to use the PAC to choose the 
-#'   best k. Specifying an integer as a user-desired k will override the best k 
-#'   chosen by PAC. Finally, specifying "all" will produce consensus
-#'   results for all k. The "all" method is implicitly performed when the 
-#'   number of k used is one.
-#' @param nmf.method specify NMF-based algorithms to run. By default the 
-#'   "brunet" and "lee" algorithms are called. See
-#'   \code{\link{consensus_cluster}} for details.
-#' @param distance a vector of distance functions. Defaults to "euclidean". Can 
-#'   use a custom distance function. See \code{\link{consensus_cluster}} for
-#'   details.
 #' @param cons.funs consensus functions to use. Current options are "kmodes" 
 #'   (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity 
 #'   Partitioning Algorithm), "LCE" (linkage clustering ensemble)
-#' @param sim.mat type of similarity matrix. One of "cts", "srs", "asrs. See 
-#'   \code{\link{LCE}} for details.
-#' @param prep.data Prepare the data on the "full" dataset, the
-#'   "sampled" dataset, or "none" (default). See Details.
-#' @param min.var minimum variability measure threshold. See
-#'   \code{\link{prepare_data}}.
-#' @param seed seed used for imputation
 #' @param evaluate logical; if \code{TRUE} (default), validity indices are 
 #'   returned. Internal validity indices are always computed. If \code{ref.cl} 
 #'   is not \code{NULL}, then external validity indices will also be computed.
-#' @param plot logical; if \code{TRUE}, \code{\link{graph_all}} is called and 
-#'   relevant graphs are outputted. Ignored if \code{evaluate = FALSE}.
-#' @param ref.cl reference class; a vector of length equal to the number of 
-#'   observations.
-#' @param progress logical; if \code{TRUE} (default), progress bar is shown.
+#' @inheritParams consensus_cluster
 #' @inheritParams consensus_evaluate
+#' @inheritParams LCE
+#' @inheritParams impute_knn
 #' @return A list with the following elements
 #' \item{E}{raw clustering ensemble object}
 #' \item{Eknn}{clustering ensemble object with knn imputation used on \code{E}}

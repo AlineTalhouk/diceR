@@ -12,46 +12,51 @@ dice(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   plot = FALSE, ref.cl = NULL, progress = TRUE)
 }
 \arguments{
-\item{data}{matrix with rows as observations, columns as variables}
+\item{data}{data matrix with rows as samples and columns as variables}
 
 \item{nk}{number of clusters (k) requested; can specify a single integer or a
 range of integers to compute multiple k}
 
-\item{reps}{number of data subsamples to generate. See 
-\code{\link{consensus_cluster}} for details.}
+\item{reps}{number of subsamples}
 
-\item{algorithms}{clustering algorithms to be used in the ensemble. Current 
-options are "nmf", "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block".
-See \code{\link{consensus_cluster}} for details.}
+\item{algorithms}{vector of clustering algorithms for performing consensus 
+clustering. Must be any number of the following: "nmf", 
+"hc", "diana", "km", "pam", "ap", "sc", "gmm", "block". See details. Can
+use a custom clustering algorithm. See example.}
 
-\item{k.method}{how is k chosen? The default is to use the PAC to choose the 
-best k. Specifying an integer as a user-desired k will override the best k 
-chosen by PAC. Finally, specifying "all" will produce consensus
-results for all k. The "all" method is implicitly performed when the 
-number of k used is one.}
+\item{k.method}{determines the method to choose k when no reference class is 
+given. When \code{ref.cl} is not \code{NULL}, k is the number of distinct
+classes of \code{ref.cl}. Otherwise the input from \code{k.method} chooses
+k. The default is to use the PAC to choose the best k(s). Specifying an 
+integer as a user-desired k will override the best k chosen by PAC. 
+Finally, specifying "all" will produce consensus results for all k. The 
+"all" method is implicitly performed when there is only one k used.}
 
 \item{nmf.method}{specify NMF-based algorithms to run. By default the 
-"brunet" and "lee" algorithms are called. See
-\code{\link{consensus_cluster}} for details.}
-
-\item{distance}{a vector of distance functions. Defaults to "euclidean". Can 
-use a custom distance function. See \code{\link{consensus_cluster}} for
+"brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 details.}
+
+\item{distance}{a vector of distance functions. Defaults to "euclidean".
+Other options are given in \code{\link[stats]{dist}}. See example for usage
+of a custom distance function.}
 
 \item{cons.funs}{consensus functions to use. Current options are "kmodes" 
 (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity 
 Partitioning Algorithm), "LCE" (linkage clustering ensemble)}
 
-\item{sim.mat}{type of similarity matrix. One of "cts", "srs", "asrs. See 
-\code{\link{LCE}} for details.}
+\item{sim.mat}{similarity matrix; choices are "cts", "srs", "asrs".}
 
 \item{prep.data}{Prepare the data on the "full" dataset, the
-"sampled" dataset, or "none" (default). See Details.}
+"sampled" dataset, or "none" (default).}
 
-\item{min.var}{minimum variability measure threshold. See
-\code{\link{prepare_data}}.}
+\item{min.var}{minimum variability measure threshold used to filter the
+feature space for only highly variable features. Only features with a
+minimum variability measure across all samples greater than \code{min.var}
+will be used. If \code{type = "conventional"}, the standard deviation is
+the measure used, and if \code{type = "robust"}, the MAD is the measure
+used.}
 
-\item{seed}{seed used for imputation}
+\item{seed}{random seed for knn imputation reproducibility}
 
 \item{trim}{logical; if \code{TRUE}, algorithms that score low on internal 
 indices will be trimmed out}
@@ -67,13 +72,11 @@ number of algorithms is less than \code{n} no trimming is done.}
 returned. Internal validity indices are always computed. If \code{ref.cl} 
 is not \code{NULL}, then external validity indices will also be computed.}
 
-\item{plot}{logical; if \code{TRUE}, \code{\link{graph_all}} is called and 
-relevant graphs are outputted. Ignored if \code{evaluate = FALSE}.}
+\item{plot}{logical; if \code{TRUE}, \code{graph_all} is called}
 
-\item{ref.cl}{reference class; a vector of length equal to the number of 
-observations.}
+\item{ref.cl}{reference class}
 
-\item{progress}{logical; if \code{TRUE} (default), progress bar is shown.}
+\item{progress}{logical; should a progress bar be displayed?}
 }
 \value{
 A list with the following elements
