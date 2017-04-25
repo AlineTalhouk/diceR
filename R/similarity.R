@@ -15,13 +15,12 @@
 #' @export
 #' 
 #' @examples 
-#' library(purrr)
 #' set.seed(1)
 #' E <- matrix(rep(sample(1:4, 800, replace = TRUE)), nrow = 100)
 #' SRS <- srs(E = E, dc = 0.8, R = 3)
 #' ASRS <- asrs(E = E, dc = 0.8)
 #' CTS <- cts(E = E, dc = 0.8)
-#' walk(list(SRS, ASRS, CTS), str)
+#' purrr::walk(list(SRS, ASRS, CTS), str)
 srs <- function(E, dc, R) {
   assertthat::assert_that(is.matrix(E), is.numeric(E),
                           is.numeric(R), is_pos_int(R), dc >= 0 && dc <= 1)
