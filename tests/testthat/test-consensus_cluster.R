@@ -1,6 +1,7 @@
 context("Consensus clustering")
 
 data(hgsc)
+hgsc <- hgsc[1:100, 1:50]
 
 test_that("No algorithms means all algorithms, output is an array", {
   x1 <- consensus_cluster(hgsc, nk = 4, reps = 1, progress = FALSE)

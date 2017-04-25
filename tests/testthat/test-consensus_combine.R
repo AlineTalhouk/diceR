@@ -21,9 +21,8 @@ test_that("combining results has expected lengths", {
 test_that("evaluation works with reference class and can plot", {
   cons.cl <- matrix(sample(1:4, 400, replace = TRUE), ncol = 4,
                     dimnames = list(NULL, LETTERS[1:4]))
-  expect_error(consensus_evaluate(x, CC1, CC2, cons.cl = cons.cl, plot = TRUE),
-               NA)
-  expect_length(consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, plot = FALSE),
+  expect_length(consensus_evaluate(x, CC1, CC2, cons.cl = cons.cl,
+                                   ref.cl = ref.cl, plot = TRUE),
                 5)
 })
 
