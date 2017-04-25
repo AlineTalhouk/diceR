@@ -66,6 +66,12 @@ impute_missing <- function(E, data, nk) {
 #' @note We consider 5 nearest neighbours and the minimum vote for definite 
 #'   decision is 3.
 #' @export
+#' @examples 
+#' data(hgsc)
+#' dat <- hgsc[1:100, 1:50]
+#' x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("km", "hc",
+#' "diana"), progress = FALSE)
+#' x <- apply(x, 2:4, impute_knn, data = dat, seed = 1)
 impute_knn <- function(x, data, seed = 123456) {
   set.seed(seed)
   ind <- !is.na(x)
