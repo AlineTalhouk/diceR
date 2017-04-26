@@ -58,7 +58,7 @@
 #'   each sample, and a column for each subsample. Each entry represents a class
 #'   membership.
 #' @author Derek Chiu, Aline Talhouk
-#' @import mclust
+#' @importFrom mclust mclustBIC
 #' @export
 #' @examples 
 #' data(hgsc)
