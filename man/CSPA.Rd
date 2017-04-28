@@ -15,7 +15,7 @@ CSPA(E, k)
 cluster assignments for the consensus class
 }
 \description{
-Performs hierarchical clustering on a stack of consensus matrices to obtain 
+Performs hierarchical clustering on a stack of consensus matrices to obtain
 consensus class labels.
 }
 \examples{

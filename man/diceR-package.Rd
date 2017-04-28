@@ -5,8 +5,8 @@
 \alias{diceR-package}
 \title{diceR}
 \description{
-The diceR package performs Consensus Clustering, an ensemble clustering 
+The diceR package performs Consensus Clustering, an ensemble clustering
 algorithm that pools together results from different clustering realizations.
-Each realization uses a unique combination of observations and diverse 
+Each realization uses a unique combination of observations and diverse
 clustering algorithms.
 }

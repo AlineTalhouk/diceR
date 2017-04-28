@@ -71,6 +71,6 @@ pcn_select <- function(data.sim, cl, type = c("rep", "range"), int = 5) {
 #' @noRd
 sil_widths <- function(data, cl) {
   sw <- cluster::silhouette(cl, stats::dist(data))[, "sil_width"]
-  return(data.frame(fN = mean(sw < 0), 
+  return(data.frame(fN = mean(sw < 0),
                     aP = mean(sw[sw > 0])))
 }

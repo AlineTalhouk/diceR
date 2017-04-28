@@ -56,8 +56,8 @@ used.}
 
 \item{seed.nmf}{random seed to use for NMF-based algorithms}
 
-\item{seed.data}{seed to use to ensure each algorithm operates on the same set
-of subsamples}
+\item{seed.data}{seed to use to ensure each algorithm operates on the same
+set of subsamples}
 
 \item{save}{logical; if \code{TRUE}, the returned object will be saved at
 each iteration as well as at the end.}
@@ -83,15 +83,18 @@ algorithms, and cluster sizes.
 See examples for how to use custom algorithms and distance functions. The
 default clustering algorithms provided are:
 \itemize{
-  \item{"nmf": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence}
-  \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
+  \item{"nmf": }{Nonnegative Matrix Factorization using Kullback-Leibler
+  Divergence}
+  \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean
+  distance}
   \item{"hc": }{Hierarchical Clustering}
   \item{"diana": }{DIvisive ANAlysis Clustering}
   \item{"km": }{K-Means Clustering}
   \item{"pam": }{Partition Around Mediods}
   \item{"ap": }{Affinity Propagation}
   \item{"sc": }{Spectral Clustering using Radial-Basis kernel function}
-  \item{"gmm": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm}
+  \item{"gmm": }{Gaussian Mixture Model using Bayesian Information Criterion
+  on EM algorithm}
   \item{"block": }{Biclustering using a latent block model}
 }
 

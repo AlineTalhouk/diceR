@@ -1,18 +1,18 @@
 #' Diverse Clustering Ensemble
-#' 
-#' Runs consensus clustering across subsamples, algorithms, and number of 
+#'
+#' Runs consensus clustering across subsamples, algorithms, and number of
 #' clusters (k).
-#' 
+#'
 #' There are three ways to handle the input data before clustering via argument
 #' \code{prep.data}. The default is to use the raw data as-is ("none"). Or, we
 #' can enact \code{\link{prepare_data}} on the full dataset ("full"), or the
 #' bootstrap sampled datasets ("sampled").
-#' 
-#' @param cons.funs consensus functions to use. Current options are "kmodes" 
-#'   (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity 
+#'
+#' @param cons.funs consensus functions to use. Current options are "kmodes"
+#'   (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity
 #'   Partitioning Algorithm), "LCE" (linkage clustering ensemble)
-#' @param evaluate logical; if \code{TRUE} (default), validity indices are 
-#'   returned. Internal validity indices are always computed. If \code{ref.cl} 
+#' @param evaluate logical; if \code{TRUE} (default), validity indices are
+#'   returned. Internal validity indices are always computed. If \code{ref.cl}
 #'   is not \code{NULL}, then external validity indices will also be computed.
 #' @inheritParams consensus_cluster
 #' @inheritParams consensus_evaluate
@@ -29,13 +29,13 @@
 #' otherwise \code{NULL}}
 #' @author Aline Talhouk, Derek Chiu
 #' @export
-#' @examples 
+#' @examples
 #' library(dplyr)
 #' data(hgsc)
 #' dat <- hgsc[1:100, 1:50]
-#' ref.cl <- strsplit(rownames(dat), "_") %>% 
-#'   purrr::map_chr(2) %>% 
-#'   factor() %>% 
+#' ref.cl <- strsplit(rownames(dat), "_") %>%
+#'   purrr::map_chr(2) %>%
+#'   factor() %>%
 #'   as.integer()
 #' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = "hc", cons.funs =
 #' "kmodes", ref.cl = ref.cl, progress = FALSE)
@@ -45,14 +45,14 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                  cons.funs = c("kmodes", "majority", "CSPA", "LCE"),
                  sim.mat = c("cts", "srs", "asrs"),
                  prep.data = c("none", "full", "sampled"), min.var = 1,
-                 seed = 1, trim = FALSE, reweigh = FALSE, n = 5, 
+                 seed = 1, trim = FALSE, reweigh = FALSE, n = 5,
                  evaluate = TRUE, plot = FALSE, ref.cl = NULL,
                  progress = TRUE) {
-  
+
   # Check that inputs are correct
   assertthat::assert_that(length(dim(data)) == 2)
   prep.data <- match.arg(prep.data)
-  
+
   # Generate Diverse Cluster Ensemble
   E <- consensus_cluster(data = data, nk = nk, reps = reps,
                          algorithms = algorithms, nmf.method = nmf.method,
@@ -60,7 +60,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                          min.var = min.var, progress = progress)
   # KNN imputation
   Eknn <- apply(E, 2:4, impute_knn, data = data, seed = seed)
-  
+
   # Select k and new (trimmed and reweighed) data
   eval.obj <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl,
                                  k.method = k.method, trim = trim,
@@ -69,9 +69,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   k <- eval.obj$k
 
   # Impute remaining missing cases
-  # Ecomp <- impute_missing(Eknn, data, k)
   Ecomp <- purrr::map2(Eknn, k, impute_missing, data = data)
-  
+
   # Consensus functions
   Final <- purrr::map2(Ecomp, k, ~ {
     vapply(cons.funs, function(x) {
@@ -84,7 +83,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
     }, double(nrow(.x))) %>%
       apply(2, as.integer)
     })
-  
+
   #  If more than one k, need to prepend "k=" labels
   if (length(Ecomp) > 1) {
     Final <- purrr::map2(Final, k,
@@ -97,10 +96,10 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   } else {
     FinalR <- purrr::map(Final, ~ apply(.x, 2, relabel_class, ref.cl = ref.cl))
   }
-  FinalR <- FinalR %>% 
-    purrr::invoke(cbind, .) %>% 
+  FinalR <- FinalR %>%
+    purrr::invoke(cbind, .) %>%
     magrittr::set_rownames(rownames(data))
-  
+
   # Return evaluation output including consensus function results
   if (evaluate) {
     eval.obj2 <- consensus_evaluate(data, E, cons.cl = FinalR, ref.cl = ref.cl,
@@ -115,20 +114,20 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   if (!is.null(ref.cl)) {
     FinalR <- cbind(Reference = ref.cl, FinalR)
   }
-  
+
   # Remove list structure
   Eknn <- abind::abind(Eknn, along = 3)
   Ecomp <- abind::abind(Ecomp, along = 3)
-  
+
   return(list(E = E, Eknn = Eknn, Ecomp = Ecomp, clusters = FinalR,
               indices = indices))
 }
 
 #' Prepare data for consensus clustering
-#' 
+#'
 #' Remove variables with low signal and (optionally) scale before consensus
 #' clustering.
-#' 
+#'
 #' @param data data matrix with rows as samples and columns as variables
 #' @param scale logical; should the data be centered and scaled?
 #' @param type if we use "conventional" measures (default), then the mean and
@@ -155,7 +154,7 @@ prepare_data <- function(data, scale = TRUE,
                          min.var = 1) {
   type <- match.arg(type)
   var.fun <- switch(type, conventional = stats::sd, robust = stats::mad)
-  dat <- data %>% 
+  dat <- data %>%
     magrittr::extract(stats::complete.cases(.),
                       apply(., 2, var.fun, na.rm = TRUE) > min.var)
   if (scale) {

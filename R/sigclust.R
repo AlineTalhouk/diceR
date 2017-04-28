@@ -1,13 +1,13 @@
 #' Significant Testing of Clustering Results
-#' 
+#'
 #' Uses the SigClust K-Means algorithm to assess significance of clustering
 #' results.
-#' 
+#'
 #' This function is a wrapper for the original \code{\link[sigclust]{sigclust}},
 #' except that an additional parameter \code{k} is allows testing against any
 #' number of clusters. In addition, the default type of covariance estimation is
 #' also different.
-#' 
+#'
 #' @param x data matrix, samples are rows and features are columns
 #' @param k cluster size to test against
 #' @param nsim number of simulations
@@ -16,7 +16,7 @@
 #' @param label true class label. See \code{\link[sigclust]{sigclust}} for
 #'   details.
 #' @param icovest type of covariance matrix estimation
-#'   
+#'
 #' @return An object of class \code{sigclust}. See
 #'   \code{\link[sigclust]{sigclust}} for details.
 #' @author Hanwen Huang: \email{hanwenh@email.unc.edu}; Yufeng Liu:
@@ -26,7 +26,7 @@
 #'   Low-Sample Size Data}, \emph{Journal of the American Statistical
 #'   Association} \bold{103}(483) 1281--1293.
 #' @export
-#' 
+#'
 #' @examples
 #' data(hgsc)
 #' dat <- hgsc[1:100, 1:50]

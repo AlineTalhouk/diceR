@@ -21,7 +21,7 @@
 #' @return a consensus matrix
 #' @note When consensus is calculated over bootstrap samples, not every sample
 #'   is used in each replication. Thus, there will be scenarios where two
-#'   samples are never chosen together in any bootstrap samples. This typically 
+#'   samples are never chosen together in any bootstrap samples. This typically
 #'   happens when the number of replications is small. The coordinate in the
 #'   consensus matrix for such pairs of samples is \code{NaN} from a 0 / 0
 #'   computation. These entries are coerced to 0.
@@ -38,14 +38,14 @@ consensus_matrix <- function(data, weights = NULL) {
   data <- as.data.frame(data)
   all.IM <- purrr::map(data, indicator_matrix)
   all.CM <- purrr::map(data, connectivity_matrix)
-  sum.IM <- Reduce('+', all.IM)
+  sum.IM <- Reduce(`+`, all.IM)
   if (!is.null(weights)) {
     weighted.CM <- purrr::map2(all.CM, weights, `*`)
-    sum.CM <- Reduce('+', weighted.CM) * length(weights)
+    sum.CM <- Reduce(`+`, weighted.CM) * length(weights)
   } else {
-    sum.CM <- Reduce('+', all.CM)
+    sum.CM <- Reduce(`+`, all.CM)
   }
-  cons.mat <- Reduce('/', list(sum.CM, sum.IM))
+  cons.mat <- Reduce(`/`, list(sum.CM, sum.IM))
   cons.mat[is.nan(cons.mat)] <- 0
   return(cons.mat)
 }
@@ -54,7 +54,7 @@ consensus_matrix <- function(data, weights = NULL) {
 #' @noRd
 connectivity_matrix <- function(cls) {
   # cls is a vector of cluster assignments
-  cm <- replicate(length(cls), cls) %>% 
+  cm <- replicate(length(cls), cls) %>%
     set_colnames(names(cls))
   for (j in seq_len(length(cls))) {
     cm[, j] <- ifelse(cm[j, j] != cm[, j] | is.na(cm[, j]) |
@@ -67,7 +67,7 @@ connectivity_matrix <- function(cls) {
 #' @noRd
 indicator_matrix <- function(cls) {
   # cls is a vector of cluster assignments
-  im <- replicate(length(cls), cls) %>% 
+  im <- replicate(length(cls), cls) %>%
     set_colnames(names(cls))
   for (j in seq_len(length(cls))) {
     im[, j] <- ifelse(is.na(im[, j]) | is.na(im[j, j]), 0, 1)
