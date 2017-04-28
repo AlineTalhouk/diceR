@@ -19,8 +19,8 @@ range of integers to compute multiple k}
 
 \item{reps}{number of subsamples}
 
-\item{algorithms}{vector of clustering algorithms for performing consensus 
-clustering. Must be any number of the following: "nmf", "hc", "diana", 
+\item{algorithms}{vector of clustering algorithms for performing consensus
+clustering. Must be any number of the following: "nmf", "hc", "diana",
 "km", "pam", "ap", "sc", "gmm", "block". A custom clustering algorithm can
 be used.}
 
@@ -32,12 +32,12 @@ integer as a user-desired k will override the best k chosen by PAC.
 Finally, specifying "all" will produce consensus results for all k. The 
 "all" method is implicitly performed when there is only one k used.}
 
-\item{nmf.method}{specify NMF-based algorithms to run. By default the 
+\item{nmf.method}{specify NMF-based algorithms to run. By default the
 "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 details.}
 
-\item{distance}{a vector of distance functions. Defaults to "euclidean". 
-Other options are given in \code{\link[stats]{dist}}. A custom distance 
+\item{distance}{a vector of distance functions. Defaults to "euclidean".
+Other options are given in \code{\link[stats]{dist}}. A custom distance
 function can be used.}
 
 \item{cons.funs}{consensus functions to use. Current options are "kmodes" 
