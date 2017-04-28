@@ -89,11 +89,11 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   } else if (is.null(k.method)) {
     k <- pac %>%
       use_series("k") %>%
-      extract(apply(pac[, -1, drop = FALSE], 2, which.min) %>%
-                table() %>%
-                extract(is_in(., max(.))) %>%
-                names() %>%
-                as.numeric()) %>%
+      magrittr::extract(apply(pac[, -1, drop = FALSE], 2, which.min) %>%
+                          table() %>%
+                          magrittr::extract(is_in(., max(.))) %>%
+                          names() %>%
+                          as.numeric()) %>%
       as.integer() %>%
       min()
   } else if (length(cons.mat) == 1 || k.method == "all") {
@@ -135,7 +135,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   # Only calculate external indices if a reference is given
   if (!is.null(ref.cl)) {
     mat.ext <- cl.mat %>%
-      extract(match(k, names(.)))
+      magrittr::extract(match(k, names(.)))
     ind.ext <- purrr::map(mat.ext, ~ data.frame(
       Algorithms = an,
       apply(.x, 2, function(cl)
@@ -190,20 +190,21 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
 
   # Separate algorithms into those from clusterCrit (main), and (others)
   z.main <- zk %>%
-    extract(!names(.) %in% c("Algorithms", "Compactness", "Connectivity") &
+    magrittr::extract(!names(.) %in% c("Algorithms", "Compactness",
+                                       "Connectivity") &
               purrr::map_lgl(., ~ all(!is.nan(.x))))
   z.other <- zk %>%
-    extract(c("Compactness", "Connectivity"))
+    magrittr::extract(c("Compactness", "Connectivity"))
 
   # Which algorithm is the best for each index?
   bests <- purrr::map2_int(z.main, names(z.main), clusterCrit::bestCriterion)
 
   max.bests <- z.main %>%
-    extract(purrr::map_int(., which.max) == bests) %>%
+    magrittr::extract(purrr::map_int(., which.max) == bests) %>%
     cbind(z.other) %>%
     multiply_by(-1)
   min.bests <- z.main %>%
-    extract(purrr::map_int(., which.min) == bests)
+    magrittr::extract(purrr::map_int(., which.min) == bests)
 
   # Determine trimmed ensemble using rank aggregation, only if there are more
   # algorithms than we want to keep
@@ -232,7 +233,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
     ak <- match(alg.keep, alg.all)
     max.bests <- max.bests[ak, ]
     min.bests <- z.main %>%
-      extract(ak, purrr::map_int(., which.min) == bests) %>%
+      magrittr::extract(ak, purrr::map_int(., which.min) == bests) %>%
       purrr::map_df(~ sum(.x) - .x)
 
     # Create multiples of each algorithm proportion to weight

@@ -39,7 +39,7 @@ impute_missing <- function(E, data, nk) {
   # Flatten the matrix
   E_relabeled <- flatten_E(E[, , , idk, drop = FALSE],
                            is.relabelled = FALSE) %>%
-    extract(, apply(., 2, function(x) !all(is.na(x))), drop = FALSE)
+    magrittr::extract(, apply(., 2, function(x) !all(is.na(x))), drop = FALSE)
   # Relabel and Majority vote
   if (ncol(E_relabeled) > 1) {
     E_complete <- apply(E_relabeled, 1, function(x) {

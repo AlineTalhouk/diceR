@@ -36,8 +36,8 @@ PAC <- function(cm, lower = 0, upper = 1) {
     pac <- NA
   } else {
     pac <- cm %>%
-      extract(lower.tri(.)) %>%
-      extract(. > lower & . < upper) %>%
+      magrittr::extract(lower.tri(.)) %>%
+      magrittr::extract(. > lower & . < upper) %>%
       length() %>%
       divide_by(., length(cm[lower.tri(cm)]))
   }
