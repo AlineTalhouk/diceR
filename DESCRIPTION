@@ -14,7 +14,7 @@ Description: Performs cluster analysis using an ensemble clustering framework.
     indices, visualizations such as heatmaps, and significance testing for the
     existence of clusters.
 Depends:
-    R (>= 3.3.3)
+    R (>= 3.3.1)
 Imports:
     abind,
     assertthat,
