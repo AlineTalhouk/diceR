@@ -22,7 +22,7 @@ The non-missing cases indicate the training set, and missing cases indicate
 the test set.
 }
 \note{
-We consider 5 nearest neighbours and the minimum vote for definite 
+We consider 5 nearest neighbours and the minimum vote for definite
   decision is 3.
 }
 \examples{

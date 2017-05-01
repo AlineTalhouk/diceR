@@ -4,7 +4,7 @@
 \alias{consensus_cluster}
 \title{Consensus clustering}
 \usage{
-consensus_cluster(data, nk = 2:4, pItem = 0.8, reps = 1000,
+consensus_cluster(data, nk = 2:4, p.item = 0.8, reps = 1000,
   algorithms = NULL, nmf.method = c("brunet", "lee"),
   distance = "euclidean", prep.data = c("none", "full", "sampled"),
   scale = TRUE, type = c("conventional", "robust"), min.var = 1,
@@ -17,22 +17,22 @@ consensus_cluster(data, nk = 2:4, pItem = 0.8, reps = 1000,
 \item{nk}{number of clusters (k) requested; can specify a single integer or a
 range of integers to compute multiple k}
 
-\item{pItem}{proportion of items to be used in subsampling within an 
+\item{p.item}{proportion of items to be used in subsampling within an
 algorithm}
 
 \item{reps}{number of subsamples}
 
-\item{algorithms}{vector of clustering algorithms for performing consensus 
-clustering. Must be any number of the following: "nmf", "hc", "diana", 
+\item{algorithms}{vector of clustering algorithms for performing consensus
+clustering. Must be any number of the following: "nmf", "hc", "diana",
 "km", "pam", "ap", "sc", "gmm", "block". A custom clustering algorithm can
 be used.}
 
-\item{nmf.method}{specify NMF-based algorithms to run. By default the 
+\item{nmf.method}{specify NMF-based algorithms to run. By default the
 "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 details.}
 
-\item{distance}{a vector of distance functions. Defaults to "euclidean". 
-Other options are given in \code{\link[stats]{dist}}. A custom distance 
+\item{distance}{a vector of distance functions. Defaults to "euclidean".
+Other options are given in \code{\link[stats]{dist}}. A custom distance
 function can be used.}
 
 \item{prep.data}{Prepare the data on the "full" dataset, the
@@ -56,42 +56,45 @@ used.}
 
 \item{seed.nmf}{random seed to use for NMF-based algorithms}
 
-\item{seed.data}{seed to use to ensure each algorithm operates on the same set
-of subsamples}
+\item{seed.data}{seed to use to ensure each algorithm operates on the same
+set of subsamples}
 
-\item{save}{logical; if \code{TRUE}, the returned object will be saved at 
+\item{save}{logical; if \code{TRUE}, the returned object will be saved at
 each iteration as well as at the end.}
 
 \item{file.name}{file name of the written object}
 
-\item{time.saved}{logical; if \code{TRUE}, the date saved is appended to the 
+\item{time.saved}{logical; if \code{TRUE}, the date saved is appended to the
 file name. Only applicable when \code{dir} is not \code{NULL}.}
 }
 \value{
-An array of dimension \code{nrow(x)} by \code{reps} by 
+An array of dimension \code{nrow(x)} by \code{reps} by
   \code{length(algorithms)} by \code{length(nk)}. Each cube of the array
-  represents a different k. Each slice of a cube is a matrix showing 
-  consensus clustering results for algorithms. The matrices have a row for 
+  represents a different k. Each slice of a cube is a matrix showing
+  consensus clustering results for algorithms. The matrices have a row for
   each sample, and a column for each subsample. Each entry represents a class
   membership.
 }
 \description{
-Runs consensus clustering across subsamples of the data, clustering 
+Runs consensus clustering across subsamples of the data, clustering
 algorithms, and cluster sizes.
 }
 \details{
 See examples for how to use custom algorithms and distance functions. The
 default clustering algorithms provided are:
 \itemize{
-  \item{"nmf": }{Nonnegative Matrix Factorization using Kullback-Leibler Divergence} 
-  \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean distance}
+  \item{"nmf": }{Nonnegative Matrix Factorization using Kullback-Leibler
+  Divergence}
+  \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean
+  distance}
   \item{"hc": }{Hierarchical Clustering}
   \item{"diana": }{DIvisive ANAlysis Clustering}
   \item{"km": }{K-Means Clustering}
   \item{"pam": }{Partition Around Mediods}
   \item{"ap": }{Affinity Propagation}
   \item{"sc": }{Spectral Clustering using Radial-Basis kernel function}
-  \item{"gmm": }{Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm} 
+  \item{"gmm": }{Gaussian Mixture Model using Bayesian Information Criterion
+  on EM algorithm}
   \item{"block": }{Biclustering using a latent block model}
 }
 

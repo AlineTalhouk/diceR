@@ -24,7 +24,7 @@ The goal of `diceR` is to provide a semi-automated framework for generating dive
 
 You can install `diceR` from GitHub with:
 
-```{r install, message=FALSE}
+```{r install, message=FALSE, eval=FALSE}
 # install.packages("devtools")
 devtools::install_github("AlineTalhouk/diceR")
 ```

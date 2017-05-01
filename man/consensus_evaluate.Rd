@@ -10,7 +10,7 @@ consensus_evaluate(data, ..., cons.cl = NULL, ref.cl = NULL,
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
 
-\item{...}{any number of objects outputted from 
+\item{...}{any number of objects outputted from
 \code{\link{consensus_cluster}}}
 
 \item{cons.cl}{matrix of cluster assignments from consensus functions such
@@ -18,23 +18,23 @@ as \code{kmodes} and \code{majority_voting}}
 
 \item{ref.cl}{reference class}
 
-\item{k.method}{determines the method to choose k when no reference class is 
+\item{k.method}{determines the method to choose k when no reference class is
 given. When \code{ref.cl} is not \code{NULL}, k is the number of distinct
 classes of \code{ref.cl}. Otherwise the input from \code{k.method} chooses
-k. The default is to use the PAC to choose the best k(s). Specifying an 
-integer as a user-desired k will override the best k chosen by PAC. 
-Finally, specifying "all" will produce consensus results for all k. The 
+k. The default is to use the PAC to choose the best k(s). Specifying an
+integer as a user-desired k will override the best k chosen by PAC.
+Finally, specifying "all" will produce consensus results for all k. The
 "all" method is implicitly performed when there is only one k used.}
 
 \item{plot}{logical; if \code{TRUE}, \code{graph_all} is called}
 
-\item{trim}{logical; if \code{TRUE}, algorithms that score low on internal 
+\item{trim}{logical; if \code{TRUE}, algorithms that score low on internal
 indices will be trimmed out}
 
 \item{reweigh}{logical; if \code{TRUE}, after trimming out poor performing
 algorithms, each algorithm is reweighed depending on its internal indices.}
 
-\item{n}{an integer specifying the top \code{n} algorithms to keep after 
+\item{n}{an integer specifying the top \code{n} algorithms to keep after
 trimming off the poor performing ones using Rank Aggregation. If the total
 number of algorithms is less than \code{n} no trimming is done.}
 }
@@ -53,9 +53,11 @@ number of algorithms is less than \code{n} no trimming is done.}
   \itemize{
     \item{\code{alg.keep} }{algorithms kept}
     \item{\code{alg.remove} }{algorithms removed}
-    \item{\code{rank.agg} }{a matrix of ranked algorithms for every internal evaluation index}
+    \item{\code{rank.agg} }{a matrix of ranked algorithms for every internal
+    evaluation index}
     \item{\code{top.list} }{final order of ranked algorithms}
-    \item{\code{data.new} }{A new version of a \code{consensus_cluster} data object}
+    \item{\code{data.new} }{A new version of a \code{consensus_cluster} data
+    object}
   }
 }
 \description{

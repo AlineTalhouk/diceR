@@ -34,22 +34,22 @@ from names in \code{mat}}
 \item{x}{an object from \code{\link{consensus_cluster}}}
 }
 \value{
-Various plots from \code{graph_*{}} functions. All plots are 
-  generated using \code{ggplot}, except for \code{graph_heatmap}, which uses 
-  \code{\link[gplots]{heatmap.2}}. Colours used in \code{graph_heatmap} and 
-  \code{graph_tracking} utilize \code{\link[RColorBrewer]{RColorBrewer}} 
+Various plots from \code{graph_*{}} functions. All plots are
+  generated using \code{ggplot}, except for \code{graph_heatmap}, which uses
+  \code{\link[gplots]{heatmap.2}}. Colours used in \code{graph_heatmap} and
+  \code{graph_tracking} utilize \code{\link[RColorBrewer]{RColorBrewer}}
   palettes.
 }
 \description{
-Graph cumulative distribution function (CDF) graphs, relative change in area 
+Graph cumulative distribution function (CDF) graphs, relative change in area
 under CDF curves, heatmaps, and cluster assignment tracking plots.
 }
 \details{
-\code{graph_cdf} plots the CDF for consensus matrices from different 
-algorithms. \code{graph_delta_area} calculates the relative change in area 
-under CDF curve between algorithms. \code{graph_heatmap} generates consensus 
-matrix heatmaps for each algorithm in \code{x}. \code{graph_tracking} tracks 
-how cluster assignments change between algorithms. \code{graph_all} is a 
+\code{graph_cdf} plots the CDF for consensus matrices from different
+algorithms. \code{graph_delta_area} calculates the relative change in area
+under CDF curve between algorithms. \code{graph_heatmap} generates consensus
+matrix heatmaps for each algorithm in \code{x}. \code{graph_tracking} tracks
+how cluster assignments change between algorithms. \code{graph_all} is a
 wrapper that runs all graphing functions.
 }
 \examples{

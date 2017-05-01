@@ -2,9 +2,9 @@ context("Diverse Cluster Ensemble")
 
 library(dplyr)
 data(hgsc)
-ref.cl <- strsplit(rownames(hgsc), "_") %>% 
-  purrr::map_chr(2) %>% 
-  factor() %>% 
+ref.cl <- strsplit(rownames(hgsc), "_") %>%
+  purrr::map_chr(2) %>%
+  factor() %>%
   as.integer()
 
 test_that("dice works with one algorithm, one consensus funs", {
@@ -13,7 +13,8 @@ test_that("dice works with one algorithm, one consensus funs", {
   expect_equal(dim(dice.obj$clusters), c(nrow(hgsc), 1))
 })
 
-test_that("dice works with multiple algorithms, consensus funs, trimming, and reference class", {
+test_that("dice works with multiple algorithms, consensus funs, trimming, and
+          reference class", {
   dice.obj <- dice(hgsc, nk = 4, reps = 5,
                    algorithms = c("hc", "diana", "pam"),
                    cons.funs = c("kmodes", "majority"),

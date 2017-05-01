@@ -9,7 +9,7 @@
 #' would consist of only 0s and 1s, and the PAC assessed on the (0, 1) interval
 #' would have a perfect score of 0. Using a (0.1, 0.9) interval for defining
 #' ambiguity is common as well.
-#' 
+#'
 #' The PAC is not, strictly speaking, an internal validity index. Originally
 #' used to choose the optimal number of clusters, here we use it to assess
 #' cluster stability. However, PAC is still agnostic any gold standard
@@ -36,8 +36,8 @@ PAC <- function(cm, lower = 0, upper = 1) {
     pac <- NA
   } else {
     pac <- cm %>%
-      extract(lower.tri(.)) %>%
-      extract(. > lower & . < upper) %>% 
+      magrittr::extract(lower.tri(.)) %>%
+      magrittr::extract(. > lower & . < upper) %>%
       length() %>%
       divide_by(., length(cm[lower.tri(cm)]))
   }

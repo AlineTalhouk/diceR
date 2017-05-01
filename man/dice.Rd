@@ -19,29 +19,29 @@ range of integers to compute multiple k}
 
 \item{reps}{number of subsamples}
 
-\item{algorithms}{vector of clustering algorithms for performing consensus 
-clustering. Must be any number of the following: "nmf", "hc", "diana", 
+\item{algorithms}{vector of clustering algorithms for performing consensus
+clustering. Must be any number of the following: "nmf", "hc", "diana",
 "km", "pam", "ap", "sc", "gmm", "block". A custom clustering algorithm can
 be used.}
 
-\item{k.method}{determines the method to choose k when no reference class is 
+\item{k.method}{determines the method to choose k when no reference class is
 given. When \code{ref.cl} is not \code{NULL}, k is the number of distinct
 classes of \code{ref.cl}. Otherwise the input from \code{k.method} chooses
-k. The default is to use the PAC to choose the best k(s). Specifying an 
-integer as a user-desired k will override the best k chosen by PAC. 
-Finally, specifying "all" will produce consensus results for all k. The 
+k. The default is to use the PAC to choose the best k(s). Specifying an
+integer as a user-desired k will override the best k chosen by PAC.
+Finally, specifying "all" will produce consensus results for all k. The
 "all" method is implicitly performed when there is only one k used.}
 
-\item{nmf.method}{specify NMF-based algorithms to run. By default the 
+\item{nmf.method}{specify NMF-based algorithms to run. By default the
 "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 details.}
 
-\item{distance}{a vector of distance functions. Defaults to "euclidean". 
-Other options are given in \code{\link[stats]{dist}}. A custom distance 
+\item{distance}{a vector of distance functions. Defaults to "euclidean".
+Other options are given in \code{\link[stats]{dist}}. A custom distance
 function can be used.}
 
-\item{cons.funs}{consensus functions to use. Current options are "kmodes" 
-(k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity 
+\item{cons.funs}{consensus functions to use. Current options are "kmodes"
+(k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity
 Partitioning Algorithm), "LCE" (linkage clustering ensemble)}
 
 \item{sim.mat}{similarity matrix; choices are "cts", "srs", "asrs".}
@@ -58,18 +58,18 @@ used.}
 
 \item{seed}{random seed for knn imputation reproducibility}
 
-\item{trim}{logical; if \code{TRUE}, algorithms that score low on internal 
+\item{trim}{logical; if \code{TRUE}, algorithms that score low on internal
 indices will be trimmed out}
 
 \item{reweigh}{logical; if \code{TRUE}, after trimming out poor performing
 algorithms, each algorithm is reweighed depending on its internal indices.}
 
-\item{n}{an integer specifying the top \code{n} algorithms to keep after 
+\item{n}{an integer specifying the top \code{n} algorithms to keep after
 trimming off the poor performing ones using Rank Aggregation. If the total
 number of algorithms is less than \code{n} no trimming is done.}
 
-\item{evaluate}{logical; if \code{TRUE} (default), validity indices are 
-returned. Internal validity indices are always computed. If \code{ref.cl} 
+\item{evaluate}{logical; if \code{TRUE} (default), validity indices are
+returned. Internal validity indices are always computed. If \code{ref.cl}
 is not \code{NULL}, then external validity indices will also be computed.}
 
 \item{plot}{logical; if \code{TRUE}, \code{graph_all} is called}
@@ -90,7 +90,7 @@ ensemble method}
 otherwise \code{NULL}}
 }
 \description{
-Runs consensus clustering across subsamples, algorithms, and number of 
+Runs consensus clustering across subsamples, algorithms, and number of
 clusters (k).
 }
 \details{
@@ -103,9 +103,9 @@ bootstrap sampled datasets ("sampled").
 library(dplyr)
 data(hgsc)
 dat <- hgsc[1:100, 1:50]
-ref.cl <- strsplit(rownames(dat), "_") \%>\% 
-  purrr::map_chr(2) \%>\% 
-  factor() \%>\% 
+ref.cl <- strsplit(rownames(dat), "_") \%>\%
+  purrr::map_chr(2) \%>\%
+  factor() \%>\%
   as.integer()
 dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = "hc", cons.funs =
 "kmodes", ref.cl = ref.cl, progress = FALSE)

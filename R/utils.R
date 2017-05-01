@@ -6,17 +6,17 @@ globalVariables(".")
 `%pin%` <- function(x, table) pmatch(x, table, nomatch = 0L) > 0L
 
 #' Minimize Frobenius norm for between two matrices
-#' 
+#'
 #' Finds a permutation of a matrix such that its Frobenius norm with another
 #' matrix is minimized.
-#' 
+#'
 #' Finds the permutation P of A such that \code{||PA - B||} is minimum in
 #' Frobenius norm. Uses the linear-sum assignment problem (LSAP) solver in the
 #' package \code{clue}. The default B is the identity matrix of same dimension,
 #' so that the permutation of A maximizes its trace. This procedure is useful
 #' for constructing a confusion matrix when we don't know the true class labels
 #' of a predicted class and want to compare to a reference class.
-#' 
+#'
 #' @param A data matrix we want to permute
 #' @param B matrix whose distance with the permuted A we want to minimize. By
 #' default, \code{B <- diag(nrow(A))}, so the permutation maxmizes the trace of
@@ -26,7 +26,7 @@ globalVariables(".")
 #' https://stat.ethz.ch/pipermail/r-help/2010-April/236664.html
 #' @export
 #' @examples
-#' 
+#'
 #' set.seed(1)
 #' A <- matrix(sample(1:25, size = 25, rep = FALSE), 5, 5)
 #' min_fnorm(A)
@@ -58,12 +58,12 @@ min_fnorm <- function(A, B = diag(nrow(A))) {
 #' true <- sample(1:4, 100, replace = TRUE)
 #' relabel_class(pred, true)
 relabel_class <- function(pred.cl, ref.cl) {
-  perm <- pred.cl %>% 
-    factor(levels = sort(unique(ref.cl))) %>% 
+  perm <- pred.cl %>%
+    factor(levels = sort(unique(ref.cl))) %>%
     table(., ref.cl) %>%
     min_fnorm() %>%
     use_series(perm)
-  res <- factor(pred.cl, levels = perm, labels = levels(factor(ref.cl))) %>% 
+  res <- factor(pred.cl, levels = perm, labels = levels(factor(ref.cl))) %>%
     as.integer()
   return(res)
 }

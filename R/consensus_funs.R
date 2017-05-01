@@ -1,13 +1,13 @@
 #' K-modes
-#' 
+#'
 #' Combine clustering results using K-modes.
-#' 
+#'
 #' Combine clustering results generated using different algorithms and
 #' different data perturbations by k-modes. This method is the categorical data
 #' analog of k-means clustering. Complete cases are needed: i.e. no \code{NA}s.
 #' If the matrix contains \code{NA}s those are imputed by majority voting
 #' (after class relabeling).
-#' 
+#'
 #' @param E a matrix of clusterings with number of rows equal to the number of
 #' cases to be clustered, number of columns equal to the clustering obtained by
 #' different resampling of the data, and the third dimension are the different
@@ -28,10 +28,11 @@
 k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
   # Flatten and fill in remaining missing entries with majority voting
   mv <- majority_voting(E, is.relabelled = is.relabelled)
-  flat_E <- flatten_E(E, is.relabelled = is.relabelled) %>% 
-    purrr::array_branch(margin = 1) %>% 
-    purrr::map2(mv, ~ .x %>% inset(is.na(.), .y)) %>% 
-    do.call(rbind, .) %>% 
+  flat_E <- flatten_E(E, is.relabelled = is.relabelled) %>%
+    purrr::array_branch(margin = 1) %>%
+    purrr::map2(mv, ~ .x %>%
+                  inset(is.na(.), .y)) %>%
+    do.call(rbind, .) %>%
     as.data.frame()
   # k-modes clustering if there are multiple columns of assignments
   if (ncol(flat_E) > 1) {
@@ -45,14 +46,14 @@ k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
 }
 
 #' Majority voting
-#' 
+#'
 #' Combine clustering results using majority voting.
-#' 
+#'
 #' Combine clustering results generated using different algorithms and
 #' different data perturbations by majority voting. The class of a sample is
 #' the cluster label which was selected most often across algorithms and
 #' subsamples.
-#' 
+#'
 #' @param E a matrix of clusterings with number of rows equal to the number of
 #' cases to be clustered, number of columns equal to the clustering obtained by
 #' different resampling of the data, and the third dimension are the different
@@ -71,17 +72,17 @@ k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
 #' table(majority_voting(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 majority_voting <- function(E, is.relabelled = TRUE) {
   # Flatten (and relabel) E then find most common element in every row
-  mv <- E %>% 
-    flatten_E(is.relabelled = is.relabelled) %>% 
+  mv <- E %>%
+    flatten_E(is.relabelled = is.relabelled) %>%
     apply(1, function(x) as.numeric(names(which.max(table(x)))))
   return(mv)
 }
 
 #' Cluster-based Similarity Partitioning Algorithm (CSPA)
-#' 
-#' Performs hierarchical clustering on a stack of consensus matrices to obtain 
+#'
+#' Performs hierarchical clustering on a stack of consensus matrices to obtain
 #' consensus class labels.
-#' 
+#'
 #' @param E is an array of clustering results.
 #' @param k number of clusters
 #' @return cluster assignments for the consensus class
@@ -96,20 +97,20 @@ majority_voting <- function(E, is.relabelled = TRUE) {
 #' CSPA(x, k = 4)
 CSPA <- function(E, k) {
   assertthat::assert_that(k %in% dimnames(E)[[4]])
-  cl <- consensus_combine(E, element = "matrix") %>% 
-    magrittr::extract2(as.character(k)) %>% 
-    Reduce("+", .) %>% 
-    magrittr::divide_by(dim(E)[3]) %>% 
-    stats::dist() %>% 
+  cl <- consensus_combine(E, element = "matrix") %>%
+    magrittr::extract2(as.character(k)) %>%
+    Reduce("+", .) %>%
+    magrittr::divide_by(dim(E)[3]) %>%
+    stats::dist() %>%
     hc(k = k)
   return(cl)
 }
 
 #' Linkage Clustering Ensemble
-#' 
+#'
 #' Generate a cluster assignment from a CTS, SRS, or ASRS similarity matrix.
-#' 
-#' @param E is an array of clustering results. An error is thrown if there are 
+#'
+#' @param E is an array of clustering results. An error is thrown if there are
 #'   missing values. \code{\link{impute_missing}} can be used beforehand.
 #' @param k requested number of clusters
 #' @param dc decay constant for CTS, SRS, or ASRS matrix
@@ -117,7 +118,7 @@ CSPA <- function(E, k) {
 #' @param sim.mat similarity matrix; choices are "cts", "srs", "asrs".
 #' @family consensus functions
 #' @author Johnson Liu
-#' @return a vector containing the cluster assignment from either the CTS, SRS, 
+#' @return a vector containing the cluster assignment from either the CTS, SRS,
 #'   or ASRS similarity matrices
 #' @export
 #' @examples
@@ -128,13 +129,13 @@ CSPA <- function(E, k) {
 #' \dontrun{
 #' LCE(E = x, k = 4, sim.mat = "asrs")
 #' }
-#' 
+#'
 #' x <- apply(x, 2:4, impute_knn, data = dat, seed = 1)
 #' x_imputed <- impute_missing(x, dat, nk = 4)
 #' LCE(E = x_imputed, k = 4, sim.mat = "cts")
 LCE <- function(E, k, dc = 0.8, R = 10, sim.mat = c("cts", "srs", "asrs")) {
   assertthat::assert_that(is.array(E), dc >= 0 && dc <= 1)
-                          
+
   # Check that the Cluster matrix is complete otherwise return Error
   if (anyNA(E)) stop("'E' must be complete for LCE algorithm.")
   S <- switch(match.arg(sim.mat, c("cts", "asrs", "srs")),

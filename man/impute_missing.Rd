@@ -19,7 +19,7 @@ cluster sizes.}
 }
 \value{
 If flattened matrix consists of more than one repetition, i.e. it
-  isn't a column vector, then the function returns a matrix of clusterings 
+  isn't a column vector, then the function returns a matrix of clusterings
   with complete cases imputed using majority voting, and relabelled, for
   chosen \code{k}.
 }

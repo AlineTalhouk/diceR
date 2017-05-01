@@ -49,7 +49,7 @@ When Monti et al. (2003) first introduced consensus clustering, the idea was to 
 The base function of this package is `consensus_cluster()`, which outputs cluster assignments across subsamples and algorithms, for different k (number of clusters). For example, let's say we were interested in clustering the `hgsc` data into 3 or 4 clusters, using 80% resampling on 5 replicates, for these clustering algorithms: Hierarchical Clustering, PAM, and DIvisive ANAlysis Clustering (DIANA). Euclidean distance is used for all algorithms.
 
 ```{r consensus_cluster, results='hide'}
-CC <- consensus_cluster(hgsc, nk = 3:4, pItem = 0.8, reps = 5, 
+CC <- consensus_cluster(hgsc, nk = 3:4, p.item = 0.8, reps = 5,
                         algorithms = c("hc", "pam", "diana"))
 ```
 
@@ -112,7 +112,7 @@ One can feed in `ccomb_class` (instead of `CC`) into `consensus_matrix()` to obt
 A situation might also arise where we initially decided on using 3 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. `consensus_combine()` takes in any number of ensemble objects (e.g. `CC` and `CC2`) and combines the results.
 
 ```{r consensus_combine_2, results='hide'}
-CC2 <- consensus_cluster(hgsc, nk = 3:4, pItem = 0.8, reps = 5, 
+CC2 <- consensus_cluster(hgsc, nk = 3:4, p.item = 0.8, reps = 5,
                          algorithms = "km")
 ccomb_class2 <- consensus_combine(CC, CC2, element = "class")
 ```

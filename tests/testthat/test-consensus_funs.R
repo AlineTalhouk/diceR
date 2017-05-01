@@ -20,7 +20,7 @@ test_that("k modes works with or without missing", {
   kmo.old <- klaR::kmodes(xf, 3)$cluster
   kmo.new <- k_modes(x)
   expect_equal(kmo.old, kmo.new)
-  
+
   x[3, , 1] <- NA
   kmo.missing <- k_modes(x)
   expect_false(anyNA(kmo.missing))
