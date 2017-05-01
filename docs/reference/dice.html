@@ -80,7 +80,7 @@
     </div>
 
     
-    <p>Runs consensus clustering across subsamples, algorithms, and number of 
+    <p>Runs consensus clustering across subsamples, algorithms, and number of
 clusters (k).</p>
     
 
@@ -109,37 +109,37 @@ range of integers to compute multiple k</p></td>
     </tr>
     <tr>
       <th>algorithms</th>
-      <td><p>vector of clustering algorithms for performing consensus 
-clustering. Must be any number of the following: "nmf", "hc", "diana", 
+      <td><p>vector of clustering algorithms for performing consensus
+clustering. Must be any number of the following: "nmf", "hc", "diana",
 "km", "pam", "ap", "sc", "gmm", "block". A custom clustering algorithm can
 be used.</p></td>
     </tr>
     <tr>
       <th>k.method</th>
-      <td><p>determines the method to choose k when no reference class is 
+      <td><p>determines the method to choose k when no reference class is
 given. When <code>ref.cl</code> is not <code>NULL</code>, k is the number of distinct
 classes of <code>ref.cl</code>. Otherwise the input from <code>k.method</code> chooses
-k. The default is to use the PAC to choose the best k(s). Specifying an 
-integer as a user-desired k will override the best k chosen by PAC. 
-Finally, specifying "all" will produce consensus results for all k. The 
+k. The default is to use the PAC to choose the best k(s). Specifying an
+integer as a user-desired k will override the best k chosen by PAC.
+Finally, specifying "all" will produce consensus results for all k. The
 "all" method is implicitly performed when there is only one k used.</p></td>
     </tr>
     <tr>
       <th>nmf.method</th>
-      <td><p>specify NMF-based algorithms to run. By default the 
+      <td><p>specify NMF-based algorithms to run. By default the
 "brunet" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NMF/topics/nmf'>nmf</a></code> for
 details.</p></td>
     </tr>
     <tr>
       <th>distance</th>
-      <td><p>a vector of distance functions. Defaults to "euclidean". 
-Other options are given in <code><a href='http://www.rdocumentation.org/packages/stats/topics/dist'>dist</a></code>. A custom distance 
+      <td><p>a vector of distance functions. Defaults to "euclidean".
+Other options are given in <code><a href='http://www.rdocumentation.org/packages/stats/topics/dist'>dist</a></code>. A custom distance
 function can be used.</p></td>
     </tr>
     <tr>
       <th>cons.funs</th>
-      <td><p>consensus functions to use. Current options are "kmodes" 
-(k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity 
+      <td><p>consensus functions to use. Current options are "kmodes"
+(k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity
 Partitioning Algorithm), "LCE" (linkage clustering ensemble)</p></td>
     </tr>
     <tr>
@@ -166,7 +166,7 @@ used.</p></td>
     </tr>
     <tr>
       <th>trim</th>
-      <td><p>logical; if <code>TRUE</code>, algorithms that score low on internal 
+      <td><p>logical; if <code>TRUE</code>, algorithms that score low on internal
 indices will be trimmed out</p></td>
     </tr>
     <tr>
@@ -176,14 +176,14 @@ algorithms, each algorithm is reweighed depending on its internal indices.</p></
     </tr>
     <tr>
       <th>n</th>
-      <td><p>an integer specifying the top <code>n</code> algorithms to keep after 
+      <td><p>an integer specifying the top <code>n</code> algorithms to keep after
 trimming off the poor performing ones using Rank Aggregation. If the total
 number of algorithms is less than <code>n</code> no trimming is done.</p></td>
     </tr>
     <tr>
       <th>evaluate</th>
-      <td><p>logical; if <code>TRUE</code> (default), validity indices are 
-returned. Internal validity indices are always computed. If <code>ref.cl</code> 
+      <td><p>logical; if <code>TRUE</code> (default), validity indices are
+returned. Internal validity indices are always computed. If <code>ref.cl</code>
 is not <code>NULL</code>, then external validity indices will also be computed.</p></td>
     </tr>
     <tr>

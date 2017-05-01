@@ -97,7 +97,7 @@ given weights before use in consensus functions.</p>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>any number of objects outputted from 
+      <td><p>any number of objects outputted from
 <code><a href='consensus_cluster.html'>consensus_cluster</a></code></p></td>
     </tr>
     <tr>
@@ -111,12 +111,12 @@ as <code>kmodes</code> and <code>majority_voting</code></p></td>
     </tr>
     <tr>
       <th>k.method</th>
-      <td><p>determines the method to choose k when no reference class is 
+      <td><p>determines the method to choose k when no reference class is
 given. When <code>ref.cl</code> is not <code>NULL</code>, k is the number of distinct
 classes of <code>ref.cl</code>. Otherwise the input from <code>k.method</code> chooses
-k. The default is to use the PAC to choose the best k(s). Specifying an 
-integer as a user-desired k will override the best k chosen by PAC. 
-Finally, specifying "all" will produce consensus results for all k. The 
+k. The default is to use the PAC to choose the best k(s). Specifying an
+integer as a user-desired k will override the best k chosen by PAC.
+Finally, specifying "all" will produce consensus results for all k. The
 "all" method is implicitly performed when there is only one k used.</p></td>
     </tr>
     <tr>
@@ -125,7 +125,7 @@ Finally, specifying "all" will produce consensus results for all k. The
     </tr>
     <tr>
       <th>trim</th>
-      <td><p>logical; if <code>TRUE</code>, algorithms that score low on internal 
+      <td><p>logical; if <code>TRUE</code>, algorithms that score low on internal
 indices will be trimmed out</p></td>
     </tr>
     <tr>
@@ -135,7 +135,7 @@ algorithms, each algorithm is reweighed depending on its internal indices.</p></
     </tr>
     <tr>
       <th>n</th>
-      <td><p>an integer specifying the top <code>n</code> algorithms to keep after 
+      <td><p>an integer specifying the top <code>n</code> algorithms to keep after
 trimming off the poor performing ones using Rank Aggregation. If the total
 number of algorithms is less than <code>n</code> no trimming is done.</p></td>
     </tr>
@@ -157,9 +157,11 @@ number of algorithms is less than <code>n</code> no trimming is done.</p></td>
   
     <code>alg.keep</code> algorithms kept
     <code>alg.remove</code> algorithms removed
-    <code>rank.agg</code> a matrix of ranked algorithms for every internal evaluation index
+    <code>rank.agg</code> a matrix of ranked algorithms for every internal
+    evaluation index
     <code>top.list</code> final order of ranked algorithms
-    <code>data.new</code> A new version of a <code>consensus_cluster</code> data object
+    <code>data.new</code> A new version of a <code>consensus_cluster</code> data
+    object
   
 
     
