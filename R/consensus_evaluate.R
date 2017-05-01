@@ -72,7 +72,6 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
     assertthat::assert_that(is.integer(ref.cl), nrow(data) == length(ref.cl))
 
   # Extract classes and matrices separately
-  x <- as.matrix(data)
   E <- abind::abind(list(...), along = 3)
   cl.mat <- consensus_combine(E, element = "class")
   cons.mat <- consensus_combine(E, element = "matrix")
@@ -113,19 +112,22 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   }
 
   # Internal indices
-  ind.int <- purrr::map(cl.mat, ~ data.frame(
-    Algorithms = an,
-    apply(.x, 2, function(cl)
-      clusterCrit::intCriteria(
-        traj = x, part = cl,
-        crit = c("C_index", "Calinski_Harabasz", "Davies_Bouldin", "Dunn",
-                 "McClain_Rao", "PBM", "SD_Dis", "Ray_Turi", "Tau", "Gamma",
-                 "G_plus", "Silhouette", "S_Dbw")) %>%
-        unlist()) %>% t(),
-    Compactness = apply(.x, 2, compactness, data = x),
-    Connectivity = apply(.x, 2, function(cl)
-      clValid::connectivity(Data = x, clusters = cl))) %>%
-      mutate_all(funs(structure(., names = an))))
+  ind.int <- purrr::map(cl.mat, ~ {
+    x <- as.matrix(data)
+    data.frame(
+      Algorithms = an,
+      apply(.x, 2, function(cl)
+        clusterCrit::intCriteria(
+          traj = x, part = cl,
+          crit = c("C_index", "Calinski_Harabasz", "Davies_Bouldin", "Dunn",
+                   "McClain_Rao", "PBM", "SD_Dis", "Ray_Turi", "Tau", "Gamma",
+                   "G_plus", "Silhouette", "S_Dbw")) %>%
+          unlist()) %>% t(),
+      Compactness = apply(.x, 2, compactness, data = x),
+      Connectivity = apply(.x, 2, function(cl)
+        clValid::connectivity(Data = x, clusters = cl))) %>%
+      mutate_all(funs(structure(., names = an)))
+  })
 
   # Graph all plotting functions
   if (plot) {

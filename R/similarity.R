@@ -25,7 +25,6 @@ srs <- function(E, dc, R) {
   assertthat::assert_that(is.matrix(E), is.numeric(E),
                           is.numeric(R), is_pos_int(R), dc >= 0 && dc <= 1)
   n <- nrow(E)
-  M <- ncol(E)
   E.new <- relabel_clusters(E)
   E <- E.new$newE
   no_allcl <- E.new$no_allcl
@@ -36,7 +35,7 @@ srs <- function(E, dc, R) {
     S1 <- diag(1, n) %>%
       inset(upper.tri(.), purrr::map2_dbl(
         upper_tri_row(n), upper_tri_col(n),
-        ~ (dc / (M * M)) * sum(C[E[.x, ], E[.y, ]]))) %>%
+        ~ (dc / (ncol(E) * ncol(E))) * sum(C[E[.x, ], E[.y, ]]))) %>%
       add(t(.)) %>%
       inset(row(.) == col(.), 1)
     C1 <- diag(1, no_allcl) %>%
