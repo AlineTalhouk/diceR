@@ -53,8 +53,12 @@ You can also compare the base `algorithms` with the `cons.funs` using internal e
 knitr::kable(obj$indices$internal$`4`)
 ```
 
+
 ## Pipeline
 
 This figure is a visual schematic of the pipeline that `dice()` implements.
 
 ![Ensemble Clustering pipeline.](man/figures/pipeline.png)
+
+
+Please visit the [overview](https://alinetalhouk.github.io/diceR/articles/overview.html "diceR overview") page for more detail.

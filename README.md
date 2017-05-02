@@ -22,7 +22,7 @@ You must ensure that you have the latest version of `devtools` installed.
 Example
 -------
 
-The following example shows how to use the main function of the package, `dice()`. A data matrix `hgsc` contains a subset of gene expression measurements of High Grade Serous Carcinoma Ovarian cancer patients from the Cancer Genome Atlas publically available datasets. Samples as rows, features as columns. The function below runs the package through the `dice()` function. We specofu (a range of) `nk` clusters over `reps` subsamples of the data containing 80% of the full samples. We also specifu the clustering `algorithms` to be use and the ensemble function to aggregated them `cons.funs`.
+The following example shows how to use the main function of the package, `dice()`. A data matrix `hgsc` contains a subset of gene expression measurements of High Grade Serous Carcinoma Ovarian cancer patients from the Cancer Genome Atlas publically available datasets. Samples as rows, features as columns. The function below runs the package through the `dice()` function. We specofu (a range of) `nk` clusters over `reps` subsamples of the data containing 80% of the full samples. We also specify the clustering `algorithms` to be use and the ensemble function to aggregated them `cons.funs`.
 
 ``` r
 library(diceR)
@@ -65,3 +65,5 @@ Pipeline
 This figure is a visual schematic of the pipeline that `dice()` implements.
 
 ![Ensemble Clustering pipeline.](man/figures/pipeline.png)
+
+Please visit the [overview](https://alinetalhouk.github.io/diceR/articles/overview.html "diceR overview") page for more detail.
