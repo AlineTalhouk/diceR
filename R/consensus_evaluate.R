@@ -218,7 +218,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
     rank.agg <- cbind(max.bests, min.bests) %>%
       scale(center = FALSE, scale = TRUE) %>%
       as.data.frame() %>%
-      purrr::map_df(~ alg.all[rank(.x)]) %>%
+      purrr::map_df(~ alg.all[order(.x, sample(.x))]) %>%
       t()
     top.list <- rank.agg %>%
       RankAggreg::RankAggreg(., ncol(.), method = "GA", verbose = FALSE) %>%
