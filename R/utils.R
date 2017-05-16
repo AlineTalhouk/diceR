@@ -39,7 +39,7 @@ min_fnorm <- function(A, B = diag(nrow(A))) {
     }
   }
   vec <- clue::solve_LSAP(D)
-  return(list(pmat = A[vec, ], perm = vec, ord = order(vec)))
+  list(pmat = A[vec, ], perm = vec, ord = order(vec))
 }
 
 #' Relabel classes to a standard
@@ -58,14 +58,13 @@ min_fnorm <- function(A, B = diag(nrow(A))) {
 #' true <- sample(1:4, 100, replace = TRUE)
 #' relabel_class(pred, true)
 relabel_class <- function(pred.cl, ref.cl) {
-  perm <- pred.cl %>%
+  pred.cl %>%
     factor(levels = sort(unique(ref.cl))) %>%
     table(., ref.cl) %>%
     min_fnorm() %>%
-    magrittr::use_series(perm)
-  res <- factor(pred.cl, levels = perm, labels = levels(factor(ref.cl))) %>%
+    magrittr::use_series(perm) %>%
+    factor(pred.cl, levels = ., labels = levels(factor(ref.cl))) %>%
     as.integer()
-  return(res)
 }
 
 #' Helper function for k_modes and majority_voting to flatten (and relabel) E
@@ -83,7 +82,7 @@ flatten_E <- function(E, is.relabelled) {
                     apply(flat_E[, -1, drop = FALSE], 2, relabel_class,
                           ref.cl = flat_E[, 1]))
   }
-  return(flat_E)
+  flat_E
 }
 
 #' Column min for matrix
@@ -92,7 +91,7 @@ flatten_E <- function(E, is.relabelled) {
 #' @noRd
 colMin <- function(x, na.rm = TRUE) {
   assertthat::assert_that(is.matrix(x), is.numeric(x))
-  return(apply(x, 2, min, na.rm = na.rm))
+  apply(x, 2, min, na.rm = na.rm)
 }
 
 #' Flattened row indices for upper triangular matrix elements of diag(n)
