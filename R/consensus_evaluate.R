@@ -245,7 +245,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
       rowMeans() %>%
       magrittr::multiply_by(100) %>%
       round(0) %>%
-      magrittr::divide_by(Reduce("gcd", .)) %>%
+      magrittr::divide_by(Reduce(`gcd`, .)) %>%
       purrr::set_names(alg.keep)
 
     # Generate multiples for each algorithm, adding back dimnames metadata

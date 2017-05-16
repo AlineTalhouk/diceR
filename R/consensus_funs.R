@@ -100,7 +100,7 @@ CSPA <- function(E, k) {
   assertthat::assert_that(k %in% dimnames(E)[[4]])
   cl <- consensus_combine(E, element = "matrix") %>%
     magrittr::extract2(as.character(k)) %>%
-    Reduce("+", .) %>%
+    Reduce(`+`, .) %>%
     magrittr::divide_by(dim(E)[3]) %>%
     stats::dist() %>%
     hc(k = k)
