@@ -33,13 +33,13 @@ srs <- function(E, dc, R) {
 
   for (r in seq_len(R - 1)) {
     S1 <- diag(1, n) %>%
-      inset(upper.tri(.), purrr::map2_dbl(
+      magrittr::inset(upper.tri(.), purrr::map2_dbl(
         upper_tri_row(n), upper_tri_col(n),
         ~ (dc / (ncol(E) * ncol(E))) * sum(C[E[.x, ], E[.y, ]]))) %>%
-      add(t(.)) %>%
-      inset(row(.) == col(.), 1)
+      magrittr::add(t(.)) %>%
+      magrittr::inset(row(.) == col(.), 1)
     C1 <- diag(1, no_allcl) %>%
-      inset(upper.tri(.), purrr::map2_dbl(
+      magrittr::inset(upper.tri(.), purrr::map2_dbl(
         upper_tri_row(no_allcl), upper_tri_col(no_allcl), ~ {
           Ni <- which_row(E, .x)
           Nii <- which_row(E, .y)
@@ -48,8 +48,8 @@ srs <- function(E, dc, R) {
           }
         }
       )) %>%
-      add(t(.)) %>%
-      inset(row(.) == col(.), 1)
+      magrittr::add(t(.)) %>%
+      magrittr::inset(row(.) == col(.), 1)
     S <- S1
     C <- C1
   }
@@ -80,20 +80,20 @@ asrs <- function(E, dc) {
       }
     }, double(1))
   }, double(no_allcl)) %>%
-    inset(max(.) > 0, . / max(.)) %>%
-    add(t(.)) %>%
-    inset(row(.) == col(.), 1)
+    magrittr::inset(max(.) > 0, . / max(.)) %>%
+    magrittr::add(t(.)) %>%
+    magrittr::inset(row(.) == col(.), 1)
   S <- diag(0, n) %>%
-    inset(upper.tri(.), purrr::map(seq_len(n)[-1], function(i) {
+    magrittr::inset(upper.tri(.), purrr::map(seq_len(n)[-1], function(i) {
       purrr::map_dbl(seq_len(i - 1), function(ii) {
         cse <- CS[E[i, ], E[ii, ]]
         sum(dc * cse[cse != 1]) + sum(cse == 1)
       })
     }) %>%
       purrr::flatten_dbl()) %>%
-    divide_by(M * M) %>%
-    add(t(.)) %>%
-    inset(row(.) == col(.), 1)
+    magrittr::divide_by(M * M) %>%
+    magrittr::add(t(.)) %>%
+    magrittr::inset(row(.) == col(.), 1)
   return(S)
 }
 
@@ -113,14 +113,14 @@ cts <- function(E, dc) {
     do.call(cbind, .) %>%
     t()
   wCT <- diag(0, no_allcl) %>%
-    inset(ind, ind %>%
-            purrr::array_branch(margin = 2) %>%
-            purrr::pmap_dbl(~ sum(colMin(wcl[c(.x, .y), ])))) %>%
-    inset(max(.) > 0, . / max(.)) %>%
-    add(t(.)) %>%
-    inset(row(.) == col(.), 1)
+    magrittr::inset(ind, ind %>%
+                      purrr::array_branch(margin = 2) %>%
+                      purrr::pmap_dbl(~ sum(colMin(wcl[c(.x, .y), ])))) %>%
+    magrittr::inset(max(.) > 0, . / max(.)) %>%
+    magrittr::add(t(.)) %>%
+    magrittr::inset(row(.) == col(.), 1)
   S <- diag(0, n) %>%
-    inset(upper.tri(.), purrr::map(seq_len(n)[-1], function(i) {
+    magrittr::inset(upper.tri(.), purrr::map(seq_len(n)[-1], function(i) {
       purrr::map_dbl(seq_len(i - 1), function(j) {
         Ei <- E[i, ]
         Ej <- E[j, ]
@@ -128,9 +128,9 @@ cts <- function(E, dc) {
       })
     }) %>%
       purrr::flatten_dbl()) %>%
-    divide_by(M) %>%
-    add(t(.)) %>%
-    inset(row(.) == col(.), 1)
+    magrittr::divide_by(M) %>%
+    magrittr::add(t(.)) %>%
+    magrittr::inset(row(.) == col(.), 1)
   return(S)
 }
 
@@ -151,7 +151,7 @@ relabel_clusters <- function(E) {
   newE <- matrix(0, nrow = N, ncol = M)
   for (i in seq_len(M)) {
     ucl <- sort(unique(E[, i]))
-    prevCl <- n_distinct(c(newE[, seq_len(i - 1)]))
+    prevCl <- dplyr::n_distinct(c(newE[, seq_len(i - 1)]))
     for (j in seq_along(ucl)) {
       newE[E[, i] == ucl[j], i] <- prevCl + j
     }
@@ -177,12 +177,12 @@ weigh_clusters <- function(E) {
     pc[i, E[i, ]] <- 1
   }
   wcl <- diag(0, no_allcl) %>%
-    inset(upper.tri(.), purrr::map2_dbl(
+    magrittr::inset(upper.tri(.), purrr::map2_dbl(
       upper_tri_row(no_allcl), upper_tri_col(no_allcl), ~ {
         tmp <- pc[, .x] + pc[, .y]
         ifelse(sum(tmp) > 0, sum(tmp == 2) / sum(tmp > 0), 0)
       }
     )) %>%
-    add(t(.))
+    magrittr::add(t(.))
   return(wcl)
 }

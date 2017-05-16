@@ -87,7 +87,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   #  If more than one k, need to prepend "k=" labels
   if (length(Ecomp) > 1) {
     Final <- purrr::map2(Final, k,
-                         ~ set_colnames(.x, paste0(colnames(.), " k=", .y)))
+                         ~ magrittr::set_colnames(.x, paste0(colnames(.),
+                                                             " k=",.y)))
   }
 
   # Relabel Final Clustering using reference (or first column if no reference)

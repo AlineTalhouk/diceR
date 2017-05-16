@@ -62,7 +62,7 @@ relabel_class <- function(pred.cl, ref.cl) {
     factor(levels = sort(unique(ref.cl))) %>%
     table(., ref.cl) %>%
     min_fnorm() %>%
-    use_series(perm)
+    magrittr::use_series(perm)
   res <- factor(pred.cl, levels = perm, labels = levels(factor(ref.cl))) %>%
     as.integer()
   return(res)

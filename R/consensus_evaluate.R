@@ -83,14 +83,14 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
 
   # If reference given, k is number of distinct classes
   if (!is.null(ref.cl)) {
-    k <- n_distinct(ref.cl)
+    k <- dplyr::n_distinct(ref.cl)
     # Otherwise k is chosen using the following methods
   } else if (is.null(k.method)) {
     k <- pac %>%
-      use_series("k") %>%
+      magrittr::use_series("k") %>%
       magrittr::extract(apply(pac[, -1, drop = FALSE], 2, which.min) %>%
                           table() %>%
-                          magrittr::extract(is_in(., max(.))) %>%
+                          magrittr::extract(magrittr::is_in(., max(.))) %>%
                           names() %>%
                           as.numeric()) %>%
       as.integer() %>%
@@ -204,7 +204,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   max.bests <- z.main %>%
     magrittr::extract(purrr::map_int(., which.max) == bests) %>%
     cbind(z.other) %>%
-    multiply_by(-1)
+    magrittr::multiply_by(-1)
   min.bests <- z.main %>%
     magrittr::extract(purrr::map_int(., which.min) == bests)
 
@@ -222,7 +222,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
       t()
     top.list <- rank.agg %>%
       RankAggreg::RankAggreg(., ncol(.), method = "GA", verbose = FALSE) %>%
-      use_series("top.list")
+      magrittr::use_series("top.list")
     alg.keep <- top.list[seq_len(n)]
   }
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
@@ -243,10 +243,10 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
     multiples <- cbind(as.matrix(max.bests), as.matrix(min.bests)) %>%
       prop.table(2) %>%
       rowMeans() %>%
-      multiply_by(100) %>%
+      magrittr::multiply_by(100) %>%
       round(0) %>%
-      divide_by(Reduce("gcd", .)) %>%
-      set_names(alg.keep)
+      magrittr::divide_by(Reduce("gcd", .)) %>%
+      purrr::set_names(alg.keep)
 
     # Generate multiples for each algorithm, adding back dimnames metadata
     E.trim <- purrr::array_branch(E.trim, c(3, 4)) %>%

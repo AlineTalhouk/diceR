@@ -31,7 +31,7 @@ k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
   flat_E <- flatten_E(E, is.relabelled = is.relabelled) %>%
     purrr::array_branch(margin = 1) %>%
     purrr::map2(mv, ~ .x %>%
-                  inset(is.na(.), .y)) %>%
+                  magrittr::inset(is.na(.), .y)) %>%
     do.call(rbind, .) %>%
     as.data.frame()
   # k-modes clustering if there are multiple columns of assignments

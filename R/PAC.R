@@ -39,7 +39,7 @@ PAC <- function(cm, lower = 0, upper = 1) {
       magrittr::extract(lower.tri(.)) %>%
       magrittr::extract(. > lower & . < upper) %>%
       length() %>%
-      divide_by(., length(cm[lower.tri(cm)]))
+      magrittr::divide_by(., length(cm[lower.tri(cm)]))
   }
   return(pac)
 }
