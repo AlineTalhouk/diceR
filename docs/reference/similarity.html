@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Similarity Matrices � similarity • diceR</title>
+<title>Similarity Matrices — similarity • diceR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,7 +25,7 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -80,16 +80,16 @@
     </div>
 
     
-    <p><code>srs</code> computes the simrank based similarity matrix, <code>asrs</code> computes
-the approximated simrank based similarity matrix, and <code>cts</code> computes the
-connected triple based similarity matrix.</p>
+    <p><code>cts</code> computes the connected triple based similarity matrix, <code>srs</code>
+computes the simrank based similarity matrix, and <code>asrs</code> computes the
+approximated simrank based similarity matrix.</p>
     
 
-    <pre class="usage"><span class='fu'>srs</span>(<span class='no'>E</span>, <span class='no'>dc</span>, <span class='no'>R</span>)
+    <pre><span class='fu'>cts</span>(<span class='no'>E</span>, <span class='no'>dc</span>)
 
-<span class='fu'>asrs</span>(<span class='no'>E</span>, <span class='no'>dc</span>)
+<span class='fu'>srs</span>(<span class='no'>E</span>, <span class='no'>dc</span>, <span class='no'>R</span>)
 
-<span class='fu'>cts</span>(<span class='no'>E</span>, <span class='no'>dc</span>)</pre>
+<span class='fu'>asrs</span>(<span class='no'>E</span>, <span class='no'>dc</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -110,23 +110,23 @@ connected triple based similarity matrix.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an N by N SRS, ASRS, or CTS matrix</p>
+    <p>an N by N CTS, SRS, or ASRS matrix</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>MATLAB functions srs, cts, asrs in package LinkCluE by Simon
+    <p>MATLAB functions cts, srs, asrs in package LinkCluE by Simon
   Garrett</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>set.seed</span>(<span class='fl'>1</span>)
 <span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rep</span>(<span class='fu'>sample</span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='fl'>800</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+<span class='no'>CTS</span> <span class='kw'>&lt;-</span> <span class='fu'>cts</span>(<span class='kw'>E</span> <span class='kw'>=</span> <span class='no'>E</span>, <span class='kw'>dc</span> <span class='kw'>=</span> <span class='fl'>0.8</span>)
 <span class='no'>SRS</span> <span class='kw'>&lt;-</span> <span class='fu'>srs</span>(<span class='kw'>E</span> <span class='kw'>=</span> <span class='no'>E</span>, <span class='kw'>dc</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>R</span> <span class='kw'>=</span> <span class='fl'>3</span>)
 <span class='no'>ASRS</span> <span class='kw'>&lt;-</span> <span class='fu'>asrs</span>(<span class='kw'>E</span> <span class='kw'>=</span> <span class='no'>E</span>, <span class='kw'>dc</span> <span class='kw'>=</span> <span class='fl'>0.8</span>)
-<span class='no'>CTS</span> <span class='kw'>&lt;-</span> <span class='fu'>cts</span>(<span class='kw'>E</span> <span class='kw'>=</span> <span class='no'>E</span>, <span class='kw'>dc</span> <span class='kw'>=</span> <span class='fl'>0.8</span>)
-<span class='kw'>purrr</span><span class='kw'>::</span><span class='fu'>walk</span>(<span class='fu'>list</span>(<span class='no'>SRS</span>, <span class='no'>ASRS</span>, <span class='no'>CTS</span>), <span class='no'>str</span>)</div><div class='output co'>#&gt;  num [1:100, 1:100] 1 0.0558 0.0307 0.0309 0.0307 ...
-#&gt;  num [1:100, 1:100] 1 0.66 0.609 0.646 0.646 ...
-#&gt;  num [1:100, 1:100] 1 0.848 0.767 0.794 0.78 ...</div></pre>
+<span class='kw'>purrr</span><span class='kw'>::</span><span class='fu'>walk</span>(<span class='fu'>list</span>(<span class='no'>CTS</span>, <span class='no'>SRS</span>, <span class='no'>ASRS</span>), <span class='no'>str</span>)</div><div class='output co'>#&gt;  num [1:100, 1:100] 1 0.848 0.767 0.794 0.78 ...
+#&gt;  num [1:100, 1:100] 1 0.0558 0.0307 0.0309 0.0307 ...
+#&gt;  num [1:100, 1:100] 1 0.66 0.609 0.646 0.646 ...</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
