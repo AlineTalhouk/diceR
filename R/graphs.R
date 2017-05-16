@@ -49,9 +49,8 @@
 #' # Track how cluster assignments change between algorithms
 #' p <- graph_tracking(CC1)
 graph_cdf <- function(mat) {
-  k <- CDF <- NULL
   dat <- get_cdf(mat)
-  p <- ggplot(dat, aes(x = CDF, colour = k)) +
+  p <- ggplot(dat, aes_(x = ~CDF, colour = ~k)) +
     stat_ecdf() +
     facet_wrap(~Method) +
     labs(x = "Consensus Index",
@@ -64,14 +63,14 @@ graph_cdf <- function(mat) {
 #' @rdname graphs
 #' @export
 graph_delta_area <- function(mat) {
-  k <- CDF <- AUC <- da <- Method <- NULL
   dat <- get_cdf(mat) %>%
-    dplyr::group_by(Method, k) %>%
-    dplyr::summarize(AUC = flux::auc(seq(0, 1, length.out = table(k)[1]),
-                                     CDF)) %>%
-    dplyr::mutate(da = c(AUC[1], diff(AUC) / AUC[-length(AUC)]))
+    dplyr::group_by_("Method", "k") %>%
+    dplyr::summarize_(.dots = stats::setNames(
+      list(~ flux::auc(seq(0, 1, length.out = table(k)[1]), CDF)), "AUC")) %>%
+    dplyr::mutate_(.dots = stats::setNames(
+      list(~c(AUC[1], diff(AUC) / AUC[-length(AUC)])), "da"))
   if (length(unique(dat$k)) > 1) {
-    p <- ggplot(dat, aes(k, da)) +
+    p <- ggplot(dat, aes_(x = ~k, y = ~da)) +
       geom_line(group = 1) +
       geom_point() +
       facet_wrap(~Method) +
@@ -85,16 +84,15 @@ graph_delta_area <- function(mat) {
 #' Calculate CDF for each clustering algorithm at each k
 #' @noRd
 get_cdf <- function(mat) {
-  k <- Group <- CDF <- NULL
   if (inherits(mat, "array")) {
     mat <- consensus_combine(mat, element = "matrix")
   }
   dat <- mat %>%
     purrr::at_depth(2, ~ .x[lower.tri(.x, diag = TRUE)]) %>%
     as.data.frame() %>%
-    tidyr::gather(key = Group, value = CDF, dplyr::everything()) %>%
-    tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>%
-    dplyr::mutate(k = substring(k, first = 2))
+    tidyr::gather_("Group", "CDF", names(.)) %>%
+    tidyr::separate_("Group", c("k", "Method"), sep = "\\.") %>%
+    dplyr::mutate_(.dots = stats::setNames(list(~substring(k, first = 2)), "k"))
   return(dat)
 }
 
@@ -135,21 +133,22 @@ graph_heatmap <- function(mat, main = NULL, ...) {
 #' @rdname graphs
 #' @export
 graph_tracking <- function(cl) {
-  k <- Group <- Method <- Class <- Samples <- NULL
   if (inherits(cl, "array")) {
     cl <- consensus_combine(cl, element = "class")
   }
   dat <- cl %>%
     as.data.frame() %>%
-    tidyr::gather(key = Group, value = Class, dplyr::everything()) %>%
-    tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>%
-    dplyr::mutate(k = substring(k, first = 2),
-                  Class = factor(Class), Method = factor(Method)) %>%
+    tidyr::gather_("Group", "Class", names(.)) %>%
+    tidyr::separate_("Group", c("k", "Method"), sep = "\\.") %>%
+    dplyr::mutate_(.dots = stats::setNames(list(~substring(k, first = 2),
+                                                ~factor(Class),
+                                                ~factor(Method)),
+                                           c("k", "Class", "Method"))) %>%
     cbind(Samples = factor(seq_len(unique(purrr::map_int(cl, nrow)))),
-                           levels = seq_len(unique(purrr::map_int(cl, nrow))))
+          levels = seq_len(unique(purrr::map_int(cl, nrow))))
   if (length(unique(dat$k)) > 1) {
-    p <- ggplot(dat, aes(Samples, k)) +
-      geom_tile(aes(fill = Class)) +
+    p <- ggplot(dat, aes_(x = ~Samples, y = ~k)) +
+      geom_tile(aes_(fill = ~Class)) +
       facet_wrap(~Method) +
       scale_fill_brewer(palette = "Set2") +
       ggtitle("Tracking Cluster Assignments Across k") +
