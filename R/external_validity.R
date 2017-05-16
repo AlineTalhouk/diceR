@@ -75,17 +75,14 @@ ev_confmat <- function(pred.lab, ref.lab) {
                           "No Information Rate", "P-Value [Acc > NIR]"))
 
   # Combine with averaged statistics
-  Sensitivity <- Specificity <- NULL
-  result <- data.frame(TP, TN, clm, rwm) %>%
-    dplyr::transmute(Sensitivity = TP / clm,
-                     Specificity = TN / (N - clm),
-                     PPV = TP / rwm,
-                     NPV = TN / (N - rwm),
-                     `Detection Rate` = TP / N,
-                     Accuracy = (TP + TN) / N,
-                     `Balanced Accuracy` = (Sensitivity + Specificity) / 2) %>%
-    magrittr::set_names(paste("Average", names(.))) %>%
+  avgd_stats <- data.frame(TP, TN, clm, rwm) %>%
+    dplyr::transmute_(.dots = stats::setNames(
+      list(~TP / clm, ~TN / (N - clm), ~TP / rwm, ~TN / (N - rwm), ~TP / N,
+           ~(TP + TN) / N, ~(Sensitivity + Specificity) / 2),
+      c("Sensitivity", "Specificity", "PPV", "NPV", "Detection Rate",
+        "Accuracy", "Balanced Accuracy"))) %>%
     colMeans() %>%
-    c(overall, .)
-  return(result)
+    magrittr::set_names(paste("Average", names(.)))
+
+  c(overall, avgd_stats)
 }
