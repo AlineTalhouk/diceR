@@ -73,10 +73,9 @@ k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
 #' table(majority_voting(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 majority_voting <- function(E, is.relabelled = TRUE) {
   # Flatten (and relabel) E then find most common element in every row
-  mv <- E %>%
+  E %>%
     flatten_E(is.relabelled = is.relabelled) %>%
     apply(1, function(x) as.numeric(names(which.max(table(x)))))
-  return(mv)
 }
 
 #' Cluster-based Similarity Partitioning Algorithm (CSPA)
@@ -98,13 +97,12 @@ majority_voting <- function(E, is.relabelled = TRUE) {
 #' CSPA(x, k = 4)
 CSPA <- function(E, k) {
   assertthat::assert_that(k %in% dimnames(E)[[4]])
-  cl <- consensus_combine(E, element = "matrix") %>%
+  consensus_combine(E, element = "matrix") %>%
     magrittr::extract2(as.character(k)) %>%
     Reduce(`+`, .) %>%
     magrittr::divide_by(dim(E)[3]) %>%
     stats::dist() %>%
     hc(k = k)
-  return(cl)
 }
 
 #' Linkage Clustering Ensemble
@@ -139,10 +137,9 @@ LCE <- function(E, k, dc = 0.8, R = 10, sim.mat = c("cts", "srs", "asrs")) {
 
   # Check that the Cluster matrix is complete otherwise return Error
   if (anyNA(E)) stop("'E' must be complete for LCE algorithm.")
-  S <- switch(match.arg(sim.mat, c("cts", "asrs", "srs")),
+  S <- switch(match.arg(sim.mat, c("cts", "srs", "asrs")),
               cts = cts(E = E, dc = dc),
               srs = srs(E = E, dc = dc, R = R),
               asrs = asrs(E = E, dc = dc))
-  LCE_cl <- hc(stats::dist(S), k)
-  return(LCE_cl)
+  hc(stats::dist(S), k)
 }
