@@ -66,9 +66,10 @@ graph_cdf <- function(mat) {
 graph_delta_area <- function(mat) {
   k <- CDF <- AUC <- da <- Method <- NULL
   dat <- get_cdf(mat) %>%
-    group_by(Method, k) %>%
-    summarize(AUC = flux::auc(seq(0, 1, length.out = table(k)[1]), CDF)) %>%
-    mutate(da = c(AUC[1], diff(AUC) / AUC[-length(AUC)]))
+    dplyr::group_by(Method, k) %>%
+    dplyr::summarize(AUC = flux::auc(seq(0, 1, length.out = table(k)[1]),
+                                     CDF)) %>%
+    dplyr::mutate(da = c(AUC[1], diff(AUC) / AUC[-length(AUC)]))
   if (length(unique(dat$k)) > 1) {
     p <- ggplot(dat, aes(k, da)) +
       geom_line(group = 1) +
@@ -91,9 +92,9 @@ get_cdf <- function(mat) {
   dat <- mat %>%
     purrr::at_depth(2, ~ .x[lower.tri(.x, diag = TRUE)]) %>%
     as.data.frame() %>%
-    tidyr::gather(key = Group, value = CDF, everything()) %>%
+    tidyr::gather(key = Group, value = CDF, dplyr::everything()) %>%
     tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>%
-    mutate(k = substring(k, first = 2))
+    dplyr::mutate(k = substring(k, first = 2))
   return(dat)
 }
 
@@ -142,8 +143,8 @@ graph_tracking <- function(cl) {
     as.data.frame() %>%
     tidyr::gather(key = Group, value = Class, dplyr::everything()) %>%
     tidyr::separate(Group, c("k", "Method"), sep = "\\.") %>%
-    mutate(k = substring(k, first = 2),
-           Class = factor(Class), Method = factor(Method)) %>%
+    dplyr::mutate(k = substring(k, first = 2),
+                  Class = factor(Class), Method = factor(Method)) %>%
     cbind(Samples = factor(seq_len(unique(purrr::map_int(cl, nrow)))),
                            levels = seq_len(unique(purrr::map_int(cl, nrow))))
   if (length(unique(dat$k)) > 1) {

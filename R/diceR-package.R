@@ -7,6 +7,6 @@
 #'
 #' @name diceR-package
 #' @docType package
-#' @import dplyr ggplot2
+#' @import ggplot2
 #' @importFrom magrittr "%>%"
 NULL

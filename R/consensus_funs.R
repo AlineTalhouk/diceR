@@ -38,7 +38,8 @@ k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
   if (ncol(flat_E) > 1) {
     set.seed(seed)
     k_modes <- klaR::kmodes(flat_E,
-                            modes = max(purrr::map_int(flat_E, n_distinct)))
+                            modes = max(purrr::map_int(flat_E,
+                                                       dplyr::n_distinct)))
     return(k_modes$cluster)
   } else {
     return(flat_E)

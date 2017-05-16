@@ -126,7 +126,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
       Compactness = apply(.x, 2, compactness, data = x),
       Connectivity = apply(.x, 2, function(cl)
         clValid::connectivity(Data = x, clusters = cl))) %>%
-      mutate_all(funs(structure(., names = an)))
+      dplyr::mutate_all(dplyr::funs(structure(., names = an)))
   })
 
   # Graph all plotting functions
@@ -148,7 +148,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
           unlist()) %>% t(),
       NMI = apply(.x, 2, ev_nmi, ref.lab = ref.cl)) %>%
         cbind(t(apply(.x, 2, ev_confmat, ref.lab = ref.cl))) %>%
-        mutate_all(funs(structure(., names = an))))
+        dplyr::mutate_all(dplyr::funs(structure(., names = an))))
   } else {
     ind.ext <- NULL
   }
@@ -171,10 +171,10 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   # Reorder ind.int (and ind.ext if not NULL) by top.list order if trimmed
   if (all(purrr::map_lgl(trim.obj$top.list, ~ !is.null(.x)))) {
     ind.int <- purrr::map2(ind.int, trim.obj$top.list,
-                           ~ arrange(.x, match(.y, Algorithms)))
+                           ~ dplyr::arrange(.x, match(.y, Algorithms)))
     if (!is.null(ind.ext))
       ind.ext <- purrr::map2(ind.ext, trim.obj$top.list,
-                             ~ arrange(.x, match(.y, Algorithms)))
+                             ~ dplyr::arrange(.x, match(.y, Algorithms)))
   }
 
   return(list(k = k, pac = pac, internal = ind.int, external = ind.ext,
