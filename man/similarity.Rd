@@ -2,16 +2,16 @@
 % Please edit documentation in R/similarity.R
 \name{similarity}
 \alias{similarity}
+\alias{cts}
 \alias{srs}
 \alias{asrs}
-\alias{cts}
 \title{Similarity Matrices}
 \usage{
+cts(E, dc)
+
 srs(E, dc, R)
 
 asrs(E, dc)
-
-cts(E, dc)
 }
 \arguments{
 \item{E}{an N by M matrix of cluster ensembles}
@@ -21,23 +21,23 @@ cts(E, dc)
 \item{R}{number of iterations for \code{srs}}
 }
 \value{
-an N by N SRS, ASRS, or CTS matrix
+an N by N CTS, SRS, or ASRS matrix
 }
 \description{
-\code{srs} computes the simrank based similarity matrix, \code{asrs} computes
-the approximated simrank based similarity matrix, and \code{cts} computes the
-connected triple based similarity matrix.
+\code{cts} computes the connected triple based similarity matrix, \code{srs}
+computes the simrank based similarity matrix, and \code{asrs} computes the
+approximated simrank based similarity matrix.
 }
 \examples{
 set.seed(1)
 E <- matrix(rep(sample(1:4, 800, replace = TRUE)), nrow = 100)
+CTS <- cts(E = E, dc = 0.8)
 SRS <- srs(E = E, dc = 0.8, R = 3)
 ASRS <- asrs(E = E, dc = 0.8)
-CTS <- cts(E = E, dc = 0.8)
-purrr::walk(list(SRS, ASRS, CTS), str)
+purrr::walk(list(CTS, SRS, ASRS), str)
 }
 \references{
-MATLAB functions srs, cts, asrs in package LinkCluE by Simon
+MATLAB functions cts, srs, asrs in package LinkCluE by Simon
   Garrett
 }
 \author{

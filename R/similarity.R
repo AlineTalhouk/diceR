@@ -1,26 +1,63 @@
 #' Similarity Matrices
 #'
-#' \code{srs} computes the simrank based similarity matrix, \code{asrs} computes
-#' the approximated simrank based similarity matrix, and \code{cts} computes the
-#' connected triple based similarity matrix.
+#' \code{cts} computes the connected triple based similarity matrix, \code{srs}
+#' computes the simrank based similarity matrix, and \code{asrs} computes the
+#' approximated simrank based similarity matrix.
 #'
 #' @param E an N by M matrix of cluster ensembles
 #' @param dc decay factor, ranges from 0 to 1 inclusive
 #' @param R number of iterations for \code{srs}
-#' @return an N by N SRS, ASRS, or CTS matrix
+#' @return an N by N CTS, SRS, or ASRS matrix
 #' @name similarity
 #' @author Johnson Liu, Derek Chiu
-#' @references MATLAB functions srs, cts, asrs in package LinkCluE by Simon
+#' @references MATLAB functions cts, srs, asrs in package LinkCluE by Simon
 #'   Garrett
 #' @export
 #'
 #' @examples
 #' set.seed(1)
 #' E <- matrix(rep(sample(1:4, 800, replace = TRUE)), nrow = 100)
+#' CTS <- cts(E = E, dc = 0.8)
 #' SRS <- srs(E = E, dc = 0.8, R = 3)
 #' ASRS <- asrs(E = E, dc = 0.8)
-#' CTS <- cts(E = E, dc = 0.8)
-#' purrr::walk(list(SRS, ASRS, CTS), str)
+#' purrr::walk(list(CTS, SRS, ASRS), str)
+cts <- function(E, dc) {
+  assertthat::assert_that(is.matrix(E), is.numeric(E), dc >= 0 && dc <= 1)
+  n <- nrow(E)
+  M <- ncol(E)
+  E.new <- relabel_clusters(E)
+  E <- E.new$newE
+  no_allcl <- E.new$no_allcl
+  wcl <- weigh_clusters(E)
+  ind <- seq_len(no_allcl) %>%
+    split(ceiling(. / (no_allcl / M))) %>%
+    purrr::map(utils::combn, 2) %>%
+    do.call(cbind, .) %>%
+    t()
+  wCT <- diag(0, no_allcl) %>%
+    magrittr::inset(ind, ind %>%
+                      purrr::array_branch(margin = 2) %>%
+                      purrr::pmap_dbl(~ sum(colMin(wcl[c(.x, .y), ])))) %>%
+    magrittr::inset(max(.) > 0, . / max(.)) %>%
+    magrittr::add(t(.)) %>%
+    magrittr::inset(row(.) == col(.), 1)
+  S <- diag(0, n) %>%
+    magrittr::inset(upper.tri(.), purrr::map(seq_len(n)[-1], function(i) {
+      purrr::map_dbl(seq_len(i - 1), function(j) {
+        Ei <- E[i, ]
+        Ej <- E[j, ]
+        sum(dc * wCT[Ei, Ej][, Ei != Ej]) + sum(wCT[Ei, Ej][, Ei == Ej])
+      })
+    }) %>%
+      purrr::flatten_dbl()) %>%
+    magrittr::divide_by(M) %>%
+    magrittr::add(t(.)) %>%
+    magrittr::inset(row(.) == col(.), 1)
+  return(S)
+}
+
+#' @rdname similarity
+#' @export
 srs <- function(E, dc, R) {
   assertthat::assert_that(is.matrix(E), is.numeric(E),
                           is.numeric(R), is_pos_int(R), dc >= 0 && dc <= 1)
@@ -92,43 +129,6 @@ asrs <- function(E, dc) {
     }) %>%
       purrr::flatten_dbl()) %>%
     magrittr::divide_by(M * M) %>%
-    magrittr::add(t(.)) %>%
-    magrittr::inset(row(.) == col(.), 1)
-  return(S)
-}
-
-#' @rdname similarity
-#' @export
-cts <- function(E, dc) {
-  assertthat::assert_that(is.matrix(E), is.numeric(E), dc >= 0 && dc <= 1)
-  n <- nrow(E)
-  M <- ncol(E)
-  E.new <- relabel_clusters(E)
-  E <- E.new$newE
-  no_allcl <- E.new$no_allcl
-  wcl <- weigh_clusters(E)
-  ind <- seq_len(no_allcl) %>%
-    split(ceiling(. / (no_allcl / M))) %>%
-    purrr::map(utils::combn, 2) %>%
-    do.call(cbind, .) %>%
-    t()
-  wCT <- diag(0, no_allcl) %>%
-    magrittr::inset(ind, ind %>%
-                      purrr::array_branch(margin = 2) %>%
-                      purrr::pmap_dbl(~ sum(colMin(wcl[c(.x, .y), ])))) %>%
-    magrittr::inset(max(.) > 0, . / max(.)) %>%
-    magrittr::add(t(.)) %>%
-    magrittr::inset(row(.) == col(.), 1)
-  S <- diag(0, n) %>%
-    magrittr::inset(upper.tri(.), purrr::map(seq_len(n)[-1], function(i) {
-      purrr::map_dbl(seq_len(i - 1), function(j) {
-        Ei <- E[i, ]
-        Ej <- E[j, ]
-        sum(dc * wCT[Ei, Ej][, Ei != Ej]) + sum(wCT[Ei, Ej][, Ei == Ej])
-      })
-    }) %>%
-      purrr::flatten_dbl()) %>%
-    magrittr::divide_by(M) %>%
     magrittr::add(t(.)) %>%
     magrittr::inset(row(.) == col(.), 1)
   return(S)
