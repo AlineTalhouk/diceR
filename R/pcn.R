@@ -22,9 +22,9 @@
 #' pc.select <- pcn_select(pc.dat, cl, "rep")
 pcn_simulate <- function(data, n.sim = 50) {
   pc <- stats::princomp(data)
-  Yns <- replicate(n.sim, as.matrix(
-    purrr::map_df(pc$sdev, ~ stats::rnorm(pc$n.obs, sd = .x))),
-    simplify = FALSE)
+  Yns <- purrr::rerun(n.sim, as.matrix(
+    purrr::map_df(pc$sdev, ~ stats::rnorm(pc$n.obs, sd = .x))
+  ))
   Qns <- purrr::map(Yns, ~ .x %*% t(pc$loadings))
   return(Qns)
 }
@@ -52,14 +52,14 @@ pcn_select <- function(data.sim, cl, type = c("rep", "range"), int = 5) {
   switch(type,
          rep = {
            ind <- which.min(dists)
-           sim <- data.sim[[ind]]
-           return(list(ind = ind, dat = sim))
+           dat <- data.sim[[ind]]
+           dplyr::lst(ind, dat)
          },
          range = {
            rks <- seq(1 + int, length(data.sim), int)
            ind <- order(dists)[rks]
-           sim <- data.sim[ind]
-           return(list(ranks = rks, ind = ind, dat = sim))
+           dat <- data.sim[ind]
+           dplyr::lst(rks, ind, dat)
          })
 }
 
@@ -71,6 +71,6 @@ pcn_select <- function(data.sim, cl, type = c("rep", "range"), int = 5) {
 #' @noRd
 sil_widths <- function(data, cl) {
   sw <- cluster::silhouette(cl, stats::dist(data))[, "sil_width"]
-  return(data.frame(fN = mean(sw < 0),
-                    aP = mean(sw[sw > 0])))
+  data.frame(fN = mean(sw < 0),
+             aP = mean(sw[sw > 0]))
 }
