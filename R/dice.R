@@ -97,14 +97,14 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   } else {
     FinalR <- purrr::map(Final, ~ apply(.x, 2, relabel_class, ref.cl = ref.cl))
   }
-  FinalR <- FinalR %>%
+  clusters <- FinalR %>%
     purrr::invoke(cbind, .) %>%
     magrittr::set_rownames(rownames(data))
 
   # Return evaluation output including consensus function results
   if (evaluate) {
-    eval.obj2 <- consensus_evaluate(data, E, cons.cl = FinalR, ref.cl = ref.cl,
-                                    plot = plot)
+    eval.obj2 <- consensus_evaluate(data, E, cons.cl = clusters,
+                                    ref.cl = ref.cl, plot = plot)
     indices <- c(k = list(eval.obj[["k"]]), eval.obj2[2:4],
                  trim = list(eval.obj[["trim"]]))
   } else {
@@ -113,15 +113,13 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
 
   # Add the reference class as the first column if provided
   if (!is.null(ref.cl)) {
-    FinalR <- cbind(Reference = ref.cl, FinalR)
+    clusters <- cbind(Reference = ref.cl, clusters)
   }
 
   # Remove list structure
   Eknn <- abind::abind(Eknn, along = 3)
   Ecomp <- abind::abind(Ecomp, along = 3)
-
-  return(list(E = E, Eknn = Eknn, Ecomp = Ecomp, clusters = FinalR,
-              indices = indices))
+  dplyr::lst(E, Eknn, Ecomp, clusters, indices)
 }
 
 #' Prepare data for consensus clustering
@@ -160,8 +158,8 @@ prepare_data <- function(data, scale = TRUE,
                       apply(., 2, var.fun, na.rm = TRUE) > min.var)
   if (scale) {
     dat <- switch(type,
-                   conventional = scale(dat),
-                   robust = quantable::robustscale(dat))
+                  conventional = scale(dat),
+                  robust = quantable::robustscale(dat))
   }
   return(dat)
 }
