@@ -16,7 +16,7 @@ test_that("dice works with one algorithm, one consensus funs", {
 test_that("dice works with multiple algorithms, consensus funs, trimming, and
           reference class", {
   dice.obj <- dice(hgsc, nk = 4, reps = 5,
-                   algorithms = c("hc", "diana", "pam"),
+                   algorithms = c("hc", "diana"),
                    cons.funs = c("kmodes", "majority"),
                    trim = TRUE, n = 2, ref.cl = ref.cl)
   expect_length(dice.obj, 5)
@@ -24,7 +24,7 @@ test_that("dice works with multiple algorithms, consensus funs, trimming, and
 })
 
 test_that("single algorithm and single consensus return same results", {
-  dice.obj <- dice(hgsc, nk = 4, reps = 50, algorithms = "km",
+  dice.obj <- dice(hgsc, nk = 4, reps = 5, algorithms = "km",
                    cons.funs = "CSPA", ref.cl = ref.cl)
   ind.obj <- unname(dice.obj$indices$external$`4`)
   expect_identical(as.character(ind.obj[1, -1]), as.character(ind.obj[2, -1]))

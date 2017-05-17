@@ -1,7 +1,7 @@
 context("Consensus functions")
 
 data(hgsc)
-dat <- hgsc[1:200, 1:100]
+dat <- hgsc[1:40, 1:30]
 k <- 4
 x <- consensus_cluster(dat, nk = k, reps = 4, progress = FALSE,
                        algorithms = c("nmf", "hc", "diana"), nmf.method = "lee")
@@ -41,9 +41,9 @@ test_that("Check LCE with hgsc data with 3 consensus_cluster algorithms", {
   y_cts <- LCE(E = x_imputed, k = k, R = 5, sim.mat = "cts")
   y_srs <- LCE(E = x_imputed, k = k, R = 5, sim.mat = "srs")
   y_asrs <- LCE(E = x_imputed, k = k, R = 5, sim.mat = "asrs")
-  expect_length(y_cts, 200)
-  expect_length(y_srs, 200)
-  expect_length(y_asrs, 200)
+  expect_length(y_cts, 40)
+  expect_length(y_srs, 40)
+  expect_length(y_asrs, 40)
   expect_is(y_cts, "integer")
   expect_is(y_srs, "integer")
   expect_is(y_asrs, "integer")

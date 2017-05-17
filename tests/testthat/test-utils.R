@@ -1,15 +1,17 @@
 context("Utility functions")
 
+cl <- seq_len(4)
+
 test_that("relabelling outputs a integer", {
   set.seed(2)
-  pred <- sample(1:4, 100, replace = TRUE)
-  true <- sample(1:4, 100, replace = TRUE)
+  pred <- sample(cl, 100, replace = TRUE)
+  true <- sample(cl, 100, replace = TRUE)
   expect_is(relabel_class(pred, true), "integer")
 })
 
 test_that("flatten uses first clustering as reference if not relabelled", {
-  E <- matrix(sample(1:4, 500, replace = TRUE), ncol = 5)
-  E4 <- array(sample(1:4, 2000, replace = TRUE), dim = c(100, 5, 2, 2))
+  E <- matrix(sample(cl, 500, replace = TRUE), ncol = 5)
+  E4 <- array(sample(cl, 2000, replace = TRUE), dim = c(100, 5, 2, 2))
   expect_error(flatten_E(E, is.relabelled = FALSE), NA)
   expect_error(flatten_E(E4, is.relabelled = FALSE), NA)
 })

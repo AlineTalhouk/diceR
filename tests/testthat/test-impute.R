@@ -1,6 +1,7 @@
 context("Impute missing values")
 
 data(hgsc)
+hgsc <- hgsc[1:40, 1:30]
 E <- consensus_cluster(hgsc, nk = 4, reps = 5,
                        algorithms = c("hc", "km", "sc"), progress = FALSE)
 E_imputed <- impute_missing(E, hgsc, nk = 4)
