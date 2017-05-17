@@ -6,7 +6,9 @@
 #' clustering algorithms.
 #'
 #' @name diceR-package
+#' @useDynLib diceR
 #' @docType package
 #' @import ggplot2
 #' @importFrom magrittr "%>%"
+#' @importFrom Rcpp sourceCpp
 NULL

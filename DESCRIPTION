@@ -44,7 +44,8 @@ Imports:
     quantable,
     RankAggreg,
     sigclust,
-    methods
+    methods,
+    Rcpp
 Suggests:
     testthat,
     knitr,
@@ -57,3 +58,4 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1.9000
 VignetteBuilder: knitr
+LinkingTo: Rcpp
