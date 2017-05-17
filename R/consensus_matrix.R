@@ -49,28 +49,3 @@ consensus_matrix <- function(data, weights = NULL) {
   cons.mat[is.nan(cons.mat)] <- 0
   return(cons.mat)
 }
-
-#' Connectivity matrix
-#' @noRd
-connectivity_matrix <- function(cls) {
-  # cls is a vector of cluster assignments
-  cm <- replicate(length(cls), cls) %>%
-    magrittr::set_colnames(names(cls))
-  for (j in seq_len(length(cls))) {
-    cm[, j] <- ifelse(cm[j, j] != cm[, j] | is.na(cm[, j]) |
-                        is.na(cm[j, j]), 0, 1)
-  }
-  return(cm)
-}
-
-#' Indicator matrix
-#' @noRd
-indicator_matrix <- function(cls) {
-  # cls is a vector of cluster assignments
-  im <- replicate(length(cls), cls) %>%
-    magrittr::set_colnames(names(cls))
-  for (j in seq_len(length(cls))) {
-    im[, j] <- ifelse(is.na(im[, j]) | is.na(im[j, j]), 0, 1)
-  }
-  return(im)
-}
