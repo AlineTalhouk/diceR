@@ -42,7 +42,7 @@
 #' p <- graph_delta_area(CC1)
 #'
 #' # Heatmaps with column side colours corresponding to clusters
-#' CC2 <- consensus_cluster(x, nk = 3, reps = 5, algorithms = "ap", progress =
+#' CC2 <- consensus_cluster(x, nk = 3, reps = 3, algorithms = "hc", progress =
 #' FALSE)
 #' graph_heatmap(CC2)
 #'
