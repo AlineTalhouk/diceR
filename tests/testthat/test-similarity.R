@@ -45,4 +45,3 @@ test_that("Error in cts with wrong inputs", {
   expect_error(cts(E = E, dc = -9))
   expect_error(cts(E = c(1, 1, 2, 3), dc = 0.8))
 })
-
