@@ -23,9 +23,9 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-Cluster analysis is a way of "slicing and dicing" data to allow the grouping together of similar entities and the separation of dissimilar ones. Issues arise due to the existence of a diverse number of clustering algorithms, each with different techniques and inputs, and with no universally optimal methodology. Thus, a framework for cluster analysis and validation methods are needed. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels. This ensures that the data has been considered from several angles  and using a variety of methods. We currently have implemented about 15 clustering algorithms, and we provide a simple framework to add additional algorithms (see XXX). Although, results are dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering ans select those that are most consistent with the data.
+Cluster analysis is a way of "slicing and dicing" data to allow the grouping together of similar entities and the separation of dissimilar ones. Issues arise due to the existence of a diverse number of clustering algorithms, each with different techniques and inputs, and with no universally optimal methodology. Thus, a framework for cluster analysis and validation methods are needed. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels. This ensures that the data has been considered from several angles and using a variety of methods. We have currently implemented about 15 clustering algorithms, and we provide a simple framework to add additional algorithms (see `example("consensus_cluster")`). Although results are dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering and select those that are most consistent with the data.
 
-`diceR` is currently only available on GitHub.
+`diceR` is currently available only on GitHub.
 
 ```{r install, eval=FALSE}
 # install.packages("devtools")
@@ -38,9 +38,10 @@ library(dplyr)
 library(ggplot2)
 library(knitr)
 data(hgsc)
+hgsc <- hgsc[1:100, 1:50]
 ```
 
-We load an expression data set from TCGA of `r nrow(hgsc)` high grade serous carcinoma samples measured on `r ncol(hgsc)` genes.
+We load an excerpt of an expression data set from TCGA of `r nrow(hgsc)` high grade serous carcinoma samples measured on `r ncol(hgsc)` genes.
 
 ## Consensus Clustering
 
