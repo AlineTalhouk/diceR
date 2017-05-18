@@ -10,7 +10,7 @@ min_fnorm(A, B = diag(nrow(A)))
 \item{A}{data matrix we want to permute}
 
 \item{B}{matrix whose distance with the permuted A we want to minimize. By
-default, \code{B <- diag(nrow(A))}, so the permutation maxmizes the trace of
+default, \code{B <- diag(nrow(A))}, so the permutation maximizes the trace of
 A.}
 }
 \value{

@@ -13,7 +13,7 @@
 #'   \item{"hc": }{Hierarchical Clustering}
 #'   \item{"diana": }{DIvisive ANAlysis Clustering}
 #'   \item{"km": }{K-Means Clustering}
-#'   \item{"pam": }{Partition Around Mediods}
+#'   \item{"pam": }{Partition Around Medoids}
 #'   \item{"ap": }{Affinity Propagation}
 #'   \item{"sc": }{Spectral Clustering using Radial-Basis kernel function}
 #'   \item{"gmm": }{Gaussian Mixture Model using Bayesian Information Criterion
