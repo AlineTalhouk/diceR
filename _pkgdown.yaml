@@ -13,7 +13,7 @@ navbar:
   right:
   - icon: fa-github
     href: https://github.com/AlineTalhouk/diceR
-    
+
 reference:
 - title: Functions
   contents:
