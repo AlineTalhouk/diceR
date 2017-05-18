@@ -6,7 +6,7 @@
 #' clustering algorithms.
 #'
 #' @name diceR-package
-#' @useDynLib diceR
+#' @useDynLib diceR, .registration = TRUE
 #' @docType package
 #' @import ggplot2
 #' @importFrom magrittr "%>%"
