@@ -27,3 +27,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"diceR_connectivity_matrix", (DL_FUNC) &diceR_connectivity_matrix, 1},
+    {"diceR_indicator_matrix", (DL_FUNC) &diceR_indicator_matrix, 1},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_diceR(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}
