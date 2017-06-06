@@ -109,7 +109,7 @@ graph_heatmap <- function(mat, main = NULL, ...) {
   dat <- mat %>%
     purrr::flatten() %>%
     magrittr::set_names(list(purrr::map(mat, names)[[1]], names(mat)) %>%
-                          purrr::cross_n() %>%
+                          purrr::cross() %>%
                           purrr::map_chr(paste, collapse = " k="))
   if (is.null(main)) {
     main <- names(dat)
