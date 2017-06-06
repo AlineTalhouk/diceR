@@ -159,7 +159,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                                                k.method = k.method,
                                                reweigh = reweigh, n = n)) %>%
       purrr::transpose() %>%
-      purrr::map_at(c("alg.keep", "alg.remove"), ~ unlist(unique(.x)))
+      purrr::modify_at(c("alg.keep", "alg.remove"), ~ unlist(unique(.x)))
   } else {
     trim.obj <- list(alg.keep = an,
                      alg.remove = character(0),
