@@ -88,7 +88,7 @@ get_cdf <- function(mat) {
     mat <- consensus_combine(mat, element = "matrix")
   }
   dat <- mat %>%
-    purrr::at_depth(2, ~ .x[lower.tri(.x, diag = TRUE)]) %>%
+    purrr::modify_depth(2, ~ .x[lower.tri(.x, diag = TRUE)]) %>%
     as.data.frame() %>%
     tidyr::gather_("Group", "CDF", names(.)) %>%
     tidyr::separate_("Group", c("k", "Method"), sep = "\\.") %>%

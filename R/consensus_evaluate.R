@@ -78,7 +78,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
 
   # Calculate PAC
   pac <- cons.mat %>%
-    purrr::at_depth(2, PAC) %>%
+    purrr::modify_depth(2, PAC) %>%
     purrr::map_df(data.frame, .id = "k")
 
   # If reference given, k is number of distinct classes
