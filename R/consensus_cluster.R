@@ -283,7 +283,7 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, seed.data,
                  sc = stats::setNames(kernlab::specc(as.matrix(x), nk[k],
                                                      kernel = "rbfdot")@.Data,
                                       rownames(data[ind.new, ])),
-                 gmm = mclust::Mclust(x, nk[k])$classification,
+                 gmm = mclust::Mclust(x, nk[k], verbose = FALSE)$classification,
                  block = {
                    blk.cl <- tryCatch(blockcluster::cocluster(
                      x, "continuous",
