@@ -97,6 +97,10 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
     data <- prepare_data(data, scale = scale, type = type, min.var = min.var)
   nmf.arr <- other.arr <- dist.arr <- NULL
 
+  # Use all algorithms if none are specified
+  algorithms <- algorithms %||% c("nmf", "hc", "diana", "km", "pam", "ap", "sc",
+                                  "gmm", "block")
+
   # Store consensus dimensions for calculating progress bar increments/offsets
   lnk <- length(nk)
   lnmf <- ifelse("nmf" %in% algorithms, length(nmf.method), 0)
@@ -109,11 +113,6 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   } else {
     pb <- NULL
   }
-
-  # Use all algorithms if none are specified
-  if (is.null(algorithms))
-    algorithms <- c("nmf", "hc", "diana", "km", "pam",
-                    "ap", "sc", "gmm", "block")
 
   # Cluster NMF-based algorithms
   if ("nmf" %in% algorithms) {
