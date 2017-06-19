@@ -41,5 +41,5 @@ PAC <- function(cm, lower = 0, upper = 1) {
       length() %>%
       magrittr::divide_by(., length(cm[lower.tri(cm)]))
   }
-  return(pac)
+  pac
 }

@@ -53,7 +53,7 @@ cts <- function(E, dc) {
     magrittr::divide_by(M) %>%
     magrittr::add(t(.)) %>%
     magrittr::inset(row(.) == col(.), 1)
-  return(S)
+  S
 }
 
 #' @rdname similarity
@@ -90,7 +90,7 @@ srs <- function(E, dc, R) {
     S <- S1
     C <- C1
   }
-  return(S)
+  S
 }
 
 #' @rdname similarity
@@ -131,7 +131,7 @@ asrs <- function(E, dc) {
     magrittr::divide_by(M * M) %>%
     magrittr::add(t(.)) %>%
     magrittr::inset(row(.) == col(.), 1)
-  return(S)
+  S
 }
 
 #' Relabel clusters in ensemble \code{E}
@@ -156,7 +156,7 @@ relabel_clusters <- function(E) {
       newE[E[, i] == ucl[j], i] <- prevCl + j
     }
   }
-  return(list(no_allcl = max(newE), newE = newE))
+  list(no_allcl = max(newE), newE = newE)
 }
 
 #' Compute weight for each pair of clusters using their shared members (Jaccard
@@ -184,5 +184,5 @@ weigh_clusters <- function(E) {
       }
     )) %>%
     magrittr::add(t(.))
-  return(wcl)
+  wcl
 }

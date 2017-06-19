@@ -49,7 +49,7 @@ consensus_combine <- function(..., element = c("matrix", "class")) {
              purrr::map(as.data.frame) %>%
              purrr::map(~ apply(.x, 1:2, as.integer))
          })
-  return(out)
+  out
 }
 
 #' Given an object from \code{\link{consensus_cluster}}, returns a list of
@@ -67,5 +67,5 @@ consensus_summary <- function(E) {
   out <- list(consensus_matrix = con.mats, consensus_class = con.cls) %>%
     purrr::transpose() %>%
     purrr::map(purrr::transpose)
-  return(out)
+  out
 }

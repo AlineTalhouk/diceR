@@ -33,7 +33,7 @@ ev_nmi <- function(pred.lab, ref.lab, method = "emp") {
   Hy <- infotheo::entropy(ref.lab, method)
   I <- ifelse(Hx + Hy - Hyx < 0, 0, Hx + Hy - Hyx)
   NMI <- I / sqrt(Hx * Hy)
-  return(NMI)
+  NMI
 }
 
 #' @details \code{ev_confmat} calculates a variety of statistics associated

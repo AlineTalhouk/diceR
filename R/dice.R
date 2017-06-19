@@ -161,5 +161,5 @@ prepare_data <- function(data, scale = TRUE,
                   conventional = scale(dat),
                   robust = quantable::robustscale(dat))
   }
-  return(dat)
+  dat
 }
