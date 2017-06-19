@@ -3,7 +3,7 @@ library(magrittr)
 raw <- get(load(file = "data-raw/hgsc-raw.rda"))
 hgsc <- raw %>%
   set_rownames(.$UNIQID) %>%
-  extract(-1) %>%
+  magrittr::extract(-1) %>%
   t() %>%
   as.data.frame() %>%
   structure(class.true = gsub(".*_", "\\1", rownames(.)))
