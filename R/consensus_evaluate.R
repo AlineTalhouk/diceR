@@ -268,18 +268,15 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
     if (length(alg.remove) > 0) alg.remove <- paste0(alg.remove, " k=", k)
     dimnames(E.trim)[[3]] <- paste0(dimnames(E.trim)[[3]], " k=", k)
   }
-  return(list(alg.keep = alg.keep,
-              alg.remove = alg.remove,
-              rank.agg = rank.agg,
-              top.list = top.list,
-              data.new = E.trim))
+  data.new <- E.trim
+  dplyr::lst(alg.keep, alg.remove, rank.agg, top.list, data.new)
 }
 
 #' Recursively find the greater common divisor of two numbers
 #' @noRd
 gcd <- function(x, y) {
   r <- x %% y
-  return(ifelse(r, gcd(y, r), y))
+  ifelse(r, gcd(y, r), y)
 }
 
 #' Compactness Measure
@@ -317,5 +314,5 @@ compactness <- function(data, labels) {
       cp <- cp + (nk * (sum_d / (nk * (nk - 1) / 2)))
     }
   }
-  return(cp / length(labels))
+  cp / length(labels)
 }
