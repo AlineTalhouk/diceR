@@ -45,7 +45,6 @@ consensus_matrix <- function(data, weights = NULL) {
   } else {
     sum.CM <- Reduce(`+`, all.CM)
   }
-  cons.mat <- Reduce(`/`, list(sum.CM, sum.IM))
-  cons.mat[is.nan(cons.mat)] <- 0
-  return(cons.mat)
+  Reduce(`/`, list(sum.CM, sum.IM)) %>%
+    magrittr::inset(is.nan(.), 0)
 }
