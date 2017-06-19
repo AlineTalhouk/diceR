@@ -23,9 +23,10 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -83,7 +84,7 @@
     <p>Generate a cluster assignment from a CTS, SRS, or ASRS similarity matrix.</p>
     
 
-    <pre><span class='fu'>LCE</span>(<span class='no'>E</span>, <span class='no'>k</span>, <span class='kw'>dc</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>R</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>sim.mat</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"cts"</span>, <span class='st'>"srs"</span>, <span class='st'>"asrs"</span>))</pre>
+    <pre class="usage"><span class='fu'>LCE</span>(<span class='no'>E</span>, <span class='no'>k</span>, <span class='kw'>dc</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>R</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>sim.mat</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"cts"</span>, <span class='st'>"srs"</span>, <span class='st'>"asrs"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -127,9 +128,9 @@ missing values. <code><a href='impute_missing.html'>impute_missing</a></code> ca
 <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='no'>hgsc</span>[<span class='fl'>1</span>:<span class='fl'>100</span>, <span class='fl'>1</span>:<span class='fl'>50</span>]
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>dat</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"km"</span>, <span class='st'>"hc"</span>,
 <span class='st'>"diana"</span>), <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='co'>## Not run: ------------------------------------</span>
-<span class='co'># LCE(E = x, k = 4, sim.mat = "asrs")</span>
-<span class='co'>## ---------------------------------------------</span>
+<span class='fu'>not_run</span>({
+  <span class='fu'>LCE</span>(<span class='kw'>E</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>sim.mat</span> <span class='kw'>=</span> <span class='st'>"asrs"</span>)
+})
 
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>apply</span>(<span class='no'>x</span>, <span class='fl'>2</span>:<span class='fl'>4</span>, <span class='no'>impute_knn</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='no'>x_imputed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='impute_missing.html'>impute_missing</a></span>(<span class='no'>x</span>, <span class='no'>dat</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>4</span>)
