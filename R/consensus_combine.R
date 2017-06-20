@@ -58,7 +58,7 @@ consensus_combine <- function(..., element = c("matrix", "class")) {
 consensus_summary <- function(E) {
   con.mats <- E %>%
     purrr::array_tree(c(4, 3)) %>%
-    purrr::modify_depth(2, consensus_matrix) %>%
+    purrr::at_depth(2, consensus_matrix) %>%
     purrr::map(magrittr::set_names, dimnames(E)[[3]]) %>%
     magrittr::set_names(dimnames(E)[[4]])
   con.cls <- purrr::map2(con.mats, as.numeric(names(con.mats)),

@@ -51,7 +51,6 @@ Suggests:
     knitr,
     rmarkdown,
     covr
-Remotes: tidyverse/purrr
 License: MIT + file LICENSE
 URL: https://github.com/AlineTalhouk/diceR
 BugReports: https://github.com/AlineTalhouk/diceR/issues
