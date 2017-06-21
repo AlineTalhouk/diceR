@@ -2,11 +2,37 @@
 % Please edit documentation in R/diceR-package.R
 \docType{package}
 \name{diceR-package}
+\alias{diceR}
 \alias{diceR-package}
-\title{diceR}
+\title{diceR: Diverse Cluster Ensemble in R}
 \description{
-The diceR package performs Consensus Clustering, an ensemble clustering
-algorithm that pools together results from different clustering realizations.
-Each realization uses a unique combination of observations and diverse
-clustering algorithms.
+Performs cluster analysis using an ensemble clustering framework.
+Results from a diverse set of algorithms are pooled together using methods
+such as majority voting, K-Modes, LinkCluE, and CSPA. There are options to
+compare cluster assignments across algorithms using internal and external
+indices, visualizations such as heatmaps, and significance testing for the
+existence of clusters.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/AlineTalhouk/diceR}
+  \item Report bugs at \url{https://github.com/AlineTalhouk/diceR/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Derek Chiu \email{dchiu@bccrc.ca}
+
+Authors:
+\itemize{
+  \item Aline Talhouk \email{atalhouk@bccrc.ca}
+}
+
+Other contributors:
+\itemize{
+  \item Johnson Liu \email{gliu@bccrc.ca} [contributor, compiler]
+}
+
+}
+\keyword{internal}
