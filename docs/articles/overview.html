@@ -56,9 +56,7 @@
     <div class="page-header toc-ignore">
       <h1>Cluster Analysis using <code>diceR</code>
 </h1>
-                        <h4 class="author">Derek Chiu</h4>
             
-            <h4 class="date">2017-06-21</h4>
           </div>
 
     
@@ -68,7 +66,9 @@
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>Cluster analysis is a way of “slicing and dicing” data to allow the grouping together of similar entities and the separation of dissimilar ones. Issues arise due to the existence of a diverse number of clustering algorithms, each with different techniques and inputs, and with no universally optimal methodology. Thus, a framework for cluster analysis and validation methods are needed. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels. This ensures that the data has been considered from several angles and using a variety of methods. We have currently implemented about 15 clustering algorithms, and we provide a simple framework to add additional algorithms (see <code>example("consensus_cluster")</code>). Although results are dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering and select those that are most consistent with the data.</p>
-<p><code>diceR</code> is currently available only on GitHub.</p>
+<p>You can install <code>diceR</code> from CRAN with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"diceR"</span>)</code></pre></div>
+<p>Or get the latest development version from GitHub:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 devtools::<span class="kw">install_github</span>(<span class="st">"AlineTalhouk/diceR"</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(diceR)
