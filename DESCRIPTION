@@ -53,7 +53,7 @@ Suggests:
     rmarkdown,
     covr
 License: MIT + file LICENSE
-URL: https://github.com/AlineTalhouk/diceR
+URL: https://alinetalhouk.github.io/diceR, https://github.com/AlineTalhouk/diceR
 BugReports: https://github.com/AlineTalhouk/diceR/issues
 Encoding: UTF-8
 LazyData: true

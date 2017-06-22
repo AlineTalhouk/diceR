@@ -16,6 +16,7 @@ existence of clusters.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://alinetalhouk.github.io/diceR}
   \item \url{https://github.com/AlineTalhouk/diceR}
   \item Report bugs at \url{https://github.com/AlineTalhouk/diceR/issues}
 }
