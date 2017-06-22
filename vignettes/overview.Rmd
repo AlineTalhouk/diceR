@@ -1,7 +1,5 @@
 ---
 title: "Cluster Analysis using `diceR`"
-author: "Derek Chiu"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Cluster Analysis using `diceR`}
@@ -25,12 +23,20 @@ knitr::opts_chunk$set(
 
 Cluster analysis is a way of "slicing and dicing" data to allow the grouping together of similar entities and the separation of dissimilar ones. Issues arise due to the existence of a diverse number of clustering algorithms, each with different techniques and inputs, and with no universally optimal methodology. Thus, a framework for cluster analysis and validation methods are needed. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels. This ensures that the data has been considered from several angles and using a variety of methods. We have currently implemented about 15 clustering algorithms, and we provide a simple framework to add additional algorithms (see `example("consensus_cluster")`). Although results are dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering and select those that are most consistent with the data.
 
-`diceR` is currently available only on GitHub.
+You can install `diceR` from CRAN with:
 
-```{r install, eval=FALSE}
+```{r install_CRAN, message=FALSE, eval=FALSE}
+install.packages("diceR")
+```
+
+Or get the latest development version from GitHub:
+
+```{r install_github, message=FALSE, eval=FALSE}
 # install.packages("devtools")
 devtools::install_github("AlineTalhouk/diceR")
 ```
+
+We load an excerpt of an expression data set from TCGA of `r nrow(hgsc)` high grade serous carcinoma samples measured on `r ncol(hgsc)` genes.
 
 ```{r load}
 library(diceR)
@@ -40,8 +46,6 @@ library(knitr)
 data(hgsc)
 hgsc <- hgsc[1:100, 1:50]
 ```
-
-We load an excerpt of an expression data set from TCGA of `r nrow(hgsc)` high grade serous carcinoma samples measured on `r ncol(hgsc)` genes.
 
 ## Consensus Clustering
 
