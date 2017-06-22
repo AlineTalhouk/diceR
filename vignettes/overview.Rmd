@@ -36,8 +36,6 @@ Or get the latest development version from GitHub:
 devtools::install_github("AlineTalhouk/diceR")
 ```
 
-We load an excerpt of an expression data set from TCGA of `r nrow(hgsc)` high grade serous carcinoma samples measured on `r ncol(hgsc)` genes.
-
 ```{r load}
 library(diceR)
 library(dplyr)
@@ -46,6 +44,8 @@ library(knitr)
 data(hgsc)
 hgsc <- hgsc[1:100, 1:50]
 ```
+
+We load an excerpt of an expression data set from TCGA of `r nrow(hgsc)` high grade serous carcinoma samples measured on `r ncol(hgsc)` genes.
 
 ## Consensus Clustering
 
