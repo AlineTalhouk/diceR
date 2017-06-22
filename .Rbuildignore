@@ -9,3 +9,4 @@
 ^_pkgdown\.yaml$
 ^docs$
 ^cran-comments\.md$
+^NEWS\.md$
