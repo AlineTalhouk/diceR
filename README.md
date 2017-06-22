@@ -5,19 +5,26 @@ diceR
 
 [![Travis-CI Build Status](https://travis-ci.org/AlineTalhouk/diceR.svg?branch=master)](https://travis-ci.org/AlineTalhouk/diceR) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?branch=master&svg=true)](https://ci.appveyor.com/project/dchiu911/diceR) [![Coverage Status](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg)](https://codecov.io/gh/AlineTalhouk/diceR?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/diceR)](https://cran.r-project.org/package=diceR)
 
+Overview
+--------
+
 The goal of `diceR` is to provide a systematic framework for generating diverse cluster ensembles in R. There are a lot of nuances in cluster analysis to consider. We provide a process and a suite of functions and tools to implement a systematic framework for cluster discovery, guiding the user through the generation of a diverse clustering solutions from data, ensemble formation, algorithm selection and the arrival at a final consensus solution. We have additionally developed visual and analytical validation tools to help with the assessment of the final result. We implemented a wrapper function `dice()` that allows the user to easily obtain results and assess them. Thus, the package is accessible to both end user with limited statistical knowledge. Full access to the package is available for informaticians and statisticians and the functions are easily expanded.
 
 Installation
 ------------
 
-You can install `diceR` from GitHub with:
+You can install `diceR` from CRAN with:
+
+``` r
+install.packages("diceR")
+```
+
+Or get the latest development version from GitHub:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("AlineTalhouk/diceR")
 ```
-
-You must ensure that you have the latest version of `devtools` installed.
 
 Example
 -------
