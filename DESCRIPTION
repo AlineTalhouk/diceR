@@ -1,12 +1,13 @@
 Package: diceR
 Type: Package
 Title: Diverse Cluster Ensemble in R
-Version: 0.0.0.9037
-Date: 2017-06-19
+Version: 0.1.0
+Date: 2017-06-21
 Authors@R: c(
     person("Derek", "Chiu", , "dchiu@bccrc.ca", c("aut", "cre")),
     person("Aline", "Talhouk", , "atalhouk@bccrc.ca", "aut"),
-    person("Johnson", "Liu", , "gliu@bccrc.ca", "aut"))
+    person("Johnson", "Liu", , "gliu@bccrc.ca", c("ctb", "com"))
+    )
 Description: Performs cluster analysis using an ensemble clustering framework.
     Results from a diverse set of algorithms are pooled together using methods
     such as majority voting, K-Modes, LinkCluE, and CSPA. There are options to
@@ -51,7 +52,6 @@ Suggests:
     knitr,
     rmarkdown,
     covr
-Remotes: tidyverse/purrr
 License: MIT + file LICENSE
 URL: https://github.com/AlineTalhouk/diceR
 BugReports: https://github.com/AlineTalhouk/diceR/issues

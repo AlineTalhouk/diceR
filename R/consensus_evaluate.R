@@ -78,7 +78,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
 
   # Calculate PAC
   pac <- cons.mat %>%
-    purrr::modify_depth(2, PAC) %>%
+    purrr::at_depth(2, PAC) %>%
     purrr::map_df(data.frame, .id = "k")
 
   # If reference given, k is number of distinct classes
@@ -159,7 +159,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                                                k.method = k.method,
                                                reweigh = reweigh, n = n)) %>%
       purrr::transpose() %>%
-      purrr::modify_at(c("alg.keep", "alg.remove"), ~ unlist(unique(.x)))
+      purrr::map_at(c("alg.keep", "alg.remove"), ~ unlist(unique(.x)))
   } else {
     trim.obj <- list(alg.keep = an,
                      alg.remove = character(0),
