@@ -153,3 +153,16 @@ str(ctrim, max.level = 2)
 ```
 
 The return value shows which algorithms were kept, removed (if any), and the trimmed (and potentially reweighed) cluster ensemble.
+
+## Significance Testing
+
+To test whether there are four statistically distinct clusters using the PAM algorithm (with k = 4), we run `sigclust` with 50 simulations and generate a p-value for this significance test.
+
+```{r sigclust}
+set.seed(1)
+pam_4 <- ccomb_class2$`4`[, "PAM_Euclidean"]
+sig_obj <- sigclust(hgsc, k = 4, nsim = 100, labflag = 0, label = pam_4)
+str(sig_obj)
+```
+
+The p-value is `r sig_obj@pval`, indicating we do not have sufficient evidence to conclude there are four distinct clusters. Note that we did not use the full `hgsc` data set in this example, so the underlying biological mechanisms may not be fully captured.
