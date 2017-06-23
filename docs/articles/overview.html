@@ -528,7 +528,7 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <div id="significance-testing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#significance-testing" class="anchor"></a>Significance Testing</h2>
-<p>To test whether there are four statistically distinct clusters using the PAM algorithm (with k = 4), we run <code>sigclust</code> with 50 simulations and generate a p-value for this significance test.</p>
+<p>To test whether there are four statistically distinct clusters (k = 4) versus no clusters (k = 1) using the PAM algorithm, we run <code>sigclust</code> with 50 simulations and generate a p-value for this significance test.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
 pam_4 &lt;-<span class="st"> </span>ccomb_class2$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>[, <span class="st">"PAM_Euclidean"</span>]
 sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sigclust.html">sigclust</a></span>(hgsc, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">nsim =</span> <span class="dv">100</span>, <span class="dt">labflag =</span> <span class="dv">0</span>, <span class="dt">label =</span> pam_4)

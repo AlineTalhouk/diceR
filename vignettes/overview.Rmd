@@ -156,7 +156,7 @@ The return value shows which algorithms were kept, removed (if any), and the tri
 
 ## Significance Testing
 
-To test whether there are four statistically distinct clusters using the PAM algorithm (with k = 4), we run `sigclust` with 50 simulations and generate a p-value for this significance test.
+To test whether there are four statistically distinct clusters (k = 4) versus no clusters (k = 1) using the PAM algorithm, we run `sigclust` with 50 simulations and generate a p-value for this significance test.
 
 ```{r sigclust}
 set.seed(1)
