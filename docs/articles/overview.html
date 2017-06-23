@@ -525,6 +525,27 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <p>The return value shows which algorithms were kept, removed (if any), and the trimmed (and potentially reweighed) cluster ensemble.</p>
 </div>
 </div>
+<div id="significance-testing" class="section level2">
+<h2 class="hasAnchor">
+<a href="#significance-testing" class="anchor"></a>Significance Testing</h2>
+<p>To test whether there are four statistically distinct clusters using the PAM algorithm (with k = 4), we run <code>sigclust</code> with 50 simulations and generate a p-value for this significance test.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
+pam_4 &lt;-<span class="st"> </span>ccomb_class2$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>[, <span class="st">"PAM_Euclidean"</span>]
+sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sigclust.html">sigclust</a></span>(hgsc, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">nsim =</span> <span class="dv">100</span>, <span class="dt">labflag =</span> <span class="dv">0</span>, <span class="dt">label =</span> pam_4)
+<span class="kw">str</span>(sig_obj)
+<span class="co">#&gt; Formal class 'sigclust' [package "sigclust"] with 10 slots</span>
+<span class="co">#&gt;   ..@ raw.data  : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ...</span>
+<span class="co">#&gt;   ..@ veigval   : num [1:50] 11.81 4.51 2.66 2.29 1.84 ...</span>
+<span class="co">#&gt;   ..@ vsimeigval: num [1:50] 11.81 4.51 2.66 2.29 1.84 ...</span>
+<span class="co">#&gt;   ..@ simbackvar: num 0.42</span>
+<span class="co">#&gt;   ..@ icovest   : num 2</span>
+<span class="co">#&gt;   ..@ nsim      : num 100</span>
+<span class="co">#&gt;   ..@ simcindex : num [1:100] 0.67 0.634 0.641 0.637 0.606 ...</span>
+<span class="co">#&gt;   ..@ pval      : num 0.14</span>
+<span class="co">#&gt;   ..@ pvalnorm  : num 0.163</span>
+<span class="co">#&gt;   ..@ xcindex   : num 0.63</span></code></pre></div>
+<p>The p-value is 0.14, indicating we do not have sufficient evidence to conclude there are four distinct clusters. Note that we did not use the full <code>hgsc</code> data set in this example, so the underlying biological mechanisms may not be fully captured.</p>
+</div>
 </div>
   </div>
 
@@ -536,6 +557,7 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <li><a href="#introduction">Introduction</a></li>
       <li><a href="#consensus-clustering">Consensus Clustering</a></li>
       <li><a href="#consensus-functions">Consensus Functions</a></li>
+      <li><a href="#significance-testing">Significance Testing</a></li>
       </ul>
 </div>
       </div>
