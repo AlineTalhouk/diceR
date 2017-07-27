@@ -153,18 +153,18 @@ wrapper that runs all graphing functions.</p>
 <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"hc"</span>, <span class='st'>"ap"</span>, <span class='st'>"gmm"</span>), <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># Plot CDF</span>
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>graph_cdf</span>(<span class='no'>CC1</span>)</div><img src='graphs-2.png' alt='' width='540' height='400' /><div class='input'>
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>graph_cdf</span>(<span class='no'>CC1</span>)</div><div class='img'><img src='graphs-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># Change y label and add colours</span>
-<span class='no'>p</span> + <span class='fu'>labs</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"Probability"</span>) + <span class='fu'>stat_ecdf</span>(<span class='fu'>aes</span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>k</span>)) +
-<span class='fu'>scale_color_brewer</span>(<span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"Set2"</span>)</div><img src='graphs-4.png' alt='' width='540' height='400' /><div class='input'>
+<span class='no'>p</span> + <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>labs</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"Probability"</span>) + <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/stat_ecdf'>stat_ecdf</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>k</span>)) +
+<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/scale_brewer'>scale_color_brewer</a></span>(<span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"Set2"</span>)</div><div class='img'><img src='graphs-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># Delta Area</span>
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>graph_delta_area</span>(<span class='no'>CC1</span>)</div><img src='graphs-6.png' alt='' width='540' height='400' /><div class='input'>
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>graph_delta_area</span>(<span class='no'>CC1</span>)</div><div class='img'><img src='graphs-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># Heatmaps with column side colours corresponding to clusters</span>
 <span class='no'>CC2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>x</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='st'>"hc"</span>, <span class='kw'>progress</span> <span class='kw'>=</span>
 <span class='fl'>FALSE</span>)
-<span class='fu'>graph_heatmap</span>(<span class='no'>CC2</span>)</div><img src='graphs-8.png' alt='' width='540' height='400' /><div class='input'>
+<span class='fu'>graph_heatmap</span>(<span class='no'>CC2</span>)</div><div class='img'><img src='graphs-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># Track how cluster assignments change between algorithms</span>
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>graph_tracking</span>(<span class='no'>CC1</span>)</div><img src='graphs-10.png' alt='' width='540' height='400' /></pre>
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>graph_tracking</span>(<span class='no'>CC1</span>)</div><div class='img'><img src='graphs-5.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

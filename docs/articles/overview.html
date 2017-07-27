@@ -97,7 +97,7 @@ hgsc &lt;-<span class="st"> </span>hgsc[<span class="dv">1</span>:<span class="d
 <span class="co">#&gt;   ..$ : chr [1:5] "R1" "R2" "R3" "R4" ...</span>
 <span class="co">#&gt;   ..$ : chr [1:3] "HC_Euclidean" "PAM_Euclidean" "DIANA_Euclidean"</span>
 <span class="co">#&gt;   ..$ : chr [1:2] "3" "4"</span>
-<span class="kw">kable</span>(<span class="kw">head</span>(CC[, , <span class="st">"DIANA_Euclidean"</span>, <span class="st">"3"</span>]))</code></pre></div>
+<span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(CC[, , <span class="st">"DIANA_Euclidean"</span>, <span class="st">"3"</span>]))</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -205,7 +205,7 @@ ccomb_class &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.2 1 0 1 1 1 1 1 0.8 ...</span>
 <span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 0.8 0 0.4 0 1 1 0.8 0 0 ...</span>
 <span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.6 0 0 0 1 1 0 0 1 ...</span>
-<span class="kw">kable</span>(<span class="kw">head</span>(ccomb_class$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
+<span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(ccomb_class$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">HC_Euclidean</th>
@@ -250,7 +250,7 @@ ccomb_class &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span>:<span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,
                          <span class="dt">algorithms =</span> <span class="st">"km"</span>)
 ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, CC2, <span class="dt">element =</span> <span class="st">"class"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kable</span>(<span class="kw">head</span>(ccomb_class2$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(ccomb_class2$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">HC_Euclidean</th>
@@ -304,7 +304,7 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 </h3>
 <p>Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between <code>lower</code> (defaults to 0) and <code>upper</code> (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each <code>k</code>, and choose the <code>k</code> with the greatest average PAC. If there <em>is</em> a reference class, <code>k</code> is the number of distinct classes in the reference.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ccomp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kable</span>(ccomp$internal)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(ccomp$internal)</code></pre></div>
 <table class="table"><tbody><tr>
 <td>
 <table class="table">
@@ -535,6 +535,9 @@ sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sig
 <span class="kw">str</span>(sig_obj)
 <span class="co">#&gt; Formal class 'sigclust' [package "sigclust"] with 10 slots</span>
 <span class="co">#&gt;   ..@ raw.data  : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span>
+<span class="co">#&gt;   .. .. ..$ : chr [1:100] "TCGA.04.1331_PRO.C5" "TCGA.04.1332_MES.C1" "TCGA.04.1336_DIF.C4" "TCGA.04.1337_MES.C1" ...</span>
+<span class="co">#&gt;   .. .. ..$ : chr [1:50] "ABAT" "ABHD2" "ACTB" "ACTR2" ...</span>
 <span class="co">#&gt;   ..@ veigval   : num [1:50] 11.81 4.51 2.66 2.29 1.84 ...</span>
 <span class="co">#&gt;   ..@ vsimeigval: num [1:50] 11.81 4.51 2.66 2.29 1.84 ...</span>
 <span class="co">#&gt;   ..@ simbackvar: num 0.42</span>

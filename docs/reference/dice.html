@@ -238,7 +238,7 @@ bootstrap sampled datasets ("sampled").</p>
 #&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='fu'>data</span>(<span class='no'>hgsc</span>)
 <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='no'>hgsc</span>[<span class='fl'>1</span>:<span class='fl'>100</span>, <span class='fl'>1</span>:<span class='fl'>50</span>]
 <span class='no'>ref.cl</span> <span class='kw'>&lt;-</span> <span class='fu'>strsplit</span>(<span class='fu'>rownames</span>(<span class='no'>dat</span>), <span class='st'>"_"</span>) <span class='kw'>%&gt;%</span>
-  <span class='kw'>purrr</span><span class='kw'>::</span><span class='fu'>map_chr</span>(<span class='fl'>2</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>purrr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/purrr/topics/map'>map_chr</a></span>(<span class='fl'>2</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>factor</span>() <span class='kw'>%&gt;%</span>
   <span class='fu'>as.integer</span>()
 <span class='no'>dice.obj</span> <span class='kw'>&lt;-</span> <span class='fu'>dice</span>(<span class='no'>dat</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='st'>"hc"</span>, <span class='kw'>cons.funs</span> <span class='kw'>=</span>
