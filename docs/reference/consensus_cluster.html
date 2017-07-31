@@ -227,12 +227,12 @@ default clustering algorithms provided are:</p><ul>
 
 <span class='co'># Custom distance function</span>
 <span class='no'>manh</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>) {
-  <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/stats/topics/dist'>dist</a></span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"manhattan"</span>)
+  <span class='kw'>stats</span><span class='kw'>::</span><span class='fu'>dist</span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"manhattan"</span>)
 }
 
 <span class='co'># Custom clustering algorithm</span>
 <span class='no'>agnes</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>d</span>, <span class='no'>k</span>) {
-  <span class='fu'>return</span>(<span class='fu'>as.integer</span>(<span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/stats/topics/cutree'>cutree</a></span>(<span class='kw pkg'>cluster</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/cluster/topics/agnes'>agnes</a></span>(<span class='no'>d</span>, <span class='kw'>diss</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='no'>k</span>)))
+  <span class='fu'>return</span>(<span class='fu'>as.integer</span>(<span class='kw'>stats</span><span class='kw'>::</span><span class='fu'>cutree</span>(<span class='kw'>cluster</span><span class='kw'>::</span><span class='fu'>agnes</span>(<span class='no'>d</span>, <span class='kw'>diss</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='no'>k</span>)))
 }
 
 <span class='fu'>assign</span>(<span class='st'>"agnes"</span>, <span class='no'>agnes</span>, <span class='fl'>1</span>)

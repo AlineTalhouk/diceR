@@ -3,7 +3,7 @@
 diceR
 =====
 
-[![Travis-CI Build Status](https://travis-ci.org/AlineTalhouk/diceR.svg?branch=master)](https://travis-ci.org/AlineTalhouk/diceR) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?branch=master&svg=true)](https://ci.appveyor.com/project/dchiu911/diceR) [![Coverage Status](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg)](https://codecov.io/gh/AlineTalhouk/diceR?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/diceR)](https://cran.r-project.org/package=diceR) ![](http://cranlogs.r-pkg.org/badges/grand-total/diceR?color=orange)
+[![Travis-CI Build Status](https://travis-ci.org/AlineTalhouk/diceR.svg?branch=master)](https://travis-ci.org/AlineTalhouk/diceR) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?branch=master&svg=true)](https://ci.appveyor.com/project/dchiu911/diceR) [![Coverage Status](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg)](https://codecov.io/gh/AlineTalhouk/diceR?branch=master) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/diceR)](https://cran.r-project.org/package=diceR)
 
 Overview
 --------

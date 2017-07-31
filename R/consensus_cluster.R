@@ -85,59 +85,65 @@
 consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               algorithms = NULL,
                               nmf.method = c("brunet", "lee"),
+                              hc_som.xdim = 10,
+                              hc_som.ydim = 10,
+                              hc_som.rlen = 200,
+                              hc_som.alpha = c(0.05,0.01),
                               distance = "euclidean",
                               prep.data = c("none", "full", "sampled"),
                               scale = TRUE, type = c("conventional", "robust"),
                               min.var = 1, progress = TRUE,
                               seed.nmf = 123456, seed.data = 1, save = FALSE,
-                              file.name = "CCOutput", time.saved = FALSE) {
+                              file.name = "CCOutput", time.saved = FALSE,
+                              eps = 0.5, minPts = 2) {
   # Check for invalid distance inputs
   prep.data <- match.arg(prep.data)
   if (prep.data == "full")
     data <- prepare_data(data, scale = scale, type = type, min.var = min.var)
   nmf.arr <- other.arr <- dist.arr <- NULL
-
+  
   # Use all algorithms if none are specified
   algorithms <- algorithms %||% c("nmf", "hc", "diana", "km", "pam", "ap", "sc",
-                                  "gmm", "block")
-
+                                  "gmm", "block", "hc_som", "cmeans","dbscan")
+  
   # Store consensus dimensions for calculating progress bar increments/offsets
   lnk <- length(nk)
   lnmf <- ifelse("nmf" %in% algorithms, length(nmf.method), 0)
-  ldist <- sum(!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")) *
+  ldist <- sum(!algorithms %in% c("nmf", "ap", "sc", "gmm", "block", "cmeans","dbscan")) *
     length(distance)
-  lother <- sum(c("ap", "sc", "gmm", "block") %in% algorithms)
+  lother <- sum(c("ap", "sc", "gmm", "block","hc_som", "cmeans","dbscan") %in% algorithms)
   if (progress) {
     pb <- utils::txtProgressBar(max = lnk * (lnmf + lother + ldist) * reps,
                                 style = 3)
   } else {
     pb <- NULL
   }
-
+  
   # Cluster NMF-based algorithms
   if ("nmf" %in% algorithms) {
     nmf.arr <- cluster_nmf(data, nk, p.item, reps, nmf.method,
                            seed.nmf, seed.data, prep.data, scale, type, min.var,
                            progress, pb)
   }
-
+  
   # Cluster distance-based algorithms
-  dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block")]
+  dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block", "hc_som", "cmeans","dbscan")]
   if (length(dalgs) > 0) {
     dist.arr <- cluster_dist(data, nk, p.item, reps, dalgs, distance,
                              seed.data, prep.data, scale, type, min.var,
                              progress, pb, offset = lnk * lnmf * reps)
   }
-
+  
   # Cluster other algorithms
-  oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block")]
+  oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block", "hc_som", "cmeans","dbscan")]
   if (length(oalgs) > 0) {
-    other.arr <- cluster_other(data, nk, p.item, reps, oalgs,
+    other.arr <- cluster_other(data, nk, p.item, reps, oalgs, 
+                               hc_som.xdim, hc_som.ydim, hc_som.rlen, hc_som.alpha,
                                seed.data, prep.data, scale, type, min.var,
-                               progress, pb,
+                               progress, pb, eps, minPts,
                                offset = lnk * (lnmf + ldist) * reps)
   }
-
+  
   # Combine on third dimension (algorithm) and (optionally) save
   all.arr <- abind::abind(nmf.arr, dist.arr, other.arr, along = 3)
   if (save) {
@@ -247,8 +253,8 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
 
 #' Cluster other algorithms
 #' @noRd
-cluster_other <- function(data, nk, p.item, reps, oalgs, seed.data,
-                          prep.data, scale, type, min.var, progress, pb,
+cluster_other <- function(data, nk, p.item, reps, oalgs, hc_som.xdim, hc_som.ydim, hc_som.rlen, hc_som.alpha,
+                          seed.data, prep.data, scale, type, min.var, progress, pb, eps, minPts,
                           offset) {
   n <- nrow(data)
   n.new <- floor(n * p.item)
@@ -289,7 +295,10 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, seed.data,
                      nbcocluster = c(nk[k], nk[k]))@rowclass + 1,
                      error = function(e) return(NA))
                    if (length(blk.cl) == 0) NA else blk.cl
-                 })
+                 },
+                 hc_som = hc_som_function(x, nk[k], xdim=hc_som.xdim, ydim=hc_som.ydim, rlen=hc_som.rlen, alpha=hc_som.alpha),
+                 cmeans = e1071::cmeans(x=x,centers=nk[k],iter.max=1000)$cluster,
+                 dbscan = dbscan::dbscan(x=x, eps = eps, minPts = minPts)$cluster) 
         if (progress)
           utils::setTxtProgressBar(pb, (k - 1) * lalg * reps +
                                      (j - 1) * reps + i + offset)
@@ -308,7 +317,7 @@ distances <- function(x, dist) {
   # Change partial matching distance methods from stats::dist to full names
   M <- c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski")
   dist <- ifelse(dist %pin% M, M[pmatch(dist, M)], dist)
-
+  
   # Check if spearman distance is used (starts with string)
   sp.idx <- purrr::map_lgl(paste0("^", dist), grepl, "spearman")
   if (any(sp.idx)) {
@@ -318,7 +327,7 @@ distances <- function(x, dist) {
     spear <- NULL
     d <- dist
   }
-
+  
   # If only spearman requested
   if (length(d) == 0) {
     return(spear)
@@ -330,7 +339,7 @@ distances <- function(x, dist) {
     is.error <- purrr::map_lgl(check, inherits, "try-error")
     succeeded <- which(!is.error)
     failed <- which(is.error)
-
+    
     # Search for custom function in parent environments
     if (length(failed)) {
       custom <- check[failed] %>%
@@ -340,7 +349,7 @@ distances <- function(x, dist) {
     } else {
       custom <- NULL
     }
-
+    
     # Combine distances into list and return in same order as dist argument
     dlist <- c(spear, check[succeeded], custom) %>%
       magrittr::extract(pmatch(dist, names(.)))
@@ -382,4 +391,47 @@ km <- function(d, k) {
 #' @noRd
 pam <- function(d, k) {
   return(as.integer(cluster::pam(d, k, cluster.only = TRUE)))
+}
+
+#' @noRd
+# Main function to train SOM and then do hierarchical clustering
+hc_som_function <- function(d, k, xdim, ydim, rlen, alpha, method = "average") {
+  if(!(base::is.matrix(d))) { d <- base::as.matrix(d)}
+  model <- train_som(x=d,xdim=xdim,ydim=ydim,rlen=rlen,alpha=alpha)
+  hc_result <- cluster_som(som_model=model)
+  clusters <- som_k_clusters(som_model=model, hc=hc_result, k=k)
+  return(as.integer(clusters))
+}
+# Train the Self-Organizing Map (SOM). 
+# Specifiy grid size and other optional parameters.
+train_som <- function(x, xdim, ydim, topo="hexagonal", rlen, alpha, 
+                      keep.data=TRUE){
+  # Create SOM grid
+  som_grid <- kohonen::somgrid(xdim=xdim, ydim=ydim, topo=topo)
+  # Map data onto SOM grid
+  som_model <- kohonen::som(x, 
+                            grid=som_grid, 
+                            rlen=rlen, 
+                            alpha=alpha, 
+                            keep.data = keep.data)
+  return(som_model)
+}
+# Create tree diagram for hierarchical clustering
+cluster_som <- function(som_model){
+  # Get distance matrix
+  distMatrix <- dist(getCodes(som_model, 1))
+  # use hierarchical clustering to cluster the codebook vectors
+  hc <- stats::hclust(distMatrix)
+  return(hc)
+}
+# Cut tree into k groups and output cluster labels for original data
+som_k_clusters <- function(som_model, hc, k){
+  som_cluster <- as.matrix(stats::cutree(hc, k=k))
+  lnk <- length(k)
+  som.prediction <- predict(som_model)
+  som_hc_cluster_labels <- array(NA, c(length(som.prediction$unit.classif),lnk))
+  for (i in seq_len(lnk)){
+    som_hc_cluster_labels[,i] = as.vector(som_cluster[,i][som.prediction$unit.classif])
+  }
+  return(som_hc_cluster_labels)
 }
