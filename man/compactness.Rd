@@ -19,8 +19,7 @@ Compute the compactness validity index for a clustering result.
 }
 \details{
 This index is agnostic to any reference clustering results, calculating
-cluster performance on the basis of compactness and separability. Smaller
-values indicate a better clustering structure.
+cluster performance on the basis of compactness and separability.
 }
 \examples{
 set.seed(1)

@@ -200,12 +200,13 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
 
   # Which algorithm is the best for each index?
   bests <- purrr::map2_int(z.main, names(z.main), clusterCrit::bestCriterion)
+
   max.bests <- z.main %>%
     magrittr::extract(purrr::map_int(., which.max) == bests) %>%
+    cbind(z.other) %>%
     magrittr::multiply_by(-1)
   min.bests <- z.main %>%
-    magrittr::extract(purrr::map_int(., which.min) == bests) %>%
-    cbind(z.other)
+    magrittr::extract(purrr::map_int(., which.min) == bests)
 
   # Determine trimmed ensemble using rank aggregation, only if there are more
   # algorithms than we want to keep
@@ -283,8 +284,7 @@ gcd <- function(x, y) {
 #' Compute the compactness validity index for a clustering result.
 #'
 #' This index is agnostic to any reference clustering results, calculating
-#' cluster performance on the basis of compactness and separability. Smaller
-#' values indicate a better clustering structure.
+#' cluster performance on the basis of compactness and separability.
 #'
 #' @param data a dataset with rows as observations, columns as variables
 #' @param labels a vector of cluster labels from a clustering result
