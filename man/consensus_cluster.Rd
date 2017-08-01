@@ -25,8 +25,8 @@ algorithm}
 
 \item{algorithms}{vector of clustering algorithms for performing consensus
 clustering. Must be any number of the following: "nmf", "hc", "diana",
-"km", "pam", "ap", "sc", "gmm", "block", "hc_som", "cmeans", "dbscan". A custom clustering algorithm can
-be used.}
+"km", "pam", "ap", "sc", "gmm", "block", "hc_som", "cmeans", "dbscan". A
+custom clustering algorithm can be used.}
 
 \item{nmf.method}{specify NMF-based algorithms to run. By default the
 "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
@@ -36,14 +36,17 @@ details.}
 
 \item{hc_som.ydim}{y dimension of the SOM grid}
 
-\item{hc_som.rlen}{the number of times the complete data set will be presented to the SOM network.}
+\item{hc_som.rlen}{the number of times the complete data set will be
+presented to the SOM network.}
 
-\item{hc_som.alpha}{SOM learning rate, a vector of two numbers indicating the amount of change. 
-Default is to decline linearly from 0.05 to 0.01 over rlen updates. Not used for the batch algorithm.}
+\item{hc_som.alpha}{SOM learning rate, a vector of two numbers indicating the
+amount of change. Default is to decline linearly from 0.05 to 0.01 over
+\code{rlen} updates. Not used for the batch algorithm.}
 
 \item{eps}{size of the epsilon neighborhood for DBSCAN.}
 
-\item{minPts}{number of minimum points in the eps region (for core points) for DBSCAN. Default is 5 points.}
+\item{minPts}{number of minimum points in the eps region (for core points)
+for DBSCAN. Default is 5 points.}
 
 \item{distance}{a vector of distance functions. Defaults to "euclidean".
 Other options are given in \code{\link[stats]{dist}}. A custom distance
@@ -110,9 +113,10 @@ default clustering algorithms provided are:
   \item{"gmm": }{Gaussian Mixture Model using Bayesian Information Criterion
   on EM algorithm}
   \item{"block": }{Biclustering using a latent block model}
-  \item{"hc_som":}{Self-Organizing Map (SOM) with Hierarchical Clustering}
-  \item{"cmeans":}{Fuzzy C-means clustering}
-  \item{"dbscan":}{Density-based Spatial Clustering of Applications with Noise (DBSCAN)}
+  \item{"hc_som": }{Self-Organizing Map (SOM) with Hierarchical Clustering}
+  \item{"cmeans": }{Fuzzy C-Means Clustering}
+  \item{"dbscan": }{Density-based Spatial Clustering of Applications with
+  Noise (DBSCAN)}
 }
 
 The \code{nmf.method} defaults are "brunet" (Kullback-Leibler divergence) and
