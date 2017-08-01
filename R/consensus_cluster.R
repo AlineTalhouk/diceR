@@ -19,6 +19,9 @@
 #'   \item{"gmm": }{Gaussian Mixture Model using Bayesian Information Criterion
 #'   on EM algorithm}
 #'   \item{"block": }{Biclustering using a latent block model}
+#'   \item{"hc_som":}{Self-Organizing Map (SOM) with Hierarchical Clustering}
+#'   \item{"cmeans":}{Fuzzy C-means clustering}
+#'   \item{"dbscan":}{Density-based Spatial Clustering of Applications with Noise (DBSCAN)}
 #' }
 #'
 #' The \code{nmf.method} defaults are "brunet" (Kullback-Leibler divergence) and
@@ -34,11 +37,18 @@
 #' @param reps number of subsamples
 #' @param algorithms vector of clustering algorithms for performing consensus
 #'   clustering. Must be any number of the following: "nmf", "hc", "diana",
-#'   "km", "pam", "ap", "sc", "gmm", "block". A custom clustering algorithm can
+#'   "km", "pam", "ap", "sc", "gmm", "block", "hc_som", "cmeans", "dbscan". A custom clustering algorithm can
 #'   be used.
 #' @param nmf.method specify NMF-based algorithms to run. By default the
 #'   "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 #'   details.
+#' @param hc_som.xdim x dimension of the SOM grid
+#' @param hc_som.ydim y dimension of the SOM grid
+#' @param hc_som.rlen the number of times the complete data set will be presented to the SOM network.
+#' @param hc_som.alpha SOM learning rate, a vector of two numbers indicating the amount of change. 
+#'    Default is to decline linearly from 0.05 to 0.01 over rlen updates. Not used for the batch algorithm.
+#' @param eps size of the epsilon neighborhood for DBSCAN.
+#' @param minPts number of minimum points in the eps region (for core points) for DBSCAN. Default is 5 points.
 #' @param distance a vector of distance functions. Defaults to "euclidean".
 #'   Other options are given in \code{\link[stats]{dist}}. A custom distance
 #'   function can be used.
@@ -89,13 +99,13 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               hc_som.ydim = 10,
                               hc_som.rlen = 200,
                               hc_som.alpha = c(0.05,0.01),
+                              eps = 0.5, minPts = 2,
                               distance = "euclidean",
                               prep.data = c("none", "full", "sampled"),
                               scale = TRUE, type = c("conventional", "robust"),
                               min.var = 1, progress = TRUE,
                               seed.nmf = 123456, seed.data = 1, save = FALSE,
-                              file.name = "CCOutput", time.saved = FALSE,
-                              eps = 0.5, minPts = 2) {
+                              file.name = "CCOutput", time.saved = FALSE) {
   # Check for invalid distance inputs
   prep.data <- match.arg(prep.data)
   if (prep.data == "full")

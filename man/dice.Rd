@@ -21,7 +21,7 @@ range of integers to compute multiple k}
 
 \item{algorithms}{vector of clustering algorithms for performing consensus
 clustering. Must be any number of the following: "nmf", "hc", "diana",
-"km", "pam", "ap", "sc", "gmm", "block". A custom clustering algorithm can
+"km", "pam", "ap", "sc", "gmm", "block", "hc_som", "cmeans", "dbscan". A custom clustering algorithm can
 be used.}
 
 \item{k.method}{determines the method to choose k when no reference class is
