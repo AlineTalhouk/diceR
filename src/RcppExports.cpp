@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // connectivity_matrix
 NumericMatrix connectivity_matrix(NumericVector x);
-RcppExport SEXP diceR_connectivity_matrix(SEXP xSEXP) {
+RcppExport SEXP _diceR_connectivity_matrix(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,7 +18,7 @@ END_RCPP
 }
 // indicator_matrix
 NumericMatrix indicator_matrix(NumericVector x);
-RcppExport SEXP diceR_indicator_matrix(SEXP xSEXP) {
+RcppExport SEXP _diceR_indicator_matrix(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -29,8 +29,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"diceR_connectivity_matrix", (DL_FUNC) &diceR_connectivity_matrix, 1},
-    {"diceR_indicator_matrix", (DL_FUNC) &diceR_indicator_matrix, 1},
+    {"_diceR_connectivity_matrix", (DL_FUNC) &_diceR_connectivity_matrix, 1},
+    {"_diceR_indicator_matrix", (DL_FUNC) &_diceR_indicator_matrix, 1},
     {NULL, NULL, 0}
 };
 
