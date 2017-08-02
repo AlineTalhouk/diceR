@@ -311,11 +311,11 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, hc_som.xdim,
                      error = function(e) return(NA))
                    if (length(blk.cl) == 0) NA else blk.cl
                  },
-                 hc_som = hc_som_function(x, nk[k],
-                                          xdim = hc_som.xdim,
-                                          ydim = hc_som.ydim,
-                                          rlen = hc_som.rlen,
-                                          alpha = hc_som.alpha),
+                 hc_som = som(x, nk[k],
+                              xdim = hc_som.xdim,
+                              ydim = hc_som.ydim,
+                              rlen = hc_som.rlen,
+                              alpha = hc_som.alpha),
                  cmeans = e1071::cmeans(x = x, centers = nk[k],
                                         iter.max = 1000)$cluster,
                  dbscan = dbscan::dbscan(x = x, eps = eps,
@@ -417,56 +417,28 @@ pam <- function(d, k) {
 
 #' Main function to train SOM and then do hierarchical clustering
 #' @noRd
-hc_som_function <- function(d, k, xdim, ydim, rlen, alpha, method = "average") {
-  if (!(is.matrix(d))) {
-    d <- base::as.matrix(d)
-  }
-  model <- train_som(x = d, xdim = xdim, ydim = ydim, rlen = rlen,
+som <- function(x, k, xdim, ydim, rlen, alpha, method = "average") {
+  if (!is.matrix(x)) x <- as.matrix(x)
+  model <- som_train(x = x, xdim = xdim, ydim = ydim, rlen = rlen,
                      alpha = alpha)
-  hc_result <- cluster_som(som_model = model)
-  clusters <- som_k_clusters(som_model = model, hc = hc_result, k = k)
-  as.integer(clusters)
+  som_cluster(model = model, k = k, method = method)
 }
 
 #' Train the SOM, specifiy grid size and other optional parameters.
 #' @noRd
-train_som <- function(x, xdim, ydim, topo = "hexagonal", rlen, alpha,
-                      keep.data = TRUE) {
-  # Create SOM grid
-  som_grid <- kohonen::somgrid(xdim = xdim, ydim = ydim, topo = topo)
-  # Map data onto SOM grid
-  som_model <- kohonen::som(
-    x,
-    grid = som_grid,
-    rlen = rlen,
-    alpha = alpha,
-    keep.data = keep.data
-  )
-  som_model
-}
-
-
-#' Create dendrogram for hierarchical clustering
-#' @noRd
-cluster_som <- function(som_model) {
-  # Get distance matrix
-  distMatrix <- stats::dist(kohonen::getCodes(som_model, 1))
-  # use hierarchical clustering to cluster the codebook vectors
-  stats::hclust(distMatrix)
+som_train <- function(x, xdim, ydim, rlen, alpha, topo = "hexagonal") {
+  # Create SOM grid and map data into the grid
+  grid <- kohonen::somgrid(xdim = xdim, ydim = ydim, topo = topo)
+  kohonen::som(x, grid = grid, rlen = rlen, alpha = alpha)
 }
 
 #' Cut tree into k groups and output cluster labels for original data
 #' @noRd
-som_k_clusters <- function(som_model, hc, k) {
-  som_cluster <- as.matrix(stats::cutree(hc, k = k))
-  lnk <- length(k)
-  som.prediction <- stats::predict(som_model)
-  som_hc_cluster_labels <- array(NA, c(length(som.prediction$unit.classif),
-                                       lnk))
-  for (i in seq_len(lnk)) {
-    som_hc_cluster_labels[, i] = as.vector(
-      som_cluster[, i][som.prediction$unit.classif]
-    )
-  }
-  som_hc_cluster_labels
+som_cluster <- function(model, k, method) {
+  # Get distance matrix, use hc to cluster the codebook vectors
+  cl <- hc(stats::dist(kohonen::getCodes(model, 1)),
+           k = k,
+           method = method)
+  pred <- stats::predict(model)$unit.classif
+  cl[pred]
 }
