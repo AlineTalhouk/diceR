@@ -19,7 +19,7 @@
 #'   \item{"gmm": }{Gaussian Mixture Model using Bayesian Information Criterion
 #'   on EM algorithm}
 #'   \item{"block": }{Biclustering using a latent block model}
-#'   \item{"hc_som": }{Self-Organizing Map (SOM) with Hierarchical Clustering}
+#'   \item{"som": }{Self-Organizing Map (SOM) with Hierarchical Clustering}
 #'   \item{"cmeans": }{Fuzzy C-Means Clustering}
 #'   \item{"dbscan": }{Density-based Spatial Clustering of Applications with
 #'   Noise (DBSCAN)}
@@ -38,17 +38,17 @@
 #' @param reps number of subsamples
 #' @param algorithms vector of clustering algorithms for performing consensus
 #'   clustering. Must be any number of the following: "nmf", "hc", "diana",
-#'   "km", "pam", "ap", "sc", "gmm", "block", "hc_som", "cmeans", "dbscan". A
+#'   "km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "dbscan". A
 #'   custom clustering algorithm can be used.
 #' @param nmf.method specify NMF-based algorithms to run. By default the
 #'   "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
 #'   details.
-#' @param hc_som.xdim x dimension of the SOM grid
-#' @param hc_som.ydim y dimension of the SOM grid
-#' @param hc_som.rlen the number of times the complete data set will be
-#'   presented to the SOM network.
-#' @param hc_som.alpha SOM learning rate, a vector of two numbers indicating the
-#'   amount of change. Default is to decline linearly from 0.05 to 0.01 over
+#' @param xdim x dimension of the SOM grid
+#' @param ydim y dimension of the SOM grid
+#' @param rlen the number of times the complete data set will be presented to
+#'   the SOM network.
+#' @param alpha SOM learning rate, a vector of two numbers indicating the amount
+#'   of change. Default is to decline linearly from 0.05 to 0.01 over
 #'   \code{rlen} updates. Not used for the batch algorithm.
 #' @param eps size of the epsilon neighborhood for DBSCAN.
 #' @param minPts number of minimum points in the eps region (for core points)
@@ -99,9 +99,9 @@
 consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               algorithms = NULL,
                               nmf.method = c("brunet", "lee"),
-                              hc_som.xdim = 10, hc_som.ydim = 10,
-                              hc_som.rlen = 200, hc_som.alpha = c(0.05, 0.01),
-                              eps = 0.5, minPts = 2, distance = "euclidean",
+                              xdim = 10, ydim = 10, rlen = 200,
+                              alpha = c(0.05, 0.01), eps = 0.5, minPts = 2,
+                              distance = "euclidean",
                               prep.data = c("none", "full", "sampled"),
                               scale = TRUE, type = c("conventional", "robust"),
                               min.var = 1, progress = TRUE,
@@ -115,14 +115,14 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   # Use all algorithms if none are specified
   algorithms <- algorithms %||% c("nmf", "hc", "diana", "km", "pam", "ap", "sc",
-                                  "gmm", "block", "hc_som", "cmeans", "dbscan")
+                                  "gmm", "block", "som", "cmeans", "dbscan")
 
   # Store consensus dimensions for calculating progress bar increments/offsets
   lnk <- length(nk)
   lnmf <- ifelse("nmf" %in% algorithms, length(nmf.method), 0)
-  ldist <- sum(!algorithms %in% c("nmf", "ap", "sc", "gmm", "block", "hc_som",
+  ldist <- sum(!algorithms %in% c("nmf", "ap", "sc", "gmm", "block", "som",
                                   "cmeans", "dbscan")) * length(distance)
-  lother <- sum(c("ap", "sc", "gmm", "block", "hc_som", "cmeans", "dbscan") %in%
+  lother <- sum(c("ap", "sc", "gmm", "block", "som", "cmeans", "dbscan") %in%
                   algorithms)
   if (progress) {
     pb <- utils::txtProgressBar(max = lnk * (lnmf + lother + ldist) * reps,
@@ -140,7 +140,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   # Cluster distance-based algorithms
   dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block",
-                                         "hc_som", "cmeans", "dbscan")]
+                                         "som", "cmeans", "dbscan")]
   if (length(dalgs) > 0) {
     dist.arr <- cluster_dist(data, nk, p.item, reps, dalgs, distance,
                              seed.data, prep.data, scale, type, min.var,
@@ -149,11 +149,10 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   # Cluster other algorithms
   oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block",
-                                        "hc_som", "cmeans", "dbscan")]
+                                        "som", "cmeans", "dbscan")]
   if (length(oalgs) > 0) {
-    other.arr <- cluster_other(data, nk, p.item, reps, oalgs,
-                               hc_som.xdim, hc_som.ydim, hc_som.rlen,
-                               hc_som.alpha, seed.data, prep.data, scale, type,
+    other.arr <- cluster_other(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
+                               alpha, seed.data, prep.data, scale, type,
                                min.var, progress, pb, eps, minPts,
                                offset = lnk * (lnmf + ldist) * reps)
   }
@@ -267,10 +266,9 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
 
 #' Cluster other algorithms
 #' @noRd
-cluster_other <- function(data, nk, p.item, reps, oalgs, hc_som.xdim,
-                          hc_som.ydim, hc_som.rlen, hc_som.alpha, seed.data,
-                          prep.data, scale, type, min.var, progress, pb, eps,
-                          minPts, offset) {
+cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
+                          alpha, seed.data, prep.data, scale, type, min.var,
+                          progress, pb, eps, minPts, offset) {
   n <- nrow(data)
   n.new <- floor(n * p.item)
   lalg <- length(oalgs)
@@ -311,11 +309,8 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, hc_som.xdim,
                      error = function(e) return(NA))
                    if (length(blk.cl) == 0) NA else blk.cl
                  },
-                 hc_som = som(x, nk[k],
-                              xdim = hc_som.xdim,
-                              ydim = hc_som.ydim,
-                              rlen = hc_som.rlen,
-                              alpha = hc_som.alpha),
+                 som = som(x, nk[k], xdim = xdim, ydim = ydim, rlen = rlen,
+                           alpha = alpha),
                  cmeans = e1071::cmeans(x = x, centers = nk[k],
                                         iter.max = 1000)$cluster,
                  dbscan = dbscan::dbscan(x = x, eps = eps,
