@@ -311,8 +311,7 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
                  },
                  som = som(x, nk[k], xdim = xdim, ydim = ydim, rlen = rlen,
                            alpha = alpha),
-                 cmeans = e1071::cmeans(x = x, centers = nk[k],
-                                        iter.max = 1000)$cluster,
+                 cmeans = cmeans(x, nk[k]),
                  dbscan = dbscan::dbscan(x = x, eps = eps,
                                          minPts = minPts)$cluster
           )
@@ -436,4 +435,23 @@ som_cluster <- function(model, k, method) {
            method = method)
   pred <- stats::predict(model)$unit.classif
   cl[pred]
+}
+
+#' Fuzzy c-means using best m via validity/performance measures
+#' @noRd
+cmeans <- function(x, k) {
+  fuzzy <- seq(1.1, 3, by = 0.1) %>%
+    purrr::map(~ e1071::cmeans(x = x, centers = k, m = .x))
+  mbest <- c("xie.beni", "fukuyama.sugeno", "partition.entropy") %>%
+    purrr::map(
+      ~ purrr::map(fuzzy,
+                   function(f) e1071::fclustIndex(y = f, x = x, index = .x)
+      )
+    ) %>%
+    purrr::map_int(which.min) %>%
+    table() %>%
+    which.max() %>%
+    names() %>%
+    as.integer()
+  fuzzy[[mbest]]$cluster
 }
