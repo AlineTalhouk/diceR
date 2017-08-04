@@ -6,7 +6,7 @@
 \usage{
 consensus_cluster(data, nk = 2:4, p.item = 0.8, reps = 1000,
   algorithms = NULL, nmf.method = c("brunet", "lee"), xdim = 10,
-  ydim = 10, rlen = 200, alpha = c(0.05, 0.01), eps = 0.5, minPts = 2,
+  ydim = 10, rlen = 200, alpha = c(0.05, 0.01), minPts = 2,
   distance = "euclidean", prep.data = c("none", "full", "sampled"),
   scale = TRUE, type = c("conventional", "robust"), min.var = 1,
   progress = TRUE, seed.nmf = 123456, seed.data = 1, save = FALSE,
@@ -25,7 +25,7 @@ algorithm}
 
 \item{algorithms}{vector of clustering algorithms for performing consensus
 clustering. Must be any number of the following: "nmf", "hc", "diana",
-"km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "dbscan". A
+"km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan". A
 custom clustering algorithm can be used.}
 
 \item{nmf.method}{specify NMF-based algorithms to run. By default the
@@ -43,10 +43,8 @@ the SOM network.}
 of change. Default is to decline linearly from 0.05 to 0.01 over
 \code{rlen} updates. Not used for the batch algorithm.}
 
-\item{eps}{size of the epsilon neighborhood for DBSCAN.}
-
 \item{minPts}{number of minimum points in the eps region (for core points)
-for DBSCAN. Default is 5 points.}
+for HDBSCAN. Default is 2 points.}
 
 \item{distance}{a vector of distance functions. Defaults to "euclidean".
 Other options are given in \code{\link[stats]{dist}}. A custom distance
@@ -115,8 +113,8 @@ default clustering algorithms provided are:
   \item{"block": }{Biclustering using a latent block model}
   \item{"som": }{Self-Organizing Map (SOM) with Hierarchical Clustering}
   \item{"cmeans": }{Fuzzy C-Means Clustering}
-  \item{"dbscan": }{Density-based Spatial Clustering of Applications with
-  Noise (DBSCAN)}
+  \item{"hdbscan": }{Hierarchical Density-based Spatial Clustering of
+  Applications with Noise (HDBSCAN)}
 }
 
 The \code{nmf.method} defaults are "brunet" (Kullback-Leibler divergence) and

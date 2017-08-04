@@ -21,8 +21,8 @@
 #'   \item{"block": }{Biclustering using a latent block model}
 #'   \item{"som": }{Self-Organizing Map (SOM) with Hierarchical Clustering}
 #'   \item{"cmeans": }{Fuzzy C-Means Clustering}
-#'   \item{"dbscan": }{Density-based Spatial Clustering of Applications with
-#'   Noise (DBSCAN)}
+#'   \item{"hdbscan": }{Hierarchical Density-based Spatial Clustering of
+#'   Applications with Noise (HDBSCAN)}
 #' }
 #'
 #' The \code{nmf.method} defaults are "brunet" (Kullback-Leibler divergence) and
@@ -38,7 +38,7 @@
 #' @param reps number of subsamples
 #' @param algorithms vector of clustering algorithms for performing consensus
 #'   clustering. Must be any number of the following: "nmf", "hc", "diana",
-#'   "km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "dbscan". A
+#'   "km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan". A
 #'   custom clustering algorithm can be used.
 #' @param nmf.method specify NMF-based algorithms to run. By default the
 #'   "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
@@ -50,9 +50,8 @@
 #' @param alpha SOM learning rate, a vector of two numbers indicating the amount
 #'   of change. Default is to decline linearly from 0.05 to 0.01 over
 #'   \code{rlen} updates. Not used for the batch algorithm.
-#' @param eps size of the epsilon neighborhood for DBSCAN.
 #' @param minPts number of minimum points in the eps region (for core points)
-#'   for DBSCAN. Default is 5 points.
+#'   for HDBSCAN. Default is 2 points.
 #' @param distance a vector of distance functions. Defaults to "euclidean".
 #'   Other options are given in \code{\link[stats]{dist}}. A custom distance
 #'   function can be used.
@@ -100,7 +99,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               algorithms = NULL,
                               nmf.method = c("brunet", "lee"),
                               xdim = 10, ydim = 10, rlen = 200,
-                              alpha = c(0.05, 0.01), eps = 0.5, minPts = 2,
+                              alpha = c(0.05, 0.01), minPts = 2,
                               distance = "euclidean",
                               prep.data = c("none", "full", "sampled"),
                               scale = TRUE, type = c("conventional", "robust"),
@@ -115,14 +114,14 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   # Use all algorithms if none are specified
   algorithms <- algorithms %||% c("nmf", "hc", "diana", "km", "pam", "ap", "sc",
-                                  "gmm", "block", "som", "cmeans", "dbscan")
+                                  "gmm", "block", "som", "cmeans", "hdbscan")
 
   # Store consensus dimensions for calculating progress bar increments/offsets
   lnk <- length(nk)
   lnmf <- ifelse("nmf" %in% algorithms, length(nmf.method), 0)
   ldist <- sum(!algorithms %in% c("nmf", "ap", "sc", "gmm", "block", "som",
-                                  "cmeans", "dbscan")) * length(distance)
-  lother <- sum(c("ap", "sc", "gmm", "block", "som", "cmeans", "dbscan") %in%
+                                  "cmeans", "hdbscan")) * length(distance)
+  lother <- sum(c("ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan") %in%
                   algorithms)
   if (progress) {
     pb <- utils::txtProgressBar(max = lnk * (lnmf + lother + ldist) * reps,
@@ -140,7 +139,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   # Cluster distance-based algorithms
   dalgs <- algorithms[!algorithms %in% c("nmf", "ap", "sc", "gmm", "block",
-                                         "som", "cmeans", "dbscan")]
+                                         "som", "cmeans", "hdbscan")]
   if (length(dalgs) > 0) {
     dist.arr <- cluster_dist(data, nk, p.item, reps, dalgs, distance,
                              seed.data, prep.data, scale, type, min.var,
@@ -149,7 +148,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   # Cluster other algorithms
   oalgs <- algorithms[algorithms %in% c("ap", "sc", "gmm", "block",
-                                        "som", "cmeans", "dbscan")]
+                                        "som", "cmeans", "hdbscan")]
   if (length(oalgs) > 0) {
     other.arr <- cluster_other(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
                                alpha, seed.data, prep.data, scale, type,
@@ -312,8 +311,7 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
                  som = som(x, nk[k], xdim = xdim, ydim = ydim, rlen = rlen,
                            alpha = alpha),
                  cmeans = cmeans(x, nk[k]),
-                 dbscan = dbscan::dbscan(x = x, eps = eps,
-                                         minPts = minPts)$cluster
+                 hdbscan = dbscan::hdbscan(x = x, minPts = minPts)$cluster
           )
         if (progress)
           utils::setTxtProgressBar(pb, (k - 1) * lalg * reps +
