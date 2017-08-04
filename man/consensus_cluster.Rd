@@ -98,10 +98,8 @@ algorithms, and cluster sizes.
 See examples for how to use custom algorithms and distance functions. The
 default clustering algorithms provided are:
 \itemize{
-  \item{"nmf": }{Nonnegative Matrix Factorization using Kullback-Leibler
-  Divergence}
-  \item{"nmfEucl": }{Nonnegative Matrix Factorization using Euclidean
-  distance}
+  \item{"nmf": }{Nonnegative Matrix Factorization (using Kullback-Leibler
+  Divergence or Euclidean distance; See Note for specifications.)}
   \item{"hc": }{Hierarchical Clustering}
   \item{"diana": }{DIvisive ANAlysis Clustering}
   \item{"km": }{K-Means Clustering}
@@ -117,10 +115,11 @@ default clustering algorithms provided are:
   Applications with Noise (HDBSCAN)}
 }
 
-The \code{nmf.method} defaults are "brunet" (Kullback-Leibler divergence) and
-"lee" (Euclidean distance).
-
-The progress bar increments for every unit of \code{reps}.
+The progress bar increments on every unit of \code{reps}.
+}
+\note{
+The \code{nmf.method} defaults are "brunet" (Kullback-Leibler
+  divergence) and "lee" (Euclidean distance).
 }
 \examples{
 data(hgsc)
