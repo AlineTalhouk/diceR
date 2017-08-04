@@ -48,8 +48,7 @@
 #' @param alpha SOM learning rate, a vector of two numbers indicating the amount
 #'   of change. Default is to decline linearly from 0.05 to 0.01 over
 #'   \code{rlen} updates. Not used for the batch algorithm.
-#' @param minPts number of minimum points in the eps region (for core points)
-#'   for HDBSCAN. Default is 2 points.
+#' @param minPts minimum size of clusters for HDBSCAN. Default is 2.
 #' @param distance a vector of distance functions. Defaults to "euclidean".
 #'   Other options are given in \code{\link[stats]{dist}}. A custom distance
 #'   function can be used.
