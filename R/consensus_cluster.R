@@ -422,7 +422,7 @@ som <- function(x, k, xdim, ydim, rlen, alpha, method = "average") {
 som_train <- function(x, xdim, ydim, rlen, alpha, topo = "hexagonal") {
   # Create SOM grid and map data into the grid
   neurons <- 5 * sqrt(nrow(x))
-  eigenvalues <- eigen(cor(x))$values
+  eigenvalues <- eigen(stats::cor(x))$values
   eigenratio <- eigenvalues[1] / eigenvalues[2]
   xdim <- xdim %||% sqrt(neurons / eigenratio)
   ydim <- ydim %||% neurons / xdim

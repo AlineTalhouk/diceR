@@ -5,8 +5,8 @@
 \title{Consensus clustering}
 \usage{
 consensus_cluster(data, nk = 2:4, p.item = 0.8, reps = 1000,
-  algorithms = NULL, nmf.method = c("brunet", "lee"), xdim = 10,
-  ydim = 10, rlen = 200, alpha = c(0.05, 0.01), minPts = 2,
+  algorithms = NULL, nmf.method = c("brunet", "lee"), xdim = NULL,
+  ydim = NULL, rlen = 200, alpha = c(0.05, 0.01), minPts = 2,
   distance = "euclidean", prep.data = c("none", "full", "sampled"),
   scale = TRUE, type = c("conventional", "robust"), min.var = 1,
   progress = TRUE, seed.nmf = 123456, seed.data = 1, save = FALSE,
