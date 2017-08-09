@@ -151,7 +151,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   if (length(oalgs) > 0) {
     other.arr <- cluster_other(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
                                alpha, seed.data, prep.data, scale, type,
-                               min.var, progress, pb, eps, minPts,
+                               min.var, progress, pb, minPts,
                                offset = lnk * (lnmf + ldist) * reps)
   }
 
@@ -266,7 +266,7 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
 #' @noRd
 cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
                           alpha, seed.data, prep.data, scale, type, min.var,
-                          progress, pb, eps, minPts, offset) {
+                          progress, pb, minPts, offset) {
   n <- nrow(data)
   n.new <- floor(n * p.item)
   lalg <- length(oalgs)
