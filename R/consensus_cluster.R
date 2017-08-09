@@ -95,7 +95,7 @@
 consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               algorithms = NULL,
                               nmf.method = c("brunet", "lee"),
-                              xdim = 10, ydim = 10, rlen = 200,
+                              xdim = NULL, ydim = NULL, rlen = 200,
                               alpha = c(0.05, 0.01), minPts = 2,
                               distance = "euclidean",
                               prep.data = c("none", "full", "sampled"),
@@ -414,10 +414,18 @@ som <- function(x, k, xdim, ydim, rlen, alpha, method = "average") {
   som_cluster(model = model, k = k, method = method)
 }
 
-#' Train the SOM, specifiy grid size and other optional parameters.
+#' Train the SOM, specifiy grid size and other optional parameters based on the
+#' SOM Toolbox
+#' @references
+#'   http://www.cis.hut.fi/somtoolbox/package/docs2/som_topol_struct.html
 #' @noRd
 som_train <- function(x, xdim, ydim, rlen, alpha, topo = "hexagonal") {
   # Create SOM grid and map data into the grid
+  neurons <- 5 * sqrt(nrow(x))
+  eigenvalues <- eigen(cor(x))$values
+  eigenratio <- eigenvalues[1] / eigenvalues[2]
+  xdim <- xdim %||% sqrt(neurons / eigenratio)
+  ydim <- ydim %||% neurons / xdim
   grid <- kohonen::somgrid(xdim = xdim, ydim = ydim, topo = topo)
   kohonen::som(x, grid = grid, rlen = rlen, alpha = alpha)
 }
