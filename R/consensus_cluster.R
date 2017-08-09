@@ -113,7 +113,6 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   ALG_NAMES <- c("nmf", "hc", "diana", "km", "pam", "ap", "sc", "gmm", "block",
                  "som", "cmeans", "hdbscan")
   algorithms <- algorithms %||% ALG_NAMES
-  assertthat::assert_that(all(algorithms %in% ALG_NAMES))  # Check names
 
   # Store consensus dimensions for calculating progress bar increments/offsets
   lnk <- length(nk)
