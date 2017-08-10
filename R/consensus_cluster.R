@@ -152,10 +152,23 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                                alpha, seed.data, prep.data, scale, type,
                                min.var, progress, pb, minPts,
                                offset = lnk * (lnmf + ldist) * reps)
+    if ("hdbscan" %in% algorithms) {
+      h.idx <- match("HDBSCAN", dimnames(other.arr)[[3]])
+      h.obj <- other.arr[, , h.idx, ] %>%
+        as.data.frame() %>%
+        purrr::map(~ {
+          c(prop_outlier = sum(.x == 0, na.rm = TRUE) / sum(!is.na(.x)),
+            num_cluster = n_distinct(!.x %in% c(NA, 0)))
+        }) %>%
+        purrr::transpose() %>%
+        purrr::map(unlist)
+      other.arr <- other.arr[, , -h.idx, , drop = FALSE]
+    }
   }
 
   # Combine on third dimension (algorithm) and (optionally) save
   all.arr <- abind::abind(nmf.arr, dist.arr, other.arr, along = 3)
+  if ("hdbscan" %in% algorithms) attr(all.arr, "hdbscan") <- h.obj
   if (save) {
     if (time.saved) {
       path <- paste0(file.name, "_",
