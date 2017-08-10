@@ -88,7 +88,7 @@ get_cdf <- function(mat) {
     mat <- consensus_combine(mat, element = "matrix")
   }
   dat <- mat %>%
-    purrr::at_depth(2, ~ .x[lower.tri(.x, diag = TRUE)]) %>%
+    purrr::modify_depth(2, ~ .x[lower.tri(.x, diag = TRUE)]) %>%
     as.data.frame() %>%
     tidyr::gather_("Group", "CDF", names(.)) %>%
     tidyr::separate_("Group", c("k", "Method"), sep = "\\.") %>%
@@ -109,7 +109,7 @@ graph_heatmap <- function(mat, main = NULL, ...) {
   dat <- mat %>%
     purrr::flatten() %>%
     magrittr::set_names(list(purrr::map(mat, names)[[1]], names(mat)) %>%
-                          purrr::cross_n() %>%
+                          purrr::cross() %>%
                           purrr::map_chr(paste, collapse = " k="))
   if (is.null(main)) {
     main <- names(dat)

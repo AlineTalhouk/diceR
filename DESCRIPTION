@@ -22,7 +22,7 @@ Imports:
     dplyr,
     magrittr,
     tidyr,
-    purrr,
+    purrr (>= 0.2.3),
     ggplot2,
     gplots,
     grDevices,
