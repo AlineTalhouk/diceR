@@ -48,7 +48,7 @@
 #' @param alpha SOM learning rate, a vector of two numbers indicating the amount
 #'   of change. Default is to decline linearly from 0.05 to 0.01 over
 #'   \code{rlen} updates. Not used for the batch algorithm.
-#' @param minPts minimum size of clusters for HDBSCAN. Default is 2.
+#' @param minPts minimum size of clusters for HDBSCAN. Default is 5.
 #' @param distance a vector of distance functions. Defaults to "euclidean".
 #'   Other options are given in \code{\link[stats]{dist}}. A custom distance
 #'   function can be used.
@@ -96,7 +96,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               algorithms = NULL,
                               nmf.method = c("brunet", "lee"),
                               xdim = NULL, ydim = NULL, rlen = 200,
-                              alpha = c(0.05, 0.01), minPts = 2,
+                              alpha = c(0.05, 0.01), minPts = 5,
                               distance = "euclidean",
                               prep.data = c("none", "full", "sampled"),
                               scale = TRUE, type = c("conventional", "robust"),
