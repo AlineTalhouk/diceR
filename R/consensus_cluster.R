@@ -158,7 +158,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
         as.data.frame() %>%
         purrr::map(~ {
           c(prop_outlier = sum(.x == 0, na.rm = TRUE) / sum(!is.na(.x)),
-            num_cluster = n_distinct(!.x %in% c(NA, 0)))
+            num_cluster = dplyr::n_distinct(!.x %in% c(NA, 0)))
         }) %>%
         purrr::transpose() %>%
         purrr::map(unlist)
