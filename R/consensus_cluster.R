@@ -26,7 +26,12 @@
 #' The progress bar increments on every unit of \code{reps}.
 #'
 #' @note The \code{nmf.method} defaults are "brunet" (Kullback-Leibler
-#'   divergence) and "lee" (Euclidean distance).
+#'   divergence) and "lee" (Euclidean distance). When "hdbscan" is chosen as an
+#'   algorithm to use, its results are excluded from the rest of the consensus
+#'   clusters. This is because there is no guarantee that the cluster assignment
+#'   will have every sample clustered; more often than not there will be noise
+#'   points or outliers. In addition, the number of distinct clusters may not
+#'   even be equal to \code{nk}.
 #'
 #' @param data data matrix with rows as samples and columns as variables
 #' @param nk number of clusters (k) requested; can specify a single integer or a
@@ -70,6 +75,10 @@
 #'   consensus clustering results for algorithms. The matrices have a row for
 #'   each sample, and a column for each subsample. Each entry represents a class
 #'   membership.
+#'
+#'   When "hdbscan" is part of \code{algorithms}, we do not include its clustering
+#'   array in the consensus result. Instead, we report two summary statistics
+#'   as attributes: the proportion of outliers and the number of clusters.
 #' @author Derek Chiu, Aline Talhouk
 #' @importFrom mclust mclustBIC
 #' @export
