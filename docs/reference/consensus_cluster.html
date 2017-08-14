@@ -89,7 +89,8 @@ algorithms, and cluster sizes.</p>
     
 
     <pre class="usage"><span class='fu'>consensus_cluster</span>(<span class='no'>data</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>4</span>, <span class='kw'>p.item</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"brunet"</span>, <span class='st'>"lee"</span>),
+  <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"brunet"</span>, <span class='st'>"lee"</span>), <span class='kw'>xdim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ydim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rlen</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.01</span>), <span class='kw'>minPts</span> <span class='kw'>=</span> <span class='fl'>5</span>,
   <span class='kw'>distance</span> <span class='kw'>=</span> <span class='st'>"euclidean"</span>, <span class='kw'>prep.data</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"none"</span>, <span class='st'>"full"</span>, <span class='st'>"sampled"</span>),
   <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"conventional"</span>, <span class='st'>"robust"</span>), <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>seed.nmf</span> <span class='kw'>=</span> <span class='fl'>123456</span>, <span class='kw'>seed.data</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>save</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
@@ -120,14 +121,37 @@ algorithm</p></td>
       <th>algorithms</th>
       <td><p>vector of clustering algorithms for performing consensus
 clustering. Must be any number of the following: "nmf", "hc", "diana",
-"km", "pam", "ap", "sc", "gmm", "block". A custom clustering algorithm can
-be used.</p></td>
+"km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan". A
+custom clustering algorithm can be used.</p></td>
     </tr>
     <tr>
       <th>nmf.method</th>
       <td><p>specify NMF-based algorithms to run. By default the
 "brunet" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NMF/topics/nmf'>nmf</a></code> for
 details.</p></td>
+    </tr>
+    <tr>
+      <th>xdim</th>
+      <td><p>x dimension of the SOM grid</p></td>
+    </tr>
+    <tr>
+      <th>ydim</th>
+      <td><p>y dimension of the SOM grid</p></td>
+    </tr>
+    <tr>
+      <th>rlen</th>
+      <td><p>the number of times the complete data set will be presented to
+the SOM network.</p></td>
+    </tr>
+    <tr>
+      <th>alpha</th>
+      <td><p>SOM learning rate, a vector of two numbers indicating the amount
+of change. Default is to decline linearly from 0.05 to 0.01 over
+<code>rlen</code> updates. Not used for the batch algorithm.</p></td>
+    </tr>
+    <tr>
+      <th>minPts</th>
+      <td><p>minimum size of clusters for HDBSCAN. Default is 5.</p></td>
     </tr>
     <tr>
       <th>distance</th>
@@ -197,15 +221,16 @@ file name. Only applicable when <code>dir</code> is not <code>NULL</code>.</p></
   consensus clustering results for algorithms. The matrices have a row for
   each sample, and a column for each subsample. Each entry represents a class
   membership.</p>
+<p>When "hdbscan" is part of <code>algorithms</code>, we do not include its clustering
+  array in the consensus result. Instead, we report two summary statistics
+  as attributes: the proportion of outliers and the number of clusters.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>See examples for how to use custom algorithms and distance functions. The
 default clustering algorithms provided are:</p><ul>
-<li><p>"nmf": Nonnegative Matrix Factorization using Kullback-Leibler
-  Divergence</p></li>
-<li><p>"nmfEucl": Nonnegative Matrix Factorization using Euclidean
-  distance</p></li>
+<li><p>"nmf": Nonnegative Matrix Factorization (using Kullback-Leibler
+  Divergence or Euclidean distance; See Note for specifications.)</p></li>
 <li><p>"hc": Hierarchical Clustering</p></li>
 <li><p>"diana": DIvisive ANAlysis Clustering</p></li>
 <li><p>"km": K-Means Clustering</p></li>
@@ -215,10 +240,22 @@ default clustering algorithms provided are:</p><ul>
 <li><p>"gmm": Gaussian Mixture Model using Bayesian Information Criterion
   on EM algorithm</p></li>
 <li><p>"block": Biclustering using a latent block model</p></li>
+<li><p>"som": Self-Organizing Map (SOM) with Hierarchical Clustering</p></li>
+<li><p>"cmeans": Fuzzy C-Means Clustering</p></li>
+<li><p>"hdbscan": Hierarchical Density-based Spatial Clustering of
+  Applications with Noise (HDBSCAN)</p></li>
 </ul>
-    <p>The <code>nmf.method</code> defaults are "brunet" (Kullback-Leibler divergence) and
-"lee" (Euclidean distance).</p>
-<p>The progress bar increments for every unit of <code>reps</code>.</p>
+    <p>The progress bar increments on every unit of <code>reps</code>.</p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>The <code>nmf.method</code> defaults are "brunet" (Kullback-Leibler
+  divergence) and "lee" (Euclidean distance). When "hdbscan" is chosen as an
+  algorithm to use, its results are excluded from the rest of the consensus
+  clusters. This is because there is no guarantee that the cluster assignment
+  will have every sample clustered; more often than not there will be noise
+  points or outliers. In addition, the number of distinct clusters may not
+  even be equal to <code>nk</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -254,6 +291,8 @@ default clustering algorithms provided are:</p><ul>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#note">Note</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
