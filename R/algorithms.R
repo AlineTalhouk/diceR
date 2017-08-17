@@ -6,6 +6,19 @@ DALG <- c("hc", "diana", "km", "pam")
 OALG <- c("ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan")
 ALG_NAMES <- c(NALG, DALG, OALG)
 
+
+# NMF-Based ---------------------------------------------------------------
+
+#' Transform to non-negative matrix by column-binding a negative replicate and
+#' then coercing all negative values to 0
+#' @noRd
+nmf_transform <- function(x) {
+  x %>%
+    cbind(-.) %>%
+    as.data.frame() %>%
+    purrr::map_dfc(~ ifelse(.x < 0, 0, .x))
+}
+
 # Distance-Based ----------------------------------------------------------
 
 #' Hierarchical Clustering

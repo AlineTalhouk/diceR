@@ -193,11 +193,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 #' @noRd
 cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
                         prep.data, scale, type, min.var, progress, pb) {
-  # Transform to non-negative matrix by column-binding a negative replicate and
-  # then coercing all negatives to 0
-  x.nmf <- data %>%
-    cbind(-.) %>%
-    apply(2, function(d) ifelse(d < 0, 0, d))
+  x.nmf <- nmf_transform(data)
   n <- nrow(data)
   n.new <- floor(n * p.item)
   lnmf <- length(nmf.method)
@@ -218,10 +214,9 @@ cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
         x.nmf_samp <- x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
                                              function(x) all(x == 0)))]
         if (prep.data == "sampled") {
-          x <- prepare_data(x.nmf_samp, scale = scale, type = type,
-                            min.var = min.var) %>%
-            cbind(-.) %>%
-            apply(2, function(d) ifelse(d < 0, 0, d))
+          x <- x.nmf_samp %>%
+            prepare_data(scale = scale, type = type, min.var = min.var) %>%
+            nmf_transform()
         } else if (prep.data %in% c("full", "none")) {
           x <- x.nmf_samp
         }
