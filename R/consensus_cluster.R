@@ -195,7 +195,6 @@ cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
                         prep.data, scale, type, min.var, progress, pb) {
   x.nmf <- nmf_transform(data)
   n <- nrow(data)
-  n.new <- floor(n * p.item)
   lnmf <- length(nmf.method)
   lnk <- length(nk)
   nmf.arr <- array(NA, c(n, reps, lnmf, lnk),
@@ -208,7 +207,7 @@ cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
     for (j in seq_len(lnmf)) {
       set.seed(seed.data)
       for (i in seq_len(reps)) {
-        ind.new <- sample(n, n.new, replace = FALSE)
+        ind.new <- sample(n, floor(n * p.item), replace = FALSE)
         # Transpose since input for NMF::nmf uses rows as vars, cols as samples
         # In case the subsample has all-zero vars, remove them to speed up comp
         x.nmf_samp <- x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
@@ -237,7 +236,6 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
                          prep.data, scale, type, min.var, progress, pb,
                          offset) {
   n <- nrow(data)
-  n.new <- floor(n * p.item)
   ld <- length(distance)
   lalg <- length(dalgs)
   ldist <- prod(lalg, ld)
@@ -256,7 +254,7 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
         set.seed(seed.data)
         for (i in seq_len(reps)) {
           # Find custom functions use get()
-          ind.new <- sample(n, n.new, replace = FALSE)
+          ind.new <- sample(n, floor(n * p.item), replace = FALSE)
           if (prep.data == "sampled") {
             x <- prepare_data(data[ind.new, ], scale = scale, type = type,
                               min.var = min.var)
@@ -283,7 +281,6 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
                           alpha, seed.data, prep.data, scale, type, min.var,
                           progress, pb, minPts, offset) {
   n <- nrow(data)
-  n.new <- floor(n * p.item)
   lalg <- length(oalgs)
   lnk <- length(nk)
   other.arr <- array(NA, c(n, reps, lalg, lnk),
@@ -295,7 +292,7 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
     for (j in seq_len(lalg)) {
       set.seed(seed.data)
       for (i in seq_len(reps)) {
-        ind.new <- sample(n, n.new, replace = FALSE)
+        ind.new <- sample(n, floor(n * p.item), replace = FALSE)
         if (prep.data == "sampled") {
           x <- prepare_data(data[ind.new, ], scale = scale, type = type,
                             min.var = min.var)
