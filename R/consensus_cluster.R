@@ -155,7 +155,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                                alpha, seed.data, prep.data, scale, type,
                                min.var, progress, pb, minPts,
                                offset = lnk * (lnmf + ldist) * reps)
-    if ("hdbscan" %in% algorithms) {
+    if ("hdbscan" %in% oalgs) {
       h.idx <- match("HDBSCAN", dimnames(other.arr)[[3]])
       h.obj <- other.arr[, , h.idx, ] %>%
         as.data.frame() %>%
