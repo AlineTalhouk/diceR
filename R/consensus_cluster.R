@@ -116,7 +116,6 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   prep.data <- match.arg(prep.data)
   if (prep.data == "full")
     data <- prepare_data(data, scale = scale, type = type, min.var = min.var)
-  nmf.arr <- other.arr <- dist.arr <- NULL
 
   # Use all algorithms if none are specified
   algorithms <- algorithms %||% ALG_NAMES
@@ -138,6 +137,8 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
     nmf.arr <- cluster_nmf(data, nk, p.item, reps, nmf.method, seed.nmf,
                            seed.data, prep.data, scale, type, min.var,
                            progress, pb)
+  } else {
+    nmf.arr <- NULL
   }
 
   # Cluster distance-based algorithms
@@ -146,6 +147,8 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
     dist.arr <- cluster_dist(data, nk, p.item, reps, dalgs, distance,
                              seed.data, prep.data, scale, type, min.var,
                              progress, pb, offset = lnk * lnmf * reps)
+  } else {
+    dist.arr <- NULL
   }
 
   # Cluster other algorithms
@@ -167,6 +170,8 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
         purrr::map(unlist)
       other.arr <- other.arr[, , -h.idx, , drop = FALSE]
     }
+  } else {
+    other.arr <- NULL
   }
 
   # Combine on third dimension (algorithm) and (optionally) save
