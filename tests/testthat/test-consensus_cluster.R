@@ -11,9 +11,10 @@ test_that("No algorithms means all algorithms, output is an array", {
 
 test_that("Output can be saved with or without time in file name", {
   x1 <- consensus_cluster(hgsc, nk = 2:4, reps = 5, algorithms = "hc",
-                          progress = FALSE, save = TRUE)
+                          progress = FALSE, file.name = "CCOutput")
   x2 <- consensus_cluster(hgsc, nk = 2:4, reps = 5, algorithms = "hc",
-                          progress = FALSE, save = TRUE, time.saved = TRUE)
+                          progress = FALSE, file.name = "CCOutput",
+                          time.saved = TRUE)
   expect_identical(x1, x2)
   file.remove(list.files(pattern = "CCOutput"))
 })

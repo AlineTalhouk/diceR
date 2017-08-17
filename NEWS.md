@@ -1,5 +1,7 @@
 # diceR 0.1.0.9000
 
+* Simplify saving mechanism in `consensus_cluster()` such that only `file.name` needs to be specified, and the `save` parameter has been removed
+
 * New algorithms: SOM, Fuzzy C-Means, DBSCAN (@dustin21, #118)
 
 * Added significance testing section to vignette

@@ -64,11 +64,11 @@
 #' @param seed.nmf random seed to use for NMF-based algorithms
 #' @param seed.data seed to use to ensure each algorithm operates on the same
 #'   set of subsamples
-#' @param save logical; if \code{TRUE}, the returned object will be saved at
-#'   each iteration as well as at the end.
-#' @param file.name file name of the written object
-#' @param time.saved logical; if \code{TRUE}, the date saved is appended to the
-#'   file name. Only applicable when \code{dir} is not \code{NULL}.
+#' @param file.name if not \code{NULL}, the returned array will be saved at each
+#'   iteration as well as at the end of the function call to an \code{rds}
+#'   object with \code{file.name} as the file name.
+#' @param time.saved logical; if \code{TRUE}, the date saved is appended to
+#'   \code{file.name}. Only applicable when \code{file.name} is not \code{NULL}.
 #' @return An array of dimension \code{nrow(x)} by \code{reps} by
 #'   \code{length(algorithms)} by \code{length(nk)}. Each cube of the array
 #'   represents a different k. Each slice of a cube is a matrix showing
@@ -110,8 +110,8 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               prep.data = c("none", "full", "sampled"),
                               scale = TRUE, type = c("conventional", "robust"),
                               min.var = 1, progress = TRUE,
-                              seed.nmf = 123456, seed.data = 1, save = FALSE,
-                              file.name = "CCOutput", time.saved = FALSE) {
+                              seed.nmf = 123456, seed.data = 1,
+                              file.name = NULL, time.saved = FALSE) {
   # Check for invalid distance inputs
   prep.data <- match.arg(prep.data)
   if (prep.data == "full")
@@ -177,7 +177,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   # Combine on third dimension (algorithm) and (optionally) save
   all.arr <- abind::abind(nmf.arr, dist.arr, other.arr, along = 3)
   if ("hdbscan" %in% algorithms) attr(all.arr, "hdbscan") <- h.obj
-  if (save) {
+  if (!is.null(file.name)) {
     if (time.saved) {
       path <- paste0(file.name, "_",
                      format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".rds")

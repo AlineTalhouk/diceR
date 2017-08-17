@@ -9,8 +9,8 @@ consensus_cluster(data, nk = 2:4, p.item = 0.8, reps = 1000,
   ydim = NULL, rlen = 200, alpha = c(0.05, 0.01), minPts = 5,
   distance = "euclidean", prep.data = c("none", "full", "sampled"),
   scale = TRUE, type = c("conventional", "robust"), min.var = 1,
-  progress = TRUE, seed.nmf = 123456, seed.data = 1, save = FALSE,
-  file.name = "CCOutput", time.saved = FALSE)
+  progress = TRUE, seed.nmf = 123456, seed.data = 1, file.name = NULL,
+  time.saved = FALSE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -73,13 +73,12 @@ used.}
 \item{seed.data}{seed to use to ensure each algorithm operates on the same
 set of subsamples}
 
-\item{save}{logical; if \code{TRUE}, the returned object will be saved at
-each iteration as well as at the end.}
+\item{file.name}{if not \code{NULL}, the returned array will be saved at each
+iteration as well as at the end of the function call to an \code{rds}
+object with \code{file.name} as the file name.}
 
-\item{file.name}{file name of the written object}
-
-\item{time.saved}{logical; if \code{TRUE}, the date saved is appended to the
-file name. Only applicable when \code{dir} is not \code{NULL}.}
+\item{time.saved}{logical; if \code{TRUE}, the date saved is appended to
+\code{file.name}. Only applicable when \code{file.name} is not \code{NULL}.}
 }
 \value{
 An array of dimension \code{nrow(x)} by \code{reps} by
