@@ -195,13 +195,11 @@ cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
                         prep.data, scale, type, min.var, progress, pb) {
   x_nmf <- nmf_transform(data)
   n <- nrow(data)
-  lnmf <- length(nmf.method)
-  lnk <- length(nk)
   alg <- paste0("NMF_", Hmisc::capitalize(nmf.method))
   arr_nmf <- init_array(data, reps, alg, nk)
 
-  for (k in seq_len(lnk)) {
-    for (j in seq_len(lnmf)) {
+  for (k in seq_along(nk)) {
+    for (j in seq_along(nmf.method)) {
       set.seed(seed.data)
       for (i in seq_len(reps)) {
         ind.new <- sample(n, floor(n * p.item))
@@ -217,7 +215,8 @@ cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
           t(x), rank = nk[k], method = nmf.method[j], seed = seed.nmf))
         if (progress) {
           utils::setTxtProgressBar(pb,
-                                   (k - 1) * lnmf * reps + (j - 1) * reps + i)
+                                   (k - 1) * length(nmf.method) * reps +
+                                     (j - 1) * reps + i)
         }
       }
     }
@@ -231,18 +230,14 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
                          prep.data, scale, type, min.var, progress, pb,
                          offset) {
   n <- nrow(data)
-  ld <- length(distance)
-  lalg <- length(dalgs)
-  ldist <- lalg * ld
-  lnk <- length(nk)
   alg <- apply(expand.grid(Hmisc::capitalize(distance),
                            toupper(dalgs)),
                1, function(x) paste0(x[2], "_", x[1]))
   arr_dist <- init_array(data, reps, alg, nk)
 
-  for (k in seq_len(lnk)) {
-    for (j in seq_len(lalg)) {
-      for (d in seq_len(ld)) {
+  for (k in seq_along(nk)) {
+    for (j in seq_along(dalgs)) {
+      for (d in seq_along(distance)) {
         set.seed(seed.data)
         for (i in seq_len(reps)) {
           ind.new <- sample(n, floor(n * p.item))
@@ -253,11 +248,12 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
           }
           dists <- distances(x, distance[d])
           # Find custom functions use get()
-          arr_dist[ind.new, i, (j - 1) * ld + d, k] <- get(dalgs[j])(dists[[1]],
-                                                                     nk[k])
+          arr_dist[ind.new, i, (j - 1) * length(distance) + d, k] <-
+            get(dalgs[j])(dists[[1]], nk[k])
           if (progress)
-            utils::setTxtProgressBar(pb, (k - 1) * lalg * ld * reps +
-                                       (j - 1) * ld * reps +
+            utils::setTxtProgressBar(pb, (k - 1) * length(dalgs) *
+                                       length(distance) * reps +
+                                       (j - 1) * length(distance) * reps +
                                        (d - 1) * reps + i + offset)
         }
       }
@@ -272,13 +268,11 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
                           alpha, seed.data, prep.data, scale, type, min.var,
                           progress, pb, minPts, offset) {
   n <- nrow(data)
-  lalg <- length(oalgs)
-  lnk <- length(nk)
   alg <- toupper(oalgs)
   arr_other <- init_array(data, reps, alg, nk)
 
-  for (k in seq_len(lnk)) {
-    for (j in seq_len(lalg)) {
+  for (k in seq_along(nk)) {
+    for (j in seq_along(oalgs)) {
       set.seed(seed.data)
       for (i in seq_len(reps)) {
         ind.new <- sample(n, floor(n * p.item))
@@ -299,7 +293,7 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
                  hdbscan = dbscan::hdbscan(x = x, minPts = minPts)$cluster
           )
         if (progress)
-          utils::setTxtProgressBar(pb, (k - 1) * lalg * reps +
+          utils::setTxtProgressBar(pb, (k - 1) * length(oalgs) * reps +
                                      (j - 1) * reps + i + offset)
       }
     }
