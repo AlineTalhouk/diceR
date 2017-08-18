@@ -193,7 +193,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 #' @noRd
 cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
                         prep.data, scale, type, min.var, progress, pb) {
-  x.nmf <- nmf_transform(data)
+  x_nmf <- nmf_transform(data)
   n <- nrow(data)
   lnmf <- length(nmf.method)
   lnk <- length(nk)
@@ -208,22 +208,20 @@ cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
       set.seed(seed.data)
       for (i in seq_len(reps)) {
         ind.new <- sample(n, floor(n * p.item), replace = FALSE)
-        # Transpose since input for NMF::nmf uses rows as vars, cols as samples
         # In case the subsample has all-zero vars, remove them to speed up comp
-        x.nmf_samp <- x.nmf[ind.new, !(apply(x.nmf[ind.new, ], 2,
-                                             function(x) all(x == 0)))]
+        x <- x_nmf[ind.new, ] %>% magrittr::extract(colSums(.) != 0)
         if (prep.data == "sampled") {
-          x <- x.nmf_samp %>%
+          x <- x %>%
             prepare_data(scale = scale, type = type, min.var = min.var) %>%
             nmf_transform()
-        } else if (prep.data %in% c("full", "none")) {
-          x <- x.nmf_samp
         }
+        # Transpose since input for NMF::nmf uses rows as vars, cols as samples
         nmf.arr[ind.new, i, j, k] <- NMF::predict(NMF::nmf(
           t(x), rank = nk[k], method = nmf.method[j], seed = seed.nmf))
-        if (progress)
+        if (progress) {
           utils::setTxtProgressBar(pb,
                                    (k - 1) * lnmf * reps + (j - 1) * reps + i)
+        }
       }
     }
   }
