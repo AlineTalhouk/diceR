@@ -236,7 +236,7 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
   n <- nrow(data)
   ld <- length(distance)
   lalg <- length(dalgs)
-  ldist <- prod(lalg, ld)
+  ldist <- lalg * ld
   lnk <- length(nk)
   dist.arr <- array(NA, c(n, reps, ldist, lnk),
                     dimnames = list(
