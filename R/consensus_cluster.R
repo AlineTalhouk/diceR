@@ -245,15 +245,14 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
       for (d in seq_len(ld)) {
         set.seed(seed.data)
         for (i in seq_len(reps)) {
-          # Find custom functions use get()
           ind.new <- sample(n, floor(n * p.item))
+          x <- data[ind.new, ]
+
           if (prep.data == "sampled") {
-            x <- prepare_data(data[ind.new, ], scale = scale, type = type,
-                              min.var = min.var)
-          } else if (prep.data %in% c("full", "none")) {
-            x <- data[ind.new, ]
+            x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
           }
           dists <- distances(x, distance[d])
+          # Find custom functions use get()
           dist.arr[ind.new, i, (j - 1) * ld + d, k] <- get(dalgs[j])(dists[[1]],
                                                                      nk[k])
           if (progress)
@@ -283,11 +282,10 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
       set.seed(seed.data)
       for (i in seq_len(reps)) {
         ind.new <- sample(n, floor(n * p.item))
+        x <- data[ind.new, ]
+
         if (prep.data == "sampled") {
-          x <- prepare_data(data[ind.new, ], scale = scale, type = type,
-                            min.var = min.var)
-        } else if (prep.data %in% c("full", "none")) {
-          x <- data[ind.new, ]
+          x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
         }
         other.arr[ind.new, i, j, k] <-
           switch(oalgs[j],
