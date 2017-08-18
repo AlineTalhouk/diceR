@@ -1,5 +1,7 @@
 # diceR 0.1.0.9000
 
+* Speed up the operation that transforms a matrix to become "NMF-ready"
+
 * Simplify saving mechanism in `consensus_cluster()` such that only `file.name` needs to be specified, and the `save` parameter has been removed
 
 * New algorithms: SOM, Fuzzy C-Means, DBSCAN (@dustin21, #118)
