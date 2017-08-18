@@ -134,33 +134,33 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   # Cluster NMF-based algorithms
   if (lnmf > 0) {
-    nmf.arr <- cluster_nmf(data, nk, p.item, reps, nmf.method, seed.nmf,
+    arr_nmf <- cluster_nmf(data, nk, p.item, reps, nmf.method, seed.nmf,
                            seed.data, prep.data, scale, type, min.var,
                            progress, pb)
   } else {
-    nmf.arr <- NULL
+    arr_nmf <- NULL
   }
 
   # Cluster distance-based algorithms
   dalgs <- algorithms[algorithms %in% DALG]
   if (ldist > 0) {
-    dist.arr <- cluster_dist(data, nk, p.item, reps, dalgs, distance,
+    arr_dist <- cluster_dist(data, nk, p.item, reps, dalgs, distance,
                              seed.data, prep.data, scale, type, min.var,
                              progress, pb, offset = lnk * lnmf * reps)
   } else {
-    dist.arr <- NULL
+    arr_dist <- NULL
   }
 
   # Cluster other algorithms
   oalgs <- algorithms[algorithms %in% OALG]
   if (lother > 0) {
-    other.arr <- cluster_other(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
+    arr_other <- cluster_other(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
                                alpha, seed.data, prep.data, scale, type,
                                min.var, progress, pb, minPts,
                                offset = lnk * (lnmf + ldist) * reps)
     if ("hdbscan" %in% oalgs) {
-      h.idx <- match("HDBSCAN", dimnames(other.arr)[[3]])
-      h.obj <- other.arr[, , h.idx, ] %>%
+      h.idx <- match("HDBSCAN", dimnames(arr_other)[[3]])
+      h.obj <- arr_other[, , h.idx, ] %>%
         as.data.frame() %>%
         purrr::map(~ {
           c(prop_outlier = sum(.x == 0, na.rm = TRUE) / sum(!is.na(.x)),
@@ -168,14 +168,14 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
         }) %>%
         purrr::transpose() %>%
         purrr::map(unlist)
-      other.arr <- other.arr[, , -h.idx, , drop = FALSE]
+      arr_other <- arr_other[, , -h.idx, , drop = FALSE]
     }
   } else {
-    other.arr <- NULL
+    arr_other <- NULL
   }
 
   # Combine on third dimension (algorithm) and (optionally) save
-  all.arr <- abind::abind(nmf.arr, dist.arr, other.arr, along = 3)
+  all.arr <- abind::abind(arr_nmf, arr_dist, arr_other, along = 3)
   if ("hdbscan" %in% algorithms) attr(all.arr, "hdbscan") <- h.obj
   if (!is.null(file.name)) {
     if (time.saved) {
@@ -198,7 +198,7 @@ cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
   lnmf <- length(nmf.method)
   lnk <- length(nk)
   alg <- paste0("NMF_", Hmisc::capitalize(nmf.method))
-  nmf.arr <- init_array(data, reps, alg, nk)
+  arr_nmf <- init_array(data, reps, alg, nk)
 
   for (k in seq_len(lnk)) {
     for (j in seq_len(lnmf)) {
@@ -213,7 +213,7 @@ cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
             nmf_transform()
         }
         # Transpose since input for NMF::nmf uses rows as vars, cols as samples
-        nmf.arr[ind.new, i, j, k] <- NMF::predict(NMF::nmf(
+        arr_nmf[ind.new, i, j, k] <- NMF::predict(NMF::nmf(
           t(x), rank = nk[k], method = nmf.method[j], seed = seed.nmf))
         if (progress) {
           utils::setTxtProgressBar(pb,
@@ -222,7 +222,7 @@ cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
       }
     }
   }
-  nmf.arr
+  arr_nmf
 }
 
 #' Cluster algorithms with dissimilarity specification
@@ -238,7 +238,7 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
   alg <- apply(expand.grid(Hmisc::capitalize(distance),
                            toupper(dalgs)),
                1, function(x) paste0(x[2], "_", x[1]))
-  dist.arr <- init_array(data, reps, alg, nk)
+  arr_dist <- init_array(data, reps, alg, nk)
 
   for (k in seq_len(lnk)) {
     for (j in seq_len(lalg)) {
@@ -253,7 +253,7 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
           }
           dists <- distances(x, distance[d])
           # Find custom functions use get()
-          dist.arr[ind.new, i, (j - 1) * ld + d, k] <- get(dalgs[j])(dists[[1]],
+          arr_dist[ind.new, i, (j - 1) * ld + d, k] <- get(dalgs[j])(dists[[1]],
                                                                      nk[k])
           if (progress)
             utils::setTxtProgressBar(pb, (k - 1) * lalg * ld * reps +
@@ -263,7 +263,7 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
       }
     }
   }
-  dist.arr
+  arr_dist
 }
 
 #' Cluster other algorithms
@@ -275,7 +275,7 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
   lalg <- length(oalgs)
   lnk <- length(nk)
   alg <- toupper(oalgs)
-  other.arr <- init_array(data, reps, alg, nk)
+  arr_other <- init_array(data, reps, alg, nk)
 
   for (k in seq_len(lnk)) {
     for (j in seq_len(lalg)) {
@@ -287,7 +287,7 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
         if (prep.data == "sampled") {
           x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
         }
-        other.arr[ind.new, i, j, k] <-
+        arr_other[ind.new, i, j, k] <-
           switch(oalgs[j],
                  ap = ap(x, nk[k]),
                  sc = sc(x, nk[k]),
@@ -301,10 +301,10 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
         if (progress)
           utils::setTxtProgressBar(pb, (k - 1) * lalg * reps +
                                      (j - 1) * reps + i + offset)
-      i}
+      }
     }
   }
-  other.arr
+  arr_other
 }
 
 #' Initialize array to store consensus clustering results
