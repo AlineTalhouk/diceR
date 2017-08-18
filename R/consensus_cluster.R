@@ -328,7 +328,7 @@ distances <- function(x, dist) {
   # Check if spearman distance is used (starts with string)
   sp.idx <- purrr::map_lgl(paste0("^", dist), grepl, "spearman")
   if (any(sp.idx)) {
-    spear <- stats::setNames(list(spearman_dist(x)), "spearman")
+    spear <- purrr::set_names(list(spearman_dist(x)), "spearman")
     d <- dist[!sp.idx]
   } else {
     spear <- NULL
