@@ -289,24 +289,10 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
         }
         other.arr[ind.new, i, j, k] <-
           switch(oalgs[j],
-                 ap = {
-                   ap.cl <- stats::setNames(dplyr::dense_rank(suppressWarnings(
-                     apcluster::apclusterK(apcluster::negDistMat, x,
-                                           nk[k], verbose = FALSE)@idx)),
-                     rownames(data[ind.new, ]))
-                   if (length(ap.cl) == 0) NA else ap.cl
-                 },
-                 sc = stats::setNames(kernlab::specc(as.matrix(x), nk[k],
-                                                     kernel = "rbfdot")@.Data,
-                                      rownames(data[ind.new, ])),
-                 gmm = mclust::Mclust(x, nk[k], verbose = FALSE)$classification,
-                 block = {
-                   blk.cl <- tryCatch(blockcluster::cocluster(
-                     x, "continuous",
-                     nbcocluster = c(nk[k], nk[k]))@rowclass + 1,
-                     error = function(e) return(NA))
-                   if (length(blk.cl) == 0) NA else blk.cl
-                 },
+                 ap = ap(x, nk[k]),
+                 sc = sc(x, nk[k]),
+                 gmm = gmm(x, nk[k]),
+                 block = block(x, nk[k]),
                  som = som(x, nk[k], xdim = xdim, ydim = ydim, rlen = rlen,
                            alpha = alpha),
                  cmeans = cmeans(x, nk[k]),
@@ -315,7 +301,7 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
         if (progress)
           utils::setTxtProgressBar(pb, (k - 1) * lalg * reps +
                                      (j - 1) * reps + i + offset)
-      }
+      i}
     }
   }
   other.arr

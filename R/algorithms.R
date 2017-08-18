@@ -48,6 +48,42 @@ pam <- function(d, k) {
 
 # All Other Algorithms ----------------------------------------------------
 
+#' Affinity Propagation
+#' @noRd
+ap <- function(x, k) {
+  cl <- suppressWarnings(
+    apcluster::apclusterK(
+      apcluster::negDistMat, x, k, verbose = FALSE)@idx
+  ) %>%
+    dplyr::dense_rank() %>%
+    purrr::set_names(rownames(x))
+  if (length(cl)) cl else NA
+}
+
+#' Spectral Clustering (Radial-Basis Kernel)
+#' @noRd
+sc <- function(x, k) {
+  kernlab::specc(as.matrix(x), k, kernel = "rbfdot")@.Data %>%
+    purrr::set_names(rownames(x))
+}
+
+#' Gaussian Mixture Model
+#' @noRd
+gmm <- function(x, k) {
+  mclust::Mclust(x, k, verbose = FALSE)$classification
+}
+
+#' Block Clustering (Co-clustering)
+#' @noRd
+block <- function(x, k) {
+  cl <- tryCatch(
+    blockcluster::cocluster(x, "continuous",
+                            nbcocluster = c(k, k))@rowclass + 1,
+    error = function(e) return(NA)
+  )
+  if (length(cl)) cl else NA
+}
+
 #' Self-Organizing Maps
 #' @noRd
 som <- function(x, k, xdim, ydim, rlen, alpha, method = "average") {
