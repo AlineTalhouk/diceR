@@ -371,11 +371,20 @@ distances <- function(x, dist) {
 #'
 #' @noRd
 spearman_dist <- function(x) {
-  rvec <- stats::cor(t(x), method = "spearman") %>%
+  x %>%
+    t() %>%
+    stats::cor(method = "spearman") %>%
     abs() %>%
     magrittr::subtract(1, .) %>%
-    magrittr::extract(lower.tri(.))
-  attributes(rvec) <- list(Size = nrow(x), Labels = rownames(x), Diag = FALSE,
-                           Upper = FALSE, methods = "spearman", class = "dist")
-  rvec
+    magrittr::extract(lower.tri(.)) %>%
+    magrittr::set_attributes(
+      list(
+        Size = nrow(x),
+        Labels = rownames(x),
+        Diag = FALSE,
+        Upper = FALSE,
+        methods = "spearman",
+        class = "dist"
+      )
+    )
 }
