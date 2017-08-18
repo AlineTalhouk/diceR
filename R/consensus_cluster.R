@@ -207,7 +207,7 @@ cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
     for (j in seq_len(lnmf)) {
       set.seed(seed.data)
       for (i in seq_len(reps)) {
-        ind.new <- sample(n, floor(n * p.item), replace = FALSE)
+        ind.new <- sample(n, floor(n * p.item))
         # In case the subsample has all-zero vars, remove them to speed up comp
         x <- x_nmf[ind.new, ] %>% magrittr::extract(colSums(.) != 0)
         if (prep.data == "sampled") {
@@ -252,7 +252,7 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
         set.seed(seed.data)
         for (i in seq_len(reps)) {
           # Find custom functions use get()
-          ind.new <- sample(n, floor(n * p.item), replace = FALSE)
+          ind.new <- sample(n, floor(n * p.item))
           if (prep.data == "sampled") {
             x <- prepare_data(data[ind.new, ], scale = scale, type = type,
                               min.var = min.var)
@@ -290,7 +290,7 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
     for (j in seq_len(lalg)) {
       set.seed(seed.data)
       for (i in seq_len(reps)) {
-        ind.new <- sample(n, floor(n * p.item), replace = FALSE)
+        ind.new <- sample(n, floor(n * p.item))
         if (prep.data == "sampled") {
           x <- prepare_data(data[ind.new, ], scale = scale, type = type,
                             min.var = min.var)
