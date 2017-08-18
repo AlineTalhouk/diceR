@@ -197,12 +197,9 @@ cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
   n <- nrow(data)
   lnmf <- length(nmf.method)
   lnk <- length(nk)
-  nmf.arr <- array(NA, c(n, reps, lnmf, lnk),
-                   dimnames = list(
-                     rownames(data),
-                     paste0("R", seq_len(reps)),
-                     paste0("NMF_", Hmisc::capitalize(nmf.method)),
-                     nk))
+  alg <- paste0("NMF_", Hmisc::capitalize(nmf.method))
+  nmf.arr <- init_array(data, reps, alg, nk)
+
   for (k in seq_len(lnk)) {
     for (j in seq_len(lnmf)) {
       set.seed(seed.data)
@@ -238,14 +235,11 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
   lalg <- length(dalgs)
   ldist <- lalg * ld
   lnk <- length(nk)
-  dist.arr <- array(NA, c(n, reps, ldist, lnk),
-                    dimnames = list(
-                      rownames(data),
-                      paste0("R", seq_len(reps)),
-                      apply(expand.grid(Hmisc::capitalize(distance),
-                                        toupper(dalgs)),
-                            1, function(x) paste0(x[2], "_", x[1])),
-                      nk))
+  alg <- apply(expand.grid(Hmisc::capitalize(distance),
+                           toupper(dalgs)),
+               1, function(x) paste0(x[2], "_", x[1]))
+  dist.arr <- init_array(data, reps, alg, nk)
+
   for (k in seq_len(lnk)) {
     for (j in seq_len(lalg)) {
       for (d in seq_len(ld)) {
@@ -281,11 +275,9 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
   n <- nrow(data)
   lalg <- length(oalgs)
   lnk <- length(nk)
-  other.arr <- array(NA, c(n, reps, lalg, lnk),
-                     dimnames = list(rownames(data),
-                                     paste0("R", seq_len(reps)),
-                                     toupper(oalgs),
-                                     nk))
+  alg <- toupper(oalgs)
+  other.arr <- init_array(data, reps, alg, nk)
+
   for (k in seq_len(lnk)) {
     for (j in seq_len(lalg)) {
       set.seed(seed.data)
@@ -329,6 +321,14 @@ cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
     }
   }
   other.arr
+}
+
+#' Initialize array to store consensus clustering results
+#' @noRd
+init_array <- function(data, r, a, k) {
+  rn <- rownames(data) %||% seq_len(nrow(data))
+  dn <- list(rn, paste0("R", seq_len(r)), a, k)
+  array(NA_integer_, dim = purrr::map_int(dn, length), dimnames = dn)
 }
 
 #' Return a list of distance matrices
