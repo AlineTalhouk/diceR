@@ -48,7 +48,6 @@ Imports:
     quantable,
     RankAggreg,
     sigclust,
-    methods,
     Rcpp
 Suggests:
     testthat,
