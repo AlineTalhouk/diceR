@@ -138,3 +138,24 @@ cmeans <- function(x, k) {
     as.integer()
   fuzzy[[mbest]]$cluster
 }
+
+#' Hierarchical Density-Based Spatial Clustering of Applications with Noise
+#' summarize the proportino of outliers and number of clusters
+#' @noRd
+hdbscan_summarize <- function(arr, algorithms) {
+  if ("hdbscan" %in% algorithms) {
+    h.idx <- match("HDBSCAN", dimnames(arr)[[3]])
+    h.obj <- arr[, , h.idx, ] %>%
+      as.data.frame() %>%
+      purrr::map(~ {
+        c(prop_outlier = sum(.x == 0, na.rm = TRUE) / sum(!is.na(.x)),
+          num_cluster = dplyr::n_distinct(!.x %in% c(NA, 0)))
+      }) %>%
+      purrr::transpose() %>%
+      purrr::map(unlist)
+    arr <- arr[, , -h.idx, , drop = FALSE]
+    attr(arr, "hdbscan") <- h.obj
+  }
+  arr
+}
+
