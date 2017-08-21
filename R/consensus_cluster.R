@@ -122,9 +122,11 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   # Store consensus dimensions for calculating progress bar increments/offsets
   lnk <- length(nk)
-  lnmf <- sum(NALG %in% algorithms) * length(nmf.method)
-  ldist <- sum(DALG %in% algorithms) * length(distance)
-  lother <- sum(OALG %in% algorithms)
+  algs <- dplyr::lst(NALG, DALG, OALG) %>%
+    purrr::map(~ algorithms[algorithms %in% .x])
+  lnmf <- length(algs$NALG) * length(nmf.method)
+  ldist <- length(algs$DALG) * length(distance)
+  lother <- length(algs$OALG)
   if (progress) {
     pb <- utils::txtProgressBar(max = lnk * (lnmf + lother + ldist) * reps,
                                 style = 3)
@@ -132,51 +134,31 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
     pb <- NULL
   }
 
-  # Cluster NMF-based algorithms
-  if (lnmf > 0) {
-    arr_nmf <- cluster_nmf(data, nk, p.item, reps, nmf.method, seed.nmf,
-                           seed.data, prep.data, scale, type, min.var,
-                           progress, pb)
-  } else {
-    arr_nmf <- NULL
-  }
+  # Argument lists: Common, NMF, Distance, Other
+  cargs <- dplyr::lst(data, nk, p.item, reps, seed.data, prep.data, scale,
+                      type, min.var, progress, pb)
+  nargs <- c(cargs, dplyr::lst(nalgs = algs$NALG, nmf.method, seed.nmf))
+  dargs <- c(cargs, dplyr::lst(dalgs = algs$DALG, distance,
+                               offset = lnk * lnmf * reps))
+  oargs <- c(cargs, dplyr::lst(oalgs = algs$OALG, xdim, ydim, rlen, alpha,
+                               minPts, offset = lnk * (lnmf + ldist) * reps))
 
-  # Cluster distance-based algorithms
-  dalgs <- algorithms[algorithms %in% DALG]
-  if (ldist > 0) {
-    arr_dist <- cluster_dist(data, nk, p.item, reps, dalgs, distance,
-                             seed.data, prep.data, scale, type, min.var,
-                             progress, pb, offset = lnk * lnmf * reps)
-  } else {
-    arr_dist <- NULL
-  }
-
-  # Cluster other algorithms
-  oalgs <- algorithms[algorithms %in% OALG]
-  if (lother > 0) {
-    arr_other <- cluster_other(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
-                               alpha, seed.data, prep.data, scale, type,
-                               min.var, progress, pb, minPts,
-                               offset = lnk * (lnmf + ldist) * reps)
-    if ("hdbscan" %in% oalgs) {
-      h.idx <- match("HDBSCAN", dimnames(arr_other)[[3]])
-      h.obj <- arr_other[, , h.idx, ] %>%
-        as.data.frame() %>%
-        purrr::map(~ {
-          c(prop_outlier = sum(.x == 0, na.rm = TRUE) / sum(!is.na(.x)),
-            num_cluster = dplyr::n_distinct(!.x %in% c(NA, 0)))
-        }) %>%
-        purrr::transpose() %>%
-        purrr::map(unlist)
-      arr_other <- arr_other[, , -h.idx, , drop = FALSE]
-    }
-  } else {
-    arr_other <- NULL
-  }
+  # Cluster NMF, Distance, and Other algorithms
+  arr_nmf <- lnmf %>%
+    purrr::when(. > 0 ~ cluster_nmf %>% purrr::invoke(nargs), ~ NULL)
+  arr_dist <- ldist %>%
+    purrr::when(. > 0 ~ cluster_dist %>% purrr::invoke(dargs), ~ NULL)
+  arr_other <- lother %>%
+    purrr::when(. > 0 ~ cluster_other %>%
+                  purrr::invoke(oargs) %>%
+                  hdbscan_summarize(algorithms), ~ NULL)
 
   # Combine on third dimension (algorithm) and (optionally) save
-  all.arr <- abind::abind(arr_nmf, arr_dist, arr_other, along = 3)
-  if ("hdbscan" %in% algorithms) attr(all.arr, "hdbscan") <- h.obj
+  arr_all <- abind::abind(arr_nmf, arr_dist, arr_other, along = 3)
+  if ("hdbscan" %in% algorithms) {
+    attr(arr_all, "hdbscan") <- attr(arr_other, "hdbscan")
+    attributes(arr_other) <- NULL
+  }
   if (!is.null(file.name)) {
     if (time.saved) {
       path <- paste0(file.name, "_",
@@ -184,18 +166,19 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
     } else {
       path <- paste0(file.name, ".rds")
     }
-    saveRDS(all.arr, file = path)
+    saveRDS(arr_all, file = path)
   }
-  all.arr
+  arr_all
 }
 
 #' Cluster NMF-based algorithms
 #' @noRd
-cluster_nmf <- function(data, nk, p.item, reps, nmf.method, seed.nmf, seed.data,
-                        prep.data, scale, type, min.var, progress, pb) {
+cluster_nmf <- function(data, nk, p.item, reps, nalgs, nmf.method, seed.nmf,
+                        seed.data, prep.data, scale, type, min.var, progress,
+                        pb) {
   x_nmf <- nmf_transform(data)
   n <- nrow(data)
-  alg <- paste0("NMF_", Hmisc::capitalize(nmf.method))
+  alg <- paste(toupper(nalgs), Hmisc::capitalize(nmf.method), sep = "_")
   arr_nmf <- init_array(data, reps, alg, nk)
 
   for (k in seq_along(nk)) {
