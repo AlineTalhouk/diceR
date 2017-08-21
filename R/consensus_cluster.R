@@ -145,11 +145,11 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   # Cluster NMF, Distance, and Other algorithms
   arr_nmf <- lnmf %>%
-    purrr::when(. > 0 ~ cluster_nmf %>% purrr::invoke(nargs), ~ NULL)
+    purrr::when(. > 0 ~ cc_nmf %>% purrr::invoke(nargs), ~ NULL)
   arr_dist <- ldist %>%
-    purrr::when(. > 0 ~ cluster_dist %>% purrr::invoke(dargs), ~ NULL)
+    purrr::when(. > 0 ~ cc_dist %>% purrr::invoke(dargs), ~ NULL)
   arr_other <- lother %>%
-    purrr::when(. > 0 ~ cluster_other %>%
+    purrr::when(. > 0 ~ cc_other %>%
                   purrr::invoke(oargs) %>%
                   hdbscan_summarize(algorithms), ~ NULL)
 
@@ -173,9 +173,9 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
 #' Cluster NMF-based algorithms
 #' @noRd
-cluster_nmf <- function(data, nk, p.item, reps, nalgs, nmf.method, seed.nmf,
-                        seed.data, prep.data, scale, type, min.var, progress,
-                        pb) {
+cc_nmf <- function(data, nk, p.item, reps, nalgs, nmf.method, seed.nmf,
+                   seed.data, prep.data, scale, type, min.var, progress,
+                   pb) {
   x_nmf <- nmf_transform(data)
   n <- nrow(data)
   alg <- paste(toupper(nalgs), Hmisc::capitalize(nmf.method), sep = "_")
@@ -209,9 +209,9 @@ cluster_nmf <- function(data, nk, p.item, reps, nalgs, nmf.method, seed.nmf,
 
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
-cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
-                         prep.data, scale, type, min.var, progress, pb,
-                         offset) {
+cc_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
+                    prep.data, scale, type, min.var, progress, pb,
+                    offset) {
   n <- nrow(data)
   alg <- apply(expand.grid(Hmisc::capitalize(distance),
                            toupper(dalgs)),
@@ -247,9 +247,9 @@ cluster_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
 
 #' Cluster other algorithms
 #' @noRd
-cluster_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
-                          alpha, seed.data, prep.data, scale, type, min.var,
-                          progress, pb, minPts, offset) {
+cc_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
+                     alpha, seed.data, prep.data, scale, type, min.var,
+                     progress, pb, minPts, offset) {
   n <- nrow(data)
   alg <- toupper(oalgs)
   arr_other <- init_array(data, reps, alg, nk)
