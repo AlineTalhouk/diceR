@@ -371,7 +371,7 @@ spearman_dist <- function(x) {
     abs() %>%
     magrittr::subtract(1, .) %>%
     magrittr::extract(lower.tri(.)) %>%
-    magrittr::set_attributes(
+    `attributes<-`(
       list(
         Size = nrow(x),
         Labels = rownames(x),
