@@ -153,12 +153,10 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   if (!is.null(file.name)) {
     if (time.saved) {
-      path <- paste0(file.name, "_",
-                     format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".rds")
-    } else {
-      path <- paste0(file.name, ".rds")
+      file.name <- paste0(file.name, "_",
+                          format(Sys.time(), "%Y-%m-%d_%H-%M-%S"))
     }
-    saveRDS(arr_all, file = path)
+    saveRDS(arr_all, file = paste0(file.name, ".rds"))
   }
   arr_all
 }
