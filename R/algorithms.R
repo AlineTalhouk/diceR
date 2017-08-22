@@ -9,6 +9,13 @@ ALG_NAMES <- c(NALG, DALG, OALG)
 
 # NMF-Based ---------------------------------------------------------------
 
+#' Nonnegative Matrix Factorization
+#' Transpose since input for NMF::nmf uses rows as vars, cols as samples
+#' @noRd
+nmf <- function(x, k, method, seed) {
+  NMF::predict(NMF::nmf(t(x), rank = k, method = method, seed = seed))
+}
+
 #' Transform to non-negative matrix by column-binding a negative replicate and
 #' then coercing all negative values to 0
 #' @noRd
@@ -140,7 +147,12 @@ cmeans <- function(x, k) {
 }
 
 #' Hierarchical Density-Based Spatial Clustering of Applications with Noise
-#' summarize the proportion of outliers and number of clusters
+#' @noRd
+hdbscan <- function(x, minPts) {
+  dbscan::hdbscan(x = x, minPts = minPts)$cluster
+}
+
+#' Summarize the proportion of outliers and number of clusters
 #' remove from consensus array and assign as an attribute, if used
 #' @noRd
 hdbscan_summarize <- function(arr, algorithms) {
