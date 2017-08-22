@@ -112,7 +112,8 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               min.var = 1, progress = TRUE,
                               seed.nmf = 123456, seed.data = 1,
                               file.name = NULL, time.saved = FALSE) {
-  if (match.arg(prep.data) == "full")  # prepare data
+  prep.data <- match.arg(prep.data)
+  if (prep.data == "full")
     data <- prepare_data(data, scale = scale, type = type, min.var = min.var)
   algorithms <- algorithms %||% ALG_NAMES  # Use all if none are specified
 
@@ -124,7 +125,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   ldist <- length(algs$DALG) * length(distance)
   lother <- length(algs$OALG)
   if (progress) {
-    pb <- utils::txtProgressBar(max = lnk * (lnmf + lother + ldist) * reps,
+    pb <- utils::txtProgressBar(max = lnk * (lnmf + ldist + lother) * reps,
                                 style = 3)
   } else {
     pb <- NULL
@@ -133,17 +134,16 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   # Argument lists: Common, NMF, Distance, Other
   cargs <- dplyr::lst(data, nk, p.item, reps, seed.data, prep.data, scale, type,
                       min.var, progress, pb)
-  nargs <- c(cargs, dplyr::lst(nalgs = algs$NALG, nmf.method, seed.nmf))
-  dargs <- c(cargs, dplyr::lst(dalgs = algs$DALG, distance,
+  nargs <- c(cargs, dplyr::lst(algs = algs$NALG, nmf.method, seed.nmf))
+  dargs <- c(cargs, dplyr::lst(algs = algs$DALG, distance,
                                offset = lnk * lnmf * reps))
-  oargs <- c(cargs, dplyr::lst(oalgs = algs$OALG, xdim, ydim, rlen, alpha,
+  oargs <- c(cargs, dplyr::lst(algs = algs$OALG, xdim, ydim, rlen, alpha,
                                minPts, offset = lnk * (lnmf + ldist) * reps))
+  args <- list(nargs, dargs, oargs)
 
   # Run cc on all algorithms, combine on 3rd dim, HDBSCAN manipulation
-  arr_all <- list(list(lnmf, ldist, lother),
-                  list(cc_nmf, cc_dist, cc_other),
-                  list(nargs, dargs, oargs)) %>%
-    purrr::pmap(cc) %>%
+  fun <- list(cc_nmf, cc_dist, cc_other)
+  arr_all <- purrr::pmap(list(fun, args), cc) %>%
     abind::abind(along = 3) %>%
     hdbscan_summarize(algorithms)
 
@@ -157,20 +157,20 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   arr_all
 }
 
-#' Consensus cluster invoked on different algorithms, functions, arguments
+#' If algs from each group exist, invoke respective cc fun, otherwise NULL
 #' @noRd
-cc <- function(n, fun, args) {
-  n %>% purrr::when(. > 0 ~ fun %>% purrr::invoke(args), ~ NULL)
+cc <- function(fun, args) {
+  length(args$algs) %>% purrr::when(. > 0 ~ purrr::invoke(fun, args), ~ NULL)
 }
 
 #' Cluster NMF-based algorithms
 #' @noRd
-cc_nmf <- function(data, nk, p.item, reps, nalgs, nmf.method, seed.nmf,
+cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
                    seed.data, prep.data, scale, type, min.var, progress,
                    pb) {
   x_nmf <- nmf_transform(data)
   n <- nrow(data)
-  alg <- paste(toupper(nalgs), Hmisc::capitalize(nmf.method), sep = "_")
+  alg <- paste(toupper(algs), Hmisc::capitalize(nmf.method), sep = "_")
   arr_nmf <- init_array(data, reps, alg, nk)
 
   for (k in seq_along(nk)) {
@@ -201,17 +201,17 @@ cc_nmf <- function(data, nk, p.item, reps, nalgs, nmf.method, seed.nmf,
 
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
-cc_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
+cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
                     prep.data, scale, type, min.var, progress, pb,
                     offset) {
   n <- nrow(data)
   alg <- apply(expand.grid(Hmisc::capitalize(distance),
-                           toupper(dalgs)),
+                           toupper(algs)),
                1, function(x) paste0(x[2], "_", x[1]))
   arr_dist <- init_array(data, reps, alg, nk)
 
   for (k in seq_along(nk)) {
-    for (j in seq_along(dalgs)) {
+    for (j in seq_along(algs)) {
       for (d in seq_along(distance)) {
         set.seed(seed.data)
         for (i in seq_len(reps)) {
@@ -224,9 +224,9 @@ cc_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
           dists <- distances(x, distance[d])
           # Find custom functions use get()
           arr_dist[ind.new, i, (j - 1) * length(distance) + d, k] <-
-            get(dalgs[j])(dists[[1]], nk[k])
+            get(algs[j])(dists[[1]], nk[k])
           if (progress)
-            utils::setTxtProgressBar(pb, (k - 1) * length(dalgs) *
+            utils::setTxtProgressBar(pb, (k - 1) * length(algs) *
                                        length(distance) * reps +
                                        (j - 1) * length(distance) * reps +
                                        (d - 1) * reps + i + offset)
@@ -239,15 +239,15 @@ cc_dist <- function(data, nk, p.item, reps, dalgs, distance, seed.data,
 
 #' Cluster other algorithms
 #' @noRd
-cc_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
+cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen,
                      alpha, seed.data, prep.data, scale, type, min.var,
                      progress, pb, minPts, offset) {
   n <- nrow(data)
-  alg <- toupper(oalgs)
+  alg <- toupper(algs)
   arr_other <- init_array(data, reps, alg, nk)
 
   for (k in seq_along(nk)) {
-    for (j in seq_along(oalgs)) {
+    for (j in seq_along(algs)) {
       set.seed(seed.data)
       for (i in seq_len(reps)) {
         ind.new <- sample(n, floor(n * p.item))
@@ -257,7 +257,7 @@ cc_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
           x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
         }
         arr_other[ind.new, i, j, k] <-
-          switch(oalgs[j],
+          switch(algs[j],
                  ap = ap(x, nk[k]),
                  sc = sc(x, nk[k]),
                  gmm = gmm(x, nk[k]),
@@ -268,7 +268,7 @@ cc_other <- function(data, nk, p.item, reps, oalgs, xdim, ydim, rlen,
                  hdbscan = dbscan::hdbscan(x = x, minPts = minPts)$cluster
           )
         if (progress)
-          utils::setTxtProgressBar(pb, (k - 1) * length(oalgs) * reps +
+          utils::setTxtProgressBar(pb, (k - 1) * length(algs) * reps +
                                      (j - 1) * reps + i + offset)
       }
     }
