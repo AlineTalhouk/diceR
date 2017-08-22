@@ -143,22 +143,14 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   oargs <- c(cargs, dplyr::lst(oalgs = algs$OALG, xdim, ydim, rlen, alpha,
                                minPts, offset = lnk * (lnmf + ldist) * reps))
 
-  # Cluster NMF, Distance, and Other algorithms
-  arr_nmf <- lnmf %>%
-    purrr::when(. > 0 ~ cc_nmf %>% purrr::invoke(nargs), ~ NULL)
-  arr_dist <- ldist %>%
-    purrr::when(. > 0 ~ cc_dist %>% purrr::invoke(dargs), ~ NULL)
-  arr_other <- lother %>%
-    purrr::when(. > 0 ~ cc_other %>%
-                  purrr::invoke(oargs) %>%
-                  hdbscan_summarize(algorithms), ~ NULL)
+  # Run cc on all algorithms, combine on 3rd dim, HDBSCAN manipulation
+  arr_all <- list(list(lnmf, ldist, lother),
+                  list(cc_nmf, cc_dist, cc_other),
+                  list(nargs, dargs, oargs)) %>%
+    purrr::pmap(cc) %>%
+    abind::abind(along = 3) %>%
+    hdbscan_summarize(algorithms)
 
-  # Combine on third dimension (algorithm) and (optionally) save
-  arr_all <- abind::abind(arr_nmf, arr_dist, arr_other, along = 3)
-  if ("hdbscan" %in% algorithms) {
-    attr(arr_all, "hdbscan") <- attr(arr_other, "hdbscan")
-    attributes(arr_other) <- NULL
-  }
   if (!is.null(file.name)) {
     if (time.saved) {
       path <- paste0(file.name, "_",
@@ -169,6 +161,12 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
     saveRDS(arr_all, file = path)
   }
   arr_all
+}
+
+#' Consensus cluster invoked on different algorithms, functions, arguments
+#' @noRd
+cc <- function(n, f, args) {
+  n %>% purrr::when(. > 0 ~ f %>% purrr::invoke(args), ~ NULL)
 }
 
 #' Cluster NMF-based algorithms
