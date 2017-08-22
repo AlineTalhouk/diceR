@@ -112,9 +112,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               min.var = 1, progress = TRUE,
                               seed.nmf = 123456, seed.data = 1,
                               file.name = NULL, time.saved = FALSE) {
-  # Check for invalid distance inputs
-  prep.data <- match.arg(prep.data)
-  if (prep.data == "full")
+  if (match.arg(prep.data) == "full")  # prepare data
     data <- prepare_data(data, scale = scale, type = type, min.var = min.var)
 
   # Use all algorithms if none are specified
