@@ -166,12 +166,11 @@ cc <- function(fun, args) {
 #' Cluster NMF-based algorithms
 #' @noRd
 cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
-                   seed.data, prep.data, scale, type, min.var, progress,
-                   pb) {
-  x_nmf <- nmf_transform(data)
+                   seed.data, prep.data, scale, type, min.var, progress, pb) {
   n <- nrow(data)
   alg <- paste(toupper(algs), Hmisc::capitalize(nmf.method), sep = "_")
   arr_nmf <- init_array(data, reps, alg, nk)
+  x_nmf <- nmf_transform(data)
 
   for (k in seq_along(nk)) {
     for (j in seq_along(nmf.method)) {
@@ -200,12 +199,11 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
 cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
-                    prep.data, scale, type, min.var, progress, pb,
-                    offset) {
+                    prep.data, scale, type, min.var, progress, pb, offset) {
   n <- nrow(data)
-  alg <- apply(expand.grid(Hmisc::capitalize(distance),
-                           toupper(algs)),
-               1, function(x) paste0(x[2], "_", x[1]))
+  alg <- paste(rep(toupper(algs), each = length(distance)),
+               rep(Hmisc::capitalize(distance), length(algs)),
+               sep = "_")
   arr_dist <- init_array(data, reps, alg, nk)
 
   for (k in seq_along(nk)) {
@@ -236,9 +234,9 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
 
 #' Cluster other algorithms
 #' @noRd
-cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen,
-                     alpha, seed.data, prep.data, scale, type, min.var,
-                     progress, pb, minPts, offset) {
+cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
+                     minPts, seed.data, prep.data, scale, type, min.var,
+                     progress, pb, offset) {
   n <- nrow(data)
   alg <- toupper(algs)
   arr_other <- init_array(data, reps, alg, nk)
