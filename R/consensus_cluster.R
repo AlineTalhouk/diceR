@@ -185,13 +185,11 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
             prepare_data(scale = scale, type = type, min.var = min.var) %>%
             nmf_transform()
         }
-        # Transpose since input for NMF::nmf uses rows as vars, cols as samples
-        arr_nmf[ind.new, i, j, k] <- NMF::predict(NMF::nmf(
-          t(x), rank = nk[k], method = nmf.method[j], seed = seed.nmf))
+        arr_nmf[ind.new, i, j, k] <- nmf(x, nk[k], nmf.method[j], seed.nmf)
+
         if (progress) {
-          utils::setTxtProgressBar(pb,
-                                   (k - 1) * length(nmf.method) * reps +
-                                     (j - 1) * reps + i)
+          value <- (k - 1) * length(nmf.method) * reps + (j - 1) * reps + i
+          utils::setTxtProgressBar(pb, value)
         }
       }
     }
@@ -222,14 +220,13 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
             x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
           }
           dists <- distances(x, distance[d])
-          # Find custom functions use get()
           arr_dist[ind.new, i, (j - 1) * length(distance) + d, k] <-
-            get(algs[j])(dists[[1]], nk[k])
-          if (progress)
-            utils::setTxtProgressBar(pb, (k - 1) * length(algs) *
-                                       length(distance) * reps +
-                                       (j - 1) * length(distance) * reps +
-                                       (d - 1) * reps + i + offset)
+            get(algs[j])(dists[[1]], nk[k])  # get() for custom funs
+          if (progress) {
+            value <- (k - 1) * length(algs) * length(distance) * reps +
+              (j - 1) * length(distance) * reps + (d - 1) * reps + i + offset
+            utils::setTxtProgressBar(pb, value)
+          }
         }
       }
     }
@@ -262,14 +259,14 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen,
                  sc = sc(x, nk[k]),
                  gmm = gmm(x, nk[k]),
                  block = block(x, nk[k]),
-                 som = som(x, nk[k], xdim = xdim, ydim = ydim, rlen = rlen,
-                           alpha = alpha),
+                 som = som(x, nk[k], xdim, ydim, rlen, alpha),
                  cmeans = cmeans(x, nk[k]),
-                 hdbscan = dbscan::hdbscan(x = x, minPts = minPts)$cluster
+                 hdbscan = hdbscan(x, minPts)
           )
-        if (progress)
-          utils::setTxtProgressBar(pb, (k - 1) * length(algs) * reps +
-                                     (j - 1) * reps + i + offset)
+        if (progress) {
+          value <- (k - 1) * length(algs) * reps + (j - 1) * reps + i + offset
+          utils::setTxtProgressBar(pb, value)
+        }
       }
     }
   }
