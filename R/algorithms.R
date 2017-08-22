@@ -140,7 +140,8 @@ cmeans <- function(x, k) {
 }
 
 #' Hierarchical Density-Based Spatial Clustering of Applications with Noise
-#' summarize the proportino of outliers and number of clusters
+#' summarize the proportion of outliers and number of clusters
+#' remove from consensus array and assign as an attribute, if used
 #' @noRd
 hdbscan_summarize <- function(arr, algorithms) {
   if ("hdbscan" %in% algorithms) {
@@ -158,4 +159,3 @@ hdbscan_summarize <- function(arr, algorithms) {
   }
   arr
 }
-
