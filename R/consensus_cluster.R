@@ -114,9 +114,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               file.name = NULL, time.saved = FALSE) {
   if (match.arg(prep.data) == "full")  # prepare data
     data <- prepare_data(data, scale = scale, type = type, min.var = min.var)
-
-  # Use all algorithms if none are specified
-  algorithms <- algorithms %||% ALG_NAMES
+  algorithms <- algorithms %||% ALG_NAMES  # Use all if none are specified
 
   # Store consensus dimensions for calculating progress bar increments/offsets
   lnk <- length(nk)
@@ -133,8 +131,8 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   }
 
   # Argument lists: Common, NMF, Distance, Other
-  cargs <- dplyr::lst(data, nk, p.item, reps, seed.data, prep.data, scale,
-                      type, min.var, progress, pb)
+  cargs <- dplyr::lst(data, nk, p.item, reps, seed.data, prep.data, scale, type,
+                      min.var, progress, pb)
   nargs <- c(cargs, dplyr::lst(nalgs = algs$NALG, nmf.method, seed.nmf))
   dargs <- c(cargs, dplyr::lst(dalgs = algs$DALG, distance,
                                offset = lnk * lnmf * reps))
@@ -161,8 +159,8 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
 #' Consensus cluster invoked on different algorithms, functions, arguments
 #' @noRd
-cc <- function(n, f, args) {
-  n %>% purrr::when(. > 0 ~ f %>% purrr::invoke(args), ~ NULL)
+cc <- function(n, fun, args) {
+  n %>% purrr::when(. > 0 ~ fun %>% purrr::invoke(args), ~ NULL)
 }
 
 #' Cluster NMF-based algorithms
