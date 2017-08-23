@@ -125,15 +125,19 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   ldist <- length(algs$DALG) * length(distance)
   lother <- length(algs$OALG)
   if (progress) {
-    pb <- utils::txtProgressBar(max = lnk * (lnmf + ldist + lother) * reps,
-                                style = 3)
+    pb <- progress::progress_bar$new(
+      format = "Clustering :alg [:bar] :percent eta: :eta",
+      total = lnk * (lnmf + ldist + lother) * reps,
+      width = 100,
+      clear = FALSE
+    )
   } else {
     pb <- NULL
   }
 
   # Argument lists: Common, NMF, Distance, Other
   cargs <- dplyr::lst(data, nk, p.item, reps, seed.data, prep.data, scale, type,
-                      min.var, progress, pb)
+                      min.var, pb)
   nargs <- c(cargs, dplyr::lst(algs = algs$NALG, nmf.method, seed.nmf))
   dargs <- c(cargs, dplyr::lst(algs = algs$DALG, distance,
                                offset = lnk * lnmf * reps))
@@ -166,7 +170,7 @@ cc <- function(fun, args) {
 #' Cluster NMF-based algorithms
 #' @noRd
 cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
-                   seed.data, prep.data, scale, type, min.var, progress, pb) {
+                   seed.data, prep.data, scale, type, min.var, pb) {
   n <- nrow(data)
   alg <- paste(toupper(algs), Hmisc::capitalize(nmf.method), sep = "_")
   arr_nmf <- init_array(data, reps, alg, nk)
@@ -186,9 +190,8 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
         }
         arr_nmf[ind.new, i, j, k] <- nmf(x, nk[k], nmf.method[j], seed.nmf)
 
-        if (progress) {
-          value <- (k - 1) * length(nmf.method) * reps + (j - 1) * reps + i
-          utils::setTxtProgressBar(pb, value)
+        if (!is.null(pb)) {
+          pb$tick(tokens = list(alg = alg[j]))
         }
       }
     }
@@ -199,7 +202,7 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
 cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
-                    prep.data, scale, type, min.var, progress, pb, offset) {
+                    prep.data, scale, type, min.var, pb, offset) {
   n <- nrow(data)
   alg <- paste(rep(toupper(algs), each = length(distance)),
                rep(Hmisc::capitalize(distance), length(algs)),
@@ -218,12 +221,10 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
             x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
           }
           dists <- distances(x, distance[d])
-          arr_dist[ind.new, i, (j - 1) * length(distance) + d, k] <-
-            get(algs[j])(dists[[1]], nk[k])  # get() for custom funs
-          if (progress) {
-            value <- (k - 1) * length(algs) * length(distance) * reps +
-              (j - 1) * length(distance) * reps + (d - 1) * reps + i + offset
-            utils::setTxtProgressBar(pb, value)
+          a <- (j - 1) * length(distance) + d
+          arr_dist[ind.new, i, a, k] <- get(algs[j])(dists[[1]], nk[k]) # custom
+          if (!is.null(pb)) {
+            pb$tick(tokens = list(alg = alg[a]))
           }
         }
       }
@@ -235,8 +236,8 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
 #' Cluster other algorithms
 #' @noRd
 cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
-                     minPts, seed.data, prep.data, scale, type, min.var,
-                     progress, pb, offset) {
+                     minPts, seed.data, prep.data, scale, type, min.var, pb,
+                     offset) {
   n <- nrow(data)
   alg <- toupper(algs)
   arr_other <- init_array(data, reps, alg, nk)
@@ -261,9 +262,8 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
                  cmeans = cmeans(x, nk[k]),
                  hdbscan = hdbscan(x, minPts)
           )
-        if (progress) {
-          value <- (k - 1) * length(algs) * reps + (j - 1) * reps + i + offset
-          utils::setTxtProgressBar(pb, value)
+        if (!is.null(pb)) {
+          pb$tick(tokens = list(alg = alg[j]))
         }
       }
     }
