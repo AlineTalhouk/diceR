@@ -171,8 +171,8 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
   arr_nmf <- init_array(data, reps, alg, nk)
   x_nmf <- nmf_transform(data)
 
-  for (k in seq_along(nk)) {
-    for (j in seq_along(nmf.method)) {
+  for (j in seq_along(nmf.method)) {
+    for (k in seq_along(nk)) {
       set.seed(seed.data)
       for (i in seq_len(reps)) {
         ind.new <- sample(n, floor(n * p.item))
@@ -204,8 +204,8 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
                sep = "_")
   arr_dist <- init_array(data, reps, alg, nk)
 
-  for (k in seq_along(nk)) {
-    for (j in seq_along(algs)) {
+  for (j in seq_along(algs)) {
+    for (k in seq_along(nk)) {
       for (d in seq_along(distance)) {
         set.seed(seed.data)
         for (i in seq_len(reps)) {
@@ -237,8 +237,8 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
   alg <- toupper(algs)
   arr_other <- init_array(data, reps, alg, nk)
 
-  for (k in seq_along(nk)) {
-    for (j in seq_along(algs)) {
+  for (j in seq_along(algs)) {
+    for (k in seq_along(nk)) {
       set.seed(seed.data)
       for (i in seq_len(reps)) {
         ind.new <- sample(n, floor(n * p.item))
