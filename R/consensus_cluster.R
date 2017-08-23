@@ -117,18 +117,15 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
     data <- prepare_data(data, scale = scale, type = type, min.var = min.var)
   algorithms <- algorithms %||% ALG_NAMES  # Use all if none are specified
 
-  # Store consensus dimensions
-  lnk <- length(nk)
+  # Calculate total number of algorithms
   algs <- dplyr::lst(NALG, DALG, OALG) %>%
     purrr::map(~ algorithms[algorithms %in% .x])
-  lnmf <- length(algs$NALG) * length(nmf.method)
-  ldist <- length(algs$DALG) * length(distance)
-  lother <- length(algs$OALG)
+  lalg <- sum(lengths(algs) * lengths(list(nmf.method, distance, 1)))
+
   if (progress) {
     pb <- progress::progress_bar$new(
-      format = "Clustering :alg [:bar] :percent eta: :eta",
-      total = lnk * (lnmf + ldist + lother) * reps,
-      width = 100,
+      format = "Clustering Algorithm :num of :den: :alg (k = :k) [:bar] :percent eta: :eta",
+      total = length(nk) * lalg * reps,
       clear = FALSE
     )
   } else {
@@ -138,11 +135,10 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   # Argument lists: Common, NMF, Distance, Other
   cargs <- dplyr::lst(data, nk, p.item, reps, seed.data, prep.data, scale, type,
                       min.var, pb)
-  nargs <- c(cargs, dplyr::lst(algs = algs$NALG, nmf.method, seed.nmf))
-  dargs <- c(cargs, dplyr::lst(algs = algs$DALG, distance))
-  oargs <- c(cargs, dplyr::lst(algs = algs$OALG, xdim, ydim, rlen, alpha,
-                               minPts))
-  args <- list(nargs, dargs, oargs)
+  nargs <- dplyr::lst(algs = algs$NALG, nmf.method, seed.nmf)
+  dargs <- dplyr::lst(algs = algs$DALG, distance)
+  oargs <- dplyr::lst(algs = algs$OALG, xdim, ydim, rlen, alpha, minPts)
+  args <- purrr::map(list(nargs, dargs, oargs), ~ c(cargs, .))
 
   # Run cc on all algorithms, combine on 3rd dim, HDBSCAN manipulation
   fun <- list(cc_nmf, cc_dist, cc_other)
@@ -190,7 +186,8 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
         arr_nmf[ind.new, i, j, k] <- nmf(x, nk[k], nmf.method[j], seed.nmf)
 
         if (!is.null(pb)) {
-          pb$tick(tokens = list(alg = alg[j]))
+          pb$tick(tokens = list(num = j, den = length(alg), alg = alg[j],
+                                k = nk[k]))
         }
       }
     }
@@ -223,7 +220,8 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
           a <- (j - 1) * length(distance) + d
           arr_dist[ind.new, i, a, k] <- get(algs[j])(dists[[1]], nk[k]) # custom
           if (!is.null(pb)) {
-            pb$tick(tokens = list(alg = alg[a]))
+            pb$tick(tokens = list(num = j, den = length(alg), alg = alg[a],
+                                  k = nk[k]))
           }
         }
       }
@@ -261,7 +259,8 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
                  hdbscan = hdbscan(x, minPts)
           )
         if (!is.null(pb)) {
-          pb$tick(tokens = list(alg = alg[j]))
+          pb$tick(tokens = list(num = j, den = length(alg), alg = alg[j],
+                                k = nk[k]))
         }
       }
     }
