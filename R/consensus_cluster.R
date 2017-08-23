@@ -183,12 +183,11 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
             prepare_data(scale = scale, type = type, min.var = min.var) %>%
             nmf_transform()
         }
-        arr_nmf[ind.new, i, j, k] <- nmf(x, nk[k], nmf.method[j], seed.nmf)
-
         if (!is.null(pb)) {
           pb$tick(tokens = list(num = j, den = sum(lalg), alg = alg[j],
                                 k = nk[k]))
         }
+        arr_nmf[ind.new, i, j, k] <- nmf(x, nk[k], nmf.method[j], seed.nmf)
       }
     }
   }
@@ -212,17 +211,16 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
         for (i in seq_len(reps)) {
           ind.new <- sample(n, floor(n * p.item))
           x <- data[ind.new, ]
-
           if (prep.data == "sampled") {
             x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
           }
           dists <- distances(x, distance[d])[[1]]
           a <- (j - 1) * length(distance) + d
-          arr_dist[ind.new, i, a, k] <- get(algs[j])(dists, nk[k]) # custom
           if (!is.null(pb)) {
             pb$tick(tokens = list(num = j + lalg["NALG"], den = sum(lalg),
                                   alg = alg[a], k = nk[k]))
           }
+          arr_dist[ind.new, i, a, k] <- get(algs[j])(dists, nk[k]) # custom
         }
       }
     }
@@ -245,9 +243,12 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
       for (i in seq_len(reps)) {
         ind.new <- sample(n, floor(n * p.item))
         x <- data[ind.new, ]
-
         if (prep.data == "sampled") {
           x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
+        }
+        if (!is.null(pb)) {
+          pb$tick(tokens = list(num = j + sum(lalg[c("NALG", "DALG")]),
+                                den = sum(lalg), alg = alg[j], k = nk[k]))
         }
         arr_other[ind.new, i, j, k] <-
           switch(algs[j],
@@ -259,10 +260,6 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
                  cmeans = cmeans(x, nk[k]),
                  hdbscan = hdbscan(x, minPts)
           )
-        if (!is.null(pb)) {
-          pb$tick(tokens = list(num = j + sum(lalg[c("NALG", "DALG")]),
-                                den = sum(lalg), alg = alg[j], k = nk[k]))
-        }
       }
     }
   }
