@@ -28,8 +28,8 @@ Generate a cluster assignment from a CTS, SRS, or ASRS similarity matrix.
 \examples{
 data(hgsc)
 dat <- hgsc[1:100, 1:50]
-x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("km", "hc",
-"diana"), progress = FALSE)
+x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("km", "hc"),
+progress = FALSE)
 \dontrun{
 LCE(E = x, k = 4, sim.mat = "asrs")
 }
