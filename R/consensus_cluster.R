@@ -216,9 +216,9 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
           if (prep.data == "sampled") {
             x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
           }
-          dists <- distances(x, distance[d])
+          dists <- distances(x, distance[d])[[1]]
           a <- (j - 1) * length(distance) + d
-          arr_dist[ind.new, i, a, k] <- get(algs[j])(dists[[1]], nk[k]) # custom
+          arr_dist[ind.new, i, a, k] <- get(algs[j])(dists, nk[k]) # custom
           if (!is.null(pb)) {
             pb$tick(tokens = list(num = j, den = length(alg), alg = alg[a],
                                   k = nk[k]))
