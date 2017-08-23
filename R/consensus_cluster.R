@@ -120,12 +120,12 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   # Calculate total number of algorithms
   algs <- dplyr::lst(NALG, DALG, OALG) %>%
     purrr::map(~ algorithms[algorithms %in% .x])
-  lalg <- sum(lengths(algs) * lengths(list(nmf.method, distance, 1)))
+  lalg <- lengths(algs) * lengths(list(nmf.method, distance, 1))
 
   if (progress) {
     pb <- progress::progress_bar$new(
       format = "Clustering Algorithm :num of :den: :alg (k = :k) [:bar] :percent eta: :eta",
-      total = length(nk) * lalg * reps,
+      total = length(nk) * sum(lalg) * reps,
       clear = FALSE
     )
   } else {
@@ -134,7 +134,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   # Argument lists: Common, NMF, Distance, Other
   cargs <- dplyr::lst(data, nk, p.item, reps, seed.data, prep.data, scale, type,
-                      min.var, pb)
+                      min.var, pb, lalg)
   nargs <- dplyr::lst(algs = algs$NALG, nmf.method, seed.nmf)
   dargs <- dplyr::lst(algs = algs$DALG, distance)
   oargs <- dplyr::lst(algs = algs$OALG, xdim, ydim, rlen, alpha, minPts)
@@ -165,7 +165,7 @@ cc <- function(fun, args) {
 #' Cluster NMF-based algorithms
 #' @noRd
 cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
-                   seed.data, prep.data, scale, type, min.var, pb) {
+                   seed.data, prep.data, scale, type, min.var, pb, lalg) {
   n <- nrow(data)
   alg <- paste(toupper(algs), Hmisc::capitalize(nmf.method), sep = "_")
   arr_nmf <- init_array(data, reps, alg, nk)
@@ -186,7 +186,7 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
         arr_nmf[ind.new, i, j, k] <- nmf(x, nk[k], nmf.method[j], seed.nmf)
 
         if (!is.null(pb)) {
-          pb$tick(tokens = list(num = j, den = length(alg), alg = alg[j],
+          pb$tick(tokens = list(num = j, den = sum(lalg), alg = alg[j],
                                 k = nk[k]))
         }
       }
@@ -198,7 +198,7 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
 cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
-                    prep.data, scale, type, min.var, pb) {
+                    prep.data, scale, type, min.var, pb, lalg) {
   n <- nrow(data)
   alg <- paste(rep(toupper(algs), each = length(distance)),
                rep(Hmisc::capitalize(distance), length(algs)),
@@ -220,8 +220,8 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
           a <- (j - 1) * length(distance) + d
           arr_dist[ind.new, i, a, k] <- get(algs[j])(dists, nk[k]) # custom
           if (!is.null(pb)) {
-            pb$tick(tokens = list(num = j, den = length(alg), alg = alg[a],
-                                  k = nk[k]))
+            pb$tick(tokens = list(num = j + lalg["NALG"], den = sum(lalg),
+                                  alg = alg[a], k = nk[k]))
           }
         }
       }
@@ -233,7 +233,8 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
 #' Cluster other algorithms
 #' @noRd
 cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
-                     minPts, seed.data, prep.data, scale, type, min.var, pb) {
+                     minPts, seed.data, prep.data, scale, type, min.var, pb,
+                     lalg) {
   n <- nrow(data)
   alg <- toupper(algs)
   arr_other <- init_array(data, reps, alg, nk)
@@ -259,8 +260,8 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
                  hdbscan = hdbscan(x, minPts)
           )
         if (!is.null(pb)) {
-          pb$tick(tokens = list(num = j, den = length(alg), alg = alg[j],
-                                k = nk[k]))
+          pb$tick(tokens = list(num = j + sum(lalg[c("NALG", "DALG")]),
+                                den = sum(lalg), alg = alg[j], k = nk[k]))
         }
       }
     }
