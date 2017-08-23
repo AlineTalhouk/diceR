@@ -214,7 +214,7 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
           if (prep.data == "sampled") {
             x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
           }
-          dists <- distances(x, distance[d])[[1]]
+          dists <- cdist(x, distance[d])
           a <- (j - 1) * length(distance) + d
           if (!is.null(pb)) {
             pb$tick(tokens = list(num = j + lalg["NALG"], den = sum(lalg),
@@ -274,53 +274,24 @@ init_array <- function(data, r, a, k) {
   array(NA_integer_, dim = purrr::map_int(dn, length), dimnames = dn)
 }
 
-#' Return a list of distance matrices
+#' Return a clustering distance matrix object
 #' @param x data matrix
-#' @param dist a character vector of distance methods taken from stats::dist, or
+#' @param dist a character string of distance methods taken from stats::dist, or
 #'   "spearman", or a custom distance function in the current environment
 #' @noRd
-distances <- function(x, dist) {
+cdist <- function(x, dist) {
   # Change partial matching distance methods from stats::dist to full names
   M <- c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski")
   dist <- ifelse(dist %pin% M, M[pmatch(dist, M)], dist)
 
-  # Check if spearman distance is used (starts with string)
-  sp.idx <- purrr::map_lgl(paste0("^", dist), grepl, "spearman")
-  if (any(sp.idx)) {
-    spear <- purrr::set_names(list(spearman_dist(x)), "spearman")
-    d <- dist[!sp.idx]
-  } else {
-    spear <- NULL
-    d <- dist
-  }
+  # If spearman is specified, use spearman_dist()
+  if (dist %pin% "spearman") return(spearman_dist(x))
 
-  # If only spearman requested
-  if (length(d) == 0) {
-    return(spear)
-  } else {
-    # Identify custom distance functions from those found in stats::dist
-    check <- d %>%
-      purrr::map(~ try(stats::dist(x = x, method = .x), silent = TRUE)) %>%
-      purrr::set_names(d)
-    is.error <- purrr::map_lgl(check, inherits, "try-error")
-    succeeded <- which(!is.error)
-    failed <- which(is.error)
+  # Identify custom distance functions from those found in stats::dist
+  d <- try(stats::dist(x = x, method = dist), silent = TRUE)
 
-    # Search for custom function in parent environments
-    if (length(failed)) {
-      custom <- check[failed] %>%
-        names() %>%
-        purrr::map(~ get(.x)(x)) %>%
-        purrr::set_names(names(failed))
-    } else {
-      custom <- NULL
-    }
-
-    # Combine distances into list and return in same order as dist argument
-    dlist <- c(spear, check[succeeded], custom) %>%
-      magrittr::extract(pmatch(dist, names(.)))
-    return(dlist)
-  }
+  # Run custom function in parent environments if not found
+  if (inherits(d, "try-error")) get(dist)(x) else d
 }
 
 #' Calculate pairwise Spearman correlational distances using
