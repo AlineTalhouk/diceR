@@ -46,3 +46,9 @@ test_that("no scaling means only choose complete cases and high signal vars", {
                           scale = FALSE)
   expect_error(x6, NA)
 })
+
+test_that("t-SNE dimension reduction works", {
+  x7 <- consensus_cluster(hgsc, nk = 4, reps = 1, algorithms = c("hc", "km"),
+                          type = "tsne")
+  expect_error(x7, NA)
+})

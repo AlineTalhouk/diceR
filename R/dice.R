@@ -149,9 +149,15 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
 #' dim(x)
 #' dim(x.prep)
 prepare_data <- function(data, scale = TRUE,
-                         type = c("conventional", "robust"),
+                         type = c("conventional", "robust", "tsne"),
                          min.var = 1) {
   type <- match.arg(type)
+  if (type == "tsne") {
+    return(
+      Rtsne::Rtsne(as.matrix(data), perplexity = 5, max_iter = 500)$Y %>%
+        magrittr::set_rownames(rownames(data))
+    )
+  }
   var.fun <- switch(type, conventional = stats::sd, robust = stats::mad)
   dat <- data %>%
     magrittr::extract(stats::complete.cases(.),

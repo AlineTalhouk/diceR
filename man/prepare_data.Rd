@@ -4,7 +4,7 @@
 \alias{prepare_data}
 \title{Prepare data for consensus clustering}
 \usage{
-prepare_data(data, scale = TRUE, type = c("conventional", "robust"),
+prepare_data(data, scale = TRUE, type = c("conventional", "robust", "tsne"),
   min.var = 1)
 }
 \arguments{
