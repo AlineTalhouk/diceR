@@ -57,7 +57,8 @@ function can be used.}
 \item{type}{if we use "conventional" measures (default), then the mean and
 standard deviation are used for centering and scaling, respectively. If
 "robust" measures are specified, the median and median absolute deviation
-(MAD) are used.}
+(MAD) are used. Alternatively, we can apply "tsne" as a method of
+dimension reduction.}
 
 \item{min.var}{minimum variability measure threshold used to filter the
 feature space for only highly variable features. Only features with a
