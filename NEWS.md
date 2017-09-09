@@ -1,6 +1,6 @@
 # diceR 0.1.0.9000
 
-* New dimension reduction method: t-SNE (@dustin21)
+* New dimension reduction methods: t-SNE, largeVis (@dustin21)
 
 * Better annotated progress bar using `progress` package
 

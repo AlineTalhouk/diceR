@@ -49,6 +49,7 @@ Imports:
     RankAggreg,
     sigclust,
     Rtsne,
+    largeVis,
     progress,
     methods,
     Rcpp

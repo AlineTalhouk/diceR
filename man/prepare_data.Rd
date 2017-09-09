@@ -4,8 +4,8 @@
 \alias{prepare_data}
 \title{Prepare data for consensus clustering}
 \usage{
-prepare_data(data, scale = TRUE, type = c("conventional", "robust", "tsne"),
-  min.var = 1)
+prepare_data(data, scale = TRUE, type = c("conventional", "robust", "tsne",
+  "largevis"), min.var = 1)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -15,8 +15,8 @@ prepare_data(data, scale = TRUE, type = c("conventional", "robust", "tsne"),
 \item{type}{if we use "conventional" measures (default), then the mean and
 standard deviation are used for centering and scaling, respectively. If
 "robust" measures are specified, the median and median absolute deviation
-(MAD) are used. Alternatively, we can apply "tsne" as a method of
-dimension reduction.}
+(MAD) are used. Alternatively, we can apply "tsne" or "largevis" as other
+methods of dimension reduction.}
 
 \item{min.var}{minimum variability measure threshold used to filter the
 feature space for only highly variable features. Only features with a
@@ -36,7 +36,9 @@ We can apply a basic filtering method of feature selection that removes
 variables with low signal and (optionally) scales before consensus
 clustering. Or, we can use t-SNE dimension reduction to transform the data to
 just two variables. This lower-dimensional embedding allows algorithms such
-as hierarchical clustering to achieve greater performance.
+as hierarchical clustering to achieve greater performance. The largeVis
+algorithm is well-suited for visualizing datasets of high dimension by
+reducing to a lower-dimensional representation.
 }
 \examples{
 set.seed(2)

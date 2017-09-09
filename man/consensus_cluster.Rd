@@ -8,9 +8,9 @@ consensus_cluster(data, nk = 2:4, p.item = 0.8, reps = 1000,
   algorithms = NULL, nmf.method = c("brunet", "lee"), xdim = NULL,
   ydim = NULL, rlen = 200, alpha = c(0.05, 0.01), minPts = 5,
   distance = "euclidean", prep.data = c("none", "full", "sampled"),
-  scale = TRUE, type = c("conventional", "robust", "tsne"), min.var = 1,
-  progress = TRUE, seed.nmf = 123456, seed.data = 1, file.name = NULL,
-  time.saved = FALSE)
+  scale = TRUE, type = c("conventional", "robust", "tsne", "largevis"),
+  min.var = 1, progress = TRUE, seed.nmf = 123456, seed.data = 1,
+  file.name = NULL, time.saved = FALSE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -57,8 +57,8 @@ function can be used.}
 \item{type}{if we use "conventional" measures (default), then the mean and
 standard deviation are used for centering and scaling, respectively. If
 "robust" measures are specified, the median and median absolute deviation
-(MAD) are used. Alternatively, we can apply "tsne" as a method of
-dimension reduction.}
+(MAD) are used. Alternatively, we can apply "tsne" or "largevis" as other
+methods of dimension reduction.}
 
 \item{min.var}{minimum variability measure threshold used to filter the
 feature space for only highly variable features. Only features with a
