@@ -1,5 +1,5 @@
 language: r
-sudo: false
+sudo: required
 cache: packages
 
 r:
@@ -11,7 +11,10 @@ env:
    - RGL_USE_NULL=TRUE
 
 before_install:
- - Rscript -e 'install.packages("largeVis"); update.packages(ask = FALSE)'
+ - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+ - sudo apt-get -qq update
+ - sudo apt-get -qq install g++-4.9
+ - Rscript -e 'update.packages(ask = FALSE)'
 
 after_success:
  - Rscript -e 'covr::codecov(line_exclusions = list("R/zzz.R"))'
