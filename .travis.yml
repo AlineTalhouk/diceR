@@ -11,7 +11,7 @@ env:
    - RGL_USE_NULL=TRUE
 
 before_install:
- - Rscript -e 'update.packages(ask = FALSE)'
+ - Rscript -e 'install.packages("largeVis"); update.packages(ask = FALSE)'
 
 after_success:
  - Rscript -e 'covr::codecov(line_exclusions = list("R/zzz.R"))'
