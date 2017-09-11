@@ -25,14 +25,6 @@ matrix:
 sudo: false
 cache: packages
 
-r_github_packages:
-  - jimhester/covr
-
-r_packages:
-  - Rcpp
-  - RcppArmadillo
-  - devtools
-
 addons:
   apt:
     sources:
@@ -41,13 +33,6 @@ addons:
       - gcc-4.9
       - g++-4.9
       - gfortran-4.9
-
-before_install: |
-  mkdir ~/.R
-  cat <<EOF > ~/.R/Makevars
-  CXX1X=g++-4.9
-  FC=gfortran-4.9
-  CXX1XSTD=-std=c++11
 
 env:
  global:
