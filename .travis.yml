@@ -11,13 +11,18 @@ env:
    - RGL_USE_NULL=TRUE
 
 before_install:
- - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
- - sudo apt-get -qq update
- - sudo apt-get -qq install g++-4.9
  - Rscript -e 'update.packages(ask = FALSE)'
 
 after_success:
  - Rscript -e 'covr::codecov(line_exclusions = list("R/zzz.R"))'
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.9
+      - g++-4.9
 
 notifications:
   email:
