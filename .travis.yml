@@ -10,16 +10,12 @@ env:
  global:
    - RGL_USE_NULL=TRUE
 
-before_install:
- - |
+before_install: |
   mkdir ~/.R
-  cat <<EOF > ~/.R/Makevars
+  cat <<EOF >> ~/.R/Makevars
   CXX1X=g++-4.9
+  FC=gfortran-4.9
   CXX1XSTD=-std=c++11
- - Rscript -e 'update.packages(ask = FALSE)'
-
-after_success:
- - Rscript -e 'covr::codecov(line_exclusions = list("R/zzz.R"))'
 
 addons:
   apt:
@@ -28,6 +24,10 @@ addons:
     packages:
       - gcc-4.9
       - g++-4.9
+      - gfortran-4.9
+
+after_success:
+ - Rscript -e 'covr::codecov(line_exclusions = list("R/zzz.R"))'
 
 notifications:
   email:
