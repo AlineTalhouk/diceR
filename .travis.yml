@@ -1,45 +1,77 @@
 language: r
+
 matrix:
   include:
-    - os: linux
-      dist: trusty
-      r: release
-    - os: osx
-      osx_image: xcode7.4
-      r: release
-  allow_failures:
-    - os: osx
-      osx_image: xcode6.4
-      r: release
-    - os: linux
-      dist: trusty
-      r: devel
-    - os: osx
-      osx_image: xcode7.4
-      r: devel
-    - os: linux
-      dist: trusty
-      r: oldrel
-  fast_finish: true
+  - os: linux
+    dist: trusty
+    r: release
+    before_install: |1
+     mkdir ~/.R
+     cat <<EOF > ~/.R/Makevars
+     CC=gcc-6
+     CXX=g++-6
+     CXX1X=g++-6
+     CXX11=g++-6
+  - os: osx
+    r: release
 
-sudo: false
+  - os: linux
+    dist: trusty
+    r: devel
+    before_install: |1
+     mkdir ~/.R
+     cat <<EOF > ~/.R/Makevars
+     CC=gcc-6
+     CXX=g++-6
+     CXX1X=g++-6
+     CXX11=g++-6
+  - os: osx
+    r: devel
+    env: _R_CHECK_FORCE_SUGGESTS_=FALSE
+  allow_failure:
+    r: devel
+    r_check_args: --use-valgrind
+
 cache: packages
+
+env:
+  global:
+  - OS=$(uname -s)
+  - RGL_USE_NULL=TRUE
+
+cran: http://cran.rstudio.com
+
+r_packages:
+  - covr
+  - BH
+  - ggplot2
+
+r_binary_packages:
+  - testthat
+  - png
+  - Rcpp
+  - RcppArmadillo
+  - RcppProgress
+  - dbscan
+  - knitr
+  - rmarkdown
+
+sudo: required
 
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-4.9
-      - g++-4.9
-      - gfortran-4.9
-
-env:
- global:
-   - RGL_USE_NULL=TRUE
+      - gcc-6
+      - g++-6
+      - gfortran-6
+      - libudunits2-dev
+  brew_packages:
+      - udunits
 
 after_success:
- - Rscript -e 'covr::codecov(line_exclusions = list("R/zzz.R"))'
+  - Rscript -e 'covr::codecov(line_exclusions = list("R/zzz.R"))'
 
 notifications:
   email:
