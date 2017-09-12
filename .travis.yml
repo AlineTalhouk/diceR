@@ -1,20 +1,29 @@
 language: r
 sudo: required
 cache: packages
-dist: trusty
 
-r:
- - release
- - devel
-
-before_install: |1
-  mkdir ~/.R
-  cat <<EOF > ~/.R/Makevars
-  CC=gcc-6
-  CXX=g++-6
-  CXX1X=g++-6
-  CXX11=g++-6
-
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    r: release
+    before_install: |1
+     mkdir ~/.R
+     cat <<EOF > ~/.R/Makevars
+     CC=gcc-6
+     CXX=g++-6
+     CXX1X=g++-6
+     CXX11=g++-6
+  - os: linux
+    dist: trusty
+    r: devel
+    before_install: |1
+     mkdir ~/.R
+     cat <<EOF > ~/.R/Makevars
+     CC=gcc-6
+     CXX=g++-6
+     CXX1X=g++-6
+     CXX11=g++-6
 env:
   global:
   - OS=$(uname -s)
