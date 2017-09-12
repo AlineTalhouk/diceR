@@ -18,7 +18,6 @@ before_install: |1
 env:
   global:
   - OS=$(uname -s)
-  - RGL_USE_NULL=TRUE
 
 r_packages:
   - RcppArmadillo
