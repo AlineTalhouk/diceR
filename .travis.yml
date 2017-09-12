@@ -1,4 +1,6 @@
 language: r
+sudo: required
+cache: packages
 
 matrix:
   include:
@@ -12,9 +14,6 @@ matrix:
      CXX=g++-6
      CXX1X=g++-6
      CXX11=g++-6
-  - os: osx
-    r: release
-
   - os: linux
     dist: trusty
     r: devel
@@ -25,38 +24,11 @@ matrix:
      CXX=g++-6
      CXX1X=g++-6
      CXX11=g++-6
-  - os: osx
-    r: devel
-    env: _R_CHECK_FORCE_SUGGESTS_=FALSE
-  allow_failure:
-    r: devel
-    r_check_args: --use-valgrind
-
-cache: packages
 
 env:
   global:
   - OS=$(uname -s)
   - RGL_USE_NULL=TRUE
-
-cran: http://cran.rstudio.com
-
-r_packages:
-  - covr
-  - BH
-  - ggplot2
-
-r_binary_packages:
-  - testthat
-  - png
-  - Rcpp
-  - RcppArmadillo
-  - RcppProgress
-  - dbscan
-  - knitr
-  - rmarkdown
-
-sudo: required
 
 addons:
   apt:
