@@ -33,8 +33,6 @@ addons:
       - g++-6
       - gfortran-6
       - libudunits2-dev
-  brew_packages:
-      - udunits
 
 after_success:
   - Rscript -e 'covr::codecov(line_exclusions = list("R/zzz.R"))'
