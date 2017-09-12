@@ -30,6 +30,10 @@ env:
   - OS=$(uname -s)
   - RGL_USE_NULL=TRUE
 
+r_packages:
+  - RcppArmadillo
+  - RcppProgress
+
 addons:
   apt:
     sources:
