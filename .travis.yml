@@ -15,10 +15,6 @@ before_install: |1
      CXX1X=g++-6
      CXX11=g++-6
 
-env:
-  global:
-  - OS=$(uname -s)
-
 r_packages:
   - RcppArmadillo
   - RcppProgress
