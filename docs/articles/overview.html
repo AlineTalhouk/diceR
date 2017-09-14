@@ -73,13 +73,13 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"diceR"</span>)</code></pre></div>
 <p>Or get the latest development version from GitHub:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools::<span class="kw">install_github</span>(<span class="st">"AlineTalhouk/diceR"</span>)</code></pre></div>
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"AlineTalhouk/diceR"</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(diceR)
 <span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(knitr)
 <span class="kw">data</span>(hgsc)
-hgsc &lt;-<span class="st"> </span>hgsc[<span class="dv">1</span>:<span class="dv">100</span>, <span class="dv">1</span>:<span class="dv">50</span>]</code></pre></div>
+hgsc &lt;-<span class="st"> </span>hgsc[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">50</span>]</code></pre></div>
 <p>We load an excerpt of an expression data set from TCGA of 100 high grade serous carcinoma samples measured on 50 genes.</p>
 </div>
 <div id="consensus-clustering" class="section level2">
@@ -87,7 +87,7 @@ hgsc &lt;-<span class="st"> </span>hgsc[<span class="dv">1</span>:<span class="d
 <a href="#consensus-clustering" class="anchor"></a>Consensus Clustering</h2>
 <p>When Monti et al. (2003) first introduced consensus clustering, the idea was to use one clustering algorithm on bootstrapped subsamples of the data. We implement some extensions where a consensus is reached across subsamples <em>and</em> across algorithms. The final cluster assignment is then computed using statistical transformations on the ensemble cluster.</p>
 <p>The base function of this package is <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>, which outputs cluster assignments across subsamples and algorithms, for different k (number of clusters). For example, let’s say we were interested in clustering the <code>hgsc</code> data into 3 or 4 clusters, using 80% resampling on 5 replicates, for these clustering algorithms: Hierarchical Clustering, PAM, and DIvisive ANAlysis Clustering (DIANA). Euclidean distance is used for all algorithms.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span>:<span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,
                         <span class="dt">algorithms =</span> <span class="kw">c</span>(<span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span>))</code></pre></div>
 <p>The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each “box” (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the DIANA algorithm for k = 3.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(CC)
@@ -159,7 +159,7 @@ hgsc &lt;-<span class="st"> </span>hgsc[<span class="dv">1</span>:<span class="d
 </tbody>
 </table>
 <p>Note the unavoidable presence of <code>NA</code>s because we used 80% subsampling. This can be problematic in certain downstream ensemble methods, so we can impute missing values using K-Nearest Neighbours beforehand. There might still be <code>NA</code>s after KNN because of how the decision threshold was set. The remaining missing values can be imputed using majority voting.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw">apply</span>(CC, <span class="dv">2</span>:<span class="dv">4</span>, impute_knn, <span class="dt">data =</span> hgsc, <span class="dt">seed =</span> <span class="dv">1</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw">apply</span>(CC, <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>, impute_knn, <span class="dt">data =</span> hgsc, <span class="dt">seed =</span> <span class="dv">1</span>)
 CC_imputed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/impute_missing.html">impute_missing</a></span>(CC, hgsc, <span class="dt">nk =</span> <span class="dv">4</span>)
 <span class="kw">sum</span>(<span class="kw">is.na</span>(CC))
 <span class="co">#&gt; [1] 5</span>
@@ -181,11 +181,11 @@ CC_imputed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <a href="#compute-consensus-matrix-with-consensus_matrix" class="anchor"></a>Compute consensus matrix with <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code>
 </h3>
 <p>The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one’s. Suppose we wanted to compute the consensus matrix for PAM, k = 4, and visualize using <code><a href="../reference/graphs.html">graph_heatmap()</a></code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pam<span class="fl">.4</span> &lt;-<span class="st"> </span>CC[, , <span class="st">"PAM_Euclidean"</span>, <span class="st">"4"</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]
-cm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(pam<span class="fl">.4</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pam.<span class="dv">4</span> &lt;-<span class="st"> </span>CC[, , <span class="st">"PAM_Euclidean"</span>, <span class="st">"4"</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]
+cm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(pam.<span class="dv">4</span>)
 <span class="kw">dim</span>(cm)
 <span class="co">#&gt; [1] 100 100</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/graphs.html">graph_heatmap</a></span>(pam<span class="fl">.4</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/graphs.html">graph_heatmap</a></span>(pam.<span class="dv">4</span>)</code></pre></div>
 <p><img src="overview_files/figure-html/graph_heatmap-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="combine-consensus-summaries-with-consensus_combine" class="section level3">
@@ -205,7 +205,7 @@ ccomb_class &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.2 1 0 1 1 1 1 1 0.8 ...</span>
 <span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 0.8 0 0.4 0 1 1 0.8 0 0 ...</span>
 <span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.6 0 0 0 1 1 0 0 1 ...</span>
-<span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(ccomb_class$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
+<span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(ccomb_class<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">HC_Euclidean</th>
@@ -247,10 +247,10 @@ ccomb_class &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 </table>
 <p>One can feed in <code>ccomb_class</code> (instead of <code>CC</code>) into <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code> to obtain a consensus matrix across both subsamples <strong>and</strong> algorithms.</p>
 <p>A situation might also arise where we initially decided on using 3 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> takes in any number of ensemble objects (e.g. <code>CC</code> and <code>CC2</code>) and combines the results.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span>:<span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,
                          <span class="dt">algorithms =</span> <span class="st">"km"</span>)
 ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, CC2, <span class="dt">element =</span> <span class="st">"class"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(ccomb_class2$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(ccomb_class2<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">HC_Euclidean</th>
@@ -304,7 +304,7 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 </h3>
 <p>Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between <code>lower</code> (defaults to 0) and <code>upper</code> (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each <code>k</code>, and choose the <code>k</code> with the greatest average PAC. If there <em>is</em> a reference class, <code>k</code> is the number of distinct classes in the reference.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ccomp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(ccomp$internal)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(ccomp<span class="op">$</span>internal)</code></pre></div>
 <table class="table"><tbody><tr>
 <td>
 <table class="table">
@@ -530,8 +530,8 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <a href="#significance-testing" class="anchor"></a>Significance Testing</h2>
 <p>To test whether there are four statistically distinct clusters (k = 4) versus no clusters (k = 1) using the PAM algorithm, we run <code>sigclust</code> with 50 simulations and generate a p-value for this significance test.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
-pam_4 &lt;-<span class="st"> </span>ccomb_class2$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>[, <span class="st">"PAM_Euclidean"</span>]
-sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sigclust.html">sigclust</a></span>(hgsc, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">nsim =</span> <span class="dv">100</span>, <span class="dt">labflag =</span> <span class="dv">0</span>, <span class="dt">label =</span> pam_4)
+pam_<span class="dv">4</span> &lt;-<span class="st"> </span>ccomb_class2<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>[, <span class="st">"PAM_Euclidean"</span>]
+sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sigclust.html">sigclust</a></span>(hgsc, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">nsim =</span> <span class="dv">100</span>, <span class="dt">labflag =</span> <span class="dv">0</span>, <span class="dt">label =</span> pam_<span class="dv">4</span>)
 <span class="kw">str</span>(sig_obj)
 <span class="co">#&gt; Formal class 'sigclust' [package "sigclust"] with 10 slots</span>
 <span class="co">#&gt;   ..@ raw.data  : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ...</span>

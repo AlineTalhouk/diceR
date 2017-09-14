@@ -84,12 +84,11 @@
     </div>
 
     
-    <p>Remove variables with low signal and (optionally) scale before consensus
-clustering.</p>
+    <p>Perform feature selection or dimension reduction to remove noise variables.</p>
     
 
-    <pre class="usage"><span class='fu'>prepare_data</span>(<span class='no'>data</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"conventional"</span>, <span class='st'>"robust"</span>),
-  <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'>prepare_data</span>(<span class='no'>data</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"conventional"</span>, <span class='st'>"robust"</span>, <span class='st'>"tsne"</span>,
+  <span class='st'>"largevis"</span>), <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -107,7 +106,8 @@ clustering.</p>
       <td><p>if we use "conventional" measures (default), then the mean and
 standard deviation are used for centering and scaling, respectively. If
 "robust" measures are specified, the median and median absolute deviation
-(MAD) are used.</p></td>
+(MAD) are used. Alternatively, we can apply "tsne" or "largevis" as other
+methods of dimension reduction.</p></td>
     </tr>
     <tr>
       <th>min.var</th>
@@ -124,6 +124,16 @@ used.</p></td>
 
     <p>dataset prepared for usage in <code>consensus_cluster</code></p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>We can apply a basic filtering method of feature selection that removes
+variables with low signal and (optionally) scales before consensus
+clustering. Or, we can use t-SNE dimension reduction to transform the data to
+just two variables. This lower-dimensional embedding allows algorithms such
+as hierarchical clustering to achieve greater performance. The largeVis
+algorithm is well-suited for visualizing datasets of high dimension by
+reducing to a lower-dimensional representation.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>set.seed</span>(<span class='fl'>2</span>)
@@ -137,6 +147,8 @@ used.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

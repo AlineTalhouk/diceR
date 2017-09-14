@@ -78,7 +78,7 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"diceR"</span>)</code></pre></div>
 <p>Or get the latest development version from GitHub:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools::<span class="kw">install_github</span>(<span class="st">"AlineTalhouk/diceR"</span>)</code></pre></div>
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"AlineTalhouk/diceR"</span>)</code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
@@ -89,7 +89,7 @@ devtools::<span class="kw">install_github</span>(<span class="st">"AlineTalhouk/
 obj &lt;-<span class="st"> </span><span class="kw"><a href="reference/dice.html">dice</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">4</span>, <span class="dt">reps =</span> <span class="dv">5</span>, <span class="dt">algorithms =</span> <span class="kw">c</span>(<span class="st">"hc"</span>, <span class="st">"diana"</span>),
             <span class="dt">cons.funs =</span> <span class="kw">c</span>(<span class="st">"kmodes"</span>, <span class="st">"majority"</span>))</code></pre></div>
 <p>The first few cluster assignments are shown below:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(<span class="kw">head</span>(obj$clusters))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(obj<span class="op">$</span>clusters))</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -130,7 +130,7 @@ obj &lt;-<span class="st"> </span><span class="kw"><a href="reference/dice.html"
 </tbody>
 </table>
 <p>You can also compare the base <code>algorithms</code> with the <code>cons.funs</code> using internal evaluation indices:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(obj$indices$internal$<span class="st">`</span><span class="dt">4</span><span class="st">`</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(obj<span class="op">$</span>indices<span class="op">$</span>internal<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>)</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Algorithms</th>

@@ -92,9 +92,9 @@ algorithms, and cluster sizes.</p>
   <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"brunet"</span>, <span class='st'>"lee"</span>), <span class='kw'>xdim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ydim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rlen</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.01</span>), <span class='kw'>minPts</span> <span class='kw'>=</span> <span class='fl'>5</span>,
   <span class='kw'>distance</span> <span class='kw'>=</span> <span class='st'>"euclidean"</span>, <span class='kw'>prep.data</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"none"</span>, <span class='st'>"full"</span>, <span class='st'>"sampled"</span>),
-  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"conventional"</span>, <span class='st'>"robust"</span>), <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>seed.nmf</span> <span class='kw'>=</span> <span class='fl'>123456</span>, <span class='kw'>seed.data</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>save</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>file.name</span> <span class='kw'>=</span> <span class='st'>"CCOutput"</span>, <span class='kw'>time.saved</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"conventional"</span>, <span class='st'>"robust"</span>, <span class='st'>"tsne"</span>, <span class='st'>"largevis"</span>),
+  <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>seed.nmf</span> <span class='kw'>=</span> <span class='fl'>123456</span>, <span class='kw'>seed.data</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>file.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time.saved</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -173,7 +173,8 @@ function can be used.</p></td>
       <td><p>if we use "conventional" measures (default), then the mean and
 standard deviation are used for centering and scaling, respectively. If
 "robust" measures are specified, the median and median absolute deviation
-(MAD) are used.</p></td>
+(MAD) are used. Alternatively, we can apply "tsne" or "largevis" as other
+methods of dimension reduction.</p></td>
     </tr>
     <tr>
       <th>min.var</th>
@@ -198,18 +199,15 @@ used.</p></td>
 set of subsamples</p></td>
     </tr>
     <tr>
-      <th>save</th>
-      <td><p>logical; if <code>TRUE</code>, the returned object will be saved at
-each iteration as well as at the end.</p></td>
-    </tr>
-    <tr>
       <th>file.name</th>
-      <td><p>file name of the written object</p></td>
+      <td><p>if not <code>NULL</code>, the returned array will be saved at each
+iteration as well as at the end of the function call to an <code>rds</code>
+object with <code>file.name</code> as the file name.</p></td>
     </tr>
     <tr>
       <th>time.saved</th>
-      <td><p>logical; if <code>TRUE</code>, the date saved is appended to the
-file name. Only applicable when <code>dir</code> is not <code>NULL</code>.</p></td>
+      <td><p>logical; if <code>TRUE</code>, the date saved is appended to
+<code>file.name</code>. Only applicable when <code>file.name</code> is not <code>NULL</code>.</p></td>
     </tr>
     </table>
     
@@ -276,11 +274,11 @@ default clustering algorithms provided are:</p><ul>
 
 <span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='fu'>consensus_cluster</span>(<span class='no'>dat</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"pam"</span>, <span class='st'>"agnes"</span>),
 <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"euclidean"</span>, <span class='st'>"manh"</span>), <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'>str</span>(<span class='no'>cc</span>)</div><div class='output co'>#&gt;  int [1:100, 1:6, 1:4, 1:3] 1 1 2 1 2 1 1 NA 2 1 ...
+<span class='fu'>str</span>(<span class='no'>cc</span>)</div><div class='output co'>#&gt;  int [1:100, 1:6, 1:2, 1:3] 1 1 2 1 2 1 1 NA 2 1 ...
 #&gt;  - attr(*, "dimnames")=List of 4
 #&gt;   ..$ : chr [1:100] "TCGA.04.1331_PRO.C5" "TCGA.04.1332_MES.C1" "TCGA.04.1336_DIF.C4" "TCGA.04.1337_MES.C1" ...
 #&gt;   ..$ : chr [1:6] "R1" "R2" "R3" "R4" ...
-#&gt;   ..$ : chr [1:4] "PAM_Euclidean" "PAM_Manh" "AGNES_Euclidean" "AGNES_Manh"
+#&gt;   ..$ : chr [1:2] "PAM_Euclidean" "PAM_Manh"
 #&gt;   ..$ : chr [1:3] "2" "3" "4"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
