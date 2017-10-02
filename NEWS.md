@@ -1,3 +1,5 @@
+# diceR 0.2.0.9000
+
 # diceR 0.2.0
 
 * New dimension reduction methods: t-SNE, largeVis (@dustin21)
