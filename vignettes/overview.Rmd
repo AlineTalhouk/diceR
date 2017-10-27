@@ -47,6 +47,71 @@ hgsc <- hgsc[1:100, 1:50]
 
 We load an excerpt of an expression data set from TCGA of `r nrow(hgsc)` high grade serous carcinoma samples measured on `r ncol(hgsc)` genes.
 
+## Clustering Algorithms
+
+The list of clustering algorithms available for use are: 
+
+  - `"nmf"`: Nonnegative Matrix Factorization (using Kullback-Leibler Divergence or Euclidean distance)
+  - `"hc"`: Hierarchical Clustering
+  - `"diana"`: DIvisive ANAlysis Clustering
+  - `"km"`: K-Means Clustering
+  - `"pam"`: Partition Around Medoids
+  - `"ap"`: Affinity Propagation
+  - `"sc"`: Spectral Clustering using Radial-Basis kernel function
+  - `"gmm"`: Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm
+  - `"block"`: Biclustering using a latent block model
+  - `"som"`: Self-Organizing Map (SOM) with Hierarchical Clustering
+  - `"cmeans"`: Fuzzy C-Means Clustering
+  - `"hdbscan"`: Hierarchical Density-based Spatial Clustering of Applications with Noise (HDBSCAN)
+  
+They are passed as a character vector into the `algorithms` parameter of `consensus_cluster()`. Note that the list continues to evolve as we implement more algorithms into `diceR`.
+
+### Cluster Models
+
+The clustering algorithms can be categorized under different models or paradigms based on how the clusters are formed. We provide a brief overview to guide the initial selection of algorithms since no single algorithm works for every data model.^1^
+
+  - Connectivity Models: `"hc"` and `"diana"` are hierarchical models based on connecting objects using a particular similarity or distance metric.
+  - Centroid Models: `"km"` and `"pam"` uses initial cluster centers calculated based on the mean of the objects, where `"pam"` restricts the centroid to be an actual object. These models are good for modeling data that produces spherical clusters. `"ap"` is similar to `"pam"` because it calculates "exemplars" (like centroids) of the data but is advantageous because initialization of k (number of clusters) is not required.^2^ `"cmeans"` is similar to `"km"` except that points can be assigned to more than one cluster.
+  - Distribution Models: `"gmm"` assumes a Gaussian mixture model used by the EM algorithm for clustering.^3^ The gain in model complexity is traded with utility since the assumption is quite strong.
+  - Density Models: `"hdbscan"` runs hierarchical clustering on the DBSCAN result.^4,5^ These models assume that each cluster has high density, so when there are overlapping regions, the algortihms may not be able to separate objects that well.
+  - Subspace Models: `"block"` clusters both samples and features, so is useful when you want to associate these pairs of cluster entities (e.g. are there functional gene groups that associate with sample subtypes?). Our implementation uses the latent block model.^6^
+  - Neural Models: our implementation of `"som"` reduces the data to a two-dimensional subspace using a neural network model, before performing hierarchical clustering.^7^ A lot of the noise is phased out and cluster stability can be improved from using `"hc"` alone.
+  - Spectral Clustering: Similar to `"som"`, `"sc"` also performs dimensionality reduction before clustering, but instead uses eigenvectors of a kernel matrix.^8^ We use a radial-basis kernel function in the package.
+  - Non-negative Matrix Factorization: the computational complexity with `"nmf"` is doubled compared to other algorithms because data manipulations need to performed to transform the input data into a non-negative matrix. Otherwise, NMF has a natural clustering result that can be used to group together samples and/or features.^9^
+
+## Distance Measures
+
+The list of distance measures available for use are those found in `stats::dist` and the spearman distance:
+
+  - `"euclidean"`: see `stats::dist`
+  - `"maximum"`: see `stats::dist`
+  - `"manhattan"`: see `stats::dist`
+  - `"canberra"`: see `stats::dist`
+  - `"binary"`: see `stats::dist`
+  - `"minkowski"`: see `stats::dist`
+  - `"spearman"`: based on `bioDist::spearman.dist`
+  
+They are passed as a character vector into the `distance` parameter of `consensus_cluster()`. Only the `"hc"`, `"diana"`, `"km"`, `"pam"` algorithms use the `distance` parameter.
+
+## Validity Indices
+
+### Internal
+
+The list of internal validity indices used for evaluating clusters are:
+
+  - "C_index", "Calinski_Harabasz", "Davies_Bouldin", "Dunn", "McClain_Rao", "PBM", "SD_Dis", "Ray_Turi", "Tau", "Gamma", "G_plus", "Silhouette", "S_Dbw" from `clusterCrit::intCriteria`
+  - "Compactness" from the `LinkCluE` package
+  - "Connectivity" from `clValid::connectivity`
+
+### External
+
+The list of external validity indices used for evaluating clusters are:
+
+  - "Hubert", "Jaccard", "McNemar", "Precision", "Rand", "Recall" from `clusterCrit::extCriteria`
+  - "NMI" calculated using `infotheo::entropy`
+  - Overall confusion matrix statistics from `caret::confusionMatrix`: "Overall Accuracy", "Cohen's kappa", "No Information Rate", "P-Value [Acc > NIR]"
+  - Averaged class-specific confusion matrix statistics: "Sensitivity", "Specificity", "PPV", "NPV", "Detection Rate", "Accuracy", "Balanced Accuracy"
+
 ## Consensus Clustering
 
 When Monti et al. (2003) first introduced consensus clustering, the idea was to use one clustering algorithm on bootstrapped subsamples of the data. We implement some extensions where a consensus is reached across subsamples *and* across algorithms. The final cluster assignment is then computed using statistical transformations on the ensemble cluster.
@@ -166,3 +231,16 @@ str(sig_obj)
 ```
 
 The p-value is `r sig_obj@pval`, indicating we do not have sufficient evidence to conclude there are four distinct clusters. Note that we did not use the full `hgsc` data set in this example, so the underlying biological mechanisms may not be fully captured.
+
+## References
+
+1. Estivill-Castro, Vladimir (20 June 2002). "Why so many clustering algorithms — A Position Paper". ACM SIGKDD Explorations Newsletter. 4 (1): 65–75. 
+2. Brendan J. Frey; Delbert Dueck (2007). "Clustering by passing messages between data points". Science. 315 (5814): 972–976.
+3. C. Fraley, A. E. Raftery, T. B. Murphy and L. Scrucca (2012). mclust Version 4 for R: Normal Mixture Modeling for Model-Based Clustering, Classification, and Density Estimation. Technical Report No. 597, Department of Statistics, University of Washington.
+4. Campello, R. J. G. B.; Moulavi, D.; Sander, J. (2013). Density-Based Clustering Based on Hierarchical Density Estimates. Proceedings of the 17th Pacific-Asia Conference on Knowledge Discovery in Databases, PAKDD 2013, Lecture Notes in Computer Science 7819, p. 160.
+5. Campello, Ricardo JGB, et al. "Hierarchical density estimates for data clustering, visualization, and outlier detection." ACM Transactions on Knowledge Discovery from Data (TKDD) 10.1 (2015): 5.
+6. G. Govaert and M. Nadif. Latent block model for contingency table. Communications in
+Statistics - Theory and Methods, 39(3):416–425, 2010.
+7. Isa, Dino, V. P. Kallimani, and Lam Hong Lee. "Using the self organizing map for clustering of text documents." Expert Systems with Applications 36.5 (2009): 9584-9591.
+8. Andrew Y. Ng, Michael I. Jordan, Yair Weiss On Spectral Clustering: Analysis and an Algorithm Neural Information Processing Symposium 2001
+9. Brunet J, Tamayo P, Golub TR and Mesirov JP (2004). "Metagenes and molecular pattern discovery using matrix factorization." Proceedings of the National Academy of Sciences of the United States of America, 101(12), pp. 4164-9.
