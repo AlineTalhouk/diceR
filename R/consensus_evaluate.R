@@ -88,7 +88,9 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   } else if (is.null(k.method)) {
     k <- pac %>%
       magrittr::use_series("k") %>%
-      magrittr::extract(apply(pac[, -1, drop = FALSE], 2, which.min) %>%
+      magrittr::extract(pac[, -1, drop = FALSE] %>%
+                          apply(2, which.min) %>%
+                          unlist() %>%
                           table() %>%
                           magrittr::extract(magrittr::is_in(., max(.))) %>%
                           names() %>%
