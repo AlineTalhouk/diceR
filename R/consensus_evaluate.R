@@ -212,8 +212,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   # Determine trimmed ensemble using rank aggregation, only if there are more
   # algorithms than we want to keep
   if (length(alg.all) <= n) {
-    rank.agg <- NULL
-    top.list <- NULL
+    rank.agg <- top.list <- NULL
     alg.keep <- alg.all
   } else {
     rank.agg <- cbind(max.bests, min.bests) %>%
@@ -222,7 +221,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
       purrr::map_df(~ alg.all[order(.x, sample(length(.x)))]) %>%
       t()
     top.list <- rank.agg %>%
-      RankAggreg::RankAggreg(., ncol(.), method = "GA", verbose = FALSE) %>%
+      RankAggreg::RankAggreg(ncol(.), method = "GA", verbose = FALSE) %>%
       magrittr::use_series("top.list")
     alg.keep <- top.list[seq_len(n)]
   }
