@@ -82,6 +82,113 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 hgsc &lt;-<span class="st"> </span>hgsc[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">50</span>]</code></pre></div>
 <p>We load an excerpt of an expression data set from TCGA of 100 high grade serous carcinoma samples measured on 50 genes.</p>
 </div>
+<div id="clustering-algorithms" class="section level2">
+<h2 class="hasAnchor">
+<a href="#clustering-algorithms" class="anchor"></a>Clustering Algorithms</h2>
+<p>The list of clustering algorithms available for use are:</p>
+<ul>
+<li>
+<code>"nmf"</code>: Nonnegative Matrix Factorization (using Kullback-Leibler Divergence or Euclidean distance)</li>
+<li>
+<code>"hc"</code>: Hierarchical Clustering</li>
+<li>
+<code>"diana"</code>: DIvisive ANAlysis Clustering</li>
+<li>
+<code>"km"</code>: K-Means Clustering</li>
+<li>
+<code>"pam"</code>: Partition Around Medoids</li>
+<li>
+<code>"ap"</code>: Affinity Propagation</li>
+<li>
+<code>"sc"</code>: Spectral Clustering using Radial-Basis kernel function</li>
+<li>
+<code>"gmm"</code>: Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm</li>
+<li>
+<code>"block"</code>: Biclustering using a latent block model</li>
+<li>
+<code>"som"</code>: Self-Organizing Map (SOM) with Hierarchical Clustering</li>
+<li>
+<code>"cmeans"</code>: Fuzzy C-Means Clustering</li>
+<li>
+<code>"hdbscan"</code>: Hierarchical Density-based Spatial Clustering of Applications with Noise (HDBSCAN)</li>
+</ul>
+<p>They are passed as a character vector into the <code>algorithms</code> parameter of <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>. Note that the list continues to evolve as we implement more algorithms into <code>diceR</code>.</p>
+<div id="cluster-models" class="section level3">
+<h3 class="hasAnchor">
+<a href="#cluster-models" class="anchor"></a>Cluster Models</h3>
+<p>The clustering algorithms can be categorized under different models or paradigms based on how the clusters are formed. We provide a brief overview to guide the initial selection of algorithms since no single algorithm works for every data model.<sup>1</sup></p>
+<ul>
+<li>Connectivity Models: <code>"hc"</code> and <code>"diana"</code> are hierarchical models based on connecting objects using a particular similarity or distance metric.</li>
+<li>Centroid Models: <code>"km"</code> and <code>"pam"</code> uses initial cluster centers calculated based on the mean of the objects, where <code>"pam"</code> restricts the centroid to be an actual object. These models are good for modeling data that produces spherical clusters. <code>"ap"</code> is similar to <code>"pam"</code> because it calculates “exemplars” (like centroids) of the data but is advantageous because initialization of k (number of clusters) is not required.<sup>2</sup><code>"cmeans"</code> is similar to <code>"km"</code> except that points can be assigned to more than one cluster.</li>
+<li>Distribution Models: <code>"gmm"</code> assumes a Gaussian mixture model used by the EM algorithm for clustering.<sup>3</sup> The gain in model complexity is traded with utility since the assumption is quite strong.</li>
+<li>Density Models: <code>"hdbscan"</code> runs hierarchical clustering on the DBSCAN result.<sup>4,5</sup> These models assume that each cluster has high density, so when there are overlapping regions, the algortihms may not be able to separate objects that well.</li>
+<li>Subspace Models: <code>"block"</code> clusters both samples and features, so is useful when you want to associate these pairs of cluster entities (e.g. are there functional gene groups that associate with sample subtypes?). Our implementation uses the latent block model.<sup>6</sup>
+</li>
+<li>Neural Models: our implementation of <code>"som"</code> reduces the data to a two-dimensional subspace using a neural network model, before performing hierarchical clustering.<sup>7</sup> A lot of the noise is phased out and cluster stability can be improved from using <code>"hc"</code> alone.</li>
+<li>Spectral Clustering: Similar to <code>"som"</code>, <code>"sc"</code> also performs dimensionality reduction before clustering, but instead uses eigenvectors of a kernel matrix.<sup>8</sup> We use a radial-basis kernel function in the package.</li>
+<li>Non-negative Matrix Factorization: the computational complexity with <code>"nmf"</code> is doubled compared to other algorithms because data manipulations need to performed to transform the input data into a non-negative matrix. Otherwise, NMF has a natural clustering result that can be used to group together samples and/or features.<sup>9</sup>
+</li>
+</ul>
+</div>
+</div>
+<div id="distance-measures" class="section level2">
+<h2 class="hasAnchor">
+<a href="#distance-measures" class="anchor"></a>Distance Measures</h2>
+<p>The list of distance measures available for use are those found in <code><a href="http://www.rdocumentation.org/packages/stats/topics/dist">stats::dist</a></code> and the spearman distance:</p>
+<ul>
+<li>
+<code>"euclidean"</code>: see <code><a href="http://www.rdocumentation.org/packages/stats/topics/dist">stats::dist</a></code>
+</li>
+<li>
+<code>"maximum"</code>: see <code><a href="http://www.rdocumentation.org/packages/stats/topics/dist">stats::dist</a></code>
+</li>
+<li>
+<code>"manhattan"</code>: see <code><a href="http://www.rdocumentation.org/packages/stats/topics/dist">stats::dist</a></code>
+</li>
+<li>
+<code>"canberra"</code>: see <code><a href="http://www.rdocumentation.org/packages/stats/topics/dist">stats::dist</a></code>
+</li>
+<li>
+<code>"binary"</code>: see <code><a href="http://www.rdocumentation.org/packages/stats/topics/dist">stats::dist</a></code>
+</li>
+<li>
+<code>"minkowski"</code>: see <code><a href="http://www.rdocumentation.org/packages/stats/topics/dist">stats::dist</a></code>
+</li>
+<li>
+<code>"spearman"</code>: based on <code><a href="http://www.rdocumentation.org/packages/bioDist/topics/spearman.dist">bioDist::spearman.dist</a></code>
+</li>
+</ul>
+<p>They are passed as a character vector into the <code>distance</code> parameter of <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>. Only the <code>"hc"</code>, <code>"diana"</code>, <code>"km"</code>, <code>"pam"</code> algorithms use the <code>distance</code> parameter.</p>
+</div>
+<div id="validity-indices" class="section level2">
+<h2 class="hasAnchor">
+<a href="#validity-indices" class="anchor"></a>Validity Indices</h2>
+<div id="internal" class="section level3">
+<h3 class="hasAnchor">
+<a href="#internal" class="anchor"></a>Internal</h3>
+<p>The list of internal validity indices used for evaluating clusters are:</p>
+<ul>
+<li>“C_index”, “Calinski_Harabasz”, “Davies_Bouldin”, “Dunn”, “McClain_Rao”, “PBM”, “SD_Dis”, “Ray_Turi”, “Tau”, “Gamma”, “G_plus”, “Silhouette”, “S_Dbw” from <code><a href="http://www.rdocumentation.org/packages/clusterCrit/topics/intCriteria">clusterCrit::intCriteria</a></code>
+</li>
+<li>“Compactness” from the <code>LinkCluE</code> package</li>
+<li>“Connectivity” from <code><a href="http://www.rdocumentation.org/packages/clValid/topics/connectivity">clValid::connectivity</a></code>
+</li>
+</ul>
+</div>
+<div id="external" class="section level3">
+<h3 class="hasAnchor">
+<a href="#external" class="anchor"></a>External</h3>
+<p>The list of external validity indices used for evaluating clusters are:</p>
+<ul>
+<li>“Hubert”, “Jaccard”, “McNemar”, “Precision”, “Rand”, “Recall” from <code><a href="http://www.rdocumentation.org/packages/clusterCrit/topics/extCriteria">clusterCrit::extCriteria</a></code>
+</li>
+<li>“NMI” calculated using <code><a href="http://www.rdocumentation.org/packages/infotheo/topics/entropy">infotheo::entropy</a></code>
+</li>
+<li>Overall confusion matrix statistics from <code><a href="http://www.rdocumentation.org/packages/caret/topics/confusionMatrix">caret::confusionMatrix</a></code>: “Overall Accuracy”, “Cohen’s kappa”, “No Information Rate”, “P-Value [Acc &gt; NIR]”</li>
+<li>Averaged class-specific confusion matrix statistics: “Sensitivity”, “Specificity”, “PPV”, “NPV”, “Detection Rate”, “Accuracy”, “Balanced Accuracy”</li>
+</ul>
+</div>
+</div>
 <div id="consensus-clustering" class="section level2">
 <h2 class="hasAnchor">
 <a href="#consensus-clustering" class="anchor"></a>Consensus Clustering</h2>
@@ -549,6 +656,21 @@ sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sig
 <span class="co">#&gt;   ..@ xcindex   : num 0.63</span></code></pre></div>
 <p>The p-value is 0.14, indicating we do not have sufficient evidence to conclude there are four distinct clusters. Note that we did not use the full <code>hgsc</code> data set in this example, so the underlying biological mechanisms may not be fully captured.</p>
 </div>
+<div id="references" class="section level2">
+<h2 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h2>
+<ol style="list-style-type: decimal">
+<li>Estivill-Castro, Vladimir (20 June 2002). “Why so many clustering algorithms — A Position Paper”. ACM SIGKDD Explorations Newsletter. 4 (1): 65–75.</li>
+<li>Brendan J. Frey; Delbert Dueck (2007). “Clustering by passing messages between data points”. Science. 315 (5814): 972–976.</li>
+<li>C. Fraley, A. E. Raftery, T. B. Murphy and L. Scrucca (2012). mclust Version 4 for R: Normal Mixture Modeling for Model-Based Clustering, Classification, and Density Estimation. Technical Report No. 597, Department of Statistics, University of Washington.</li>
+<li>Campello, R. J. G. B.; Moulavi, D.; Sander, J. (2013). Density-Based Clustering Based on Hierarchical Density Estimates. Proceedings of the 17th Pacific-Asia Conference on Knowledge Discovery in Databases, PAKDD 2013, Lecture Notes in Computer Science 7819, p. 160.</li>
+<li>Campello, Ricardo JGB, et al. “Hierarchical density estimates for data clustering, visualization, and outlier detection.” ACM Transactions on Knowledge Discovery from Data (TKDD) 10.1 (2015): 5.</li>
+<li>G. Govaert and M. Nadif. Latent block model for contingency table. Communications in Statistics - Theory and Methods, 39(3):416–425, 2010.</li>
+<li>Isa, Dino, V. P. Kallimani, and Lam Hong Lee. “Using the self organizing map for clustering of text documents.” Expert Systems with Applications 36.5 (2009): 9584-9591.</li>
+<li>Andrew Y. Ng, Michael I. Jordan, Yair Weiss On Spectral Clustering: Analysis and an Algorithm Neural Information Processing Symposium 2001</li>
+<li>Brunet J, Tamayo P, Golub TR and Mesirov JP (2004). “Metagenes and molecular pattern discovery using matrix factorization.” Proceedings of the National Academy of Sciences of the United States of America, 101(12), pp. 4164-9.</li>
+</ol>
+</div>
 </div>
   </div>
 
@@ -558,9 +680,13 @@ sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sig
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#clustering-algorithms">Clustering Algorithms</a></li>
+      <li><a href="#distance-measures">Distance Measures</a></li>
+      <li><a href="#validity-indices">Validity Indices</a></li>
       <li><a href="#consensus-clustering">Consensus Clustering</a></li>
       <li><a href="#consensus-functions">Consensus Functions</a></li>
       <li><a href="#significance-testing">Significance Testing</a></li>
+      <li><a href="#references">References</a></li>
       </ul>
 </div>
       </div>
