@@ -52,7 +52,8 @@ Imports:
     largeVis,
     progress,
     methods,
-    Rcpp
+    Rcpp,
+    cli
 Suggests:
     testthat,
     knitr,

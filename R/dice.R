@@ -62,6 +62,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   Eknn <- apply(E, 2:4, impute_knn, data = data, seed = seed)
 
   # Select k and new (trimmed and reweighed) data
+  if (progress)
+    cli::cat_line("Selecting k and imputing non-clustered cases")
   eval.obj <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl,
                                  k.method = k.method, trim = trim,
                                  reweigh = reweigh, n = n)
@@ -72,6 +74,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   Ecomp <- purrr::map2(Eknn, k, impute_missing, data = data)
 
   # Consensus functions
+  if (progress)
+    cli::cat_line("Computing consensus functions")
   Final <- purrr::map2(Ecomp, k, ~ {
     vapply(cons.funs, function(x) {
       switch(x,
@@ -103,6 +107,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
 
   # Return evaluation output including consensus function results
   if (evaluate) {
+    if (progress)
+      cli::cat_line("Evaluating output with consensus function results")
     eval.obj2 <- consensus_evaluate(data, E, cons.cl = clusters,
                                     ref.cl = ref.cl, plot = plot)
     indices <- c(k = list(eval.obj[["k"]]), eval.obj2[2:4],
@@ -119,5 +125,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   # Remove list structure
   Eknn <- abind::abind(Eknn, along = 3)
   Ecomp <- abind::abind(Ecomp, along = 3)
+  if (progress)
+    cli::cat_line("Diverse Cluster Ensemble Completed")
   dplyr::lst(E, Eknn, Ecomp, clusters, indices)
 }
