@@ -1,5 +1,7 @@
 # diceR 0.2.0.9000
 
+* Progress messages in `dice()`
+
 * Fix bug in `consensus_evaluate()` when algorithm has `NA` for all PAC values
 
 # diceR 0.2.0
