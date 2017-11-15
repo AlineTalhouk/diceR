@@ -83,10 +83,9 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
              majority = majority_voting(.x),
              CSPA = CSPA(E, .y),
              LCE = LCE(drop(.x), k = .y, sim.mat = sim.mat)
-      )
-    }, double(nrow(.x))) %>%
-      apply(2, as.integer)
-    })
+      ) %>% as.integer()
+    }, integer(nrow(.x)))
+  })
 
   #  If more than one k, need to prepend "k=" labels
   if (length(Ecomp) > 1) {
