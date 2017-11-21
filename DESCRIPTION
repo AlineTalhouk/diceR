@@ -21,6 +21,7 @@ Imports:
     assertthat,
     dplyr,
     magrittr,
+    tibble,
     tidyr,
     purrr (>= 0.2.3),
     ggplot2,

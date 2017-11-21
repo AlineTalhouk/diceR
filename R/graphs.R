@@ -176,7 +176,7 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
   # Setup
   finalR <- E %>%
     consensus_combine(element = "class") %>%
-    magrittr::extract2(as.character(k)) %>%
+    magrittr::extract2(as.character(nk)) %>%
     cbind(clusters) %>%
     apply(2, relabel_class, ref.cl = ref.cl %||% .[, 1])
   an <- colnames(finalR)
