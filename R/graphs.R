@@ -89,7 +89,7 @@ get_cdf <- function(mat) {
   }
   mat %>%
     purrr::modify_depth(2, ~ .x[lower.tri(.x, diag = TRUE)]) %>%
-    purrr::imap(~ set_names(.x, paste(.y, names(.x), sep = "."))) %>%
+    purrr::imap(~ purrr::set_names(.x, paste(.y, names(.x), sep = "."))) %>%
     dplyr::bind_cols() %>%
     tidyr::gather_("Group", "CDF", names(.)) %>%
     tidyr::separate_("Group", c("k", "Method"), sep = "\\.")
