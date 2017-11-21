@@ -40,7 +40,7 @@ devtools::install_github("AlineTalhouk/diceR")
 library(diceR)
 library(dplyr)
 library(ggplot2)
-library(knitr)
+library(pander)
 data(hgsc)
 hgsc <- hgsc[1:100, 1:50]
 ```
@@ -125,9 +125,14 @@ CC <- consensus_cluster(hgsc, nk = 3:4, p.item = 0.8, reps = 5,
 
 The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each "box" (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the DIANA algorithm for k = 3.
 
-```{r consensus_cluster_biclust}
-str(CC)
-kable(head(CC[, , "DIANA_Euclidean", "3"]))
+```{r consensus_cluster_str}
+co <- capture.output(str(CC))
+strwrap(co, width = 80)
+```
+
+```{r consensus_cluster_table, echo=FALSE, results='asis'}
+pandoc.table(head(CC[, , "DIANA_Euclidean", "3"]),
+             caption = "Cluster Assignments for DIANA, k = 3")
 ```
 
 Note the unavoidable presence of `NA`s because we used 80% subsampling. This can be problematic in certain downstream ensemble methods, so we can impute missing values using K-Nearest Neighbours beforehand. There might still be `NA`s after KNN because of how the decision threshold was set. The remaining missing values can be imputed using majority voting.
@@ -174,21 +179,24 @@ ccomb_class <- consensus_combine(CC, element = "class")
 
 ```{r consensus_combine_str}
 str(ccomb_matrix, max.level = 2)
-kable(head(ccomb_class$`4`))
+```
+
+```{r consensus_combine_table, echo=FALSE, results='asis'}
+pandoc.table(head(ccomb_class$`4`), caption = "Consensus Classes")
 ```
 
 One can feed in `ccomb_class` (instead of `CC`) into `consensus_matrix()` to obtain a consensus matrix across both subsamples **and** algorithms.
 
 A situation might also arise where we initially decided on using 3 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. `consensus_combine()` takes in any number of ensemble objects (e.g. `CC` and `CC2`) and combines the results.
 
-```{r consensus_combine_2, results='hide'}
+```{r consensus_combine_2_str, results='hide'}
 CC2 <- consensus_cluster(hgsc, nk = 3:4, p.item = 0.8, reps = 5,
                          algorithms = "km")
 ccomb_class2 <- consensus_combine(CC, CC2, element = "class")
 ```
 
-```{r consensus_combine_2_str}
-kable(head(ccomb_class2$`4`))
+```{r consensus_combine_2_table, echo=FALSE, results='asis'}
+pandoc.table(head(ccomb_class2$`4`), caption = "Consensus Classes with KM added")
 ```
 
 ### Evaluate, trim, and reweigh algortihms with `consensus_evaluate()`
@@ -199,8 +207,9 @@ Internal cluster validation indices assess the performance of results by taking 
 ccomp <- consensus_evaluate(hgsc, CC, CC2, plot = FALSE)
 ```
 
-```{r consensus_evaluate_kable}
-kable(ccomp$internal)
+```{r consensus_evaluate_table, echo=FALSE, results='asis'}
+pandoc.table(ccomp$internal$`4`, split.tables = 100,
+             caption = "Internal Indices for k = 4")
 ```
 
 We see that the biclustering algorithm is the least ambiguous and also most well-clustered (high compactness and separability).
@@ -227,7 +236,8 @@ To test whether there are four statistically distinct clusters (k = 4) versus no
 set.seed(1)
 pam_4 <- ccomb_class2$`4`[, "PAM_Euclidean"]
 sig_obj <- sigclust(hgsc, k = 4, nsim = 100, labflag = 0, label = pam_4)
-str(sig_obj)
+co <- capture.output(str(sig_obj))
+strwrap(co, width = 80)
 ```
 
 The p-value is `r sig_obj@pval`, indicating we do not have sufficient evidence to conclude there are four distinct clusters. Note that we did not use the full `hgsc` data set in this example, so the underlying biological mechanisms may not be fully captured.
