@@ -121,6 +121,11 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
     clusters <- cbind(Reference = ref.cl, clusters)
   }
 
+  # Algorithm vs internal index heatmap
+  if (plot) {
+    algii_heatmap(data, nk, E, clusters, ref.cl)
+  }
+
   # Remove list structure
   Eknn <- abind::abind(Eknn, along = 3)
   Ecomp <- abind::abind(Ecomp, along = 3)
