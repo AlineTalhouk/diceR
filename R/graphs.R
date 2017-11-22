@@ -171,47 +171,39 @@ graph_all <- function(x, ...) {
 #' @param clusters object in \code{dice}
 #' @noRd
 algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
-  # Setup
-  finalR <- E %>%
+  # Final clusters
+  fc <- E %>%
     consensus_combine(element = "class") %>%
     magrittr::extract2(as.character(nk)) %>%
-    cbind(clusters) %>%
-    apply(2, relabel_class, ref.cl = ref.cl %||% .[, 1])
-  an <- colnames(finalR)
-  x <- as.matrix(data)
+    cbind.data.frame(clusters) %>%
+    purrr::map_df(relabel_class, ref.cl = ref.cl %||% .[, 1])
 
   # Internal indices
   ii <- data.frame(
-    Algorithms = an,
-    apply(finalR, 2, function(cl)
-      clusterCrit::intCriteria(
-        traj = x, part = cl,
-        crit = c("C_index", "Calinski_Harabasz", "Davies_Bouldin", "Dunn",
-                 "McClain_Rao", "PBM", "SD_Dis", "Ray_Turi", "Tau", "Gamma",
-                 "G_plus", "Silhouette")) %>%
-        unlist()) %>%
-      t(),
-    Compactness = apply(finalR, 2, compactness, data = x),
-    Connectivity = apply(finalR, 2, function(cl)
-      clValid::connectivity(Data = x, clusters = cl))
-  ) %>%
-    dplyr::mutate_all(dplyr::funs(structure(., names = an)))
+    Algorithms = colnames(fc),
+    fc %>% purrr::map_df(
+      clusterCrit::intCriteria,
+      traj = as.matrix(data),
+      crit = c("Calinski_Harabasz", "Dunn", "PBM", "Tau", "Gamma", "C_index",
+               "Davies_Bouldin", "McClain_Rao", "SD_Dis", "Ray_Turi", "G_plus",
+               "Silhouette", "S_Dbw")),
+    Compactness = fc %>% purrr::map_dbl(compactness, data = data),
+    Connectivity = fc %>% purrr::map_dbl(
+      ~ clValid::connectivity(Data = data, clusters = .))) %>%
+    dplyr::mutate_all(dplyr::funs(structure(., names = colnames(fc))))
 
-  # Rank algorithms
-  ra <- rank_alg(ii)
-
-  # Heatmap data
+  # Heatmap data: reorder rows by ranked algorithms, remove indices with NaN
   hm <- ii %>%
     tibble::column_to_rownames("Algorithms") %>%
-    magrittr::extract(match(ra$top.list, rownames(.)),
-                      c(names(ra$max.bests), names(ra$min.bests))) %>%
-    as.matrix()
+    magrittr::extract(match(rank_alg(ii), rownames(.)),
+                      purrr::map_lgl(., ~ all(!is.nan(.x))))
 
+  # Plot heatmap with annotated colours, column scaling, no further reordering
   NMF::aheatmap(
     hm,
     annCol = data.frame(Criteria = c(rep("Maximized", 5), rep("Minimized", 8))),
-    annColors = list(Criteria = purrr::set_names(c("darkgreen", "deeppink4"),
-                                                 c("Maximized", "Minimized"))),
+    annColors = list(Criteria = stats::setNames(c("darkgreen", "deeppink4"),
+                                                c("Maximized", "Minimized"))),
     Colv = NA, Rowv = NA, scale = "column", col = "PiYG",
     main = "Ranked Algorithms on Internal Validity Indices"
   )
@@ -220,35 +212,28 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
 #' Rank Algorithms
 #' @noRd
 rank_alg <- function(ii) {
-  zk <- ii
-  alg.all <- as.character(ii$Algorithms)
-
-  # Separate algorithms into those from clusterCrit (main), and (others)
-  z.main <- zk %>%
+  # Separate internal indices into those from clusterCrit and from others
+  ii.cc <- ii %>%
     magrittr::extract(!names(.) %in% c("Algorithms", "Compactness",
                                        "Connectivity") &
-                        purrr::map_lgl(., ~ all(!is.nan(.x))))
-  z.other <- zk %>%
-    magrittr::extract(c("Compactness", "Connectivity"))
+                        purrr::map_lgl(., ~ all(!is.nan(.x)))) # Remove NaN idx
+  ii.other <- ii[c("Compactness", "Connectivity")]
 
   # Which algorithm is the best for each index?
-  bests <- purrr::map2_int(z.main, names(z.main), clusterCrit::bestCriterion)
-  max.bests <- z.main %>%
+  bests <- purrr::imap_int(ii.cc, clusterCrit::bestCriterion)
+  max.bests <- ii.cc %>%
     magrittr::extract(purrr::map_int(., which.max) == bests) %>%
     magrittr::multiply_by(-1)
-  min.bests <- z.main %>%
+  min.bests <- ii.cc %>%
     magrittr::extract(purrr::map_int(., which.min) == bests) %>%
-    cbind(z.other)
+    cbind(ii.other)
 
   # Determine trimmed ensemble using rank aggregation
   rank.agg <- cbind(max.bests, min.bests) %>%
     scale(center = FALSE, scale = TRUE) %>%
     as.data.frame() %>%
-    purrr::map_df(~ alg.all[order(.x, sample(length(.x)))]) %>%
+    purrr::map_df(~ ii$Algorithms[order(.x, sample(length(.x)))]) %>%
     t()
-  top.list <- rank.agg %>%
-    RankAggreg::RankAggreg(., ncol(.), method = "GA", verbose = FALSE) %>%
-    magrittr::use_series("top.list")
-
-  dplyr::lst(max.bests, min.bests, top.list)
+  RankAggreg::RankAggreg(rank.agg, ncol(rank.agg),
+                         method = "GA", verbose = FALSE)$top.list
 }
