@@ -76,34 +76,11 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   cl.mat <- consensus_combine(E, element = "class")
   cons.mat <- consensus_combine(E, element = "matrix")
 
-  # Calculate PAC
+  # Calculate PAC and choose k
   pac <- cons.mat %>%
     purrr::modify_depth(2, PAC) %>%
     purrr::map_df(data.frame, .id = "k")
-
-  # If reference given, k is number of distinct classes
-  if (!is.null(ref.cl)) {
-    k <- dplyr::n_distinct(ref.cl)
-    # Otherwise k is chosen using the following methods
-  } else if (is.null(k.method)) {
-    k <- pac %>%
-      magrittr::use_series("k") %>%
-      magrittr::extract(pac[, -1, drop = FALSE] %>%
-                          apply(2, which.min) %>%
-                          unlist() %>%
-                          table() %>%
-                          magrittr::extract(magrittr::is_in(., max(.))) %>%
-                          names() %>%
-                          as.numeric()) %>%
-      as.integer() %>%
-      min()
-  } else if (length(cons.mat) == 1 || k.method == "all") {
-    k <- as.integer(dimnames(E)[[4]])
-  } else if (length(k.method) == 1 & is.numeric(k.method)) {
-    k <- k.method
-  } else {
-    stop("Invalid input. Check documentation for possible options.")
-  }
+  k <- choose_k(ref.cl, k.method, pac)
 
   # If matrix of cluster assignments from cons.funs given, cbind to cl.mat
   an <- dimnames(E)[[3]]
@@ -270,6 +247,36 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   }
   data.new <- E.trim
   dplyr::lst(alg.keep, alg.remove, rank.agg, top.list, data.new)
+}
+
+#' Choose k using PAC
+#' @noRd
+choose_k <- function(ref.cl, k.method, pac) {
+  # If reference given, k is number of distinct classes
+  if (!is.null(ref.cl)) {
+    k <- dplyr::n_distinct(ref.cl)
+    # Otherwise k is chosen using the following methods
+  } else if (is.null(k.method)) {
+    k <- pac %>%
+      magrittr::use_series("k") %>%
+      magrittr::extract(pac[, -1, drop = FALSE] %>%
+                          apply(2, which.min) %>%
+                          unlist() %>%
+                          table() %>%
+                          magrittr::extract(magrittr::is_in(., max(.))) %>%
+                          names() %>%
+                          as.numeric()) %>%
+      as.integer() %>%
+      min()
+  } else if (nrow(pac) == 1 || k.method == "all") {
+    k <- pac$k
+  } else if (purrr::is_scalar_integer(k.method) ||
+             purrr::is_scalar_double(k.method)) {
+    k <- k.method
+  } else {
+    stop("Invalid input. Check documentation for possible options.")
+  }
+  as.integer(k)
 }
 
 #' Recursively find the greater common divisor of two numbers
