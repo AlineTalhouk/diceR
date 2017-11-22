@@ -123,7 +123,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
 
   # Algorithm vs internal index heatmap
   if (plot) {
-    algii_heatmap(data, nk, E, clusters, ref.cl)
+    algii_heatmap(data, k, E, clusters, ref.cl)
   }
 
   # Remove list structure
