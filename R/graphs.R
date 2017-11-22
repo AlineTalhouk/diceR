@@ -110,23 +110,21 @@ graph_heatmap <- function(mat, main = NULL, ...) {
     magrittr::set_names(list(purrr::map(mat, names)[[1]], names(mat)) %>%
                           purrr::cross() %>%
                           purrr::map_chr(paste, collapse = " k="))
-  if (is.null(main)) {
-    main <- names(dat)
-  } else {
-    assertthat::assert_that(length(main) == length(purrr::flatten(mat)))
-  }
-  hm.col <- grDevices::colorRampPalette(
-    RColorBrewer::brewer.pal(n = 9, "PuBuGn"))(256)
+  main <- paste(main %||% names(dat), "Consensus Matrix")
+  assertthat::assert_that(length(main) == length(purrr::flatten(mat)))
+
   cs.col <- RColorBrewer::brewer.pal(8, "Set2")
   cc <- purrr::map2(dat, rep(as.numeric(names(mat)),
                              each = unique(purrr::map_int(mat, length))),
                     ~ sample(cs.col)[hc(stats::dist(.x), k = .y)])
   purrr::pwalk(list(dat, main, cc), function(dat, main, cc)
-    gplots::heatmap.2(x = dat, main = paste(main, "Consensus Matrix"),
+    gplots::heatmap.2(x = dat, main = main, ColSideColors = cc,
+                      col = grDevices::colorRampPalette(
+                        RColorBrewer::brewer.pal(n = 9, "PuBuGn"))(256),
+                      labRow = "", labCol = "", trace = "none",
                       hclustfun = function(d)
                         stats::hclust(d, method = "average"),
-                      trace = "none", dendrogram = "column", col = hm.col,
-                      labRow = "", labCol = "", ColSideColors = cc, ...))
+                      dendrogram = "column", ...))
 }
 
 #' @rdname graphs
