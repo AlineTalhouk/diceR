@@ -73,7 +73,8 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
 
   # Extract classes and matrices separately
   E <- abind::abind(list(...), along = 3)
-  cl.mat <- consensus_combine(E, element = "class")
+  cl.mat <- consensus_combine(E, element = "class") %>%
+    purrr::map(as.data.frame)
   cons.mat <- consensus_combine(E, element = "matrix")
 
   # Calculate PAC and choose k
@@ -91,25 +92,21 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   }
 
   # Internal indices
-  ind.int <- cl.mat %>%
-    purrr::map(as.data.frame) %>%
-    purrr::map(ivi_table, data = data)
+  ii <- cl.mat %>% purrr::map(ivi_table, data = data)
 
-  # External indices for chosen k if reference is given
-  ind.ext <- ref.cl %>%
+  # External indices if reference is given
+  ei <- ref.cl %>%
     purrr::when(
       !is.null(.) ~ cl.mat %>%
-        magrittr::extract(match(k, names(.))) %>%
-        purrr::map(as.data.frame) %>%
+        magrittr::extract(match(k, names(.))) %>% # for chosen k only
         purrr::map(evi_table, ref.cl = ref.cl),
       TRUE ~ NULL
     )
 
   # Only trim if more than one algorithm and trim is specified
   if (dim(E)[3] > 1 & trim) {
-    trim.obj <- purrr::map(k, ~ consensus_trim(E = E, ii = ind.int, k = .x,
-                                               k.method = k.method,
-                                               reweigh = reweigh, n = n)) %>%
+    trim.obj <- purrr::map(k, consensus_trim, E = E, ii = ii,
+                           k.method = k.method, reweigh = reweigh, n = n) %>%
       purrr::transpose() %>%
       purrr::map_at(c("alg.keep", "alg.remove"), ~ unlist(unique(.x)))
   } else {
@@ -120,13 +117,13 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                      data.new = list(E))
   }
 
-  # Reorder ind.int (and ind.ext if not NULL) by top.list order if trimmed
+  # Reorder ii (and ei if not NULL) by top.list order if trimmed
   if (all(purrr::map_lgl(trim.obj$top.list, ~ !is.null(.x)))) {
-    ind.int <- purrr::map2(ind.int, trim.obj$top.list,
-                           ~ dplyr::arrange(.x, match(.y, Algorithms)))
-    if (!is.null(ind.ext))
-      ind.ext <- purrr::map2(ind.ext, trim.obj$top.list,
-                             ~ dplyr::arrange(.x, match(.y, Algorithms)))
+    ii <- purrr::map2(ii, trim.obj$top.list,
+                      ~ dplyr::arrange(.x, match(.y, Algorithms)))
+    if (!is.null(ei))
+      ei <- purrr::map2(ei, trim.obj$top.list,
+                        ~ dplyr::arrange(.x, match(.y, Algorithms)))
   }
 
   # Graph all plotting functions
@@ -134,7 +131,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
     graph_all(E)
   }
 
-  list(k = k, pac = pac, internal = ind.int, external = ind.ext, trim = trim.obj)
+  list(k = k, pac = pac, internal = ii, external = ei, trim = trim.obj)
 }
 
 #' @param E consensus object from \code{consensus_evaluate}
