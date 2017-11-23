@@ -91,48 +91,21 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   }
 
   # Internal indices
-  ind.int <- purrr::map(cl.mat, ~ {
-    x <- as.matrix(data)
-    data.frame(
-      Algorithms = an,
-      apply(.x, 2, function(cl)
-        clusterCrit::intCriteria(
-          traj = x, part = cl,
-          crit = c("C_index", "Calinski_Harabasz", "Davies_Bouldin", "Dunn",
-                   "McClain_Rao", "PBM", "SD_Dis", "Ray_Turi", "Tau", "Gamma",
-                   "G_plus", "Silhouette", "S_Dbw")) %>%
-          unlist()) %>% t(),
-      Compactness = apply(.x, 2, compactness, data = x),
-      Connectivity = apply(.x, 2, function(cl)
-        clValid::connectivity(Data = x, clusters = cl))) %>%
-      dplyr::mutate_all(dplyr::funs(structure(., names = an)))
-  })
+  ind.int <- cl.mat %>%
+    purrr::map(as.data.frame) %>%
+    purrr::map(ivi_table, data = data)
 
-  # Graph all plotting functions
-  if (plot) {
-    graph_all(E)
-  }
+  # External indices for chosen k if reference is given
+  ind.ext <- ref.cl %>%
+    purrr::when(
+      !is.null(.) ~ cl.mat %>%
+        magrittr::extract(match(k, names(.))) %>%
+        purrr::map(as.data.frame) %>%
+        purrr::map(evi_table, ref.cl = ref.cl),
+      TRUE ~ NULL
+    )
 
-  # Only calculate external indices if a reference is given
-  if (!is.null(ref.cl)) {
-    mat.ext <- cl.mat %>%
-      magrittr::extract(match(k, names(.)))
-    ind.ext <- purrr::map(mat.ext, ~ data.frame(
-      Algorithms = an,
-      apply(.x, 2, function(cl)
-        clusterCrit::extCriteria(
-          part1 = cl, part2 = ref.cl,
-          crit = c("Hubert", "Jaccard", "McNemar", "Precision", "Rand",
-                   "Recall")) %>%
-          unlist()) %>% t(),
-      NMI = apply(.x, 2, ev_nmi, ref.lab = ref.cl)) %>%
-        cbind(t(apply(.x, 2, ev_confmat, ref.lab = ref.cl))) %>%
-        dplyr::mutate_all(dplyr::funs(structure(., names = an))))
-  } else {
-    ind.ext <- NULL
-  }
-
-  # Only trim if specified and more than one algorithm
+  # Only trim if more than one algorithm and trim is specified
   if (dim(E)[3] > 1 & trim) {
     trim.obj <- purrr::map(k, ~ consensus_trim(E = E, ii = ind.int, k = .x,
                                                k.method = k.method,
@@ -156,8 +129,12 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                              ~ dplyr::arrange(.x, match(.y, Algorithms)))
   }
 
-  return(list(k = k, pac = pac, internal = ind.int, external = ind.ext,
-              trim = trim.obj))
+  # Graph all plotting functions
+  if (plot) {
+    graph_all(E)
+  }
+
+  list(k = k, pac = pac, internal = ind.int, external = ind.ext, trim = trim.obj)
 }
 
 #' @param E consensus object from \code{consensus_evaluate}
@@ -247,6 +224,46 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   }
   data.new <- E.trim
   dplyr::lst(alg.keep, alg.remove, rank.agg, top.list, data.new)
+}
+
+#' Table of internal validity indices for each algorithm
+#' @param cl.df data frame of cluster assignments for each algorithm
+#' @param data data frame with rows as samples and columns as variables
+#' @noRd
+ivi_table <- function(cl.df, data) {
+  data.frame(
+    Algorithms = colnames(cl.df),
+    cl.df %>% purrr::map_df(
+      clusterCrit::intCriteria,
+      traj = as.matrix(data),
+      crit = c("Calinski_Harabasz", "Dunn", "PBM", "Tau", "Gamma", "C_index",
+               "Davies_Bouldin", "McClain_Rao", "SD_Dis", "Ray_Turi", "G_plus",
+               "Silhouette", "S_Dbw")),
+    Compactness = cl.df %>% purrr::map_dbl(compactness, data = data),
+    Connectivity = cl.df %>% purrr::map_dbl(
+      ~ clValid::connectivity(Data = data, clusters = .))
+  ) %>%
+    dplyr::mutate_all(dplyr::funs(structure(., names = colnames(cl.df))))
+}
+
+#' Table of external validity indices for each algorithm
+#' @param cl.df data frame of cluster assignments for each algorithm
+#' @param ref.cl reference class
+#' @noRd
+evi_table <- function(cl.df, ref.cl) {
+  data.frame(
+    Algorithms = colnames(cl.df),
+    cl.df %>% purrr::map_df(
+      clusterCrit::extCriteria,
+      part2 = ref.cl,
+      crit = c("Hubert", "Jaccard", "McNemar", "Precision", "Rand", "Recall")
+    ),
+    NMI = cl.df %>% purrr::map_dbl(ev_nmi, ref.lab = ref.cl)
+  ) %>%
+    cbind(cl.df %>%
+            purrr::map(ev_confmat, ref.lab = ref.cl) %>%
+            do.call(rbind, .)) %>%
+    dplyr::mutate_all(dplyr::funs(structure(., names = colnames(cl.df))))
 }
 
 #' Choose k using PAC

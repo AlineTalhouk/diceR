@@ -179,20 +179,9 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
     purrr::map_df(relabel_class, ref.cl = ref.cl %||% .[, 1])
 
   # Internal indices
-  ii <- data.frame(
-    Algorithms = colnames(fc),
-    fc %>% purrr::map_df(
-      clusterCrit::intCriteria,
-      traj = as.matrix(data),
-      crit = c("Calinski_Harabasz", "Dunn", "PBM", "Tau", "Gamma", "C_index",
-               "Davies_Bouldin", "McClain_Rao", "SD_Dis", "Ray_Turi", "G_plus",
-               "Silhouette", "S_Dbw")),
-    Compactness = fc %>% purrr::map_dbl(compactness, data = data),
-    Connectivity = fc %>% purrr::map_dbl(
-      ~ clValid::connectivity(Data = data, clusters = .))) %>%
-    dplyr::mutate_all(dplyr::funs(structure(., names = colnames(fc))))
+  ii <- ivi_table(data, fc)
 
-  # Heatmap data: reorder rows by ranked algorithms, remove indices with NaN
+  # Heatmap: order algorithms by ranked ii, remove indices with NaN
   hm <- ii %>%
     tibble::column_to_rownames("Algorithms") %>%
     magrittr::extract(match(rank_alg(ii), rownames(.)),
