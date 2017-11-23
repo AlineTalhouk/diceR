@@ -58,6 +58,7 @@ Imports:
 Suggests:
     testthat,
     knitr,
+    pander,
     rmarkdown,
     covr
 License: MIT + file LICENSE
