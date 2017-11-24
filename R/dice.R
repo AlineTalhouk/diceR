@@ -67,7 +67,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   eval.obj <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl,
                                  k.method = k.method, trim = trim,
                                  reweigh = reweigh, n = n)
-  Eknn <- eval.obj$trim$data.new
+  Eknn <- eval.obj$trim$E.new
   k <- eval.obj$k
 
   # Impute remaining missing cases

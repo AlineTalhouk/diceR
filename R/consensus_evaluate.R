@@ -47,7 +47,7 @@
 #'     \item{\code{rank.matrix} }{a matrix of ranked algorithms for every internal
 #'     evaluation index}
 #'     \item{\code{top.list} }{final order of ranked algorithms}
-#'     \item{\code{data.new} }{A new version of a \code{consensus_cluster} data
+#'     \item{\code{E.new} }{A new version of a \code{consensus_cluster} data
 #'     object}
 #'   }
 #' @export
@@ -115,7 +115,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                      alg.remove = character(0),
                      rank.matrix = list(NULL),
                      top.list = list(NULL),
-                     data.new = list(E))
+                     E.new = list(E))
   }
 
   # Reorder ii (and ei if not NULL) by top.list order if trimmed
@@ -154,21 +154,20 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   alg.keep <- top.list %>% purrr::when(is.null(.) ~ alg.all,
                                        TRUE ~ .[seq_len(n)])
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
-  E.trim <- E[, , alg.keep, k, drop = FALSE]
+  E.new <- E[, , alg.keep, k, drop = FALSE]
 
   # Reweigh only if specified, more than 1 algorithm is kept, trimming done
   if (reweigh && length(alg.keep) > 1 && !is.null(top.list)) {
-    E.trim <- consensus_reweigh(E.trim, rank.obj, alg.keep, alg.all)
+    E.new <- consensus_reweigh(E.new, rank.obj, alg.keep, alg.all)
   }
 
   # If k.method is to select "all", need to add suffixes to algorithms
   if (!is.null(k.method) && k.method == "all") {
     alg.keep <- paste0(alg.keep, " k=", k)
     if (length(alg.remove) > 0) alg.remove <- paste0(alg.remove, " k=", k)
-    dimnames(E.trim)[[3]] <- paste0(dimnames(E.trim)[[3]], " k=", k)
+    dimnames(E.new)[[3]] <- paste0(dimnames(E.new)[[3]], " k=", k)
   }
-  data.new <- E.trim
-  dplyr::lst(alg.keep, alg.remove, rank.matrix, top.list, data.new)
+  dplyr::lst(alg.keep, alg.remove, rank.matrix, top.list, E.new)
 }
 
 #' Rank based on internal validity indices
@@ -207,7 +206,7 @@ consensus_rank <- function(ii, n) {
 
 #' Reweigh the algorithms in the ensemble if some were trimmed out
 #' @noRd
-consensus_reweigh <- function(E.trim, rank.obj, alg.keep, alg.all) {
+consensus_reweigh <- function(E.new, rank.obj, alg.keep, alg.all) {
   # Filter after knowing which to keep
   ak <- match(alg.keep, alg.all)
   max.bests <- rank.obj$max.bests[ak, ]
@@ -224,13 +223,13 @@ consensus_reweigh <- function(E.trim, rank.obj, alg.keep, alg.all) {
     purrr::set_names(alg.keep)
 
   # Generate multiples for each algorithm, updating dimnames 3rd dimension
-  E.trim %>%
+  E.new %>%
     purrr::array_branch(c(3, 4)) %>%
     purrr::map2(multiples, ~ rep(list(.x), .y)) %>%
     purrr::map(abind::abind, along = 3) %>%
     abind::abind(along = 3) %>%
     abind::abind(along = 4) %>%
-    `dimnames<-`(append(dimnames(E.trim)[-3],
+    `dimnames<-`(append(dimnames(E.new)[-3],
                         list(purrr::flatten_chr(
                           purrr::imap(multiples, ~ rep(.y, .x))
                         )),
