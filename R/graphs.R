@@ -179,12 +179,12 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
     purrr::map_df(relabel_class, ref.cl = ref.cl %||% .[, 1])
 
   # Internal indices
-  ii <- ivi_table(data, fc)
+  ii <- ivi_table(fc, data)
 
   # Heatmap: order algorithms by ranked ii, remove indices with NaN
   hm <- ii %>%
     tibble::column_to_rownames("Algorithms") %>%
-    magrittr::extract(match(rank_alg(ii), rownames(.)),
+    magrittr::extract(match(consensus_rank(ii, 1)$top.list, rownames(.)),
                       purrr::map_lgl(., ~ all(!is.nan(.x))))
 
   # Plot heatmap with annotated colours, column scaling, no further reordering
@@ -196,33 +196,4 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
     Colv = NA, Rowv = NA, scale = "column", col = "PiYG",
     main = "Ranked Algorithms on Internal Validity Indices"
   )
-}
-
-#' Rank Algorithms
-#' @noRd
-rank_alg <- function(ii) {
-  # Separate internal indices into those from clusterCrit and from others
-  ii.cc <- ii %>%
-    magrittr::extract(!names(.) %in% c("Algorithms", "Compactness",
-                                       "Connectivity") &
-                        purrr::map_lgl(., ~ all(!is.nan(.x)))) # Remove NaN idx
-  ii.other <- ii[c("Compactness", "Connectivity")]
-
-  # Which algorithm is the best for each index?
-  bests <- purrr::imap_int(ii.cc, clusterCrit::bestCriterion)
-  max.bests <- ii.cc %>%
-    magrittr::extract(purrr::map_int(., which.max) == bests) %>%
-    magrittr::multiply_by(-1)
-  min.bests <- ii.cc %>%
-    magrittr::extract(purrr::map_int(., which.min) == bests) %>%
-    cbind(ii.other)
-
-  # Determine trimmed ensemble using rank aggregation
-  rank.agg <- cbind(max.bests, min.bests) %>%
-    scale(center = FALSE, scale = TRUE) %>%
-    as.data.frame() %>%
-    purrr::map_df(~ ii$Algorithms[order(.x, sample(length(.x)))]) %>%
-    t()
-  RankAggreg::RankAggreg(rank.agg, ncol(rank.agg),
-                         method = "GA", verbose = FALSE)$top.list
 }
