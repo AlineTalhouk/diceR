@@ -143,7 +143,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   # Extract ii only for chosen k
   k <- as.character(k)
   ii <- ii[[k]]
-  alg.all <- ii$Algorithms
+  alg.all <- as.character(ii$Algorithms)
 
   # Rank algorithms on internal indices, store rank matrix and top alg list
   rank.obj <- consensus_rank(ii, n)
@@ -210,12 +210,8 @@ consensus_rank <- function(ii, n) {
 consensus_reweigh <- function(E.trim, rank.obj, alg.keep, alg.all) {
   # Filter after knowing which to keep
   ak <- match(alg.keep, alg.all)
-  # max.bests <- max.bests[ak, ]
-  # min.bests <- ii.cc %>%
-  #   magrittr::extract(ak, purrr::map_int(., which.min) == bests) %>%
-  #   purrr::map_df(~ sum(.x) - .x)
   max.bests <- rank.obj$max.bests[ak, ]
-  min.best <- rank.obj$min.bests[ak, ]
+  min.bests <- rank.obj$min.bests[ak, ]
 
   # Create multiples of each algorithm proportion to weight
   # Divide multiples by greatest common divisor to minimize number of copies
@@ -227,18 +223,18 @@ consensus_reweigh <- function(E.trim, rank.obj, alg.keep, alg.all) {
     magrittr::divide_by(Reduce(`gcd`, .)) %>%
     purrr::set_names(alg.keep)
 
-  # Generate multiples for each algorithm, adding back dimnames metadata
-  purrr::array_branch(E.trim, c(3, 4)) %>%
+  # Generate multiples for each algorithm, updating dimnames 3rd dimension
+  E.trim %>%
+    purrr::array_branch(c(3, 4)) %>%
     purrr::map2(multiples, ~ rep(list(.x), .y)) %>%
     purrr::map(abind::abind, along = 3) %>%
     abind::abind(along = 3) %>%
     abind::abind(along = 4) %>%
-    `dimnames<-`(list(
-      NULL,
-      dimnames(E.trim)[[2]],
-      purrr::flatten_chr(purrr::imap(multiples, ~ rep(.y, .x))),
-      k
-    ))
+    `dimnames<-`(append(dimnames(E.trim)[-3],
+                        list(purrr::flatten_chr(
+                          purrr::imap(multiples, ~ rep(.y, .x))
+                        )),
+                        2))
 }
 
 #' Table of internal validity indices for each algorithm
