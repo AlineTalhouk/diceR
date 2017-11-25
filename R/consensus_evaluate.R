@@ -158,7 +158,7 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   }
 
   # If k.method is to select "all", need to add suffixes to algorithms
-  if (k.method == "all") {
+  if (!is.null(k.method) && k.method == "all") {
     alg.keep <- paste_k(alg.keep, k)
     alg.remove <- alg.remove %>%
       purrr::when(length(.) > 0 ~ paste_k(., k), TRUE ~ .)
