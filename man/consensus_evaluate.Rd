@@ -45,11 +45,10 @@ number of algorithms is less than \code{n} no trimming is done.}
   the one giving the largest mean PAC across algorithms}
   \item{pac}{a data frame showing the PAC for each combination of algorithm
   and cluster size}
-  \item{internal}{a list of data frames for all k showing internal evaluation
+  \item{ii}{a list of data frames for all k showing internal evaluation
   indices}
-  \item{external}{a data frame showing external evaluation indices for
-  \code{k}}
-  \item{trim}{A list with 4 elements}
+  \item{ei}{a data frame showing external evaluation indices for \code{k}}
+  \item{trim.obj}{A list with 4 elements}
   \itemize{
     \item{\code{alg.keep} }{algorithms kept}
     \item{\code{alg.remove} }{algorithms removed}

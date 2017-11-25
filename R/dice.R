@@ -67,7 +67,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   eval.obj <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl,
                                  k.method = k.method, trim = trim,
                                  reweigh = reweigh, n = n)
-  Eknn <- eval.obj$trim$E.new
+  Eknn <- eval.obj$trim.obj$E.new
   k <- eval.obj$k
 
   # Impute remaining missing cases
@@ -111,7 +111,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
     eval.obj2 <- consensus_evaluate(data, E, cons.cl = clusters,
                                     ref.cl = ref.cl, plot = plot)
     indices <- c(k = list(eval.obj[["k"]]), eval.obj2[2:4],
-                 trim = list(eval.obj[["trim"]]))
+                 trim = list(eval.obj[["trim.obj"]]))
   } else {
     indices <- NULL
   }

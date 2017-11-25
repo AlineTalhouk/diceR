@@ -36,11 +36,10 @@
 #'   the one giving the largest mean PAC across algorithms}
 #'   \item{pac}{a data frame showing the PAC for each combination of algorithm
 #'   and cluster size}
-#'   \item{internal}{a list of data frames for all k showing internal evaluation
+#'   \item{ii}{a list of data frames for all k showing internal evaluation
 #'   indices}
-#'   \item{external}{a data frame showing external evaluation indices for
-#'   \code{k}}
-#'   \item{trim}{A list with 4 elements}
+#'   \item{ei}{a data frame showing external evaluation indices for \code{k}}
+#'   \item{trim.obj}{A list with 4 elements}
 #'   \itemize{
 #'     \item{\code{alg.keep} }{algorithms kept}
 #'     \item{\code{alg.remove} }{algorithms removed}
@@ -127,12 +126,9 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                         ~ dplyr::arrange(.x, match(.y, Algorithms)))
   }
 
-  # Graph all plotting functions
-  if (plot) {
-    graph_all(E)
-  }
+  if (plot) graph_all(E) # Graph all plotting functions
 
-  list(k = k, pac = pac, internal = ii, external = ei, trim = trim.obj)
+  dplyr::lst(k, pac, ii, ei, trim.obj)
 }
 
 #' @param E consensus object from \code{consensus_evaluate}
@@ -162,10 +158,11 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   }
 
   # If k.method is to select "all", need to add suffixes to algorithms
-  if (!is.null(k.method) && k.method == "all") {
-    alg.keep <- paste0(alg.keep, " k=", k)
-    if (length(alg.remove) > 0) alg.remove <- paste0(alg.remove, " k=", k)
-    dimnames(E.new)[[3]] <- paste0(dimnames(E.new)[[3]], " k=", k)
+  if (k.method == "all") {
+    alg.keep <- paste_k(alg.keep, k)
+    alg.remove <- alg.remove %>%
+      purrr::when(length(.) > 0 ~ paste_k(., k), TRUE ~ .)
+    dimnames(E.new)[[3]] <- paste_k(dimnames(E.new)[[3]], k)
   }
   dplyr::lst(alg.keep, alg.remove, rank.matrix, top.list, E.new)
 }
@@ -173,12 +170,12 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
 #' Rank based on internal validity indices
 #' @noRd
 consensus_rank <- function(ii, n) {
-  # Separate internal indices into those from clusterCrit and from others
+  # Extract internal indices from clusterCrit and remove NaN idx
   ii.cc <- ii %>%
-    magrittr::extract(!names(.) %in% c("Algorithms", "Compactness",
-                                       "Connectivity") &
-                        purrr::map_lgl(., ~ all(!is.nan(.x)))) # Remove NaN idx
-  ii.other <- ii[c("Compactness", "Connectivity")]
+    magrittr::extract(
+      !names(.) %in% c("Algorithms", "Compactness", "Connectivity") &
+        purrr::map_lgl(., ~ all(!is.nan(.x)))
+    )
 
   # Which algorithm is the best for each index?
   bests <- purrr::imap_int(ii.cc, clusterCrit::bestCriterion)
@@ -187,7 +184,7 @@ consensus_rank <- function(ii, n) {
     magrittr::multiply_by(-1)
   min.bests <- ii.cc %>%
     magrittr::extract(purrr::map_int(., which.min) == bests) %>%
-    cbind(ii.other)
+    cbind(ii[c("Compactness", "Connectivity")]) # these two need to be minimized
 
   # Determine trimmed ensemble using rank aggregation
   if (nrow(ii) <= n) {
@@ -207,20 +204,18 @@ consensus_rank <- function(ii, n) {
 #' Reweigh the algorithms in the ensemble if some were trimmed out
 #' @noRd
 consensus_reweigh <- function(E.new, rank.obj, alg.keep, alg.all) {
-  # Filter after knowing which to keep
-  ak <- match(alg.keep, alg.all)
-  max.bests <- rank.obj$max.bests[ak, ]
-  min.bests <- rank.obj$min.bests[ak, ]
-
   # Create multiples of each algorithm proportion to weight
-  # Divide multiples by greatest common divisor to minimize number of copies
-  multiples <- cbind(as.matrix(max.bests), as.matrix(min.bests)) %>%
-    prop.table(2) %>%
-    rowMeans() %>%
-    magrittr::multiply_by(100) %>%
-    round(0) %>%
-    magrittr::divide_by(Reduce(`gcd`, .)) %>%
-    purrr::set_names(alg.keep)
+  multiples <- rank.obj %>%
+    magrittr::extract(c("max.bests", "min.bests")) %>%
+    dplyr::bind_cols() %>% # Recombine internal validity indices
+    dplyr::arrange(match(alg.keep, alg.all), ) %>% # Reorder for algs to keep
+    as.matrix() %>% # Cannot calculate proportions on data.frame
+    prop.table(2) %>% # Proportion for each index
+    rowMeans() %>% # Average proportion across indices
+    magrittr::multiply_by(100) %>% # Percentage
+    round(0) %>% # Round to closest whole number
+    magrittr::divide_by(Reduce(`gcd`, .)) %>% # Divide by gcd to minimize copies
+    purrr::set_names(alg.keep) # reassign names of algs to keep
 
   # Generate multiples for each algorithm, updating dimnames 3rd dimension
   E.new %>%
@@ -304,6 +299,12 @@ choose_k <- function(ref.cl, k.method, pac) {
     stop("Invalid input. Check documentation for possible options.")
   }
   as.integer(k)
+}
+
+#' Add cluster size suffix to algorithms when k.method == "all"
+#' @noRd
+paste_k <- function(a, k) {
+  paste0(a, " k=", k)
 }
 
 #' Recursively find the greater common divisor of two numbers
