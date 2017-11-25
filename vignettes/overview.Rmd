@@ -208,7 +208,7 @@ ccomp <- consensus_evaluate(hgsc, CC, CC2, plot = FALSE)
 ```
 
 ```{r consensus_evaluate_table, echo=FALSE, results='asis'}
-pandoc.table(ccomp$internal$`4`, split.tables = 100,
+pandoc.table(ccomp$ii$`4`, split.tables = 100,
              caption = "Internal Indices for k = 4")
 ```
 
