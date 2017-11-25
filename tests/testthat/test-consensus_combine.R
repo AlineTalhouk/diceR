@@ -39,7 +39,7 @@ test_that("compactness measure works with singleton clusters", {
 
 test_that("trimming (potentially) removes algorithms", {
   CC.trimmed <- consensus_evaluate(x, CC1, CC2, ref.cl = ref.cl, n = 1,
-                                   trim = TRUE)$trim$data.new
+                                   trim = TRUE)$trim.obj$E.new
   expect_lte(dim(CC.trimmed[[1]])[3],
              dim(abind::abind(list(CC1, CC2), along = 3))[3])
 })
