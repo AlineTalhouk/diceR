@@ -208,7 +208,7 @@ consensus_reweigh <- function(E.new, rank.obj, alg.keep, alg.all) {
   multiples <- rank.obj %>%
     magrittr::extract(c("max.bests", "min.bests")) %>%
     dplyr::bind_cols() %>% # Recombine internal validity indices
-    dplyr::arrange(match(alg.keep, alg.all), ) %>% # Reorder for algs to keep
+    magrittr::extract(match(alg.keep, alg.all), ) %>% # Extract algs to keep
     as.matrix() %>% # Cannot calculate proportions on data.frame
     prop.table(2) %>% # Proportion for each index
     rowMeans() %>% # Average proportion across indices
