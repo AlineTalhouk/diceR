@@ -14,6 +14,9 @@
 #' @param evaluate logical; if \code{TRUE} (default), validity indices are
 #'   returned. Internal validity indices are always computed. If \code{ref.cl}
 #'   is not \code{NULL}, then external validity indices will also be computed.
+#' @param plot logical; if \code{TRUE}, \code{graph_all} is called and a summary
+#'   evaluation heatmap of ranked algorithms vs. internal validity indices is
+#'   plotted as well.
 #' @inheritParams consensus_cluster
 #' @inheritParams consensus_evaluate
 #' @inheritParams LCE

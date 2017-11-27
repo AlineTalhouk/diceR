@@ -72,7 +72,9 @@ number of algorithms is less than \code{n} no trimming is done.}
 returned. Internal validity indices are always computed. If \code{ref.cl}
 is not \code{NULL}, then external validity indices will also be computed.}
 
-\item{plot}{logical; if \code{TRUE}, \code{graph_all} is called}
+\item{plot}{logical; if \code{TRUE}, \code{graph_all} is called and a summary
+evaluation heatmap of ranked algorithms vs. internal validity indices is
+plotted as well.}
 
 \item{ref.cl}{reference class}
 
