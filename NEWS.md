@@ -1,4 +1,4 @@
-# diceR 0.2.0.9000
+# diceR 0.3.0
 
 * Updated object output names in `consensus_evaluate()`
 
