@@ -23,7 +23,7 @@
 #' x <- matrix(rnorm(500), ncol = 10)
 #' CC1 <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = "ap",
 #' progress = FALSE)
-#' CC2 <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = "gmm",
+#' CC2 <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = "km",
 #' progress = FALSE)
 #'
 #' # Combine and return either matrices or classes

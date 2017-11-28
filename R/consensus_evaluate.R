@@ -54,7 +54,7 @@
 #' # Consensus clustering for multiple algorithms
 #' set.seed(911)
 #' x <- matrix(rnorm(500), ncol = 10)
-#' CC <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = c("ap", "gmm"),
+#' CC <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = c("ap", "km"),
 #' progress = FALSE)
 #'
 #' # Evaluate algorithms on internal/external indices and trim algorithms:
