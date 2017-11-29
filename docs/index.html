@@ -130,20 +130,20 @@ obj &lt;-<span class="st"> </span><span class="kw"><a href="reference/dice.html"
 </tbody>
 </table>
 <p>You can also compare the base <code>algorithms</code> with the <code>cons.funs</code> using internal evaluation indices:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(obj<span class="op">$</span>indices<span class="op">$</span>internal<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(obj<span class="op">$</span>indices<span class="op">$</span>ii<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>)</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Algorithms</th>
-<th align="right">c_index</th>
 <th align="right">calinski_harabasz</th>
-<th align="right">davies_bouldin</th>
 <th align="right">dunn</th>
-<th align="right">mcclain_rao</th>
 <th align="right">pbm</th>
-<th align="right">sd_dis</th>
-<th align="right">ray_turi</th>
 <th align="right">tau</th>
 <th align="right">gamma</th>
+<th align="right">c_index</th>
+<th align="right">davies_bouldin</th>
+<th align="right">mcclain_rao</th>
+<th align="right">sd_dis</th>
+<th align="right">ray_turi</th>
 <th align="right">g_plus</th>
 <th align="right">silhouette</th>
 <th align="right">s_dbw</th>
@@ -153,16 +153,16 @@ obj &lt;-<span class="st"> </span><span class="kw"><a href="reference/dice.html"
 <tbody>
 <tr class="odd">
 <td align="left">HC_Euclidean</td>
-<td align="right">0.3122823</td>
 <td align="right">4.945499</td>
-<td align="right">3.100302</td>
 <td align="right">0.3025234</td>
-<td align="right">0.8237540</td>
 <td align="right">38.34704</td>
-<td align="right">0.1795670</td>
-<td align="right">3.0886000</td>
 <td align="right">0.1992999</td>
 <td align="right">0.5598731</td>
+<td align="right">0.3122823</td>
+<td align="right">3.100302</td>
+<td align="right">0.8237540</td>
+<td align="right">0.1795670</td>
+<td align="right">3.0886000</td>
 <td align="right">0.0278858</td>
 <td align="right">0.0300838</td>
 <td align="right">NaN</td>
@@ -171,16 +171,16 @@ obj &lt;-<span class="st"> </span><span class="kw"><a href="reference/dice.html"
 </tr>
 <tr class="even">
 <td align="left">DIANA_Euclidean</td>
-<td align="right">0.1639431</td>
 <td align="right">51.332198</td>
-<td align="right">3.037874</td>
 <td align="right">0.3348103</td>
-<td align="right">0.8077658</td>
 <td align="right">32.92726</td>
-<td align="right">0.2034291</td>
-<td align="right">3.1687896</td>
 <td align="right">0.4271483</td>
 <td align="right">0.6216897</td>
+<td align="right">0.1639431</td>
+<td align="right">3.037874</td>
+<td align="right">0.8077658</td>
+<td align="right">0.2034291</td>
+<td align="right">3.1687896</td>
 <td align="right">0.0892952</td>
 <td align="right">0.0700862</td>
 <td align="right">NaN</td>
@@ -189,16 +189,16 @@ obj &lt;-<span class="st"> </span><span class="kw"><a href="reference/dice.html"
 </tr>
 <tr class="odd">
 <td align="left">kmodes</td>
-<td align="right">0.2020221</td>
 <td align="right">39.127460</td>
-<td align="right">1.563373</td>
 <td align="right">0.3352598</td>
-<td align="right">0.8254116</td>
 <td align="right">49.27019</td>
-<td align="right">0.1046540</td>
-<td align="right">1.1356906</td>
 <td align="right">0.3907289</td>
 <td align="right">0.5528538</td>
+<td align="right">0.2020221</td>
+<td align="right">1.563373</td>
+<td align="right">0.8254116</td>
+<td align="right">0.1046540</td>
+<td align="right">1.1356906</td>
 <td align="right">0.1116735</td>
 <td align="right">NaN</td>
 <td align="right">0.7207352</td>
@@ -207,16 +207,16 @@ obj &lt;-<span class="st"> </span><span class="kw"><a href="reference/dice.html"
 </tr>
 <tr class="even">
 <td align="left">majority</td>
-<td align="right">0.2458043</td>
 <td align="right">5.645220</td>
-<td align="right">1.379460</td>
 <td align="right">0.4315581</td>
-<td align="right">0.7781939</td>
 <td align="right">96.93674</td>
-<td align="right">0.0948754</td>
-<td align="right">0.8261741</td>
 <td align="right">0.2221915</td>
 <td align="right">0.7330421</td>
+<td align="right">0.2458043</td>
+<td align="right">1.379460</td>
+<td align="right">0.7781939</td>
+<td align="right">0.0948754</td>
+<td align="right">0.8261741</td>
 <td align="right">0.0122634</td>
 <td align="right">NaN</td>
 <td align="right">0.7224928</td>

@@ -77,7 +77,7 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(diceR)
 <span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(ggplot2)
-<span class="kw">library</span>(knitr)
+<span class="kw">library</span>(pander)
 <span class="kw">data</span>(hgsc)
 hgsc &lt;-<span class="st"> </span>hgsc[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">50</span>]</code></pre></div>
 <p>We load an excerpt of an expression data set from TCGA of 100 high grade serous carcinoma samples measured on 50 genes.</p>
@@ -197,71 +197,81 @@ hgsc &lt;-<span class="st"> </span>hgsc[<span class="dv">1</span><span class="op
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,
                         <span class="dt">algorithms =</span> <span class="kw">c</span>(<span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span>))</code></pre></div>
 <p>The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each “box” (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the DIANA algorithm for k = 3.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(CC)
-<span class="co">#&gt;  int [1:100, 1:5, 1:3, 1:2] 1 3 1 3 1 1 1 NA 1 1 ...</span>
-<span class="co">#&gt;  - attr(*, "dimnames")=List of 4</span>
-<span class="co">#&gt;   ..$ : chr [1:100] "TCGA.04.1331_PRO.C5" "TCGA.04.1332_MES.C1" "TCGA.04.1336_DIF.C4" "TCGA.04.1337_MES.C1" ...</span>
-<span class="co">#&gt;   ..$ : chr [1:5] "R1" "R2" "R3" "R4" ...</span>
-<span class="co">#&gt;   ..$ : chr [1:3] "HC_Euclidean" "PAM_Euclidean" "DIANA_Euclidean"</span>
-<span class="co">#&gt;   ..$ : chr [1:2] "3" "4"</span>
-<span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(CC[, , <span class="st">"DIANA_Euclidean"</span>, <span class="st">"3"</span>]))</code></pre></div>
-<table class="table">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">co &lt;-<span class="st"> </span><span class="kw">capture.output</span>(<span class="kw">str</span>(CC))
+<span class="kw">strwrap</span>(co, <span class="dt">width =</span> <span class="dv">80</span>)
+<span class="co">#&gt; [1] "int [1:100, 1:5, 1:3, 1:2] 1 3 1 3 1 1 1 NA 1 1 ..."                   </span>
+<span class="co">#&gt; [2] "- attr(*, \"dimnames\")=List of 4"                                     </span>
+<span class="co">#&gt; [3] "..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""     </span>
+<span class="co">#&gt; [4] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                   </span>
+<span class="co">#&gt; [5] "..$ : chr [1:5] \"R1\" \"R2\" \"R3\" \"R4\" ..."                       </span>
+<span class="co">#&gt; [6] "..$ : chr [1:3] \"HC_Euclidean\" \"PAM_Euclidean\" \"DIANA_Euclidean\""</span>
+<span class="co">#&gt; [7] "..$ : chr [1:2] \"3\" \"4\""</span></code></pre></div>
+<table style="width:71%;" class="table">
+<caption>Cluster Assignments for DIANA, k = 3</caption>
+<colgroup>
+<col width="36%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+</colgroup>
 <thead><tr class="header">
-<th></th>
-<th align="right">R1</th>
-<th align="right">R2</th>
-<th align="right">R3</th>
-<th align="right">R4</th>
-<th align="right">R5</th>
+<th align="center"> </th>
+<th align="center">R1</th>
+<th align="center">R2</th>
+<th align="center">R3</th>
+<th align="center">R4</th>
+<th align="center">R5</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>TCGA.04.1331_PRO.C5</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="center"><strong>TCGA.04.1331_PRO.C5</strong></td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
 </tr>
 <tr class="even">
-<td>TCGA.04.1332_MES.C1</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">NA</td>
+<td align="center"><strong>TCGA.04.1332_MES.C1</strong></td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">NA</td>
 </tr>
 <tr class="odd">
-<td>TCGA.04.1336_DIF.C4</td>
-<td align="right">2</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">1</td>
-<td align="right">NA</td>
+<td align="center"><strong>TCGA.04.1336_DIF.C4</strong></td>
+<td align="center">2</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+<td align="center">1</td>
+<td align="center">NA</td>
 </tr>
 <tr class="even">
-<td>TCGA.04.1337_MES.C1</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">2</td>
+<td align="center"><strong>TCGA.04.1337_MES.C1</strong></td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">2</td>
 </tr>
 <tr class="odd">
-<td>TCGA.04.1338_MES.C1</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">2</td>
+<td align="center"><strong>TCGA.04.1338_MES.C1</strong></td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">2</td>
 </tr>
 <tr class="even">
-<td>TCGA.04.1341_PRO.C5</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">1</td>
+<td align="center"><strong>TCGA.04.1341_PRO.C5</strong></td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
@@ -311,44 +321,49 @@ ccomb_class &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <span class="co">#&gt;  $ 4:List of 3</span>
 <span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.2 1 0 1 1 1 1 1 0.8 ...</span>
 <span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 0.8 0 0.4 0 1 1 0.8 0 0 ...</span>
-<span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.6 0 0 0 1 1 0 0 1 ...</span>
-<span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(ccomb_class<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
-<table class="table">
+<span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.6 0 0 0 1 1 0 0 1 ...</span></code></pre></div>
+<table style="width:67%;" class="table">
+<caption>Consensus Classes</caption>
+<colgroup>
+<col width="20%">
+<col width="22%">
+<col width="23%">
+</colgroup>
 <thead><tr class="header">
-<th align="right">HC_Euclidean</th>
-<th align="right">PAM_Euclidean</th>
-<th align="right">DIANA_Euclidean</th>
+<th align="center">HC_Euclidean</th>
+<th align="center">PAM_Euclidean</th>
+<th align="center">DIANA_Euclidean</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 <tr class="even">
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
 </tr>
 <tr class="even">
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">2</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">2</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
@@ -357,50 +372,56 @@ ccomb_class &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,
                          <span class="dt">algorithms =</span> <span class="st">"km"</span>)
 ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, CC2, <span class="dt">element =</span> <span class="st">"class"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw">head</span>(ccomb_class2<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>))</code></pre></div>
-<table class="table">
+<table style="width:88%;" class="table">
+<caption>Consensus Classes with KM added</caption>
+<colgroup>
+<col width="20%">
+<col width="22%">
+<col width="25%">
+<col width="19%">
+</colgroup>
 <thead><tr class="header">
-<th align="right">HC_Euclidean</th>
-<th align="right">PAM_Euclidean</th>
-<th align="right">DIANA_Euclidean</th>
-<th align="right">KM_Euclidean</th>
+<th align="center">HC_Euclidean</th>
+<th align="center">PAM_Euclidean</th>
+<th align="center">DIANA_Euclidean</th>
+<th align="center">KM_Euclidean</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 <tr class="even">
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">2</td>
 </tr>
 <tr class="even">
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">3</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">2</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
@@ -411,201 +432,135 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 </h3>
 <p>Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between <code>lower</code> (defaults to 0) and <code>upper</code> (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each <code>k</code>, and choose the <code>k</code> with the greatest average PAC. If there <em>is</em> a reference class, <code>k</code> is the number of distinct classes in the reference.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ccomp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(ccomp<span class="op">$</span>internal)</code></pre></div>
-<table class="table"><tbody><tr>
-<td>
 <table class="table">
+<caption>Internal Indices for k = 4 (continued below)</caption>
+<colgroup>
+<col width="18%">
+<col width="20%">
+<col width="9%">
+<col width="8%">
+<col width="9%">
+<col width="9%">
+<col width="10%">
+<col width="16%">
+</colgroup>
 <thead><tr class="header">
-<th align="left">Algorithms</th>
-<th align="right">c_index</th>
-<th align="right">calinski_harabasz</th>
-<th align="right">davies_bouldin</th>
-<th align="right">dunn</th>
-<th align="right">mcclain_rao</th>
-<th align="right">pbm</th>
-<th align="right">sd_dis</th>
-<th align="right">ray_turi</th>
-<th align="right">tau</th>
-<th align="right">gamma</th>
-<th align="right">g_plus</th>
-<th align="right">silhouette</th>
-<th align="right">s_dbw</th>
-<th align="right">Compactness</th>
-<th align="right">Connectivity</th>
+<th align="center">Algorithms</th>
+<th align="center">calinski_harabasz</th>
+<th align="center">dunn</th>
+<th align="center">pbm</th>
+<th align="center">tau</th>
+<th align="center">gamma</th>
+<th align="center">c_index</th>
+<th align="center">davies_bouldin</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">HC_Euclidean</td>
-<td align="right">0.2628654</td>
-<td align="right">4.410259</td>
-<td align="right">0.4882016</td>
-<td align="right">0.3811705</td>
-<td align="right">0.7501849</td>
-<td align="right">15.658647</td>
-<td align="right">0.2770320</td>
-<td align="right">0.7461296</td>
-<td align="right">0.2795918</td>
-<td align="right">0.6686529</td>
-<td align="right">0.0289668</td>
-<td align="right">NaN</td>
-<td align="right">NaN</td>
-<td align="right">7.810255</td>
-<td align="right">12.65913</td>
+<td align="center">HC_Euclidean</td>
+<td align="center">3.949</td>
+<td align="center">0.4524</td>
+<td align="center">13.25</td>
+<td align="center">0.3188</td>
+<td align="center">0.7036</td>
+<td align="center">0.2092</td>
+<td align="center">0.5132</td>
 </tr>
 <tr class="even">
-<td align="left">PAM_Euclidean</td>
-<td align="right">0.2050865</td>
-<td align="right">20.228140</td>
-<td align="right">2.1384974</td>
-<td align="right">0.2763511</td>
-<td align="right">0.7985953</td>
-<td align="right">10.366476</td>
-<td align="right">0.4987234</td>
-<td align="right">1.2721484</td>
-<td align="right">0.3549500</td>
-<td align="right">0.5249518</td>
-<td align="right">0.1085933</td>
-<td align="right">0.1255940</td>
-<td align="right">NaN</td>
-<td align="right">6.944100</td>
-<td align="right">59.22500</td>
+<td align="center">PAM_Euclidean</td>
+<td align="center">15.09</td>
+<td align="center">0.2979</td>
+<td align="center">8.456</td>
+<td align="center">0.3756</td>
+<td align="center">0.5701</td>
+<td align="center">0.1796</td>
+<td align="center">2.056</td>
 </tr>
 <tr class="odd">
-<td align="left">DIANA_Euclidean</td>
-<td align="right">0.2054155</td>
-<td align="right">17.267393</td>
-<td align="right">2.3827644</td>
-<td align="right">0.2833219</td>
-<td align="right">0.7948289</td>
-<td align="right">5.481678</td>
-<td align="right">0.5285429</td>
-<td align="right">1.9552072</td>
-<td align="right">0.3678170</td>
-<td align="right">0.5261285</td>
-<td align="right">0.1158006</td>
-<td align="right">0.0888720</td>
-<td align="right">NaN</td>
-<td align="right">7.118123</td>
-<td align="right">55.26071</td>
+<td align="center">DIANA_Euclidean</td>
+<td align="center">12.51</td>
+<td align="center">0.2663</td>
+<td align="center">5.698</td>
+<td align="center">0.3863</td>
+<td align="center">0.5516</td>
+<td align="center">0.1909</td>
+<td align="center">1.507</td>
 </tr>
 <tr class="even">
-<td align="left">KM_Euclidean</td>
-<td align="right">0.1550889</td>
-<td align="right">21.207103</td>
-<td align="right">1.9314614</td>
-<td align="right">0.3016047</td>
-<td align="right">0.7637774</td>
-<td align="right">11.444229</td>
-<td align="right">0.4713559</td>
-<td align="right">1.1327433</td>
-<td align="right">0.4287440</td>
-<td align="right">0.6325554</td>
-<td align="right">0.0844035</td>
-<td align="right">0.1203563</td>
-<td align="right">NaN</td>
-<td align="right">6.908208</td>
-<td align="right">57.88492</td>
+<td align="center">KM_Euclidean</td>
+<td align="center">15.84</td>
+<td align="center">0.2541</td>
+<td align="center">8.839</td>
+<td align="center">0.4683</td>
+<td align="center">0.7021</td>
+<td align="center">0.1195</td>
+<td align="center">1.912</td>
 </tr>
 </tbody>
 </table>
-</td>
-<td>
 <table class="table">
+<colgroup>
+<col width="15%">
+<col width="9%">
+<col width="11%">
+<col width="10%">
+<col width="13%">
+<col width="8%">
+<col width="15%">
+<col width="15%">
+</colgroup>
 <thead><tr class="header">
-<th align="left">Algorithms</th>
-<th align="right">c_index</th>
-<th align="right">calinski_harabasz</th>
-<th align="right">davies_bouldin</th>
-<th align="right">dunn</th>
-<th align="right">mcclain_rao</th>
-<th align="right">pbm</th>
-<th align="right">sd_dis</th>
-<th align="right">ray_turi</th>
-<th align="right">tau</th>
-<th align="right">gamma</th>
-<th align="right">g_plus</th>
-<th align="right">silhouette</th>
-<th align="right">s_dbw</th>
-<th align="right">Compactness</th>
-<th align="right">Connectivity</th>
+<th align="center">mcclain_rao</th>
+<th align="center">sd_dis</th>
+<th align="center">ray_turi</th>
+<th align="center">g_plus</th>
+<th align="center">silhouette</th>
+<th align="center">s_dbw</th>
+<th align="center">Compactness</th>
+<th align="center">Connectivity</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">HC_Euclidean</td>
-<td align="right">0.2092373</td>
-<td align="right">3.948713</td>
-<td align="right">0.5132453</td>
-<td align="right">0.4523993</td>
-<td align="right">0.7277567</td>
-<td align="right">13.247761</td>
-<td align="right">0.2665937</td>
-<td align="right">0.5898774</td>
-<td align="right">0.3188450</td>
-<td align="right">0.7035632</td>
-<td align="right">0.0304408</td>
-<td align="right">NaN</td>
-<td align="right">NaN</td>
-<td align="right">7.782720</td>
-<td align="right">15.93095</td>
+<td align="center">0.7278</td>
+<td align="center">0.2666</td>
+<td align="center">0.5899</td>
+<td align="center">0.03044</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+<td align="center">7.783</td>
+<td align="center">15.93</td>
 </tr>
 <tr class="even">
-<td align="left">PAM_Euclidean</td>
-<td align="right">0.1795640</td>
-<td align="right">15.085862</td>
-<td align="right">2.0559155</td>
-<td align="right">0.2979097</td>
-<td align="right">0.7820270</td>
-<td align="right">8.455729</td>
-<td align="right">0.4753546</td>
-<td align="right">1.2251523</td>
-<td align="right">0.3755686</td>
-<td align="right">0.5701096</td>
-<td align="right">0.0932802</td>
-<td align="right">0.0814430</td>
-<td align="right">NaN</td>
-<td align="right">6.875115</td>
-<td align="right">72.86746</td>
+<td align="center">0.782</td>
+<td align="center">0.4754</td>
+<td align="center">1.225</td>
+<td align="center">0.09328</td>
+<td align="center">0.08144</td>
+<td align="center">NA</td>
+<td align="center">6.875</td>
+<td align="center">72.87</td>
 </tr>
 <tr class="odd">
-<td align="left">DIANA_Euclidean</td>
-<td align="right">0.1908600</td>
-<td align="right">12.512635</td>
-<td align="right">1.5074910</td>
-<td align="right">0.2663142</td>
-<td align="right">0.7848426</td>
-<td align="right">5.698152</td>
-<td align="right">0.4672917</td>
-<td align="right">1.6854933</td>
-<td align="right">0.3863081</td>
-<td align="right">0.5516210</td>
-<td align="right">0.1099515</td>
-<td align="right">0.0274828</td>
-<td align="right">NaN</td>
-<td align="right">7.070627</td>
-<td align="right">50.82460</td>
+<td align="center">0.7848</td>
+<td align="center">0.4673</td>
+<td align="center">1.685</td>
+<td align="center">0.11</td>
+<td align="center">0.02748</td>
+<td align="center">NA</td>
+<td align="center">7.071</td>
+<td align="center">50.82</td>
 </tr>
 <tr class="even">
-<td align="left">KM_Euclidean</td>
-<td align="right">0.1195002</td>
-<td align="right">15.838879</td>
-<td align="right">1.9122514</td>
-<td align="right">0.2541215</td>
-<td align="right">0.7397945</td>
-<td align="right">8.839085</td>
-<td align="right">0.4449419</td>
-<td align="right">1.1424613</td>
-<td align="right">0.4682810</td>
-<td align="right">0.7021381</td>
-<td align="right">0.0662450</td>
-<td align="right">0.0639874</td>
-<td align="right">NaN</td>
-<td align="right">6.840458</td>
-<td align="right">73.99008</td>
+<td align="center">0.7398</td>
+<td align="center">0.4449</td>
+<td align="center">1.142</td>
+<td align="center">0.06624</td>
+<td align="center">0.06399</td>
+<td align="center">NA</td>
+<td align="center">6.84</td>
+<td align="center">73.99</td>
 </tr>
 </tbody>
 </table>
-</td>
-</tr></tbody></table>
 <p>We see that the biclustering algorithm is the least ambiguous and also most well-clustered (high compactness and separability).</p>
 <p>Some algorithms perform too poorly to deserve membership in the cluster ensemble. We consider the relative ranks of each algorithm across all internal indices, and compute their sum. All algorithms below a certain quantile for the sum rank are trimmed (removed). By default this quantile is 75%.</p>
 <p>After trimming, we can optionally choose to reweigh the algorithms based on the internal index magnitudes. Of course, we take into account the direction of optimality (higher is better is lower is better). Algorithms reweighed are then fed into the consensus functions. This is done by replicating each algorithm by a scalar factor that is proportional to its weight. For example, if we have two algorithms A and B, and A is given a weight of 80% and B is given a weight of 20%, then we make 4 copies of A and 1 copy of B. To minimize computational time, the total number of copies out of all algorithms has an upper bound of 100. Without reweighing, each algorithm is given equal weight.</p>
@@ -619,16 +574,16 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:2] 0.248 0.251</span>
 <span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:2] 0.215 0.242</span>
 <span class="co">#&gt;   ..$ KM_Euclidean   : num [1:2] 0.275 0.242</span>
-<span class="co">#&gt;  $ internal:List of 2</span>
+<span class="co">#&gt;  $ ii      :List of 2</span>
 <span class="co">#&gt;   ..$ 3:'data.frame':    4 obs. of  16 variables:</span>
 <span class="co">#&gt;   ..$ 4:'data.frame':    4 obs. of  16 variables:</span>
-<span class="co">#&gt;  $ external: NULL</span>
-<span class="co">#&gt;  $ trim    :List of 5</span>
-<span class="co">#&gt;   ..$ alg.keep  : chr [1:2] "HC_Euclidean" "KM_Euclidean"</span>
-<span class="co">#&gt;   ..$ alg.remove: chr [1:2] "PAM_Euclidean" "DIANA_Euclidean"</span>
-<span class="co">#&gt;   ..$ rank.agg  :List of 1</span>
-<span class="co">#&gt;   ..$ top.list  :List of 1</span>
-<span class="co">#&gt;   ..$ data.new  :List of 1</span></code></pre></div>
+<span class="co">#&gt;  $ ei      : NULL</span>
+<span class="co">#&gt;  $ trim.obj:List of 5</span>
+<span class="co">#&gt;   ..$ alg.keep   : chr [1:2] "HC_Euclidean" "KM_Euclidean"</span>
+<span class="co">#&gt;   ..$ alg.remove : chr [1:2] "PAM_Euclidean" "DIANA_Euclidean"</span>
+<span class="co">#&gt;   ..$ rank.matrix:List of 1</span>
+<span class="co">#&gt;   ..$ top.list   :List of 1</span>
+<span class="co">#&gt;   ..$ E.new      :List of 1</span></code></pre></div>
 <p>The return value shows which algorithms were kept, removed (if any), and the trimmed (and potentially reweighed) cluster ensemble.</p>
 </div>
 </div>
@@ -639,21 +594,23 @@ ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
 pam_<span class="dv">4</span> &lt;-<span class="st"> </span>ccomb_class2<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>[, <span class="st">"PAM_Euclidean"</span>]
 sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sigclust.html">sigclust</a></span>(hgsc, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">nsim =</span> <span class="dv">100</span>, <span class="dt">labflag =</span> <span class="dv">0</span>, <span class="dt">label =</span> pam_<span class="dv">4</span>)
-<span class="kw">str</span>(sig_obj)
-<span class="co">#&gt; Formal class 'sigclust' [package "sigclust"] with 10 slots</span>
-<span class="co">#&gt;   ..@ raw.data  : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ...</span>
-<span class="co">#&gt;   .. ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;   .. .. ..$ : chr [1:100] "TCGA.04.1331_PRO.C5" "TCGA.04.1332_MES.C1" "TCGA.04.1336_DIF.C4" "TCGA.04.1337_MES.C1" ...</span>
-<span class="co">#&gt;   .. .. ..$ : chr [1:50] "ABAT" "ABHD2" "ACTB" "ACTR2" ...</span>
-<span class="co">#&gt;   ..@ veigval   : num [1:50] 11.81 4.51 2.66 2.29 1.84 ...</span>
-<span class="co">#&gt;   ..@ vsimeigval: num [1:50] 11.81 4.51 2.66 2.29 1.84 ...</span>
-<span class="co">#&gt;   ..@ simbackvar: num 0.42</span>
-<span class="co">#&gt;   ..@ icovest   : num 2</span>
-<span class="co">#&gt;   ..@ nsim      : num 100</span>
-<span class="co">#&gt;   ..@ simcindex : num [1:100] 0.67 0.634 0.641 0.637 0.606 ...</span>
-<span class="co">#&gt;   ..@ pval      : num 0.14</span>
-<span class="co">#&gt;   ..@ pvalnorm  : num 0.163</span>
-<span class="co">#&gt;   ..@ xcindex   : num 0.63</span></code></pre></div>
+co &lt;-<span class="st"> </span><span class="kw">capture.output</span>(<span class="kw">str</span>(sig_obj))
+<span class="kw">strwrap</span>(co, <span class="dt">width =</span> <span class="dv">80</span>)
+<span class="co">#&gt;  [1] "Formal class 'sigclust' [package \"sigclust\"] with 10 slots"               </span>
+<span class="co">#&gt;  [2] "..@ raw.data : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ..."</span>
+<span class="co">#&gt;  [3] ".. ..- attr(*, \"dimnames\")=List of 2"                                     </span>
+<span class="co">#&gt;  [4] ".. .. ..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""    </span>
+<span class="co">#&gt;  [5] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                        </span>
+<span class="co">#&gt;  [6] ".. .. ..$ : chr [1:50] \"ABAT\" \"ABHD2\" \"ACTB\" \"ACTR2\" ..."           </span>
+<span class="co">#&gt;  [7] "..@ veigval : num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                     </span>
+<span class="co">#&gt;  [8] "..@ vsimeigval: num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                   </span>
+<span class="co">#&gt;  [9] "..@ simbackvar: num 0.42"                                                   </span>
+<span class="co">#&gt; [10] "..@ icovest : num 2"                                                        </span>
+<span class="co">#&gt; [11] "..@ nsim : num 100"                                                         </span>
+<span class="co">#&gt; [12] "..@ simcindex : num [1:100] 0.67 0.634 0.641 0.637 0.606 ..."               </span>
+<span class="co">#&gt; [13] "..@ pval : num 0.14"                                                        </span>
+<span class="co">#&gt; [14] "..@ pvalnorm : num 0.163"                                                   </span>
+<span class="co">#&gt; [15] "..@ xcindex : num 0.63"</span></code></pre></div>
 <p>The p-value is 0.14, indicating we do not have sufficient evidence to conclude there are four distinct clusters. Note that we did not use the full <code>hgsc</code> data set in this example, so the underlying biological mechanisms may not be fully captured.</p>
 </div>
 <div id="references" class="section level2">

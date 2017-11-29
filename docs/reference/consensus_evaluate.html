@@ -153,18 +153,17 @@ number of algorithms is less than <code>n</code> no trimming is done.</p></td>
   the one giving the largest mean PAC across algorithms</p></dd>
   <dt>pac</dt><dd><p>a data frame showing the PAC for each combination of algorithm
   and cluster size</p></dd>
-  <dt>internal</dt><dd><p>a list of data frames for all k showing internal evaluation
+  <dt>ii</dt><dd><p>a list of data frames for all k showing internal evaluation
   indices</p></dd>
-  <dt>external</dt><dd><p>a data frame showing external evaluation indices for
-  <code>k</code></p></dd>
-  <dt>trim</dt><dd><p>A list with 4 elements</p></dd>
+  <dt>ei</dt><dd><p>a data frame showing external evaluation indices for <code>k</code></p></dd>
+  <dt>trim.obj</dt><dd><p>A list with 4 elements</p></dd>
   
     <code>alg.keep</code> algorithms kept
     <code>alg.remove</code> algorithms removed
-    <code>rank.agg</code> a matrix of ranked algorithms for every internal
+    <code>rank.matrix</code> a matrix of ranked algorithms for every internal
     evaluation index
     <code>top.list</code> final order of ranked algorithms
-    <code>data.new</code> A new version of a <code>consensus_cluster</code> data
+    <code>E.new</code> A new version of a <code>consensus_cluster</code> data
     object
   
 
@@ -182,7 +181,7 @@ are trimmed.</p>
     <pre class="examples"><div class='input'><span class='co'># Consensus clustering for multiple algorithms</span>
 <span class='fu'>set.seed</span>(<span class='fl'>911</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rnorm</span>(<span class='fl'>500</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10</span>)
-<span class='no'>CC</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>x</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>3</span>:<span class='fl'>4</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ap"</span>, <span class='st'>"gmm"</span>),
+<span class='no'>CC</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>x</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>3</span>:<span class='fl'>4</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"ap"</span>, <span class='st'>"km"</span>),
 <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># Evaluate algorithms on internal/external indices and trim algorithms:</span>
@@ -193,20 +192,20 @@ are trimmed.</p>
 <span class='fu'>str</span>(<span class='no'>z</span>, <span class='kw'>max.level</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; List of 5
 #&gt;  $ k       : int 4
 #&gt;  $ pac     :'data.frame':	2 obs. of  3 variables:
-#&gt;   ..$ k  : chr [1:2] "3" "4"
-#&gt;   ..$ AP : num [1:2] 0.607 0.468
-#&gt;   ..$ GMM: num [1:2] 0.729 0.691
-#&gt;  $ internal:List of 2
+#&gt;   ..$ k           : chr [1:2] "3" "4"
+#&gt;   ..$ KM_Euclidean: num [1:2] 0.621 0.488
+#&gt;   ..$ AP          : num [1:2] 0.607 0.468
+#&gt;  $ ii      :List of 2
 #&gt;   ..$ 3:'data.frame':	2 obs. of  16 variables:
 #&gt;   ..$ 4:'data.frame':	2 obs. of  16 variables:
-#&gt;  $ external:List of 1
+#&gt;  $ ei      :List of 1
 #&gt;   ..$ 4:'data.frame':	2 obs. of  19 variables:
-#&gt;  $ trim    :List of 5
-#&gt;   ..$ alg.keep  : chr "GMM"
-#&gt;   ..$ alg.remove: chr "AP"
-#&gt;   ..$ rank.agg  :List of 1
-#&gt;   ..$ top.list  :List of 1
-#&gt;   ..$ data.new  :List of 1</div></pre>
+#&gt;  $ trim.obj:List of 5
+#&gt;   ..$ alg.keep   : chr "KM_Euclidean"
+#&gt;   ..$ alg.remove : chr "AP"
+#&gt;   ..$ rank.matrix:List of 1
+#&gt;   ..$ top.list   :List of 1
+#&gt;   ..$ E.new      :List of 1</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
