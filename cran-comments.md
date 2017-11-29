@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Reduced the runtime of all examples to < 10s.
+
 ## Test environments
 * local OS X install, R 3.3.3
 * ubuntu 12.04 (on travis-ci), R 3.3.3
