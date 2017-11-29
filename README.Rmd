@@ -60,7 +60,7 @@ knitr::kable(head(obj$clusters))
 You can also compare the base `algorithms` with the `cons.funs` using internal evaluation indices:
 
 ```{r compare}
-knitr::kable(obj$indices$internal$`4`)
+knitr::kable(obj$indices$ii$`4`)
 ```
 
 
