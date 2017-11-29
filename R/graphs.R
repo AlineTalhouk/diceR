@@ -29,7 +29,7 @@
 #' set.seed(911)
 #' x <- matrix(rnorm(100), ncol = 10)
 #' CC1 <- consensus_cluster(x, nk = 2:4, reps = 5,
-#' algorithms = c("hc", "ap", "gmm"), progress = FALSE)
+#' algorithms = c("hc", "ap", "km"), progress = FALSE)
 #'
 #' # Plot CDF
 #' p <- graph_cdf(CC1)
