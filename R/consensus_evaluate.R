@@ -236,17 +236,18 @@ consensus_reweigh <- function(E.new, rank.obj, alg.keep, alg.all) {
 #' @param data data frame with rows as samples and columns as variables
 #' @noRd
 ivi_table <- function(cl.df, data) {
+  ndata <- apply(data, 2, function(x) as.numeric(as.character(x)))
   data.frame(
     Algorithms = colnames(cl.df),
     cl.df %>% purrr::map_df(
       clusterCrit::intCriteria,
-      traj = as.matrix(data),
+      traj = ndata,
       crit = c("Calinski_Harabasz", "Dunn", "PBM", "Tau", "Gamma", "C_index",
                "Davies_Bouldin", "McClain_Rao", "SD_Dis", "Ray_Turi", "G_plus",
                "Silhouette", "S_Dbw")),
     Compactness = cl.df %>% purrr::map_dbl(compactness, data = data),
     Connectivity = cl.df %>% purrr::map_dbl(
-      ~ clValid::connectivity(Data = data, clusters = .))
+      ~ clValid::connectivity(Data = ndata, clusters = .))
   ) %>%
     dplyr::mutate_all(dplyr::funs(structure(., names = colnames(cl.df))))
 }
