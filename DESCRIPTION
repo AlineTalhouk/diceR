@@ -25,6 +25,7 @@ Imports:
     tidyr,
     purrr (>= 0.2.3),
     ggplot2,
+    stringr,
     gplots,
     grDevices,
     Hmisc,
