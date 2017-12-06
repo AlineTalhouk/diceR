@@ -1,5 +1,9 @@
 # diceR 0.3.0.9000
 
+* Fix bug in `algii_heatmap()` when `k.method = "all"` in `dice()`
+
+* Fix bug in calculating internal indices when data has categorical variables (thanks Kurt Salmela)
+
 # diceR 0.3.0
 
 * Updated object output names in `consensus_evaluate()`

@@ -171,12 +171,26 @@ graph_all <- function(x, ...) {
 #' @param clusters object in \code{dice}
 #' @noRd
 algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
-  # Final clusters
-  fc <- E %>%
+  # Cluster list to keep
+  cl.list <- E %>%
     consensus_combine(element = "class") %>%
-    magrittr::extract2(as.character(nk)) %>%
-    cbind.data.frame(clusters) %>%
-    purrr::map_df(relabel_class, ref.cl = ref.cl %||% .[, 1])
+    magrittr::extract(as.character(nk))
+
+  # Final cluster object construction depends on value of nk
+  if (length(nk) > 1) {
+    fc <- purrr::map2(cl.list, nk,
+                           ~ magrittr::set_colnames(.x, paste0(colnames(.),
+                                                               " k=", .y))) %>%
+      purrr::map2(split_clusters(clusters), cbind) %>%
+      purrr::map(~ apply(., 2, relabel_class, ref.cl = ref.cl %||% .[, 1])) %>%
+      do.call(cbind, .) %>%
+      as.data.frame()
+  } else {
+    fc <- cl.list %>%
+      do.call(cbind, .) %>%
+      cbind.data.frame(clusters) %>%
+      purrr::map_df(relabel_class, ref.cl = ref.cl %||% .[, 1])
+  }
 
   # Internal indices
   ii <- ivi_table(fc, data)
@@ -196,4 +210,16 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
     Colv = NA, Rowv = NA, scale = "column", col = "PiYG",
     main = "Ranked Algorithms on Internal Validity Indices"
   )
+}
+
+#' Split clusters matrix into list based on value of k
+#' @noRd
+split_clusters <- function(clusters) {
+  split.data.frame(
+    x = t(clusters),
+    f = stringr::str_split_fixed(string = rownames(t(clusters)),
+                                 pattern = " ",
+                                 n = 2)[, 2]
+  ) %>%
+    purrr::map(t)
 }
