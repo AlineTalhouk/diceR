@@ -1,5 +1,7 @@
 # diceR 0.3.0.9000
 
+* Suppress success/fail message printout and fix input data to be matrix for block clustering
+
 * Fix bug in `algii_heatmap()` when `k.method = "all"` in `dice()`
 
 * Fix bug in calculating internal indices when data has categorical variables (thanks Kurt Salmela)
