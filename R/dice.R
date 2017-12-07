@@ -98,13 +98,9 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   }
 
   # Relabel Final Clustering using reference (or first column if no reference)
-  if (is.null(ref.cl)) {
-    FinalR <- purrr::map(Final, ~ apply(.x, 2, relabel_class, ref.cl = .x[, 1]))
-  } else {
-    FinalR <- purrr::map(Final, ~ apply(.x, 2, relabel_class, ref.cl = ref.cl))
-  }
-  clusters <- FinalR %>%
-    purrr::invoke(cbind, .) %>%
+  clusters <- Final %>%
+    purrr::map(~ apply(., 2, relabel_class, ref.cl = ref.cl %||% .[, 1])) %>%
+    do.call(cbind, .) %>%
     magrittr::set_rownames(rownames(data))
 
   # Return evaluation output including consensus function results
