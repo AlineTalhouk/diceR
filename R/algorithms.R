@@ -84,8 +84,10 @@ gmm <- function(x, k) {
 #' @noRd
 block <- function(x, k) {
   cl <- tryCatch(
-    blockcluster::cocluster(x, "continuous",
-                            nbcocluster = c(k, k))@rowclass + 1,
+    sink_output(
+      blockcluster::cocluster(as.matrix(x), "continuous",
+                              nbcocluster = c(k, k))@rowclass + 1
+    ),
     error = function(e) return(NA)
   )
   if (length(cl)) cl else NA
