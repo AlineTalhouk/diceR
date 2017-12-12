@@ -1,4 +1,4 @@
-# diceR 0.3.0.9000
+# diceR 0.3.1
 
 * Suppress success/fail message printout and fix input data to be matrix for block clustering
 
