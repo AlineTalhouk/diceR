@@ -150,7 +150,7 @@ wrapper that runs all graphing functions.</p>
 <span class='fu'>set.seed</span>(<span class='fl'>911</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rnorm</span>(<span class='fl'>100</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10</span>)
 <span class='no'>CC1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>x</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>4</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-<span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"hc"</span>, <span class='st'>"ap"</span>, <span class='st'>"km"</span>), <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"hc"</span>, <span class='st'>"pam"</span>, <span class='st'>"km"</span>), <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># Plot CDF</span>
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>graph_cdf</span>(<span class='no'>CC1</span>)</div><div class='img'><img src='graphs-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
