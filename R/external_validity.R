@@ -67,7 +67,7 @@ ev_confmat <- function(pred.lab, ref.lab) {
   TN <- N - (TP + FP + FN)
 
   # Overall confusion matrix statistics
-  overall <- caret::confusionMatrix(pred.relab, ref.lab) %>%
+  overall <- caret::confusionMatrix(CM) %>%
     magrittr::use_series(overall) %>%
     magrittr::extract(c("Accuracy", "Kappa", "AccuracyNull",
                         "AccuracyPValue")) %>%
