@@ -1,5 +1,7 @@
 # diceR 0.3.1.9000
 
+* Fix bug in `consensus_cluster()` when custom algorithms were excluded from output (thanks @phiala)
+
 # diceR 0.3.1
 
 * Suppress success/fail message printout and fix input data to be matrix for block clustering
