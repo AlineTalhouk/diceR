@@ -67,10 +67,12 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   # Select k and new (trimmed and reweighed) data
   if (progress)
     cli::cat_line("Selecting k and imputing non-clustered cases")
+
   eval.obj <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl,
                                  k.method = k.method, trim = trim,
                                  reweigh = reweigh, n = n)
-  Eknn <- eval.obj$trim.obj$E.new
+  trim.obj <- eval.obj$trim.obj
+  Eknn <- trim.obj$E.new
   k <- eval.obj$k
 
   # Impute remaining missing cases
@@ -79,6 +81,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   # Consensus functions
   if (progress)
     cli::cat_line("Computing consensus functions")
+
   Final <- purrr::map2(Ecomp, k, ~ {
     vapply(cons.funs, function(x) {
       switch(x,
@@ -91,10 +94,9 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   })
 
   #  If more than one k, need to prepend "k=" labels
-  if (length(Ecomp) > 1) {
+  if (length(Ecomp) > 1)
     Final <- purrr::map2(Final, k,
                          ~ magrittr::set_colnames(.x, paste_k(colnames(.), .y)))
-  }
 
   # Relabel Final Clustering using reference (or first column if no reference)
   clusters <- Final %>%
@@ -106,28 +108,26 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   if (evaluate) {
     if (progress)
       cli::cat_line("Evaluating output with consensus function results")
-    eval.obj2 <- consensus_evaluate(data, E, cons.cl = clusters,
+
+    eval.obj2 <- consensus_evaluate(data = data, E, cons.cl = clusters,
                                     ref.cl = ref.cl, plot = plot)
-    indices <- c(k = list(eval.obj[["k"]]), eval.obj2[2:4],
-                 trim = list(eval.obj[["trim.obj"]]))
+    indices <- c(k = k, eval.obj2[2:4], trim = list(trim.obj))
   } else {
     indices <- NULL
   }
 
   # Add the reference class as the first column if provided
-  if (!is.null(ref.cl)) {
+  if (!is.null(ref.cl))
     clusters <- cbind(Reference = ref.cl, clusters)
-  }
 
   # Algorithm vs internal index heatmap
-  if (plot) {
+  if (plot)
     algii_heatmap(data, k, E, clusters, ref.cl)
-  }
 
-  # Remove list structure
-  Eknn <- abind::abind(Eknn, along = 3)
-  Ecomp <- abind::abind(Ecomp, along = 3)
+  # Combine DICE with different E and indices
   if (progress)
     cli::cat_line("Diverse Cluster Ensemble Completed")
-  dplyr::lst(E, Eknn, Ecomp, clusters, indices)
+
+  dplyr::lst(E, Eknn, Ecomp, clusters, indices) %>%
+    purrr::map_at(2:3, abind::abind, along = 3) # Unlist Eknn/Ecomp
 }
