@@ -216,11 +216,12 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
 #' Split clusters matrix into list based on value of k
 #' @noRd
 split_clusters <- function(clusters) {
-  split.data.frame(
-    x = t(clusters),
-    f = stringr::str_split_fixed(string = rownames(t(clusters)),
-                                 pattern = " ",
-                                 n = 2)[, 2]
-  ) %>%
+  tc <- t(clusters)
+  split.data.frame(x = tc,
+                   f = stringr::str_split_fixed(
+                     string = rownames(tc),
+                     pattern = " ",
+                     n = 2
+                   )[, 2]) %>%
     purrr::map(t)
 }
