@@ -119,8 +119,9 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
     data <- prepare_data(data, scale = scale, type = type, min.var = min.var)
   algorithms <- algorithms %||% ALG_NAMES  # Use all if none are specified
 
-  # Calculate total number of algorithms
-  algs <- dplyr::lst(NALG, DALG, OALG) %>%
+  # Calculate total number of algorithms, including custom ones into DALG
+  calgs <- algorithms[!algorithms %in% ALG_NAMES]
+  algs <- dplyr::lst(NALG, DALG = c(DALG, calgs), OALG) %>%
     purrr::map(~ algorithms[algorithms %in% .x])
   lalg <- lengths(algs) * lengths(list(nmf.method, distance, 1))
 
