@@ -32,13 +32,12 @@
 #' y2 <- consensus_combine(CC1, CC2, element = "class")
 #' str(y2)
 consensus_combine <- function(..., element = c("matrix", "class")) {
-  obj <- abind::abind(list(...), along = 3) %>% # Combine ensemble arrays
-    consensus_summary() %>% # Reorganize into matrices and classes
-    purrr::map(purrr::transpose) # Transpose lists for each k
+  cs <- abind::abind(list(...), along = 3) %>% # Bind ensemble arrays on algs
+    consensus_summary() # Reorganize into matrices and classes
   switch(
     match.arg(element),
-    matrix = purrr::map(obj, "consensus_matrix"),
-    class = purrr::map(obj, "consensus_class") %>%
+    matrix = purrr::map(cs, "con.mats"),
+    class = purrr::map(cs, "con.cls") %>%
       purrr::map(~ do.call(cbind, .)) # Combine classes into list of matrices
   )
 }
@@ -52,11 +51,7 @@ consensus_summary <- function(E) {
     purrr::modify_depth(2, consensus_matrix) %>%
     purrr::map(magrittr::set_names, dimnames(E)[[3]]) %>%
     magrittr::set_names(dimnames(E)[[4]])
-  con.cls <- purrr::map2(con.mats, as.numeric(names(con.mats)),
-                         ~ purrr::map(.x, function(z)
-                           hc(stats::dist(z), k = .y)))
-  out <- list(consensus_matrix = con.mats, consensus_class = con.cls) %>%
-    purrr::transpose() %>%
-    purrr::map(purrr::transpose)
-  out
+  con.cls <- con.mats %>%
+    purrr::imap(~ purrr::map(.x, function(z) hc(stats::dist(z), k = .y)))
+  dplyr::lst(con.mats, con.cls) %>% purrr::transpose() # transpose lists
 }
