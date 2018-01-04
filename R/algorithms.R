@@ -59,19 +59,16 @@ pam <- function(d, k) {
 #' @noRd
 ap <- function(x, k) {
   cl <- suppressWarnings(
-    apcluster::apclusterK(
-      apcluster::negDistMat, x, k, verbose = FALSE)@idx
+    apcluster::apclusterK(apcluster::negDistMat, x, k, verbose = FALSE)@idx
   ) %>%
-    dplyr::dense_rank() %>%
-    purrr::set_names(rownames(x))
+    dplyr::dense_rank()
   if (length(cl)) cl else NA
 }
 
 #' Spectral Clustering (Radial-Basis Kernel)
 #' @noRd
 sc <- function(x, k) {
-  kernlab::specc(as.matrix(x), k, kernel = "rbfdot")@.Data %>%
-    purrr::set_names(rownames(x))
+  kernlab::specc(as.matrix(x), k, kernel = "rbfdot")@.Data
 }
 
 #' Gaussian Mixture Model
