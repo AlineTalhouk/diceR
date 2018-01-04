@@ -32,24 +32,15 @@
 #' y2 <- consensus_combine(CC1, CC2, element = "class")
 #' str(y2)
 consensus_combine <- function(..., element = c("matrix", "class")) {
-  # Combine ensemble arrays and reorganize into matrices and classes
-  cs <- abind::abind(list(...), along = 3)
-  # Return a list of summaries for each algorithm
-  obj <- consensus_summary(cs)
-  switch(match.arg(element),
-         matrix = {
-           # Transpose list levels and extract matrices
-           out <- purrr::map(obj, purrr::transpose) %>%
-             purrr::map("consensus_matrix")
-         },
-         class = {
-           # Transpose list levels and extract classes, coercing to integer
-           out <- purrr::map(obj, purrr::transpose) %>%
-             purrr::map("consensus_class") %>%
-             purrr::map(as.data.frame) %>%
-             purrr::map(~ apply(.x, 1:2, as.integer))
-         })
-  out
+  obj <- abind::abind(list(...), along = 3) %>% # Combine ensemble arrays
+    consensus_summary() %>% # Reorganize into matrices and classes
+    purrr::map(purrr::transpose) # Transpose lists for each k
+  switch(
+    match.arg(element),
+    matrix = purrr::map(obj, "consensus_matrix"),
+    class = purrr::map(obj, "consensus_class") %>%
+      purrr::map(~ do.call(cbind, .)) # Combine classes into list of matrices
+  )
 }
 
 #' Given an object from \code{\link{consensus_cluster}}, returns a list of
