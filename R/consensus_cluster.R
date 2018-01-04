@@ -143,11 +143,12 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   oargs <- dplyr::lst(algs = algs$OALG, xdim, ydim, rlen, alpha, minPts)
   args <- purrr::map(list(nargs, dargs, oargs), ~ c(cargs, .))
 
-  # Run cc on all algorithms, combine on 3rd dim, HDBSCAN manipulation
+  # Run cc on all algorithms, combine on 3rd dim
   fun <- list(cc_nmf, cc_dist, cc_other)
-  arr_all <- purrr::pmap(list(fun, args), cc) %>%
-    abind::abind(along = 3) %>%
-    hdbscan_summarize(algorithms)
+  arr_all <- purrr::pmap(list(fun, args), cc) %>% abind::abind(along = 3)
+  if ("hdbscan" %in% algorithms) {
+    arr_all <- hdbscan_summarize(arr_all)  # HDBSCAN summaries
+  }
 
   if (!is.null(file.name)) {
     if (time.saved) {
