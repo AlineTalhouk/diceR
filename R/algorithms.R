@@ -58,11 +58,11 @@ pam <- function(d, k) {
 #' Affinity Propagation
 #' @noRd
 ap <- function(x, k) {
-  cl <- suppressWarnings(
+  suppressWarnings(
     apcluster::apclusterK(apcluster::negDistMat, x, k, verbose = FALSE)@idx
   ) %>%
-    dplyr::dense_rank()
-  if (length(cl)) cl else NA
+    dplyr::dense_rank() %>%
+    purrr::when(length(.) > 0 ~ ., ~ NA)
 }
 
 #' Spectral Clustering (Radial-Basis Kernel)
@@ -80,23 +80,23 @@ gmm <- function(x, k) {
 #' Block Clustering (Co-clustering)
 #' @noRd
 block <- function(x, k) {
-  cl <- tryCatch(
+  tryCatch(
     sink_output(
       blockcluster::cocluster(as.matrix(x), "continuous",
                               nbcocluster = c(k, k))@rowclass + 1
     ),
     error = function(e) return(NA)
-  )
-  if (length(cl)) cl else NA
+  ) %>%
+    purrr::when(length(.) > 0 ~ ., ~ NA)
 }
 
 #' Self-Organizing Maps
 #' @noRd
 som <- function(x, k, xdim, ydim, rlen, alpha, method = "average") {
-  if (!is.matrix(x)) x <- as.matrix(x)
-  model <- som_train(x = x, xdim = xdim, ydim = ydim, rlen = rlen,
-                     alpha = alpha)
-  som_cluster(model = model, k = k, method = method)
+  x %>%
+    purrr::when(is.matrix(.) ~ ., ~ as.matrix(.)) %>%
+    som_train(xdim = xdim, ydim = ydim, rlen = rlen, alpha = alpha) %>%
+    som_cluster(k = k, method = method)
 }
 
 #' Train the SOM, specifiy grid size and other optional parameters based on the
