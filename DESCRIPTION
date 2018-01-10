@@ -1,5 +1,5 @@
-Package: diceR
 Type: Package
+Package: diceR
 Title: Diverse Cluster Ensemble in R
 Version: 0.3.1.9000
 Date: 2017-12-12
@@ -14,59 +14,60 @@ Description: Performs cluster analysis using an ensemble clustering framework.
     compare cluster assignments across algorithms using internal and external
     indices, visualizations such as heatmaps, and significance testing for the
     existence of clusters.
-Depends:
+License: MIT + file LICENSE
+URL: https://github.com/AlineTalhouk/diceR, https://alinetalhouk.github.io/diceR
+BugReports: https://github.com/AlineTalhouk/diceR/issues
+Depends: 
     R (>= 3.2.0)
-Imports:
+Imports: 
     abind,
-    assertthat,
-    dplyr,
-    magrittr,
-    tibble,
-    tidyr,
-    purrr (>= 0.2.3),
-    ggplot2,
-    stringr,
-    gplots,
-    grDevices,
-    Hmisc,
-    flux,
-    NMF,
     apcluster,
-    kernlab,
-    mclust,
-    infotheo,
+    assertthat,
     blockcluster,
     caret,
     class,
+    cli,
     clue,
     cluster,
     clusterCrit,
     clValid,
     dbscan,
+    dplyr,
     e1071,
-    kohonen,
+    flux,
+    ggplot2,
+    gplots,
+    grDevices,
+    Hmisc,
+    infotheo,
+    kernlab,
     klaR,
-    RColorBrewer,
+    kohonen,
+    largeVis,
+    magrittr,
+    mclust,
+    methods,
+    NMF,
+    progress,
+    purrr (>= 0.2.3),
     quantable,
     RankAggreg,
-    sigclust,
-    Rtsne,
-    largeVis,
-    progress,
-    methods,
+    RColorBrewer,
     Rcpp,
-    cli
-Suggests:
-    testthat,
+    Rtsne,
+    sigclust,
+    stringr,
+    tibble,
+    tidyr
+Suggests: 
+    covr,
     knitr,
     pander,
     rmarkdown,
-    covr
-License: MIT + file LICENSE
-URL: https://github.com/AlineTalhouk/diceR, https://alinetalhouk.github.io/diceR
-BugReports: https://github.com/AlineTalhouk/diceR/issues
+    testthat
+LinkingTo: 
+    Rcpp
+VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-VignetteBuilder: knitr
-LinkingTo: Rcpp
