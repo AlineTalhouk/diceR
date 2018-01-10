@@ -172,7 +172,7 @@ cc <- function(fun, args) {
 cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
                    seed.data, prep.data, scale, type, min.var, pb, lalg, n) {
   alg <- paste(toupper(algs), Hmisc::capitalize(nmf.method), sep = "_")
-  arr_nmf <- init_array(data, reps, alg, nk)
+  arr <- init_array(data, reps, alg, nk)
   x_nmf <- nmf_transform(data)
 
   for (j in seq_along(nmf.method)) {
@@ -191,11 +191,11 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
           pb$tick(tokens = list(num = j, den = sum(lalg), alg = alg[j],
                                 k = nk[k]))
         }
-        arr_nmf[ind.new, i, j, k] <- nmf(x, nk[k], nmf.method[j], seed.nmf)
+        arr[ind.new, i, j, k] <- nmf(x, nk[k], nmf.method[j], seed.nmf)
       }
     }
   }
-  arr_nmf
+  arr
 }
 
 #' Cluster algorithms with dissimilarity specification
@@ -205,7 +205,7 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
   alg <- paste(rep(toupper(algs), each = length(distance)),
                rep(Hmisc::capitalize(distance), length(algs)),
                sep = "_")
-  arr_dist <- init_array(data, reps, alg, nk)
+  arr <- init_array(data, reps, alg, nk)
 
   for (j in seq_along(algs)) {
     for (k in seq_along(nk)) {
@@ -223,12 +223,12 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
             pb$tick(tokens = list(num = j + lalg["NALG"], den = sum(lalg),
                                   alg = alg[a], k = nk[k]))
           }
-          arr_dist[ind.new, i, a, k] <- get(algs[j])(dists, nk[k]) # custom
+          arr[ind.new, i, a, k] <- get(algs[j])(dists, nk[k]) # custom
         }
       }
     }
   }
-  arr_dist
+  arr
 }
 
 #' Cluster other algorithms
@@ -237,7 +237,7 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
                      minPts, seed.data, prep.data, scale, type, min.var, pb,
                      lalg, n) {
   alg <- toupper(algs)
-  arr_other <- init_array(data, reps, alg, nk)
+  arr <- init_array(data, reps, alg, nk)
 
   for (j in seq_along(algs)) {
     for (k in seq_along(nk)) {
@@ -252,7 +252,7 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
           pb$tick(tokens = list(num = j + sum(lalg[c("NALG", "DALG")]),
                                 den = sum(lalg), alg = alg[j], k = nk[k]))
         }
-        arr_other[ind.new, i, j, k] <-
+        arr[ind.new, i, j, k] <-
           switch(algs[j],
                  ap = ap(x, nk[k]),
                  sc = sc(x, nk[k]),
@@ -265,7 +265,7 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
       }
     }
   }
-  arr_other
+  arr
 }
 
 #' Initialize array to store consensus clustering results
