@@ -4,6 +4,7 @@ cache: packages
 dist: trusty
 
 r:
+  - oldrel
   - release
   - devel
 
