@@ -156,7 +156,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
       file.name <- paste0(file.name, "_",
                           format(Sys.time(), "%Y-%m-%d_%H-%M-%S"))
     }
-    saveRDS(arr_all, file = paste0(file.name, ".rds"))
+    saveRDS(arr_all, file = paste0(file.name, ".rds"), version = 2)
   }
   arr_all
 }
