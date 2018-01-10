@@ -179,8 +179,7 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
   # Final cluster object construction depends on value of nk
   if (length(nk) > 1) {
     fc <- purrr::map2(cl.list, nk,
-                           ~ magrittr::set_colnames(.x, paste0(colnames(.),
-                                                               " k=", .y))) %>%
+                      ~ magrittr::set_colnames(.x, paste_k(colnames(.), .y))) %>%
       purrr::map2(split_clusters(clusters), cbind) %>%
       purrr::map(~ apply(., 2, relabel_class, ref.cl = ref.cl %||% .[, 1])) %>%
       do.call(cbind, .) %>%
