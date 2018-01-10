@@ -124,6 +124,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   algs <- dplyr::lst(NALG, DALG = c(DALG, calgs), OALG) %>%
     purrr::map(~ algorithms[algorithms %in% .x])
   lalg <- lengths(algs) * lengths(list(nmf.method, distance, 1))
+  n <- nrow(data)
 
   if (progress) {
     pb <- progress::progress_bar$new(
@@ -137,7 +138,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 
   # Argument lists: Common, NMF, Distance, Other
   cargs <- dplyr::lst(data, nk, p.item, reps, seed.data, prep.data, scale, type,
-                      min.var, pb, lalg)
+                      min.var, pb, lalg, n)
   nargs <- dplyr::lst(algs = algs$NALG, nmf.method, seed.nmf)
   dargs <- dplyr::lst(algs = algs$DALG, distance)
   oargs <- dplyr::lst(algs = algs$OALG, xdim, ydim, rlen, alpha, minPts)
@@ -169,8 +170,7 @@ cc <- function(fun, args) {
 #' Cluster NMF-based algorithms
 #' @noRd
 cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
-                   seed.data, prep.data, scale, type, min.var, pb, lalg) {
-  n <- nrow(data)
+                   seed.data, prep.data, scale, type, min.var, pb, lalg, n) {
   alg <- paste(toupper(algs), Hmisc::capitalize(nmf.method), sep = "_")
   arr_nmf <- init_array(data, reps, alg, nk)
   x_nmf <- nmf_transform(data)
@@ -201,8 +201,7 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
 cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
-                    prep.data, scale, type, min.var, pb, lalg) {
-  n <- nrow(data)
+                    prep.data, scale, type, min.var, pb, lalg, n) {
   alg <- paste(rep(toupper(algs), each = length(distance)),
                rep(Hmisc::capitalize(distance), length(algs)),
                sep = "_")
@@ -236,8 +235,7 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
 #' @noRd
 cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
                      minPts, seed.data, prep.data, scale, type, min.var, pb,
-                     lalg) {
-  n <- nrow(data)
+                     lalg, n) {
   alg <- toupper(algs)
   arr_other <- init_array(data, reps, alg, nk)
 
