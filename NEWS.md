@@ -2,6 +2,8 @@
 
 * Fix bug in `consensus_cluster()` when custom algorithms were excluded from output (thanks @phiala)
 
+* Use markdown language for documentation
+
 * Various performance improvements and code simplifications
 
 # diceR 0.3.1
