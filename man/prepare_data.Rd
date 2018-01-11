@@ -20,10 +20,9 @@ methods of dimension reduction.}
 
 \item{min.var}{minimum variability measure threshold used to filter the
 feature space for only highly variable features. Only features with a
-minimum variability measure across all samples greater than \code{min.var}
-will be used. If \code{type = "conventional"}, the standard deviation is
-the measure used, and if \code{type = "robust"}, the MAD is the measure
-used.}
+minimum variability measure across all samples greater than \code{min.var} will
+be used. If \code{type = "conventional"}, the standard deviation is the measure
+used, and if \code{type = "robust"}, the MAD is the measure used.}
 }
 \value{
 dataset prepared for usage in \code{consensus_cluster}

@@ -4,51 +4,47 @@
 #' algorithms can be trimmed from the ensemble. The remaining algorithms can be
 #' given weights before use in consensus functions.
 #'
-#' This function always returns internal indices. If \code{ref.cl} is not
-#' \code{NULL}, external indices are additionally shown. Relevant graphical
-#' displays are also outputted. Algorithms are ranked across internal indices
-#' using Rank Aggregation. Only the top \code{n} algorithms are kept, the rest
-#' are trimmed.
+#' This function always returns internal indices. If `ref.cl` is not `NULL`,
+#' external indices are additionally shown. Relevant graphical displays are also
+#' outputted. Algorithms are ranked across internal indices using Rank
+#' Aggregation. Only the top `n` algorithms are kept, the rest are trimmed.
 #'
 #' @param data data matrix with rows as samples and columns as variables
-#' @param cons.cl matrix of cluster assignments from consensus functions such
-#'   as \code{kmodes} and \code{majority_voting}
+#' @param cons.cl matrix of cluster assignments from consensus functions such as
+#'   `kmodes` and `majority_voting`
 #' @param ref.cl reference class
 #' @param k.method determines the method to choose k when no reference class is
-#'   given. When \code{ref.cl} is not \code{NULL}, k is the number of distinct
-#'   classes of \code{ref.cl}. Otherwise the input from \code{k.method} chooses
-#'   k. The default is to use the PAC to choose the best k(s). Specifying an
-#'   integer as a user-desired k will override the best k chosen by PAC.
-#'   Finally, specifying "all" will produce consensus results for all k. The
-#'   "all" method is implicitly performed when there is only one k used.
-#' @param plot logical; if \code{TRUE}, \code{graph_all} is called
-#' @param trim logical; if \code{TRUE}, algorithms that score low on internal
-#'   indices will be trimmed out
-#' @param reweigh logical; if \code{TRUE}, after trimming out poor performing
+#'   given. When `ref.cl` is not `NULL`, k is the number of distinct classes of
+#'   `ref.cl`. Otherwise the input from `k.method` chooses k. The default is to
+#'   use the PAC to choose the best k(s). Specifying an integer as a
+#'   user-desired k will override the best k chosen by PAC. Finally, specifying
+#'   "all" will produce consensus results for all k. The "all" method is
+#'   implicitly performed when there is only one k used.
+#' @param plot logical; if `TRUE`, `graph_all` is called
+#' @param trim logical; if `TRUE`, algorithms that score low on internal indices
+#'   will be trimmed out
+#' @param reweigh logical; if `TRUE`, after trimming out poor performing
 #'   algorithms, each algorithm is reweighed depending on its internal indices.
-#' @param n an integer specifying the top \code{n} algorithms to keep after
-#'   trimming off the poor performing ones using Rank Aggregation. If the total
-#'   number of algorithms is less than \code{n} no trimming is done.
+#' @param n an integer specifying the top `n` algorithms to keep after trimming
+#'   off the poor performing ones using Rank Aggregation. If the total number of
+#'   algorithms is less than `n` no trimming is done.
 #' @inheritParams consensus_combine
-#' @return \code{consensus_evaluate} returns a list with the following elements
-#'   \item{k}{if \code{ref.cl} is not NULL, this is the number of distinct
-#'   classes in the reference; otherwise the chosen \code{k} is determined by
-#'   the one giving the largest mean PAC across algorithms}
-#'   \item{pac}{a data frame showing the PAC for each combination of algorithm
-#'   and cluster size}
-#'   \item{ii}{a list of data frames for all k showing internal evaluation
-#'   indices}
-#'   \item{ei}{a data frame showing external evaluation indices for \code{k}}
-#'   \item{trim.obj}{A list with 4 elements}
-#'   \itemize{
-#'     \item{\code{alg.keep} }{algorithms kept}
-#'     \item{\code{alg.remove} }{algorithms removed}
-#'     \item{\code{rank.matrix} }{a matrix of ranked algorithms for every internal
-#'     evaluation index}
-#'     \item{\code{top.list} }{final order of ranked algorithms}
-#'     \item{\code{E.new} }{A new version of a \code{consensus_cluster} data
-#'     object}
-#'   }
+#' @return `consensus_evaluate` returns a list with the following elements
+#' * `k`: if `ref.cl` is not `NULL`, this is the number of distinct classes
+#'   in the reference; otherwise the chosen `k` is determined by the one giving
+#'   the largest mean PAC across algorithms
+#' * `pac`: a data frame showing the PAC for each combination of algorithm
+#'   and cluster size
+#' * `ii`: a list of data frames for all k showing internal evaluation
+#'   indices
+#' * `ei`: a data frame showing external evaluation indices for `k`
+#' * `trim.obj`: A list with 4 elements
+#'      * `alg.keep`: algorithms kept
+#'      * `alg.remove`: algorithms removed
+#'      * `rank.matrix`: a matrix of ranked algorithms for every internal
+#'        evaluation index
+#'      * `top.list`: final order of ranked algorithms
+#'      * `E.new`: A new version of a `consensus_cluster` data object
 #' @export
 #' @examples
 #' # Consensus clustering for multiple algorithms
@@ -131,9 +127,9 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   dplyr::lst(k, pac, ii, ei, trim.obj)
 }
 
-#' @param E consensus object from \code{consensus_evaluate}
-#' @param ii internal indices object from \code{consensus_evaluate}
-#' @param k chosen value(s) of k from \code{consensus_evaluate}
+#' @param E consensus object from `consensus_evaluate`
+#' @param ii internal indices object from `consensus_evaluate`
+#' @param k chosen value(s) of k from `consensus_evaluate`
 #' @noRd
 consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   # Extract ii only for chosen k
@@ -327,7 +323,7 @@ gcd <- function(x, y) {
 #' @param labels a vector of cluster labels from a clustering result
 #' @return the compactness score
 #' @author Derek Chiu
-#' @references MATLAB function \code{valid_compactness} by Simon Garrett in
+#' @references MATLAB function `valid_compactness` by Simon Garrett in
 #'   LinkCluE
 #' @export
 #'

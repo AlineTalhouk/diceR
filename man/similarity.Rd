@@ -24,9 +24,9 @@ asrs(E, dc)
 an N by N CTS, SRS, or ASRS matrix
 }
 \description{
-\code{cts} computes the connected triple based similarity matrix, \code{srs}
-computes the simrank based similarity matrix, and \code{asrs} computes the
-approximated simrank based similarity matrix.
+\code{cts} computes the connected triple based similarity matrix, \code{srs} computes
+the simrank based similarity matrix, and \code{asrs} computes the approximated
+simrank based similarity matrix.
 }
 \examples{
 set.seed(1)
@@ -38,7 +38,7 @@ purrr::walk(list(CTS, SRS, ASRS), str)
 }
 \references{
 MATLAB functions cts, srs, asrs in package LinkCluE by Simon
-  Garrett
+Garrett
 }
 \author{
 Johnson Liu, Derek Chiu

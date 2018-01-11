@@ -22,25 +22,24 @@ pcn_select(data.sim, cl, type = c("rep", "range"), int = 5)
 \item{type}{select either the representative dataset ("rep") or a range of
 datasets ("range")}
 
-\item{int}{every \code{int} data sets from median-ranked \code{data.sim} are
-taken. Defaults to 5.}
+\item{int}{every \code{int} data sets from median-ranked \code{data.sim} are taken.
+Defaults to 5.}
 }
 \value{
-\code{pcn_simulate} returns a list of length \code{n.sim}. Each
-  element is a simulated matrix using this "Principal Component Normal" (pcn)
-  procedure.
+\code{pcn_simulate} returns a list of length \code{n.sim}. Each element is a
+simulated matrix using this "Principal Component Normal" (pcn) procedure.
 
 \code{pcn_select} returns a list with elements
-\item{ranks}{When \code{type = "range"}, ranks of each extracted dataset
-shown}
-\item{ind}{index of representative simulation}
-\item{dat}{simulation data representation of all in pcNormal}
+\itemize{
+\item \code{ranks}: When \code{type = "range"}, ranks of each extracted dataset shown
+\item \code{ind}: index of representative simulation
+\item \code{dat}: simulation data representation of all in pcNormal
+}
 }
 \description{
 Using a principal component constructed from the sample space, we simulate
-null distributions with univariate Normal distributions using
-\code{pcn_simulate}. Then a subset of these distributions is chosen using
-\code{pcn_select}.
+null distributions with univariate Normal distributions using \code{pcn_simulate}.
+Then a subset of these distributions is chosen using \code{pcn_select}.
 }
 \examples{
 set.seed(9)

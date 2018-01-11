@@ -1,12 +1,12 @@
 #' Similarity Matrices
 #'
-#' \code{cts} computes the connected triple based similarity matrix, \code{srs}
-#' computes the simrank based similarity matrix, and \code{asrs} computes the
-#' approximated simrank based similarity matrix.
+#' `cts` computes the connected triple based similarity matrix, `srs` computes
+#' the simrank based similarity matrix, and `asrs` computes the approximated
+#' simrank based similarity matrix.
 #'
 #' @param E an N by M matrix of cluster ensembles
 #' @param dc decay factor, ranges from 0 to 1 inclusive
-#' @param R number of iterations for \code{srs}
+#' @param R number of iterations for `srs`
 #' @return an N by N CTS, SRS, or ASRS matrix
 #' @name similarity
 #' @author Johnson Liu, Derek Chiu
@@ -134,12 +134,12 @@ asrs <- function(E, dc) {
   S
 }
 
-#' Relabel clusters in ensemble \code{E}
+#' Relabel clusters in ensemble `E`
 #'
 #' @param E N by M cluster ensemble matrix
 #' @return A list with elements
-#' \item{newE}{N by M relabelled cluster ensemble matrix}
-#' \item{no_allcl}{total number of clusters in the ensemble}
+#' * `newE`: N by M relabelled cluster ensemble matrix
+#' * `no_allcl`: total number of clusters in the ensemble
 #' @author Johnson Liu, Derek Chiu
 #' @references MATLAB function relabelCl by Simon Garrett in LinkCluE package
 #' @noRd

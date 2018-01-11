@@ -13,17 +13,17 @@
 #'
 #' If a meta-consensus matrix is desired, where consensus classes of different
 #' clustering algorithms are aggregated, we can construct a weighted
-#' meta-consensus matrix using \code{weights}.
+#' meta-consensus matrix using `weights`.
 #'
 #' @param data data matrix has rows as samples, columns as replicates
 #' @param weights a vector of weights for each algorithm used in meta-consensus
-#'   clustering. Must have \code{length(weights)} equal to \code{ncol(data)}.
+#'   clustering. Must have `length(weights)` equal to `ncol(data)`.
 #' @return a consensus matrix
 #' @note When consensus is calculated over bootstrap samples, not every sample
 #'   is used in each replication. Thus, there will be scenarios where two
 #'   samples are never chosen together in any bootstrap samples. This typically
 #'   happens when the number of replications is small. The coordinate in the
-#'   consensus matrix for such pairs of samples is \code{NaN} from a 0 / 0
+#'   consensus matrix for such pairs of samples is `NaN` from a 0 / 0
 #'   computation. These entries are coerced to 0.
 #' @author Derek Chiu
 #' @export

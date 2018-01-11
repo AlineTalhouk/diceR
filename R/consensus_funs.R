@@ -2,18 +2,17 @@
 #'
 #' Combine clustering results using K-modes.
 #'
-#' Combine clustering results generated using different algorithms and
-#' different data perturbations by k-modes. This method is the categorical data
-#' analog of k-means clustering. Complete cases are needed: i.e. no \code{NA}s.
-#' If the matrix contains \code{NA}s those are imputed by majority voting
-#' (after class relabeling).
+#' Combine clustering results generated using different algorithms and different
+#' data perturbations by k-modes. This method is the categorical data analog of
+#' k-means clustering. Complete cases are needed: i.e. no `NA`s. If the matrix
+#' contains `NA`s those are imputed by majority voting (after class relabeling).
 #'
 #' @param E a matrix of clusterings with number of rows equal to the number of
-#' cases to be clustered, number of columns equal to the clustering obtained by
-#' different resampling of the data, and the third dimension are the different
-#' algorithms. Matrix may already be two-dimensional.
-#' @param is.relabelled logical; if \code{FALSE} the data will be relabelled
-#' using the first clustering as the reference.
+#'   cases to be clustered, number of columns equal to the clustering obtained
+#'   by different resampling of the data, and the third dimension are the
+#'   different algorithms. Matrix may already be two-dimensional.
+#' @param is.relabelled logical; if `FALSE` the data will be relabelled using
+#'   the first clustering as the reference.
 #' @param seed random seed for reproducibility
 #' @return a vector of cluster assignments based on k-modes
 #' @family consensus functions
@@ -50,17 +49,16 @@ k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
 #'
 #' Combine clustering results using majority voting.
 #'
-#' Combine clustering results generated using different algorithms and
-#' different data perturbations by majority voting. The class of a sample is
-#' the cluster label which was selected most often across algorithms and
-#' subsamples.
+#' Combine clustering results generated using different algorithms and different
+#' data perturbations by majority voting. The class of a sample is the cluster
+#' label which was selected most often across algorithms and subsamples.
 #'
 #' @param E a matrix of clusterings with number of rows equal to the number of
-#' cases to be clustered, number of columns equal to the clustering obtained by
-#' different resampling of the data, and the third dimension are the different
-#' algorithms. Matrix may already be two-dimensional.
-#' @param is.relabelled logical; if \code{FALSE} the data will be relabelled
-#' using the first clustering as the reference.
+#'   cases to be clustered, number of columns equal to the clustering obtained
+#'   by different resampling of the data, and the third dimension are the
+#'   different algorithms. Matrix may already be two-dimensional.
+#' @param is.relabelled logical; if `FALSE` the data will be relabelled using
+#'   the first clustering as the reference.
 #' @return a vector of cluster assignments based on majority voting
 #' @family consensus functions
 #' @author Aline Talhouk
@@ -110,7 +108,7 @@ CSPA <- function(E, k) {
 #' Generate a cluster assignment from a CTS, SRS, or ASRS similarity matrix.
 #'
 #' @param E is an array of clustering results. An error is thrown if there are
-#'   missing values. \code{\link{impute_missing}} can be used beforehand.
+#'   missing values. [impute_missing()] can be used beforehand.
 #' @param k requested number of clusters
 #' @param dc decay constant for CTS, SRS, or ASRS matrix
 #' @param R number of repetitions for SRS matrix

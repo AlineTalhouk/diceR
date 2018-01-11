@@ -4,11 +4,11 @@
 #' This is a robust way to assess clustering performance.
 #'
 #' Since a consensus matrix is symmetric, we only look at its lower (or upper)
-#' triangular matrix. The proportion of entries strictly between \code{lower}
-#' and \code{upper} is the PAC. In a perfect clustering, the consensus matrix
-#' would consist of only 0s and 1s, and the PAC assessed on the (0, 1) interval
-#' would have a perfect score of 0. Using a (0.1, 0.9) interval for defining
-#' ambiguity is common as well.
+#' triangular matrix. The proportion of entries strictly between `lower` and
+#' `upper` is the PAC. In a perfect clustering, the consensus matrix would
+#' consist of only 0s and 1s, and the PAC assessed on the (0, 1) interval would
+#' have a perfect score of 0. Using a (0.1, 0.9) interval for defining ambiguity
+#' is common as well.
 #'
 #' The PAC is not, strictly speaking, an internal validity index. Originally
 #' used to choose the optimal number of clusters, here we use it to assess

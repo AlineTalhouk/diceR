@@ -7,20 +7,18 @@
 consensus_combine(..., element = c("matrix", "class"))
 }
 \arguments{
-\item{...}{any number of objects outputted from
-\code{\link{consensus_cluster}}}
+\item{...}{any number of objects outputted from \code{\link[=consensus_cluster]{consensus_cluster()}}}
 
 \item{element}{either "matrix" or "class" to extract the consensus matrix or
 consensus class, respectively.}
 }
 \value{
-\code{consensus_combine} returns either a list of all consensus
-  matrices or a data frame showing all the consensus classes
+\code{consensus_combine} returns either a list of all consensus matrices
+or a data frame showing all the consensus classes
 }
 \description{
-Combines results for multiple objects from \code{consensus_cluster()} and
-outputs either the consensus matrices or consensus classes for all
-algorithms.
+Combines results for multiple objects from \code{consensus_cluster()} and outputs
+either the consensus matrices or consensus classes for all algorithms.
 }
 \details{
 This function is useful for collecting summaries because the original results

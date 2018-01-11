@@ -32,7 +32,7 @@ compactness(dat, E[, 1])
 }
 \references{
 MATLAB function \code{valid_compactness} by Simon Garrett in
-  LinkCluE
+LinkCluE
 }
 \author{
 Derek Chiu

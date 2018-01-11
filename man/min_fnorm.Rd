@@ -10,8 +10,7 @@ min_fnorm(A, B = diag(nrow(A)))
 \item{A}{data matrix we want to permute}
 
 \item{B}{matrix whose distance with the permuted A we want to minimize. By
-default, \code{B <- diag(nrow(A))}, so the permutation maximizes the trace of
-A.}
+default, \code{B <- diag(nrow(A))}, so the permutation maximizes the trace of A.}
 }
 \value{
 Permuted matrix such that it is the permutation of A closest to B
@@ -21,12 +20,12 @@ Finds a permutation of a matrix such that its Frobenius norm with another
 matrix is minimized.
 }
 \details{
-Finds the permutation P of A such that \code{||PA - B||} is minimum in
-Frobenius norm. Uses the linear-sum assignment problem (LSAP) solver in the
-package \code{clue}. The default B is the identity matrix of same dimension,
-so that the permutation of A maximizes its trace. This procedure is useful
-for constructing a confusion matrix when we don't know the true class labels
-of a predicted class and want to compare to a reference class.
+Finds the permutation P of A such that \code{||PA - B||} is minimum in Frobenius
+norm. Uses the linear-sum assignment problem (LSAP) solver in the package
+\code{clue}. The default B is the identity matrix of same dimension, so that the
+permutation of A maximizes its trace. This procedure is useful for
+constructing a confusion matrix when we don't know the true class labels of a
+predicted class and want to compare to a reference class.
 }
 \examples{
 

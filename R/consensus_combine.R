@@ -1,20 +1,18 @@
 #' Combine algorithms
 #'
-#' Combines results for multiple objects from \code{consensus_cluster()} and
-#' outputs either the consensus matrices or consensus classes for all
-#' algorithms.
+#' Combines results for multiple objects from `consensus_cluster()` and outputs
+#' either the consensus matrices or consensus classes for all algorithms.
 #'
 #' This function is useful for collecting summaries because the original results
-#' from \code{consensus_cluster} were combined to a single object. For example,
-#' setting \code{element = "class"} returns a matrix of consensus cluster
+#' from `consensus_cluster` were combined to a single object. For example,
+#' setting `element = "class"` returns a matrix of consensus cluster
 #' assignments, which can be visualized as a consensus matrix heatmap.
 #'
-#' @param ... any number of objects outputted from
-#'   \code{\link{consensus_cluster}}
+#' @param ... any number of objects outputted from [consensus_cluster()]
 #' @param element either "matrix" or "class" to extract the consensus matrix or
 #'   consensus class, respectively.
-#' @return \code{consensus_combine} returns either a list of all consensus
-#'   matrices or a data frame showing all the consensus classes
+#' @return `consensus_combine` returns either a list of all consensus matrices
+#'   or a data frame showing all the consensus classes
 #' @author Derek Chiu
 #' @export
 #' @examples
@@ -42,8 +40,8 @@ consensus_combine <- function(..., element = c("matrix", "class")) {
   )
 }
 
-#' Given an object from \code{\link{consensus_cluster}}, returns a list of
-#' consensus matrices and consensus classes for each clustering algorithm.
+#' Given an object from [consensus_cluster()], returns a list of consensus
+#' matrices and consensus classes for each clustering algorithm.
 #' @noRd
 consensus_summary <- function(E) {
   con.mats <- E %>%

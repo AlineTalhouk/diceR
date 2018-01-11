@@ -4,17 +4,17 @@
 #' clusters (k).
 #'
 #' There are three ways to handle the input data before clustering via argument
-#' \code{prep.data}. The default is to use the raw data as-is ("none"). Or, we
-#' can enact \code{\link{prepare_data}} on the full dataset ("full"), or the
-#' bootstrap sampled datasets ("sampled").
+#' `prep.data`. The default is to use the raw data as-is ("none"). Or, we can
+#' enact [prepare_data()] on the full dataset ("full"), or the bootstrap sampled
+#' datasets ("sampled").
 #'
 #' @param cons.funs consensus functions to use. Current options are "kmodes"
 #'   (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity
 #'   Partitioning Algorithm), "LCE" (linkage clustering ensemble)
-#' @param evaluate logical; if \code{TRUE} (default), validity indices are
-#'   returned. Internal validity indices are always computed. If \code{ref.cl}
-#'   is not \code{NULL}, then external validity indices will also be computed.
-#' @param plot logical; if \code{TRUE}, \code{graph_all} is called and a summary
+#' @param evaluate logical; if `TRUE` (default), validity indices are returned.
+#'   Internal validity indices are always computed. If `ref.cl` is not `NULL`,
+#'   then external validity indices will also be computed.
+#' @param plot logical; if `TRUE`, `graph_all` is called and a summary
 #'   evaluation heatmap of ranked algorithms vs. internal validity indices is
 #'   plotted as well.
 #' @inheritParams consensus_cluster
@@ -23,13 +23,13 @@
 #' @inheritParams impute_knn
 #' @return A list with the following elements
 #' \item{E}{raw clustering ensemble object}
-#' \item{Eknn}{clustering ensemble object with knn imputation used on \code{E}}
+#' \item{Eknn}{clustering ensemble object with knn imputation used on `E`}
 #' \item{Ecomp}{flattened ensemble object with remaining missing entries imputed
 #' by majority voting}
 #' \item{clusters}{final clustering assignment from the diverse clustering
 #' ensemble method}
-#' \item{indices}{if \code{evaluate = TRUE}, shows cluster evaluation indices;
-#' otherwise \code{NULL}}
+#' \item{indices}{if `evaluate = TRUE`, shows cluster evaluation indices;
+#' otherwise `NULL`}
 #' @author Aline Talhouk, Derek Chiu
 #' @export
 #' @examples

@@ -10,20 +10,19 @@ globalVariables(".")
 #' Finds a permutation of a matrix such that its Frobenius norm with another
 #' matrix is minimized.
 #'
-#' Finds the permutation P of A such that \code{||PA - B||} is minimum in
-#' Frobenius norm. Uses the linear-sum assignment problem (LSAP) solver in the
-#' package \code{clue}. The default B is the identity matrix of same dimension,
-#' so that the permutation of A maximizes its trace. This procedure is useful
-#' for constructing a confusion matrix when we don't know the true class labels
-#' of a predicted class and want to compare to a reference class.
+#' Finds the permutation P of A such that `||PA - B||` is minimum in Frobenius
+#' norm. Uses the linear-sum assignment problem (LSAP) solver in the package
+#' `clue`. The default B is the identity matrix of same dimension, so that the
+#' permutation of A maximizes its trace. This procedure is useful for
+#' constructing a confusion matrix when we don't know the true class labels of a
+#' predicted class and want to compare to a reference class.
 #'
 #' @param A data matrix we want to permute
 #' @param B matrix whose distance with the permuted A we want to minimize. By
-#' default, \code{B <- diag(nrow(A))}, so the permutation maximizes the trace of
-#' A.
+#'   default, `B <- diag(nrow(A))`, so the permutation maximizes the trace of A.
 #' @return Permuted matrix such that it is the permutation of A closest to B
 #' @author Ravi Varadhan:
-#' https://stat.ethz.ch/pipermail/r-help/2010-April/236664.html
+#'   https://stat.ethz.ch/pipermail/r-help/2010-April/236664.html
 #' @export
 #' @examples
 #'
@@ -44,8 +43,8 @@ min_fnorm <- function(A, B = diag(nrow(A))) {
 
 #' Relabel classes to a standard
 #'
-#' Relabel clustering categories to match to a standard by minimizing
-#' the Frobenius norm between the two labels.
+#' Relabel clustering categories to match to a standard by minimizing the
+#' Frobenius norm between the two labels.
 #'
 #' @param pred.cl vector of predicted cluster assignments
 #' @param ref.cl vector of reference labels to match to

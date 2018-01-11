@@ -8,12 +8,12 @@ k_modes(E, is.relabelled = TRUE, seed = 1)
 }
 \arguments{
 \item{E}{a matrix of clusterings with number of rows equal to the number of
-cases to be clustered, number of columns equal to the clustering obtained by
-different resampling of the data, and the third dimension are the different
-algorithms. Matrix may already be two-dimensional.}
+cases to be clustered, number of columns equal to the clustering obtained
+by different resampling of the data, and the third dimension are the
+different algorithms. Matrix may already be two-dimensional.}
 
-\item{is.relabelled}{logical; if \code{FALSE} the data will be relabelled
-using the first clustering as the reference.}
+\item{is.relabelled}{logical; if \code{FALSE} the data will be relabelled using
+the first clustering as the reference.}
 
 \item{seed}{random seed for reproducibility}
 }
@@ -24,11 +24,10 @@ a vector of cluster assignments based on k-modes
 Combine clustering results using K-modes.
 }
 \details{
-Combine clustering results generated using different algorithms and
-different data perturbations by k-modes. This method is the categorical data
-analog of k-means clustering. Complete cases are needed: i.e. no \code{NA}s.
-If the matrix contains \code{NA}s those are imputed by majority voting
-(after class relabeling).
+Combine clustering results generated using different algorithms and different
+data perturbations by k-modes. This method is the categorical data analog of
+k-means clustering. Complete cases are needed: i.e. no \code{NA}s. If the matrix
+contains \code{NA}s those are imputed by majority voting (after class relabeling).
 }
 \examples{
 data(hgsc)

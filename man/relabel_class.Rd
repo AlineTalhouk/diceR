@@ -15,8 +15,8 @@ relabel_class(pred.cl, ref.cl)
 A vector of relabeled cluster assignments
 }
 \description{
-Relabel clustering categories to match to a standard by minimizing
-the Frobenius norm between the two labels.
+Relabel clustering categories to match to a standard by minimizing the
+Frobenius norm between the two labels.
 }
 \examples{
 set.seed(2)

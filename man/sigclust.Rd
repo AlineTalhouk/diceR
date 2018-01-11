@@ -13,28 +13,27 @@ sigclust(x, k, nsim, nrep = 1, labflag = 0, label = 0, icovest = 2)
 
 \item{nsim}{number of simulations}
 
-\item{nrep}{See \code{\link[sigclust]{sigclust}} for details.}
+\item{nrep}{See \code{\link[sigclust:sigclust]{sigclust::sigclust()}} for details.}
 
-\item{labflag}{See \code{\link[sigclust]{sigclust}} for details.}
+\item{labflag}{See \code{\link[sigclust:sigclust]{sigclust::sigclust()}} for details.}
 
-\item{label}{true class label. See \code{\link[sigclust]{sigclust}} for
-details.}
+\item{label}{true class label. See \code{\link[sigclust:sigclust]{sigclust::sigclust()}} for details.}
 
 \item{icovest}{type of covariance matrix estimation}
 }
 \value{
-An object of class \code{sigclust}. See
-  \code{\link[sigclust]{sigclust}} for details.
+An object of class \code{sigclust}. See \code{\link[sigclust:sigclust]{sigclust::sigclust()}} for
+details.
 }
 \description{
 Uses the SigClust K-Means algorithm to assess significance of clustering
 results.
 }
 \details{
-This function is a wrapper for the original \code{\link[sigclust]{sigclust}},
-except that an additional parameter \code{k} is allows testing against any
-number of clusters. In addition, the default type of covariance estimation is
-also different.
+This function is a wrapper for the original \code{\link[sigclust:sigclust]{sigclust::sigclust()}}, except
+that an additional parameter \code{k} is allows testing against any number of
+clusters. In addition, the default type of covariance estimation is also
+different.
 }
 \examples{
 data(hgsc)
@@ -49,11 +48,11 @@ str(sigclust(x = dat, k = nk, nsim = 50, labflag = 1, label = lab))
 }
 \references{
 Liu, Yufeng, Hayes, David Neil, Nobel, Andrew and Marron, J. S,
-  2008, \emph{Statistical Significance of Clustering for High-Dimension,
-  Low-Sample Size Data}, \emph{Journal of the American Statistical
-  Association} \bold{103}(483) 1281--1293.
+2008, \emph{Statistical Significance of Clustering for High-Dimension,
+Low-Sample Size Data}, \emph{Journal of the American Statistical Association}
+\strong{103}(483) 1281--1293.
 }
 \author{
 Hanwen Huang: \email{hanwenh@email.unc.edu}; Yufeng Liu:
-  \email{yfliu@email.unc.edu}; J. S. Marron: \email{marron@email.unc.edu}
+\email{yfliu@email.unc.edu}; J. S. Marron: \email{marron@email.unc.edu}
 }

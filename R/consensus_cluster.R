@@ -5,33 +5,31 @@
 #'
 #' See examples for how to use custom algorithms and distance functions. The
 #' default clustering algorithms provided are:
-#' \itemize{
-#'   \item{"nmf": }{Nonnegative Matrix Factorization (using Kullback-Leibler
-#'   Divergence or Euclidean distance; See Note for specifications.)}
-#'   \item{"hc": }{Hierarchical Clustering}
-#'   \item{"diana": }{DIvisive ANAlysis Clustering}
-#'   \item{"km": }{K-Means Clustering}
-#'   \item{"pam": }{Partition Around Medoids}
-#'   \item{"ap": }{Affinity Propagation}
-#'   \item{"sc": }{Spectral Clustering using Radial-Basis kernel function}
-#'   \item{"gmm": }{Gaussian Mixture Model using Bayesian Information Criterion
-#'   on EM algorithm}
-#'   \item{"block": }{Biclustering using a latent block model}
-#'   \item{"som": }{Self-Organizing Map (SOM) with Hierarchical Clustering}
-#'   \item{"cmeans": }{Fuzzy C-Means Clustering}
-#'   \item{"hdbscan": }{Hierarchical Density-based Spatial Clustering of
-#'   Applications with Noise (HDBSCAN)}
-#' }
+#' * "nmf": Nonnegative Matrix Factorization (using Kullback-Leibler Divergence
+#'   or Euclidean distance; See Note for specifications.)
+#' * "hc": Hierarchical Clustering
+#' * "diana": DIvisive ANAlysis Clustering
+#' * "km": K-Means Clustering
+#' * "pam": Partition Around Medoids
+#' * "ap": Affinity Propagation
+#' * "sc": Spectral Clustering using Radial-Basis kernel function
+#' * "gmm": Gaussian Mixture Model using Bayesian Information Criterion on EM
+#'   algorithm
+#' * "block": Biclustering using a latent block model
+#' * "som": Self-Organizing Map (SOM) with Hierarchical Clustering
+#' * "cmeans": Fuzzy C-Means Clustering
+#' * "hdbscan": Hierarchical Density-based Spatial Clustering of Applications
+#'   with Noise (HDBSCAN)
 #'
-#' The progress bar increments on every unit of \code{reps}.
+#' The progress bar increments on every unit of `reps`.
 #'
-#' @note The \code{nmf.method} defaults are "brunet" (Kullback-Leibler
-#'   divergence) and "lee" (Euclidean distance). When "hdbscan" is chosen as an
-#'   algorithm to use, its results are excluded from the rest of the consensus
-#'   clusters. This is because there is no guarantee that the cluster assignment
-#'   will have every sample clustered; more often than not there will be noise
-#'   points or outliers. In addition, the number of distinct clusters may not
-#'   even be equal to \code{nk}.
+#' @note The `nmf.method` defaults are "brunet" (Kullback-Leibler divergence)
+#'   and "lee" (Euclidean distance). When "hdbscan" is chosen as an algorithm to
+#'   use, its results are excluded from the rest of the consensus clusters. This
+#'   is because there is no guarantee that the cluster assignment will have
+#'   every sample clustered; more often than not there will be noise points or
+#'   outliers. In addition, the number of distinct clusters may not even be
+#'   equal to `nk`.
 #'
 #' @param data data matrix with rows as samples and columns as variables
 #' @param nk number of clusters (k) requested; can specify a single integer or a
@@ -44,41 +42,39 @@
 #'   "km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan". A
 #'   custom clustering algorithm can be used.
 #' @param nmf.method specify NMF-based algorithms to run. By default the
-#'   "brunet" and "lee" algorithms are called. See \code{\link[NMF]{nmf}} for
-#'   details.
+#'   "brunet" and "lee" algorithms are called. See [NMF::nmf()] for details.
 #' @param xdim x dimension of the SOM grid
 #' @param ydim y dimension of the SOM grid
 #' @param rlen the number of times the complete data set will be presented to
 #'   the SOM network.
 #' @param alpha SOM learning rate, a vector of two numbers indicating the amount
-#'   of change. Default is to decline linearly from 0.05 to 0.01 over
-#'   \code{rlen} updates. Not used for the batch algorithm.
+#'   of change. Default is to decline linearly from 0.05 to 0.01 over `rlen`
+#'   updates. Not used for the batch algorithm.
 #' @param minPts minimum size of clusters for HDBSCAN. Default is 5.
 #' @param distance a vector of distance functions. Defaults to "euclidean".
-#'   Other options are given in \code{\link[stats]{dist}}. A custom distance
-#'   function can be used.
-#' @param prep.data Prepare the data on the "full" dataset, the
-#'   "sampled" dataset, or "none" (default).
+#'   Other options are given in [stats::dist()]. A custom distance function can
+#'   be used.
+#' @param prep.data Prepare the data on the "full" dataset, the "sampled"
+#'   dataset, or "none" (default).
 #' @inheritParams prepare_data
 #' @param progress logical; should a progress bar be displayed?
 #' @param seed.nmf random seed to use for NMF-based algorithms
 #' @param seed.data seed to use to ensure each algorithm operates on the same
 #'   set of subsamples
-#' @param file.name if not \code{NULL}, the returned array will be saved at each
-#'   iteration as well as at the end of the function call to an \code{rds}
-#'   object with \code{file.name} as the file name.
-#' @param time.saved logical; if \code{TRUE}, the date saved is appended to
-#'   \code{file.name}. Only applicable when \code{file.name} is not \code{NULL}.
-#' @return An array of dimension \code{nrow(x)} by \code{reps} by
-#'   \code{length(algorithms)} by \code{length(nk)}. Each cube of the array
-#'   represents a different k. Each slice of a cube is a matrix showing
-#'   consensus clustering results for algorithms. The matrices have a row for
-#'   each sample, and a column for each subsample. Each entry represents a class
-#'   membership.
+#' @param file.name if not `NULL`, the returned array will be saved at each
+#'   iteration as well as at the end of the function call to an `rds` object
+#'   with `file.name` as the file name.
+#' @param time.saved logical; if `TRUE`, the date saved is appended to
+#'   `file.name`. Only applicable when `file.name` is not `NULL`.
+#' @return An array of dimension `nrow(x)` by `reps` by `length(algorithms)` by
+#'   `length(nk)`. Each cube of the array represents a different k. Each slice
+#'   of a cube is a matrix showing consensus clustering results for algorithms.
+#'   The matrices have a row for each sample, and a column for each subsample.
+#'   Each entry represents a class membership.
 #'
-#'   When "hdbscan" is part of \code{algorithms}, we do not include its clustering
-#'   array in the consensus result. Instead, we report two summary statistics
-#'   as attributes: the proportion of outliers and the number of clusters.
+#'   When "hdbscan" is part of `algorithms`, we do not include its clustering
+#'   array in the consensus result. Instead, we report two summary statistics as
+#'   attributes: the proportion of outliers and the number of clusters.
 #' @author Derek Chiu, Aline Talhouk
 #' @importFrom mclust mclustBIC
 #' @export

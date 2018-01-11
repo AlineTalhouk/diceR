@@ -22,11 +22,11 @@ ev_confmat(pred.lab, ref.lab)
 \code{ev_nmi} returns the normalized mutual information.
 
 \code{ev_confmat} returns a vector of the following metrics: overall
-  accuracy, Cohen's kappa, no information rate, accuracy p-value. Statistics
-  are difficult to compare when there are multiclass comparisons. We hence
-  also report averaged statistics for: sensitivity, specificity, PPV, NPV,
-  prevalence, detection rate, detection prevalence, accuracy, and balanced
-  accuracy.
+accuracy, Cohen's kappa, no information rate, accuracy p-value. Statistics
+are difficult to compare when there are multiclass comparisons. We hence
+also report averaged statistics for: sensitivity, specificity, PPV, NPV,
+prevalence, detection rate, detection prevalence, accuracy, and balanced
+accuracy.
 }
 \description{
 \strong{E}xternal \strong{v}alidity indices compare a predicted clustering
@@ -35,11 +35,11 @@ result with a reference class or gold standard.
 \details{
 \code{ev_nmi} calculates the normalized mutual information
 
-\code{ev_confmat} calculates a variety of statistics associated
-with confusion matrices.
+\code{ev_confmat} calculates a variety of statistics associated with
+confusion matrices.
 }
 \note{
-\code{ev_nmi} is adapted from \code{\link[infotheo]{mutinformation}}
+\code{ev_nmi} is adapted from \code{\link[infotheo:mutinformation]{infotheo::mutinformation()}}
 }
 \examples{
 set.seed(1)
@@ -52,7 +52,7 @@ ev_confmat(x, y)
 }
 \references{
 Strehl A, Ghosh J. Cluster ensembles: a knowledge reuse framework
-  for combining multiple partitions. J. Mach. Learn. Res. 2002;3:583-617.
+for combining multiple partitions. J. Mach. Learn. Res. 2002;3:583-617.
 }
 \author{
 Johnson Liu, Derek Chiu

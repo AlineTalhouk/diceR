@@ -20,37 +20,36 @@ graph_tracking(cl)
 graph_all(x, ...)
 }
 \arguments{
-\item{mat}{same as \code{x}, or a list of consensus matrices computed from
-\code{x} for faster results}
+\item{mat}{same as \code{x}, or a list of consensus matrices computed from \code{x} for
+faster results}
 
-\item{main}{heatmap title. If \code{NULL} (default), the titles will be taken
-from names in \code{mat}}
+\item{main}{heatmap title. If \code{NULL} (default), the titles will be taken from
+names in \code{mat}}
 
-\item{...}{additional arguments to \code{\link[gplots]{heatmap.2}}}
+\item{...}{additional arguments to \code{\link[gplots:heatmap.2]{gplots::heatmap.2()}}}
 
-\item{cl}{same as \code{x}, or a matrix of consensus classes computed from
-\code{x} for faster results}
+\item{cl}{same as \code{x}, or a matrix of consensus classes computed from \code{x} for
+faster results}
 
-\item{x}{an object from \code{\link{consensus_cluster}}}
+\item{x}{an object from \code{\link[=consensus_cluster]{consensus_cluster()}}}
 }
 \value{
 Various plots from \code{graph_*{}} functions. All plots are
-  generated using \code{ggplot}, except for \code{graph_heatmap}, which uses
-  \code{\link[gplots]{heatmap.2}}. Colours used in \code{graph_heatmap} and
-  \code{graph_tracking} utilize \code{\link[RColorBrewer]{RColorBrewer}}
-  palettes.
+generated using \code{ggplot}, except for \code{graph_heatmap}, which uses
+\code{\link[gplots:heatmap.2]{gplots::heatmap.2()}}. Colours used in \code{graph_heatmap} and \code{graph_tracking}
+utilize \code{\link[RColorBrewer:RColorBrewer]{RColorBrewer::RColorBrewer()}} palettes.
 }
 \description{
 Graph cumulative distribution function (CDF) graphs, relative change in area
 under CDF curves, heatmaps, and cluster assignment tracking plots.
 }
 \details{
-\code{graph_cdf} plots the CDF for consensus matrices from different
-algorithms. \code{graph_delta_area} calculates the relative change in area
-under CDF curve between algorithms. \code{graph_heatmap} generates consensus
-matrix heatmaps for each algorithm in \code{x}. \code{graph_tracking} tracks
-how cluster assignments change between algorithms. \code{graph_all} is a
-wrapper that runs all graphing functions.
+\code{graph_cdf} plots the CDF for consensus matrices from different algorithms.
+\code{graph_delta_area} calculates the relative change in area under CDF curve
+between algorithms. \code{graph_heatmap} generates consensus matrix heatmaps for
+each algorithm in \code{x}. \code{graph_tracking} tracks how cluster assignments change
+between algorithms. \code{graph_all} is a wrapper that runs all graphing
+functions.
 }
 \examples{
 # Consensus clustering for 3 algorithms

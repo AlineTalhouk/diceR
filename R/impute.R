@@ -2,24 +2,24 @@
 #'
 #' Impute missing values from bootstrapped subsampling
 #'
-#' The default output from \code{consensus_cluster} will undoubtedly contain
-#' \code{NA} entries because each replicate chooses a random subset (with
-#' replacement) of all samples. Missing values should first be imputed using
-#' \code{\link{impute_knn}}. Not all missing values are guaranteed to be imputed
-#' by KNN. See \code{\link[class]{knn}} for details. Thus, any remaining missing
-#' values are imputed using majority voting.
+#' The default output from `consensus_cluster` will undoubtedly contain `NA`
+#' entries because each replicate chooses a random subset (with replacement) of
+#' all samples. Missing values should first be imputed using [impute_knn()]. Not
+#' all missing values are guaranteed to be imputed by KNN. See [class::knn()]
+#' for details. Thus, any remaining missing values are imputed using majority
+#' voting.
 #'
-#' @param E 4D array of clusterings from \code{consensus_cluster}. The number of
-#'   rows is equal to the number of cases to be clustered, number of columns is
-#'   equal to the clusterings obtained by different resamplings of the data, the
-#'   third dimension are the different algorithms and the fourth dimension are
-#'   cluster sizes.
+#' @param E 4D array of clusterings from `consensus_cluster`. The number of rows
+#'   is equal to the number of cases to be clustered, number of columns is equal
+#'   to the clusterings obtained by different resamplings of the data, the third
+#'   dimension are the different algorithms and the fourth dimension are cluster
+#'   sizes.
 #' @param data data matrix with samples as rows and genes/features as columns
 #' @param nk cluster size to extract data for (single value)
 #' @return If flattened matrix consists of more than one repetition, i.e. it
 #'   isn't a column vector, then the function returns a matrix of clusterings
 #'   with complete cases imputed using majority voting, and relabelled, for
-#'   chosen \code{k}.
+#'   chosen `k`.
 #' @author Aline Talhouk
 #' @family imputation functions
 #' @export

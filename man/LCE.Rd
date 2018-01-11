@@ -8,7 +8,7 @@ LCE(E, k, dc = 0.8, R = 10, sim.mat = c("cts", "srs", "asrs"))
 }
 \arguments{
 \item{E}{is an array of clustering results. An error is thrown if there are
-missing values. \code{\link{impute_missing}} can be used beforehand.}
+missing values. \code{\link[=impute_missing]{impute_missing()}} can be used beforehand.}
 
 \item{k}{requested number of clusters}
 
@@ -20,7 +20,7 @@ missing values. \code{\link{impute_missing}} can be used beforehand.}
 }
 \value{
 a vector containing the cluster assignment from either the CTS, SRS,
-  or ASRS similarity matrices
+or ASRS similarity matrices
 }
 \description{
 Generate a cluster assignment from a CTS, SRS, or ASRS similarity matrix.

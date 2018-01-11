@@ -1,16 +1,14 @@
 #' Simulate and select null distributions on empirical gene-gene correlations
 #'
 #' Using a principal component constructed from the sample space, we simulate
-#' null distributions with univariate Normal distributions using
-#' \code{pcn_simulate}. Then a subset of these distributions is chosen using
-#' \code{pcn_select}.
+#' null distributions with univariate Normal distributions using `pcn_simulate`.
+#' Then a subset of these distributions is chosen using `pcn_select`.
 #'
 #' @param data data matrix with rows as samples, columns as features
 #' @param n.sim The number of simulated datasets to simulate
 #'
-#' @return \code{pcn_simulate} returns a list of length \code{n.sim}. Each
-#'   element is a simulated matrix using this "Principal Component Normal" (pcn)
-#'   procedure.
+#' @return `pcn_simulate` returns a list of length `n.sim`. Each element is a
+#'   simulated matrix using this "Principal Component Normal" (pcn) procedure.
 #' @author Derek Chiu
 #' @name pcn
 #' @export
@@ -29,17 +27,16 @@ pcn_simulate <- function(data, n.sim = 50) {
   return(Qns)
 }
 
-#' @param data.sim an object from \code{pcn_simulate}
+#' @param data.sim an object from `pcn_simulate`
 #' @param cl vector of cluster memberships
 #' @param type select either the representative dataset ("rep") or a range of
 #'   datasets ("range")
-#' @param int every \code{int} data sets from median-ranked \code{data.sim} are
-#'   taken. Defaults to 5.
-#' @return \code{pcn_select} returns a list with elements
-#' \item{ranks}{When \code{type = "range"}, ranks of each extracted dataset
-#' shown}
-#' \item{ind}{index of representative simulation}
-#' \item{dat}{simulation data representation of all in pcNormal}
+#' @param int every `int` data sets from median-ranked `data.sim` are taken.
+#'   Defaults to 5.
+#' @return `pcn_select` returns a list with elements
+#' * `ranks`: When `type = "range"`, ranks of each extracted dataset shown
+#' * `ind`: index of representative simulation
+#' * `dat`: simulation data representation of all in pcNormal
 #' @rdname pcn
 #' @export
 pcn_select <- function(data.sim, cl, type = c("rep", "range"), int = 5) {
