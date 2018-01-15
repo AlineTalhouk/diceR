@@ -121,24 +121,23 @@ custom clustering algorithm can be used.</p></td>
     <tr>
       <th>k.method</th>
       <td><p>determines the method to choose k when no reference class is
-given. When <code>ref.cl</code> is not <code>NULL</code>, k is the number of distinct
-classes of <code>ref.cl</code>. Otherwise the input from <code>k.method</code> chooses
-k. The default is to use the PAC to choose the best k(s). Specifying an
-integer as a user-desired k will override the best k chosen by PAC.
-Finally, specifying "all" will produce consensus results for all k. The
-"all" method is implicitly performed when there is only one k used.</p></td>
+given. When <code>ref.cl</code> is not <code>NULL</code>, k is the number of distinct classes of
+<code>ref.cl</code>. Otherwise the input from <code>k.method</code> chooses k. The default is to
+use the PAC to choose the best k(s). Specifying an integer as a
+user-desired k will override the best k chosen by PAC. Finally, specifying
+"all" will produce consensus results for all k. The "all" method is
+implicitly performed when there is only one k used.</p></td>
     </tr>
     <tr>
       <th>nmf.method</th>
       <td><p>specify NMF-based algorithms to run. By default the
-"brunet" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NMF/topics/nmf'>nmf</a></code> for
-details.</p></td>
+"brunet" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NMF/topics/nmf'>NMF::nmf()</a></code> for details.</p></td>
     </tr>
     <tr>
       <th>distance</th>
       <td><p>a vector of distance functions. Defaults to "euclidean".
-Other options are given in <code><a href='http://www.rdocumentation.org/packages/stats/topics/dist'>dist</a></code>. A custom distance
-function can be used.</p></td>
+Other options are given in <code><a href='http://www.rdocumentation.org/packages/stats/topics/dist'>stats::dist()</a></code>. A custom distance function can
+be used.</p></td>
     </tr>
     <tr>
       <th>cons.funs</th>
@@ -152,17 +151,16 @@ Partitioning Algorithm), "LCE" (linkage clustering ensemble)</p></td>
     </tr>
     <tr>
       <th>prep.data</th>
-      <td><p>Prepare the data on the "full" dataset, the
-"sampled" dataset, or "none" (default).</p></td>
+      <td><p>Prepare the data on the "full" dataset, the "sampled"
+dataset, or "none" (default).</p></td>
     </tr>
     <tr>
       <th>min.var</th>
       <td><p>minimum variability measure threshold used to filter the
 feature space for only highly variable features. Only features with a
-minimum variability measure across all samples greater than <code>min.var</code>
-will be used. If <code>type = "conventional"</code>, the standard deviation is
-the measure used, and if <code>type = "robust"</code>, the MAD is the measure
-used.</p></td>
+minimum variability measure across all samples greater than <code>min.var</code> will
+be used. If <code>type = "conventional"</code>, the standard deviation is the measure
+used, and if <code>type = "robust"</code>, the MAD is the measure used.</p></td>
     </tr>
     <tr>
       <th>seed</th>
@@ -170,8 +168,8 @@ used.</p></td>
     </tr>
     <tr>
       <th>trim</th>
-      <td><p>logical; if <code>TRUE</code>, algorithms that score low on internal
-indices will be trimmed out</p></td>
+      <td><p>logical; if <code>TRUE</code>, algorithms that score low on internal indices
+will be trimmed out</p></td>
     </tr>
     <tr>
       <th>reweigh</th>
@@ -180,15 +178,15 @@ algorithms, each algorithm is reweighed depending on its internal indices.</p></
     </tr>
     <tr>
       <th>n</th>
-      <td><p>an integer specifying the top <code>n</code> algorithms to keep after
-trimming off the poor performing ones using Rank Aggregation. If the total
-number of algorithms is less than <code>n</code> no trimming is done.</p></td>
+      <td><p>an integer specifying the top <code>n</code> algorithms to keep after trimming
+off the poor performing ones using Rank Aggregation. If the total number of
+algorithms is less than <code>n</code> no trimming is done.</p></td>
     </tr>
     <tr>
       <th>evaluate</th>
-      <td><p>logical; if <code>TRUE</code> (default), validity indices are
-returned. Internal validity indices are always computed. If <code>ref.cl</code>
-is not <code>NULL</code>, then external validity indices will also be computed.</p></td>
+      <td><p>logical; if <code>TRUE</code> (default), validity indices are returned.
+Internal validity indices are always computed. If <code>ref.cl</code> is not <code>NULL</code>,
+then external validity indices will also be computed.</p></td>
     </tr>
     <tr>
       <th>plot</th>
@@ -222,18 +220,18 @@ otherwise <code>NULL</code></p></dd>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>There are three ways to handle the input data before clustering via argument
-<code>prep.data</code>. The default is to use the raw data as-is ("none"). Or, we
-can enact <code><a href='prepare_data.html'>prepare_data</a></code> on the full dataset ("full"), or the
-bootstrap sampled datasets ("sampled").</p>
+<code>prep.data</code>. The default is to use the raw data as-is ("none"). Or, we can
+enact <code><a href='prepare_data.html'>prepare_data()</a></code> on the full dataset ("full"), or the bootstrap sampled
+datasets ("sampled").</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:testthat’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:Biobase’:</span>
+#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:Biobase’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    combine</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:BiocGenerics’:</span>
+#&gt; <span class='message'>    combine, exprs</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:BiocGenerics’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    combine, intersect, setdiff, union</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
 #&gt; <span class='message'></span>
@@ -288,7 +286,7 @@ Aline Talhouk, Derek Chiu
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

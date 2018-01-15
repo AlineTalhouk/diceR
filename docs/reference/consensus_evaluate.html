@@ -101,13 +101,12 @@ given weights before use in consensus functions.</p>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>any number of objects outputted from
-<code><a href='consensus_cluster.html'>consensus_cluster</a></code></p></td>
+      <td><p>any number of objects outputted from <code><a href='consensus_cluster.html'>consensus_cluster()</a></code></p></td>
     </tr>
     <tr>
       <th>cons.cl</th>
-      <td><p>matrix of cluster assignments from consensus functions such
-as <code>kmodes</code> and <code>majority_voting</code></p></td>
+      <td><p>matrix of cluster assignments from consensus functions such as
+<code>kmodes</code> and <code>majority_voting</code></p></td>
     </tr>
     <tr>
       <th>ref.cl</th>
@@ -116,12 +115,12 @@ as <code>kmodes</code> and <code>majority_voting</code></p></td>
     <tr>
       <th>k.method</th>
       <td><p>determines the method to choose k when no reference class is
-given. When <code>ref.cl</code> is not <code>NULL</code>, k is the number of distinct
-classes of <code>ref.cl</code>. Otherwise the input from <code>k.method</code> chooses
-k. The default is to use the PAC to choose the best k(s). Specifying an
-integer as a user-desired k will override the best k chosen by PAC.
-Finally, specifying "all" will produce consensus results for all k. The
-"all" method is implicitly performed when there is only one k used.</p></td>
+given. When <code>ref.cl</code> is not <code>NULL</code>, k is the number of distinct classes of
+<code>ref.cl</code>. Otherwise the input from <code>k.method</code> chooses k. The default is to
+use the PAC to choose the best k(s). Specifying an integer as a
+user-desired k will override the best k chosen by PAC. Finally, specifying
+"all" will produce consensus results for all k. The "all" method is
+implicitly performed when there is only one k used.</p></td>
     </tr>
     <tr>
       <th>plot</th>
@@ -129,8 +128,8 @@ Finally, specifying "all" will produce consensus results for all k. The
     </tr>
     <tr>
       <th>trim</th>
-      <td><p>logical; if <code>TRUE</code>, algorithms that score low on internal
-indices will be trimmed out</p></td>
+      <td><p>logical; if <code>TRUE</code>, algorithms that score low on internal indices
+will be trimmed out</p></td>
     </tr>
     <tr>
       <th>reweigh</th>
@@ -139,42 +138,40 @@ algorithms, each algorithm is reweighed depending on its internal indices.</p></
     </tr>
     <tr>
       <th>n</th>
-      <td><p>an integer specifying the top <code>n</code> algorithms to keep after
-trimming off the poor performing ones using Rank Aggregation. If the total
-number of algorithms is less than <code>n</code> no trimming is done.</p></td>
+      <td><p>an integer specifying the top <code>n</code> algorithms to keep after trimming
+off the poor performing ones using Rank Aggregation. If the total number of
+algorithms is less than <code>n</code> no trimming is done.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>consensus_evaluate</code> returns a list with the following elements</p>
-<dt>k</dt><dd><p>if <code>ref.cl</code> is not NULL, this is the number of distinct
-  classes in the reference; otherwise the chosen <code>k</code> is determined by
-  the one giving the largest mean PAC across algorithms</p></dd>
-  <dt>pac</dt><dd><p>a data frame showing the PAC for each combination of algorithm
-  and cluster size</p></dd>
-  <dt>ii</dt><dd><p>a list of data frames for all k showing internal evaluation
-  indices</p></dd>
-  <dt>ei</dt><dd><p>a data frame showing external evaluation indices for <code>k</code></p></dd>
-  <dt>trim.obj</dt><dd><p>A list with 4 elements</p></dd>
-  
-    <code>alg.keep</code> algorithms kept
-    <code>alg.remove</code> algorithms removed
-    <code>rank.matrix</code> a matrix of ranked algorithms for every internal
-    evaluation index
-    <code>top.list</code> final order of ranked algorithms
-    <code>E.new</code> A new version of a <code>consensus_cluster</code> data
-    object
-  
+    <p><code>consensus_evaluate</code> returns a list with the following elements</p><ul>
+<li><p><code>k</code>: if <code>ref.cl</code> is not <code>NULL</code>, this is the number of distinct classes
+in the reference; otherwise the chosen <code>k</code> is determined by the one giving
+the largest mean PAC across algorithms</p></li>
+<li><p><code>pac</code>: a data frame showing the PAC for each combination of algorithm
+and cluster size</p></li>
+<li><p><code>ii</code>: a list of data frames for all k showing internal evaluation
+indices</p></li>
+<li><p><code>ei</code>: a data frame showing external evaluation indices for <code>k</code></p></li>
+<li><p><code>trim.obj</code>: A list with 4 elements</p><ul>
+<li><p><code>alg.keep</code>: algorithms kept</p></li>
+<li><p><code>alg.remove</code>: algorithms removed</p></li>
+<li><p><code>rank.matrix</code>: a matrix of ranked algorithms for every internal
+evaluation index</p></li>
+<li><p><code>top.list</code>: final order of ranked algorithms</p></li>
+<li><p><code>E.new</code>: A new version of a <code>consensus_cluster</code> data object</p></li>
+</ul></li>
+</ul>
 
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function always returns internal indices. If <code>ref.cl</code> is not
-<code>NULL</code>, external indices are additionally shown. Relevant graphical
-displays are also outputted. Algorithms are ranked across internal indices
-using Rank Aggregation. Only the top <code>n</code> algorithms are kept, the rest
-are trimmed.</p>
+    <p>This function always returns internal indices. If <code>ref.cl</code> is not <code>NULL</code>,
+external indices are additionally shown. Relevant graphical displays are also
+outputted. Algorithms are ranked across internal indices using Rank
+Aggregation. Only the top <code>n</code> algorithms are kept, the rest are trimmed.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -228,7 +225,7 @@ are trimmed.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

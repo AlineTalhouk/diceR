@@ -100,8 +100,7 @@ matrix is minimized.</p>
     <tr>
       <th>B</th>
       <td><p>matrix whose distance with the permuted A we want to minimize. By
-default, <code>B &lt;- diag(nrow(A))</code>, so the permutation maximizes the trace of
-A.</p></td>
+default, <code>B &lt;- diag(nrow(A))</code>, so the permutation maximizes the trace of A.</p></td>
     </tr>
     </table>
     
@@ -111,12 +110,12 @@ A.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Finds the permutation P of A such that <code>||PA - B||</code> is minimum in
-Frobenius norm. Uses the linear-sum assignment problem (LSAP) solver in the
-package <code>clue</code>. The default B is the identity matrix of same dimension,
-so that the permutation of A maximizes its trace. This procedure is useful
-for constructing a confusion matrix when we don't know the true class labels
-of a predicted class and want to compare to a reference class.</p>
+    <p>Finds the permutation P of A such that <code>||PA - B||</code> is minimum in Frobenius
+norm. Uses the linear-sum assignment problem (LSAP) solver in the package
+<code>clue</code>. The default B is the identity matrix of same dimension, so that the
+permutation of A maximizes its trace. This procedure is useful for
+constructing a confusion matrix when we don't know the true class labels of a
+predicted class and want to compare to a reference class.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -165,7 +164,7 @@ https://stat.ethz.ch/pipermail/r-help/2010-April/236664.html
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

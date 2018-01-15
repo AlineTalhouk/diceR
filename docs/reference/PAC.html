@@ -111,16 +111,16 @@ and 1.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>the PAC is a score used in clustering performance. The lower it is
-  the better, because we want minimal ambiguity amongst the consensus.</p>
+the better, because we want minimal ambiguity amongst the consensus.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Since a consensus matrix is symmetric, we only look at its lower (or upper)
-triangular matrix. The proportion of entries strictly between <code>lower</code>
-and <code>upper</code> is the PAC. In a perfect clustering, the consensus matrix
-would consist of only 0s and 1s, and the PAC assessed on the (0, 1) interval
-would have a perfect score of 0. Using a (0.1, 0.9) interval for defining
-ambiguity is common as well.</p>
+triangular matrix. The proportion of entries strictly between <code>lower</code> and
+<code>upper</code> is the PAC. In a perfect clustering, the consensus matrix would
+consist of only 0s and 1s, and the PAC assessed on the (0, 1) interval would
+have a perfect score of 0. Using a (0.1, 0.9) interval for defining ambiguity
+is common as well.</p>
 <p>The PAC is not, strictly speaking, an internal validity index. Originally
 used to choose the optimal number of clusters, here we use it to assess
 cluster stability. However, PAC is still agnostic any gold standard
@@ -129,8 +129,8 @@ clustering result so we use it like an internal validity index.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Senbabaoglu, Y., Michailidis, G., &amp; Li, J. Z. (2014). Critical
-  limitations of consensus clustering in class discovery. Scientific reports,
-  4.</p>
+limitations of consensus clustering in class discovery. Scientific reports,
+4.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -166,7 +166,7 @@ Derek Chiu
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

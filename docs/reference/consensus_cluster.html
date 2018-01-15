@@ -127,8 +127,7 @@ custom clustering algorithm can be used.</p></td>
     <tr>
       <th>nmf.method</th>
       <td><p>specify NMF-based algorithms to run. By default the
-"brunet" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NMF/topics/nmf'>nmf</a></code> for
-details.</p></td>
+"brunet" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NMF/topics/nmf'>NMF::nmf()</a></code> for details.</p></td>
     </tr>
     <tr>
       <th>xdim</th>
@@ -146,8 +145,8 @@ the SOM network.</p></td>
     <tr>
       <th>alpha</th>
       <td><p>SOM learning rate, a vector of two numbers indicating the amount
-of change. Default is to decline linearly from 0.05 to 0.01 over
-<code>rlen</code> updates. Not used for the batch algorithm.</p></td>
+of change. Default is to decline linearly from 0.05 to 0.01 over <code>rlen</code>
+updates. Not used for the batch algorithm.</p></td>
     </tr>
     <tr>
       <th>minPts</th>
@@ -156,13 +155,13 @@ of change. Default is to decline linearly from 0.05 to 0.01 over
     <tr>
       <th>distance</th>
       <td><p>a vector of distance functions. Defaults to "euclidean".
-Other options are given in <code><a href='http://www.rdocumentation.org/packages/stats/topics/dist'>dist</a></code>. A custom distance
-function can be used.</p></td>
+Other options are given in <code><a href='http://www.rdocumentation.org/packages/stats/topics/dist'>stats::dist()</a></code>. A custom distance function can
+be used.</p></td>
     </tr>
     <tr>
       <th>prep.data</th>
-      <td><p>Prepare the data on the "full" dataset, the
-"sampled" dataset, or "none" (default).</p></td>
+      <td><p>Prepare the data on the "full" dataset, the "sampled"
+dataset, or "none" (default).</p></td>
     </tr>
     <tr>
       <th>scale</th>
@@ -180,10 +179,9 @@ methods of dimension reduction.</p></td>
       <th>min.var</th>
       <td><p>minimum variability measure threshold used to filter the
 feature space for only highly variable features. Only features with a
-minimum variability measure across all samples greater than <code>min.var</code>
-will be used. If <code>type = "conventional"</code>, the standard deviation is
-the measure used, and if <code>type = "robust"</code>, the MAD is the measure
-used.</p></td>
+minimum variability measure across all samples greater than <code>min.var</code> will
+be used. If <code>type = "conventional"</code>, the standard deviation is the measure
+used, and if <code>type = "robust"</code>, the MAD is the measure used.</p></td>
     </tr>
     <tr>
       <th>progress</th>
@@ -201,8 +199,8 @@ set of subsamples</p></td>
     <tr>
       <th>file.name</th>
       <td><p>if not <code>NULL</code>, the returned array will be saved at each
-iteration as well as at the end of the function call to an <code>rds</code>
-object with <code>file.name</code> as the file name.</p></td>
+iteration as well as at the end of the function call to an <code>rds</code> object
+with <code>file.name</code> as the file name.</p></td>
     </tr>
     <tr>
       <th>time.saved</th>
@@ -213,47 +211,46 @@ object with <code>file.name</code> as the file name.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An array of dimension <code>nrow(x)</code> by <code>reps</code> by
-  <code>length(algorithms)</code> by <code>length(nk)</code>. Each cube of the array
-  represents a different k. Each slice of a cube is a matrix showing
-  consensus clustering results for algorithms. The matrices have a row for
-  each sample, and a column for each subsample. Each entry represents a class
-  membership.</p>
+    <p>An array of dimension <code>nrow(x)</code> by <code>reps</code> by <code>length(algorithms)</code> by
+<code>length(nk)</code>. Each cube of the array represents a different k. Each slice
+of a cube is a matrix showing consensus clustering results for algorithms.
+The matrices have a row for each sample, and a column for each subsample.
+Each entry represents a class membership.</p>
 <p>When "hdbscan" is part of <code>algorithms</code>, we do not include its clustering
-  array in the consensus result. Instead, we report two summary statistics
-  as attributes: the proportion of outliers and the number of clusters.</p>
+array in the consensus result. Instead, we report two summary statistics as
+attributes: the proportion of outliers and the number of clusters.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>See examples for how to use custom algorithms and distance functions. The
 default clustering algorithms provided are:</p><ul>
-<li><p>"nmf": Nonnegative Matrix Factorization (using Kullback-Leibler
-  Divergence or Euclidean distance; See Note for specifications.)</p></li>
+<li><p>"nmf": Nonnegative Matrix Factorization (using Kullback-Leibler Divergence
+or Euclidean distance; See Note for specifications.)</p></li>
 <li><p>"hc": Hierarchical Clustering</p></li>
 <li><p>"diana": DIvisive ANAlysis Clustering</p></li>
 <li><p>"km": K-Means Clustering</p></li>
 <li><p>"pam": Partition Around Medoids</p></li>
 <li><p>"ap": Affinity Propagation</p></li>
 <li><p>"sc": Spectral Clustering using Radial-Basis kernel function</p></li>
-<li><p>"gmm": Gaussian Mixture Model using Bayesian Information Criterion
-  on EM algorithm</p></li>
+<li><p>"gmm": Gaussian Mixture Model using Bayesian Information Criterion on EM
+algorithm</p></li>
 <li><p>"block": Biclustering using a latent block model</p></li>
 <li><p>"som": Self-Organizing Map (SOM) with Hierarchical Clustering</p></li>
 <li><p>"cmeans": Fuzzy C-Means Clustering</p></li>
-<li><p>"hdbscan": Hierarchical Density-based Spatial Clustering of
-  Applications with Noise (HDBSCAN)</p></li>
+<li><p>"hdbscan": Hierarchical Density-based Spatial Clustering of Applications
+with Noise (HDBSCAN)</p></li>
 </ul>
     <p>The progress bar increments on every unit of <code>reps</code>.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The <code>nmf.method</code> defaults are "brunet" (Kullback-Leibler
-  divergence) and "lee" (Euclidean distance). When "hdbscan" is chosen as an
-  algorithm to use, its results are excluded from the rest of the consensus
-  clusters. This is because there is no guarantee that the cluster assignment
-  will have every sample clustered; more often than not there will be noise
-  points or outliers. In addition, the number of distinct clusters may not
-  even be equal to <code>nk</code>.</p>
+    <p>The <code>nmf.method</code> defaults are "brunet" (Kullback-Leibler divergence)
+and "lee" (Euclidean distance). When "hdbscan" is chosen as an algorithm to
+use, its results are excluded from the rest of the consensus clusters. This
+is because there is no guarantee that the cluster assignment will have
+every sample clustered; more often than not there will be noise points or
+outliers. In addition, the number of distinct clusters may not even be
+equal to <code>nk</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -274,11 +271,11 @@ default clustering algorithms provided are:</p><ul>
 
 <span class='no'>cc</span> <span class='kw'>&lt;-</span> <span class='fu'>consensus_cluster</span>(<span class='no'>dat</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"pam"</span>, <span class='st'>"agnes"</span>),
 <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"euclidean"</span>, <span class='st'>"manh"</span>), <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'>str</span>(<span class='no'>cc</span>)</div><div class='output co'>#&gt;  int [1:100, 1:6, 1:2, 1:3] 1 1 2 1 2 1 1 NA 2 1 ...
+<span class='fu'>str</span>(<span class='no'>cc</span>)</div><div class='output co'>#&gt;  int [1:100, 1:6, 1:4, 1:3] 1 1 2 1 2 1 1 NA 2 1 ...
 #&gt;  - attr(*, "dimnames")=List of 4
 #&gt;   ..$ : chr [1:100] "TCGA.04.1331_PRO.C5" "TCGA.04.1332_MES.C1" "TCGA.04.1336_DIF.C4" "TCGA.04.1337_MES.C1" ...
 #&gt;   ..$ : chr [1:6] "R1" "R2" "R3" "R4" ...
-#&gt;   ..$ : chr [1:2] "PAM_Euclidean" "PAM_Manh"
+#&gt;   ..$ : chr [1:4] "PAM_Euclidean" "PAM_Manh" "AGNES_Euclidean" "AGNES_Manh"
 #&gt;   ..$ : chr [1:3] "2" "3" "4"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -308,7 +305,7 @@ Derek Chiu, Aline Talhouk
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

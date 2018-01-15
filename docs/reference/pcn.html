@@ -85,9 +85,8 @@
 
     
     <p>Using a principal component constructed from the sample space, we simulate
-null distributions with univariate Normal distributions using
-<code>pcn_simulate</code>. Then a subset of these distributions is chosen using
-<code>pcn_select</code>.</p>
+null distributions with univariate Normal distributions using <code>pcn_simulate</code>.
+Then a subset of these distributions is chosen using <code>pcn_select</code>.</p>
     
 
     <pre class="usage"><span class='fu'>pcn_simulate</span>(<span class='no'>data</span>, <span class='kw'>n.sim</span> <span class='kw'>=</span> <span class='fl'>50</span>)
@@ -120,22 +119,21 @@ datasets ("range")</p></td>
     </tr>
     <tr>
       <th>int</th>
-      <td><p>every <code>int</code> data sets from median-ranked <code>data.sim</code> are
-taken. Defaults to 5.</p></td>
+      <td><p>every <code>int</code> data sets from median-ranked <code>data.sim</code> are taken.
+Defaults to 5.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>pcn_simulate</code> returns a list of length <code>n.sim</code>. Each
-  element is a simulated matrix using this "Principal Component Normal" (pcn)
-  procedure.
+    <p><code>pcn_simulate</code> returns a list of length <code>n.sim</code>. Each element is a
+simulated matrix using this "Principal Component Normal" (pcn) procedure.
 
-<code>pcn_select</code> returns a list with elements</p>
-<dt>ranks</dt><dd><p>When <code>type = "range"</code>, ranks of each extracted dataset
-shown</p></dd>
-<dt>ind</dt><dd><p>index of representative simulation</p></dd>
-<dt>dat</dt><dd><p>simulation data representation of all in pcNormal</p></dd>
+<code>pcn_select</code> returns a list with elements</p><ul>
+<li><p><code>ranks</code>: When <code>type = "range"</code>, ranks of each extracted dataset shown</p></li>
+<li><p><code>ind</code>: index of representative simulation</p></li>
+<li><p><code>dat</code>: simulation data representation of all in pcNormal</p></li>
+</ul>
 
     
 
@@ -169,7 +167,7 @@ Derek Chiu
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

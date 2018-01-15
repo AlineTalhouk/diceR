@@ -103,45 +103,44 @@ under CDF curves, heatmaps, and cluster assignment tracking plots.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>mat</th>
-      <td><p>same as <code>x</code>, or a list of consensus matrices computed from
-<code>x</code> for faster results</p></td>
+      <td><p>same as <code>x</code>, or a list of consensus matrices computed from <code>x</code> for
+faster results</p></td>
     </tr>
     <tr>
       <th>main</th>
-      <td><p>heatmap title. If <code>NULL</code> (default), the titles will be taken
-from names in <code>mat</code></p></td>
+      <td><p>heatmap title. If <code>NULL</code> (default), the titles will be taken from
+names in <code>mat</code></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>additional arguments to <code><a href='http://www.rdocumentation.org/packages/gplots/topics/heatmap.2'>heatmap.2</a></code></p></td>
+      <td><p>additional arguments to <code><a href='http://www.rdocumentation.org/packages/gplots/topics/heatmap.2'>gplots::heatmap.2()</a></code></p></td>
     </tr>
     <tr>
       <th>cl</th>
-      <td><p>same as <code>x</code>, or a matrix of consensus classes computed from
-<code>x</code> for faster results</p></td>
+      <td><p>same as <code>x</code>, or a matrix of consensus classes computed from <code>x</code> for
+faster results</p></td>
     </tr>
     <tr>
       <th>x</th>
-      <td><p>an object from <code><a href='consensus_cluster.html'>consensus_cluster</a></code></p></td>
+      <td><p>an object from <code><a href='consensus_cluster.html'>consensus_cluster()</a></code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Various plots from <code>graph_*{}</code> functions. All plots are
-  generated using <code>ggplot</code>, except for <code>graph_heatmap</code>, which uses
-  <code><a href='http://www.rdocumentation.org/packages/gplots/topics/heatmap.2'>heatmap.2</a></code>. Colours used in <code>graph_heatmap</code> and
-  <code>graph_tracking</code> utilize <code><a href='http://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer'>RColorBrewer</a></code>
-  palettes.</p>
+generated using <code>ggplot</code>, except for <code>graph_heatmap</code>, which uses
+<code><a href='http://www.rdocumentation.org/packages/gplots/topics/heatmap.2'>gplots::heatmap.2()</a></code>. Colours used in <code>graph_heatmap</code> and <code>graph_tracking</code>
+utilize <code><a href='http://www.rdocumentation.org/packages/RColorBrewer/topics/ColorBrewer'>RColorBrewer::RColorBrewer()</a></code> palettes.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>graph_cdf</code> plots the CDF for consensus matrices from different
-algorithms. <code>graph_delta_area</code> calculates the relative change in area
-under CDF curve between algorithms. <code>graph_heatmap</code> generates consensus
-matrix heatmaps for each algorithm in <code>x</code>. <code>graph_tracking</code> tracks
-how cluster assignments change between algorithms. <code>graph_all</code> is a
-wrapper that runs all graphing functions.</p>
+    <p><code>graph_cdf</code> plots the CDF for consensus matrices from different algorithms.
+<code>graph_delta_area</code> calculates the relative change in area under CDF curve
+between algorithms. <code>graph_heatmap</code> generates consensus matrix heatmaps for
+each algorithm in <code>x</code>. <code>graph_tracking</code> tracks how cluster assignments change
+between algorithms. <code>graph_all</code> is a wrapper that runs all graphing
+functions.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -191,7 +190,7 @@ Derek Chiu
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

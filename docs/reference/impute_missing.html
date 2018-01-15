@@ -94,11 +94,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>E</th>
-      <td><p>4D array of clusterings from <code>consensus_cluster</code>. The number of
-rows is equal to the number of cases to be clustered, number of columns is
-equal to the clusterings obtained by different resamplings of the data, the
-third dimension are the different algorithms and the fourth dimension are
-cluster sizes.</p></td>
+      <td><p>4D array of clusterings from <code>consensus_cluster</code>. The number of rows
+is equal to the number of cases to be clustered, number of columns is equal
+to the clusterings obtained by different resamplings of the data, the third
+dimension are the different algorithms and the fourth dimension are cluster
+sizes.</p></td>
     </tr>
     <tr>
       <th>data</th>
@@ -113,18 +113,18 @@ cluster sizes.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>If flattened matrix consists of more than one repetition, i.e. it
-  isn't a column vector, then the function returns a matrix of clusterings
-  with complete cases imputed using majority voting, and relabelled, for
-  chosen <code>k</code>.</p>
+isn't a column vector, then the function returns a matrix of clusterings
+with complete cases imputed using majority voting, and relabelled, for
+chosen <code>k</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The default output from <code>consensus_cluster</code> will undoubtedly contain
-<code>NA</code> entries because each replicate chooses a random subset (with
-replacement) of all samples. Missing values should first be imputed using
-<code><a href='impute_knn.html'>impute_knn</a></code>. Not all missing values are guaranteed to be imputed
-by KNN. See <code><a href='http://www.rdocumentation.org/packages/class/topics/knn'>knn</a></code> for details. Thus, any remaining missing
-values are imputed using majority voting.</p>
+    <p>The default output from <code>consensus_cluster</code> will undoubtedly contain <code>NA</code>
+entries because each replicate chooses a random subset (with replacement) of
+all samples. Missing values should first be imputed using <code><a href='impute_knn.html'>impute_knn()</a></code>. Not
+all missing values are guaranteed to be imputed by KNN. See <code><a href='http://www.rdocumentation.org/packages/class/topics/knn'>class::knn()</a></code>
+for details. Thus, any remaining missing values are imputed using majority
+voting.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -166,7 +166,7 @@ Aline Talhouk
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
