@@ -1,3 +1,5 @@
+# diceR 0.3.2.9000
+
 # diceR 0.3.2
 
 * Fix bug in `consensus_cluster()` when custom algorithms were excluded from output (thanks @phiala)
