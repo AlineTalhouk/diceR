@@ -2,9 +2,13 @@
 % Please edit documentation in R/pl_merge.R
 \name{pl_merge}
 \alias{pl_merge}
-\title{Parallel cluster merging}
+\alias{pl_merge_clust}
+\alias{pl_merge_conmat}
+\title{Parallel cluster and consensus matrix merging}
 \usage{
-pl_merge(data, nk = 4)
+pl_merge_clust(data, nk = 4)
+
+pl_merge_conmat()
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -13,9 +17,13 @@ pl_merge(data, nk = 4)
 range of integers to compute multiple k}
 }
 \value{
-A raw merged cluster array, a knn-imputed cluster array, and a
-completely imputed (using majority voting) cluster array all saved to file
+\code{pl_merge_clust} returns a raw merged cluster array, a knn-imputed
+cluster array, and a completely imputed (using majority voting) cluster
+array all saved to file. \code{pl_merge_conmat} returns a list of consensus
+matrices.
 }
 \description{
-Produce the objects E, Eknn, and Ecomp from \code{dice} and save to file.
+\code{pl_merge_clust} constructs the objects E, Eknn, and Ecomp from \code{dice} and
+saves to file. \code{pl_merge_conmat} constructs consensus matrices for each
+algorithm and saves to file.
 }
