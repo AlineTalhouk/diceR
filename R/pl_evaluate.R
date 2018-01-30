@@ -12,6 +12,7 @@
 #'   summaries.
 #' @export
 pl_evaluate <- function(data, nk, n = 5) {
+  fs::dir_create("evaluate")
   # Read in the consensus matrices
   cons.mat <- fs::dir_ls("conmat") %>%
     purrr::map(readRDS)
