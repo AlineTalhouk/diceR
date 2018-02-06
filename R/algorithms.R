@@ -15,7 +15,14 @@ ALG_NAMES <- c(NALG, DALG, OALG)
 nmf <- function(x, k, method, loss, seed) {
   # NMF::predict(NMF::nmf(t(x), rank = k, method = method, seed = seed))
   set.seed(seed = seed)
-  NNLM::nnmf(A = t(x), k = k, method = method, loss = loss, verbose = 0) %>%
+  NNLM::nnmf(
+    A = t(x),
+    k = k,
+    method = method,
+    loss = loss,
+    check.k = FALSE,
+    verbose = 0
+  ) %>%
     magrittr::extract2("H") %>%
     t() %>%
     max.col()
