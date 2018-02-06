@@ -13,7 +13,6 @@ ALG_NAMES <- c(NALG, DALG, OALG)
 #' Transpose since input for NMF::nmf uses rows as vars, cols as samples
 #' @noRd
 nmf <- function(x, k, method, loss, seed) {
-  # NMF::predict(NMF::nmf(t(x), rank = k, method = method, seed = seed))
   set.seed(seed = seed)
   NNLM::nnmf(
     A = t(x),

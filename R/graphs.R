@@ -200,15 +200,6 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
                       purrr::map_lgl(., ~ all(!is.nan(.x))))
 
   # Plot heatmap with annotated colours, column scaling, no further reordering
-  # NMF::aheatmap(
-  #   hm,
-  #   annCol = data.frame(Criteria = c(rep("Maximized", 5),
-  #                                    rep("Minimized", ncol(hm) - 5))),
-  #   annColors = list(Criteria = stats::setNames(c("darkgreen", "deeppink4"),
-  #                                               c("Maximized", "Minimized"))),
-  #   Colv = NA, Rowv = NA, scale = "column", col = "PiYG",
-  #   main = "Ranked Algorithms on Internal Validity Indices"
-  # )
   pheatmap::pheatmap(
     hm,
     annotation_col = data.frame(Criteria = c(
