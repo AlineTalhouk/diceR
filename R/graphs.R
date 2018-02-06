@@ -224,7 +224,8 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
     cluster_cols = FALSE,
     cluster_rows = FALSE,
     scale = "column",
-    color = colorRampPalette(brewer.pal(n = 11, name = "PiYG"))(12),
+    color = grDevices::colorRampPalette(
+      RColorBrewer::brewer.pal(n = 11, name = "PiYG"))(12),
     main = "Ranked Algorithms on Internal Validity Indices"
   )
 }
