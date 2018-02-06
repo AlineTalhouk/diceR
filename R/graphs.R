@@ -200,13 +200,31 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
                       purrr::map_lgl(., ~ all(!is.nan(.x))))
 
   # Plot heatmap with annotated colours, column scaling, no further reordering
-  NMF::aheatmap(
+  # NMF::aheatmap(
+  #   hm,
+  #   annCol = data.frame(Criteria = c(rep("Maximized", 5),
+  #                                    rep("Minimized", ncol(hm) - 5))),
+  #   annColors = list(Criteria = stats::setNames(c("darkgreen", "deeppink4"),
+  #                                               c("Maximized", "Minimized"))),
+  #   Colv = NA, Rowv = NA, scale = "column", col = "PiYG",
+  #   main = "Ranked Algorithms on Internal Validity Indices"
+  # )
+  pheatmap::pheatmap(
     hm,
-    annCol = data.frame(Criteria = c(rep("Maximized", 5),
-                                     rep("Minimized", ncol(hm) - 5))),
-    annColors = list(Criteria = stats::setNames(c("darkgreen", "deeppink4"),
-                                                c("Maximized", "Minimized"))),
-    Colv = NA, Rowv = NA, scale = "column", col = "PiYG",
+    annotation_col = data.frame(Criteria = c(
+      rep("Maximized", 5),
+      rep("Minimized", ncol(hm) - 5)
+    ), row.names = colnames(hm)),
+    annotation_names_col = FALSE,
+    annotation_colors = list(Criteria = stats::setNames(
+      c("darkgreen", "deeppink4"),
+      c("Maximized", "Minimized")
+    )),
+    border_color = NA,
+    cluster_cols = FALSE,
+    cluster_rows = FALSE,
+    scale = "column",
+    color = colorRampPalette(brewer.pal(n = 11, name = "PiYG"))(12),
     main = "Ranked Algorithms on Internal Validity Indices"
   )
 }
