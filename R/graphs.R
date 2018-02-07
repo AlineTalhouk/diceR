@@ -26,7 +26,7 @@
 #' # Consensus clustering for 3 algorithms
 #' library(ggplot2)
 #' set.seed(911)
-#' x <- matrix(rnorm(100), ncol = 10)
+#' x <- matrix(rnorm(80), ncol = 10)
 #' CC1 <- consensus_cluster(x, nk = 2:4, reps = 3,
 #' algorithms = c("hc", "pam", "km"), progress = FALSE)
 #'
@@ -200,13 +200,23 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
                       purrr::map_lgl(., ~ all(!is.nan(.x))))
 
   # Plot heatmap with annotated colours, column scaling, no further reordering
-  NMF::aheatmap(
+  pheatmap::pheatmap(
     hm,
-    annCol = data.frame(Criteria = c(rep("Maximized", 5),
-                                     rep("Minimized", ncol(hm) - 5))),
-    annColors = list(Criteria = stats::setNames(c("darkgreen", "deeppink4"),
-                                                c("Maximized", "Minimized"))),
-    Colv = NA, Rowv = NA, scale = "column", col = "PiYG",
+    annotation_col = data.frame(Criteria = c(
+      rep("Maximized", 5),
+      rep("Minimized", ncol(hm) - 5)
+    ), row.names = colnames(hm)),
+    annotation_names_col = FALSE,
+    annotation_colors = list(Criteria = stats::setNames(
+      c("darkgreen", "deeppink4"),
+      c("Maximized", "Minimized")
+    )),
+    border_color = NA,
+    cluster_cols = FALSE,
+    cluster_rows = FALSE,
+    scale = "column",
+    color = grDevices::colorRampPalette(
+      RColorBrewer::brewer.pal(n = 11, name = "PiYG"))(12),
     main = "Ranked Algorithms on Internal Validity Indices"
   )
 }

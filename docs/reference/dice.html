@@ -89,11 +89,12 @@ clusters (k).</p>
     
 
     <pre class="usage"><span class='fu'>dice</span>(<span class='no'>data</span>, <span class='no'>nk</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>k.method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"brunet"</span>, <span class='st'>"lee"</span>), <span class='kw'>distance</span> <span class='kw'>=</span> <span class='st'>"euclidean"</span>,
-  <span class='kw'>cons.funs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"kmodes"</span>, <span class='st'>"majority"</span>, <span class='st'>"CSPA"</span>, <span class='st'>"LCE"</span>), <span class='kw'>sim.mat</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"cts"</span>,
-  <span class='st'>"srs"</span>, <span class='st'>"asrs"</span>), <span class='kw'>prep.data</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"none"</span>, <span class='st'>"full"</span>, <span class='st'>"sampled"</span>), <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reweigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>evaluate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"scd"</span>, <span class='st'>"lee"</span>), <span class='kw'>nmf.loss</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"mse"</span>, <span class='st'>"mkl"</span>),
+  <span class='kw'>distance</span> <span class='kw'>=</span> <span class='st'>"euclidean"</span>, <span class='kw'>cons.funs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"kmodes"</span>, <span class='st'>"majority"</span>, <span class='st'>"CSPA"</span>,
+  <span class='st'>"LCE"</span>), <span class='kw'>sim.mat</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"cts"</span>, <span class='st'>"srs"</span>, <span class='st'>"asrs"</span>), <span class='kw'>prep.data</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"none"</span>, <span class='st'>"full"</span>,
+  <span class='st'>"sampled"</span>), <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reweigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>evaluate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -130,8 +131,14 @@ implicitly performed when there is only one k used.</p></td>
     </tr>
     <tr>
       <th>nmf.method</th>
-      <td><p>specify NMF-based algorithms to run. By default the
-"brunet" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NMF/topics/nmf'>NMF::nmf()</a></code> for details.</p></td>
+      <td><p>specify NMF-based algorithms to run. By default both
+"scd" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NNLM/topics/nnmf'>NNLM::nnmf()</a></code> for details.</p></td>
+    </tr>
+    <tr>
+      <th>nmf.loss</th>
+      <td><p>specify loss function to use for NMF. Either "mse" for mean
+square error (default) or "mkl" for mean KL-divergence. See <code><a href='http://www.rdocumentation.org/packages/NNLM/topics/nnmf'>NNLM::nnmf()</a></code>
+for details.</p></td>
     </tr>
     <tr>
       <th>distance</th>
@@ -229,11 +236,7 @@ datasets ("sampled").</p>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:testthat’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:Biobase’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    combine, exprs</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:BiocGenerics’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    combine, intersect, setdiff, union</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
