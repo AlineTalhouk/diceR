@@ -6,6 +6,6 @@
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^codecov\.yml$
-^_pkgdown\.yaml$
+^_pkgdown\.yml$
 ^docs$
 ^cran-comments\.md$
