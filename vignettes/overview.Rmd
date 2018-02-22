@@ -199,7 +199,7 @@ ccomb_class2 <- consensus_combine(CC, CC2, element = "class")
 pandoc.table(head(ccomb_class2$`4`), caption = "Consensus Classes with KM added")
 ```
 
-### Evaluate, trim, and reweigh algortihms with `consensus_evaluate()`
+### Evaluate, trim, and reweigh algorithms with `consensus_evaluate()`
 
 Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between `lower` (defaults to 0) and `upper` (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each `k`, and choose the `k` with the greatest average PAC. If there *is* a reference class, `k` is the number of distinct classes in the reference.
 
