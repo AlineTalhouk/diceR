@@ -1,3 +1,5 @@
+# diceR 0.4.0.9000
+
 # diceR 0.4.0
 
 * Replace all code that depended on `NMF` with `NNLM` and `pheatmap`: CRAN notified that `NMF` will be archived because of inactive maintenance
