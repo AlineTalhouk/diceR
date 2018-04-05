@@ -25,13 +25,13 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
 <meta property="og:title" content="Consensus clustering — consensus_cluster" />
 
 <meta property="og:description" content="Runs consensus clustering across subsamples of the data, clustering
 algorithms, and cluster sizes." />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -39,6 +39,8 @@ algorithms, and cluster sizes." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -54,8 +56,12 @@ algorithms, and cluster sizes." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">diceR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">diceR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.0.9000</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -77,6 +83,7 @@ algorithms, and cluster sizes." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -84,10 +91,12 @@ algorithms, and cluster sizes." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Consensus clustering</h1>
+    <small>Source: <a href='https://github.com/AlineTalhouk/diceR/blob/master/R/consensus_cluster.R'><code>R/consensus_cluster.R</code></a></small>
+    <div class="hidden name"><code>consensus_cluster.Rd</code></div>
     </div>
 
     
@@ -103,7 +112,7 @@ algorithms, and cluster sizes.</p>
   <span class='st'>"largevis"</span>), <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>seed.nmf</span> <span class='kw'>=</span> <span class='fl'>123456</span>,
   <span class='kw'>seed.data</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>file.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time.saved</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -324,5 +333,8 @@ Derek Chiu, Aline Talhouk
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
