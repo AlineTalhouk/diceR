@@ -1,5 +1,9 @@
 # diceR 0.4.0.9000
 
+* Revert back to using `NMF` since `NNLM` has been archived and `NMF` is back in active maintenance.
+
+* Choose fuzzifier m in `cmeans` using Equation 5 from https://academic.oup.com/bioinformatics/article/26/22/2841/227572 (thanks @Asduveneck)
+
 # diceR 0.4.0
 
 * Replace all code that depended on `NMF` with `NNLM` and `pheatmap`: CRAN notified that `NMF` will be archived because of inactive maintenance
