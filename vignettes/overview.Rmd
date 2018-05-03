@@ -185,7 +185,18 @@ str(ccomb_matrix, max.level = 2)
 pandoc.table(head(ccomb_class$`4`), caption = "Consensus Classes")
 ```
 
-One can feed in `ccomb_class` (instead of `CC`) into `consensus_matrix()` to obtain a consensus matrix across both subsamples **and** algorithms.
+One can feed in `ccomb_class` (instead of `CC`) into `consensus_matrix()` to obtain a consensus matrix across subsamples and algorithms (and k).
+
+```{r consensus_matrix_ccomb_class}
+# consensus matrix across subsamples and algorithms within k = 3
+cm_k3 <- consensus_matrix(ccomb_class$`3`)
+
+# consensus matrix across subsamples and algorithms within k = 4
+cm_k4 <- consensus_matrix(ccomb_class$`4`)
+
+# consensus matrix across subsamples and algorithms and k
+cm_all <- consensus_matrix(ccomb_class)
+```
 
 A situation might also arise where we initially decided on using 3 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. `consensus_combine()` takes in any number of ensemble objects (e.g. `CC` and `CC2`) and combines the results.
 
