@@ -138,22 +138,22 @@ som_cluster <- function(model, k, method) {
 }
 
 #' Fuzzy C-Means (using best m via validity/performance measures)
+#'
+#' Fuzzifier m is a function of N and D (Equation 5 from ref.). If centers
+#' can't be calculated, use frequently used value of m = 2.
+#'
+#' @references https://academic.oup.com/bioinformatics/article/26/22/2841/227572
 #' @noRd
 cmeans <- function(x, k) {
-  fuzzy <- seq(1.1, 3, by = 0.1) %>%
-    purrr::map(~ e1071::cmeans(x = x, centers = k, m = .x))
-  mbest <- c("xie.beni", "fukuyama.sugeno", "partition.entropy") %>%
-    purrr::map(
-      ~ purrr::map(fuzzy,
-                   function(f) e1071::fclustIndex(y = f, x = x, index = .x)
-      )
-    ) %>%
-    purrr::map_int(which.min) %>%
-    table() %>%
-    which.max() %>%
-    names() %>%
-    as.integer()
-  fuzzy[[mbest]]$cluster
+  N <- nrow(x)
+  D <- ncol(x)
+  m <- 1 + (1418 / N + 22.05) * D ^ (-2) +
+    (12.33 / N + 0.243) * D ^ (-0.0406 * log(N) - 0.1134)
+  fuzzy <- e1071::cmeans(x = x, centers = k, m = m)
+  if (length(fuzzy$cluster) == 0) {
+    fuzzy <- e1071::cmeans(x = x, centers = k, m = 2)
+  }
+  fuzzy$cluster
 }
 
 #' Hierarchical Density-Based Spatial Clustering of Applications with Noise
