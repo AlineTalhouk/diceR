@@ -5,12 +5,12 @@
 \title{Consensus clustering}
 \usage{
 consensus_cluster(data, nk = 2:4, p.item = 0.8, reps = 1000,
-  algorithms = NULL, nmf.method = c("scd", "lee"), nmf.loss = c("mse",
-  "mkl"), xdim = NULL, ydim = NULL, rlen = 200, alpha = c(0.05, 0.01),
-  minPts = 5, distance = "euclidean", prep.data = c("none", "full",
-  "sampled"), scale = TRUE, type = c("conventional", "robust", "tsne",
-  "largevis"), min.var = 1, progress = TRUE, seed.nmf = 123456,
-  seed.data = 1, file.name = NULL, time.saved = FALSE)
+  algorithms = NULL, nmf.method = c("brunet", "lee"), xdim = NULL,
+  ydim = NULL, rlen = 200, alpha = c(0.05, 0.01), minPts = 5,
+  distance = "euclidean", prep.data = c("none", "full", "sampled"),
+  scale = TRUE, type = c("conventional", "robust", "tsne", "largevis"),
+  min.var = 1, progress = TRUE, seed.nmf = 123456, seed.data = 1,
+  file.name = NULL, time.saved = FALSE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -28,12 +28,8 @@ clustering. Must be any number of the following: "nmf", "hc", "diana",
 "km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan". A
 custom clustering algorithm can be used.}
 
-\item{nmf.method}{specify NMF-based algorithms to run. By default both
-"scd" and "lee" algorithms are called. See \code{\link[NNLM:nnmf]{NNLM::nnmf()}} for details.}
-
-\item{nmf.loss}{specify loss function to use for NMF. Either "mse" for mean
-square error (default) or "mkl" for mean KL-divergence. See \code{\link[NNLM:nnmf]{NNLM::nnmf()}}
-for details.}
+\item{nmf.method}{specify NMF-based algorithms to run. By default the
+"brunet" and "lee" algorithms are called. See \code{\link[NMF:nmf]{NMF::nmf()}} for details.}
 
 \item{xdim}{x dimension of the SOM grid}
 
@@ -102,8 +98,8 @@ algorithms, and cluster sizes.
 See examples for how to use custom algorithms and distance functions. The
 default clustering algorithms provided are:
 \itemize{
-\item "nmf": Nonnegative Matrix Factorization (using sequential coordinate-wise
-descent or Lee's multiplicative algorithm; See Note for specifications.)
+\item "nmf": Nonnegative Matrix Factorization (using Kullback-Leibler Divergence
+or Euclidean distance; See Note for specifications.)
 \item "hc": Hierarchical Clustering
 \item "diana": DIvisive ANAlysis Clustering
 \item "km": K-Means Clustering
@@ -122,13 +118,13 @@ with Noise (HDBSCAN)
 The progress bar increments on every unit of \code{reps}.
 }
 \note{
-The \code{nmf.method} options are "scd" for sequential coordinate-wise
-descent and "lee" for Lee's multiplicative algorithm. When "hdbscan" is
-chosen as an algorithm to use, its results are excluded from the rest of
-the consensus clusters. This is because there is no guarantee that the
-cluster assignment will have every sample clustered; more often than not
-there will be noise points or outliers. In addition, the number of distinct
-clusters may not even be equal to \code{nk}.
+The \code{nmf.method} options are "brunet" (Kullback-Leibler Divergence) and
+"lee" (Euclidean distance). When "hdbscan" is chosen as an algorithm to
+use, its results are excluded from the rest of the consensus clusters. This
+is because there is no guarantee that the cluster assignment will have
+every sample clustered; more often than not there will be noise points or
+outliers. In addition, the number of distinct clusters may not even be
+equal to \code{nk}.
 }
 \examples{
 data(hgsc)

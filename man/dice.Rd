@@ -5,12 +5,11 @@
 \title{Diverse Clustering Ensemble}
 \usage{
 dice(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
-  nmf.method = c("scd", "lee"), nmf.loss = c("mse", "mkl"),
-  distance = "euclidean", cons.funs = c("kmodes", "majority", "CSPA",
-  "LCE"), sim.mat = c("cts", "srs", "asrs"), prep.data = c("none", "full",
-  "sampled"), min.var = 1, seed = 1, trim = FALSE, reweigh = FALSE,
-  n = 5, evaluate = TRUE, plot = FALSE, ref.cl = NULL,
-  progress = TRUE)
+  nmf.method = c("brunet", "lee"), distance = "euclidean",
+  cons.funs = c("kmodes", "majority", "CSPA", "LCE"), sim.mat = c("cts",
+  "srs", "asrs"), prep.data = c("none", "full", "sampled"), min.var = 1,
+  seed = 1, trim = FALSE, reweigh = FALSE, n = 5, evaluate = TRUE,
+  plot = FALSE, ref.cl = NULL, progress = TRUE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -33,12 +32,8 @@ user-desired k will override the best k chosen by PAC. Finally, specifying
 "all" will produce consensus results for all k. The "all" method is
 implicitly performed when there is only one k used.}
 
-\item{nmf.method}{specify NMF-based algorithms to run. By default both
-"scd" and "lee" algorithms are called. See \code{\link[NNLM:nnmf]{NNLM::nnmf()}} for details.}
-
-\item{nmf.loss}{specify loss function to use for NMF. Either "mse" for mean
-square error (default) or "mkl" for mean KL-divergence. See \code{\link[NNLM:nnmf]{NNLM::nnmf()}}
-for details.}
+\item{nmf.method}{specify NMF-based algorithms to run. By default the
+"brunet" and "lee" algorithms are called. See \code{\link[NMF:nmf]{NMF::nmf()}} for details.}
 
 \item{distance}{a vector of distance functions. Defaults to "euclidean".
 Other options are given in \code{\link[stats:dist]{stats::dist()}}. A custom distance function can

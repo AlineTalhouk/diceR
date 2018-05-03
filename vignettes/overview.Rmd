@@ -51,7 +51,7 @@ We load an excerpt of an expression data set from TCGA of `r nrow(hgsc)` high gr
 
 The list of clustering algorithms available for use are: 
 
-  - `"nmf"`: Nonnegative Matrix Factorization (using sequential coordinate-wise descent or Lee's multiplicative algorithm)
+  - `"nmf"`: Nonnegative Matrix Factorization (using Kullback-Leibler Divergence or Euclidean distance)
   - `"hc"`: Hierarchical Clustering
   - `"diana"`: DIvisive ANAlysis Clustering
   - `"km"`: K-Means Clustering
