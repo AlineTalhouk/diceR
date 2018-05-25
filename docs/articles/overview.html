@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.0</span>
       </span>
     </div>
 
@@ -68,7 +68,7 @@
 </h1>
             
       
-      <small>Source: <a href="https://github.com/AlineTalhouk/diceR/blob/master/vignettes/overview.Rmd"><code>vignettes/overview.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AlineTalhouk/diceR/blob/master/vignettes/overview.Rmd"><code>vignettes/overview.Rmd</code></a></small>
       <div class="hidden name"><code>overview.Rmd</code></div>
 
     </div>
@@ -98,7 +98,7 @@
 <p>The list of clustering algorithms available for use are:</p>
 <ul>
 <li>
-<code>"nmf"</code>: Nonnegative Matrix Factorization (using sequential coordinate-wise descent or Lee’s multiplicative algorithm)</li>
+<code>"nmf"</code>: Nonnegative Matrix Factorization (using Kullback-Leibler Divergence or Euclidean distance)</li>
 <li>
 <code>"hc"</code>: Hierarchical Clustering</li>
 <li>
@@ -131,7 +131,7 @@
 <li>Connectivity Models: <code>"hc"</code> and <code>"diana"</code> are hierarchical models based on connecting objects using a particular similarity or distance metric.</li>
 <li>Centroid Models: <code>"km"</code> and <code>"pam"</code> uses initial cluster centers calculated based on the mean of the objects, where <code>"pam"</code> restricts the centroid to be an actual object. These models are good for modeling data that produces spherical clusters. <code>"ap"</code> is similar to <code>"pam"</code> because it calculates “exemplars” (like centroids) of the data but is advantageous because initialization of k (number of clusters) is not required.<sup>2</sup><code>"cmeans"</code> is similar to <code>"km"</code> except that points can be assigned to more than one cluster.</li>
 <li>Distribution Models: <code>"gmm"</code> assumes a Gaussian mixture model used by the EM algorithm for clustering.<sup>3</sup> The gain in model complexity is traded with utility since the assumption is quite strong.</li>
-<li>Density Models: <code>"hdbscan"</code> runs hierarchical clustering on the DBSCAN result.<sup>4,5</sup> These models assume that each cluster has high density, so when there are overlapping regions, the algortihms may not be able to separate objects that well.</li>
+<li>Density Models: <code>"hdbscan"</code> runs hierarchical clustering on the DBSCAN result.<sup>4,5</sup> These models assume that each cluster has high density, so when there are overlapping regions, the algorithms may not be able to separate objects that well.</li>
 <li>Subspace Models: <code>"block"</code> clusters both samples and features, so is useful when you want to associate these pairs of cluster entities (e.g. are there functional gene groups that associate with sample subtypes?). Our implementation uses the latent block model.<sup>6</sup>
 </li>
 <li>Neural Models: our implementation of <code>"som"</code> reduces the data to a two-dimensional subspace using a neural network model, before performing hierarchical clustering.<sup>7</sup> A lot of the noise is phased out and cluster stability can be improved from using <code>"hc"</code> alone.</li>
@@ -377,11 +377,19 @@
 </tr>
 </tbody>
 </table>
-<p>One can feed in <code>ccomb_class</code> (instead of <code>CC</code>) into <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code> to obtain a consensus matrix across both subsamples <strong>and</strong> algorithms.</p>
+<p>One can feed in <code>ccomb_class</code> (instead of <code>CC</code>) into <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code> to obtain a consensus matrix across subsamples and algorithms (and k).</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># consensus matrix across subsamples and algorithms within k = 3</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">cm_k3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(ccomb_class<span class="op">$</span><span class="st">`</span><span class="dt">3</span><span class="st">`</span>)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co"># consensus matrix across subsamples and algorithms within k = 4</span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">cm_k4 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(ccomb_class<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>)</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co"># consensus matrix across subsamples and algorithms and k</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8">cm_all &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(ccomb_class)</a></code></pre></div>
 <p>A situation might also arise where we initially decided on using 3 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> takes in any number of ensemble objects (e.g. <code>CC</code> and <code>CC2</code>) and combines the results.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">                         <span class="dt">algorithms =</span> <span class="st">"km"</span>)</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, CC2, <span class="dt">element =</span> <span class="st">"class"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">                         <span class="dt">algorithms =</span> <span class="st">"km"</span>)</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, CC2, <span class="dt">element =</span> <span class="st">"class"</span>)</a></code></pre></div>
 <table style="width:88%;" class="table">
 <caption>Consensus Classes with KM added</caption>
 <colgroup>
@@ -441,7 +449,7 @@
 <a href="#evaluate-trim-and-reweigh-algorithms-with-consensus_evaluate" class="anchor"></a>Evaluate, trim, and reweigh algorithms with <code><a href="../reference/consensus_evaluate.html">consensus_evaluate()</a></code>
 </h3>
 <p>Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between <code>lower</code> (defaults to 0) and <code>upper</code> (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each <code>k</code>, and choose the <code>k</code> with the greatest average PAC. If there <em>is</em> a reference class, <code>k</code> is the number of distinct classes in the reference.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">ccomp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">ccomp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <table class="table">
 <caption>Internal Indices for k = 4 (continued below)</caption>
 <colgroup>
@@ -574,26 +582,26 @@
 <p>We see that the biclustering algorithm is the least ambiguous and also most well-clustered (high compactness and separability).</p>
 <p>Some algorithms perform too poorly to deserve membership in the cluster ensemble. We consider the relative ranks of each algorithm across all internal indices, and compute their sum. All algorithms below a certain quantile for the sum rank are trimmed (removed). By default this quantile is 75%.</p>
 <p>After trimming, we can optionally choose to reweigh the algorithms based on the internal index magnitudes. Of course, we take into account the direction of optimality (higher is better is lower is better). Algorithms reweighed are then fed into the consensus functions. This is done by replicating each algorithm by a scalar factor that is proportional to its weight. For example, if we have two algorithms A and B, and A is given a weight of 80% and B is given a weight of 20%, then we make 4 copies of A and 1 copy of B. To minimize computational time, the total number of copies out of all algorithms has an upper bound of 100. Without reweighing, each algorithm is given equal weight.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">ctrim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">trim =</span> <span class="ot">TRUE</span>, <span class="dt">reweigh =</span> <span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="dv">2</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">str</span>(ctrim, <span class="dt">max.level =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt; List of 5</span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt;  $ k       : int 3</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt;  $ pac     :'data.frame':    2 obs. of  5 variables:</span></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt;   ..$ k              : chr [1:2] "3" "4"</span></a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;   ..$ HC_Euclidean   : num [1:2] 0.487 0.432</span></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:2] 0.248 0.251</span></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:2] 0.215 0.242</span></a>
-<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt;   ..$ KM_Euclidean   : num [1:2] 0.275 0.242</span></a>
-<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt;  $ ii      :List of 2</span></a>
-<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt;   ..$ 3:'data.frame':    4 obs. of  16 variables:</span></a>
-<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;   ..$ 4:'data.frame':    4 obs. of  16 variables:</span></a>
-<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt;  $ ei      : NULL</span></a>
-<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt;  $ trim.obj:List of 5</span></a>
-<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#&gt;   ..$ alg.keep   : chr [1:2] "HC_Euclidean" "KM_Euclidean"</span></a>
-<a class="sourceLine" id="cb14-16" data-line-number="16"><span class="co">#&gt;   ..$ alg.remove : chr [1:2] "PAM_Euclidean" "DIANA_Euclidean"</span></a>
-<a class="sourceLine" id="cb14-17" data-line-number="17"><span class="co">#&gt;   ..$ rank.matrix:List of 1</span></a>
-<a class="sourceLine" id="cb14-18" data-line-number="18"><span class="co">#&gt;   ..$ top.list   :List of 1</span></a>
-<a class="sourceLine" id="cb14-19" data-line-number="19"><span class="co">#&gt;   ..$ E.new      :List of 1</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">ctrim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">trim =</span> <span class="ot">TRUE</span>, <span class="dt">reweigh =</span> <span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">str</span>(ctrim, <span class="dt">max.level =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#&gt; List of 5</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt;  $ k       : int 3</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt;  $ pac     :'data.frame':    2 obs. of  5 variables:</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#&gt;   ..$ k              : chr [1:2] "3" "4"</span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt;   ..$ HC_Euclidean   : num [1:2] 0.487 0.432</span></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:2] 0.248 0.251</span></a>
+<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:2] 0.215 0.242</span></a>
+<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt;   ..$ KM_Euclidean   : num [1:2] 0.275 0.242</span></a>
+<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#&gt;  $ ii      :List of 2</span></a>
+<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt;   ..$ 3:'data.frame':    4 obs. of  16 variables:</span></a>
+<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt;   ..$ 4:'data.frame':    4 obs. of  16 variables:</span></a>
+<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt;  $ ei      : NULL</span></a>
+<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt;  $ trim.obj:List of 5</span></a>
+<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt;   ..$ alg.keep   : chr [1:2] "HC_Euclidean" "KM_Euclidean"</span></a>
+<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt;   ..$ alg.remove : chr [1:2] "PAM_Euclidean" "DIANA_Euclidean"</span></a>
+<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt;   ..$ rank.matrix:List of 1</span></a>
+<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="co">#&gt;   ..$ top.list   :List of 1</span></a>
+<a class="sourceLine" id="cb15-19" data-line-number="19"><span class="co">#&gt;   ..$ E.new      :List of 1</span></a></code></pre></div>
 <p>The return value shows which algorithms were kept, removed (if any), and the trimmed (and potentially reweighed) cluster ensemble.</p>
 </div>
 </div>
@@ -601,26 +609,26 @@
 <h2 class="hasAnchor">
 <a href="#significance-testing" class="anchor"></a>Significance Testing</h2>
 <p>To test whether there are four statistically distinct clusters (k = 4) versus no clusters (k = 1) using the PAM algorithm, we run <code>sigclust</code> with 50 simulations and generate a p-value for this significance test.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">pam_<span class="dv">4</span> &lt;-<span class="st"> </span>ccomb_class2<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>[, <span class="st">"PAM_Euclidean"</span>]</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sigclust.html">sigclust</a></span>(hgsc, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">nsim =</span> <span class="dv">100</span>, <span class="dt">labflag =</span> <span class="dv">0</span>, <span class="dt">label =</span> pam_<span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">co &lt;-<span class="st"> </span><span class="kw">capture.output</span>(<span class="kw">str</span>(sig_obj))</a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="kw">strwrap</span>(co, <span class="dt">width =</span> <span class="dv">80</span>)</a>
-<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt;  [1] "Formal class 'sigclust' [package \"sigclust\"] with 10 slots"               </span></a>
-<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt;  [2] "..@ raw.data : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ..."</span></a>
-<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt;  [3] ".. ..- attr(*, \"dimnames\")=List of 2"                                     </span></a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt;  [4] ".. .. ..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""    </span></a>
-<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#&gt;  [5] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                        </span></a>
-<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt;  [6] ".. .. ..$ : chr [1:50] \"ABAT\" \"ABHD2\" \"ACTB\" \"ACTR2\" ..."           </span></a>
-<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt;  [7] "..@ veigval : num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                     </span></a>
-<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt;  [8] "..@ vsimeigval: num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                   </span></a>
-<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt;  [9] "..@ simbackvar: num 0.42"                                                   </span></a>
-<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt; [10] "..@ icovest : num 2"                                                        </span></a>
-<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt; [11] "..@ nsim : num 100"                                                         </span></a>
-<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt; [12] "..@ simcindex : num [1:100] 0.67 0.634 0.641 0.637 0.606 ..."               </span></a>
-<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="co">#&gt; [13] "..@ pval : num 0.14"                                                        </span></a>
-<a class="sourceLine" id="cb15-19" data-line-number="19"><span class="co">#&gt; [14] "..@ pvalnorm : num 0.163"                                                   </span></a>
-<a class="sourceLine" id="cb15-20" data-line-number="20"><span class="co">#&gt; [15] "..@ xcindex : num 0.63"</span></a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">pam_<span class="dv">4</span> &lt;-<span class="st"> </span>ccomb_class2<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>[, <span class="st">"PAM_Euclidean"</span>]</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sigclust.html">sigclust</a></span>(hgsc, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">nsim =</span> <span class="dv">100</span>, <span class="dt">labflag =</span> <span class="dv">0</span>, <span class="dt">label =</span> pam_<span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4">co &lt;-<span class="st"> </span><span class="kw">capture.output</span>(<span class="kw">str</span>(sig_obj))</a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="kw">strwrap</span>(co, <span class="dt">width =</span> <span class="dv">80</span>)</a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt;  [1] "Formal class 'sigclust' [package \"sigclust\"] with 10 slots"               </span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt;  [2] "..@ raw.data : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ..."</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt;  [3] ".. ..- attr(*, \"dimnames\")=List of 2"                                     </span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt;  [4] ".. .. ..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""    </span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt;  [5] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                        </span></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#&gt;  [6] ".. .. ..$ : chr [1:50] \"ABAT\" \"ABHD2\" \"ACTB\" \"ACTR2\" ..."           </span></a>
+<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="co">#&gt;  [7] "..@ veigval : num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                     </span></a>
+<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="co">#&gt;  [8] "..@ vsimeigval: num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                   </span></a>
+<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="co">#&gt;  [9] "..@ simbackvar: num 0.42"                                                   </span></a>
+<a class="sourceLine" id="cb16-15" data-line-number="15"><span class="co">#&gt; [10] "..@ icovest : num 2"                                                        </span></a>
+<a class="sourceLine" id="cb16-16" data-line-number="16"><span class="co">#&gt; [11] "..@ nsim : num 100"                                                         </span></a>
+<a class="sourceLine" id="cb16-17" data-line-number="17"><span class="co">#&gt; [12] "..@ simcindex : num [1:100] 0.67 0.634 0.641 0.637 0.606 ..."               </span></a>
+<a class="sourceLine" id="cb16-18" data-line-number="18"><span class="co">#&gt; [13] "..@ pval : num 0.14"                                                        </span></a>
+<a class="sourceLine" id="cb16-19" data-line-number="19"><span class="co">#&gt; [14] "..@ pvalnorm : num 0.163"                                                   </span></a>
+<a class="sourceLine" id="cb16-20" data-line-number="20"><span class="co">#&gt; [15] "..@ xcindex : num 0.63"</span></a></code></pre></div>
 <p>The p-value is 0.14, indicating we do not have sufficient evidence to conclude there are four distinct clusters. Note that we did not use the full <code>hgsc</code> data set in this example, so the underlying biological mechanisms may not be fully captured.</p>
 </div>
 <div id="references" class="section level2">

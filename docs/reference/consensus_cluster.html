@@ -25,6 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="Consensus clustering — consensus_cluster" />
 
 <meta property="og:description" content="Runs consensus clustering across subsamples of the data, clustering
@@ -39,8 +42,6 @@ algorithms, and cluster sizes." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
-
-
 
 
   </head>
@@ -58,7 +59,7 @@ algorithms, and cluster sizes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.0</span>
       </span>
     </div>
 
@@ -95,22 +96,24 @@ algorithms, and cluster sizes." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Consensus clustering</h1>
-    <small>Source: <a href='https://github.com/AlineTalhouk/diceR/blob/master/R/consensus_cluster.R'><code>R/consensus_cluster.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/AlineTalhouk/diceR/blob/master/R/consensus_cluster.R'><code>R/consensus_cluster.R</code></a></small>
     <div class="hidden name"><code>consensus_cluster.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Runs consensus clustering across subsamples of the data, clustering
 algorithms, and cluster sizes.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>consensus_cluster</span>(<span class='no'>data</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>4</span>, <span class='kw'>p.item</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"scd"</span>, <span class='st'>"lee"</span>), <span class='kw'>nmf.loss</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"mse"</span>,
-  <span class='st'>"mkl"</span>), <span class='kw'>xdim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ydim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rlen</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.01</span>),
-  <span class='kw'>minPts</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='st'>"euclidean"</span>, <span class='kw'>prep.data</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"none"</span>, <span class='st'>"full"</span>,
-  <span class='st'>"sampled"</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"conventional"</span>, <span class='st'>"robust"</span>, <span class='st'>"tsne"</span>,
-  <span class='st'>"largevis"</span>), <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>seed.nmf</span> <span class='kw'>=</span> <span class='fl'>123456</span>,
-  <span class='kw'>seed.data</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>file.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time.saved</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"brunet"</span>, <span class='st'>"lee"</span>), <span class='kw'>xdim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ydim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rlen</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.01</span>), <span class='kw'>minPts</span> <span class='kw'>=</span> <span class='fl'>5</span>,
+  <span class='kw'>distance</span> <span class='kw'>=</span> <span class='st'>"euclidean"</span>, <span class='kw'>prep.data</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"none"</span>, <span class='st'>"full"</span>, <span class='st'>"sampled"</span>),
+  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"conventional"</span>, <span class='st'>"robust"</span>, <span class='st'>"tsne"</span>, <span class='st'>"largevis"</span>),
+  <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>seed.nmf</span> <span class='kw'>=</span> <span class='fl'>123456</span>, <span class='kw'>seed.data</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>file.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time.saved</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,14 +145,8 @@ custom clustering algorithm can be used.</p></td>
     </tr>
     <tr>
       <th>nmf.method</th>
-      <td><p>specify NMF-based algorithms to run. By default both
-"scd" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NNLM/topics/nnmf'>NNLM::nnmf()</a></code> for details.</p></td>
-    </tr>
-    <tr>
-      <th>nmf.loss</th>
-      <td><p>specify loss function to use for NMF. Either "mse" for mean
-square error (default) or "mkl" for mean KL-divergence. See <code><a href='http://www.rdocumentation.org/packages/NNLM/topics/nnmf'>NNLM::nnmf()</a></code>
-for details.</p></td>
+      <td><p>specify NMF-based algorithms to run. By default the
+"brunet" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NMF/topics/nmf'>NMF::nmf()</a></code> for details.</p></td>
     </tr>
     <tr>
       <th>xdim</th>
@@ -246,8 +243,8 @@ attributes: the proportion of outliers and the number of clusters.</p>
 
     <p>See examples for how to use custom algorithms and distance functions. The
 default clustering algorithms provided are:</p><ul>
-<li><p>"nmf": Nonnegative Matrix Factorization (using sequential coordinate-wise
-descent or Lee's multiplicative algorithm; See Note for specifications.)</p></li>
+<li><p>"nmf": Nonnegative Matrix Factorization (using Kullback-Leibler Divergence
+or Euclidean distance; See Note for specifications.)</p></li>
 <li><p>"hc": Hierarchical Clustering</p></li>
 <li><p>"diana": DIvisive ANAlysis Clustering</p></li>
 <li><p>"km": K-Means Clustering</p></li>
@@ -266,13 +263,13 @@ with Noise (HDBSCAN)</p></li>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The <code>nmf.method</code> options are "scd" for sequential coordinate-wise
-descent and "lee" for Lee's multiplicative algorithm. When "hdbscan" is
-chosen as an algorithm to use, its results are excluded from the rest of
-the consensus clusters. This is because there is no guarantee that the
-cluster assignment will have every sample clustered; more often than not
-there will be noise points or outliers. In addition, the number of distinct
-clusters may not even be equal to <code>nk</code>.</p>
+    <p>The <code>nmf.method</code> options are "brunet" (Kullback-Leibler Divergence) and
+"lee" (Euclidean distance). When "hdbscan" is chosen as an algorithm to
+use, its results are excluded from the rest of the consensus clusters. This
+is because there is no guarantee that the cluster assignment will have
+every sample clustered; more often than not there will be noise points or
+outliers. In addition, the number of distinct clusters may not even be
+equal to <code>nk</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
