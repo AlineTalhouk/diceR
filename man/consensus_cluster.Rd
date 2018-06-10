@@ -5,12 +5,13 @@
 \title{Consensus clustering}
 \usage{
 consensus_cluster(data, nk = 2:4, p.item = 0.8, reps = 1000,
-  algorithms = NULL, nmf.method = c("brunet", "lee"), xdim = NULL,
-  ydim = NULL, rlen = 200, alpha = c(0.05, 0.01), minPts = 5,
-  distance = "euclidean", prep.data = c("none", "full", "sampled"),
-  scale = TRUE, type = c("conventional", "robust", "tsne", "largevis"),
-  min.var = 1, progress = TRUE, seed.nmf = 123456, seed.data = 1,
-  file.name = NULL, time.saved = FALSE)
+  algorithms = NULL, nmf.method = c("brunet", "lee"),
+  hc.method = "average", xdim = NULL, ydim = NULL, rlen = 200,
+  alpha = c(0.05, 0.01), minPts = 5, distance = "euclidean",
+  prep.data = c("none", "full", "sampled"), scale = TRUE,
+  type = c("conventional", "robust", "tsne", "largevis"), min.var = 1,
+  progress = TRUE, seed.nmf = 123456, seed.data = 1, file.name = NULL,
+  time.saved = FALSE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -30,6 +31,9 @@ custom clustering algorithm can be used.}
 
 \item{nmf.method}{specify NMF-based algorithms to run. By default the
 "brunet" and "lee" algorithms are called. See \code{\link[NMF:nmf]{NMF::nmf()}} for details.}
+
+\item{hc.method}{agglomeration method for hierarchical clustering. The
+the "average" method is used by default. See\code{\link[stats:hclust]{stats::hclust()}} for details.}
 
 \item{xdim}{x dimension of the SOM grid}
 

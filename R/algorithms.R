@@ -92,7 +92,7 @@ block <- function(x, k) {
 
 #' Self-Organizing Maps
 #' @noRd
-som <- function(x, k, xdim, ydim, rlen, alpha, method = "average") {
+som <- function(x, k, xdim, ydim, rlen, alpha, method) {
   x %>%
     purrr::when(is.matrix(.) ~ ., ~ as.matrix(.)) %>%
     som_train(xdim = xdim, ydim = ydim, rlen = rlen, alpha = alpha) %>%
@@ -119,9 +119,7 @@ som_train <- function(x, xdim, ydim, rlen, alpha, topo = "hexagonal") {
 #' @noRd
 som_cluster <- function(model, k, method) {
   # Get distance matrix, use hc to cluster the codebook vectors
-  cl <- hc(stats::dist(kohonen::getCodes(model, 1)),
-           k = k,
-           method = method)
+  cl <- hc(stats::dist(kohonen::getCodes(model, 1)), k = k, method = method)
   pred <- stats::predict(model)$unit.classif
   cl[pred]
 }
