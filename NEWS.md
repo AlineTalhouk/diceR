@@ -1,5 +1,9 @@
 # diceR 0.5.0.9000
 
+* Add parameter `hc.method` in `dice` and `consensus_cluster` to pass to `method` parameter in `stats::hclust` (@JakeNel28, #130)
+
+* Remove dependencies on `largeVis`: package will be archived
+
 # diceR 0.5.0
 
 * Revert back to using `NMF` since `NNLM` has been archived and `NMF` is back in active maintenance.
