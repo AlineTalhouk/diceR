@@ -1,3 +1,5 @@
+# diceR 0.5.1
+
 # diceR 0.5.0.9000
 
 * Add parameter `hc.method` in `dice` and `consensus_cluster` to pass to `method` parameter in `stats::hclust` (@JakeNel28, #130)
