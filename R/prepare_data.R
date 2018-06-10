@@ -6,17 +6,14 @@
 #' variables with low signal and (optionally) scales before consensus
 #' clustering. Or, we can use t-SNE dimension reduction to transform the data to
 #' just two variables. This lower-dimensional embedding allows algorithms such
-#' as hierarchical clustering to achieve greater performance. The largeVis
-#' algorithm is well-suited for visualizing datasets of high dimension by
-#' reducing to a lower-dimensional representation.
+#' as hierarchical clustering to achieve greater performance.
 #'
 #' @param data data matrix with rows as samples and columns as variables
 #' @param scale logical; should the data be centered and scaled?
 #' @param type if we use "conventional" measures (default), then the mean and
 #'   standard deviation are used for centering and scaling, respectively. If
 #'   "robust" measures are specified, the median and median absolute deviation
-#'   (MAD) are used. Alternatively, we can apply "tsne" or "largevis" as other
-#'   methods of dimension reduction.
+#'   (MAD) are used. Alternatively, we can apply "tsne" for dimension reduction.
 #' @param min.var minimum variability measure threshold used to filter the
 #'   feature space for only highly variable features. Only features with a
 #'   minimum variability measure across all samples greater than `min.var` will
@@ -32,7 +29,7 @@
 #' dim(x)
 #' dim(x.prep)
 prepare_data <- function(data, scale = TRUE,
-                         type = c("conventional", "robust", "tsne", "largevis"),
+                         type = c("conventional", "robust", "tsne"),
                          min.var = 1) {
   type <- match.arg(type)
   if (type == "tsne") {
@@ -41,16 +38,6 @@ prepare_data <- function(data, scale = TRUE,
         as.matrix() %>%
         Rtsne::Rtsne(perplexity = 5, max_iter = 500) %>%
         magrittr::extract2("Y") %>%
-        magrittr::set_rownames(rownames(data))
-    )
-  } else if (type == "largevis") {
-    return(
-      data %>%
-        t() %>%
-        largeVis::largeVis() %>%
-        suppressWarnings() %>%
-        magrittr::extract2("coords") %>%
-        t() %>%
         magrittr::set_rownames(rownames(data))
     )
   }
