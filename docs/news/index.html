@@ -21,14 +21,17 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
 
 <meta property="og:title" content="Changelog" />
+
 
 
 <!-- mathjax -->
@@ -55,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.1</span>
       </span>
     </div>
 
@@ -95,6 +98,15 @@
       <small>Source: <a href='https://github.com/AlineTalhouk/diceR/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="dicer-0-5-1" class="section level1">
+<h1 class="page-header">
+<a href="#dicer-0-5-1" class="anchor"></a>diceR 0.5.1<small> Unreleased </small>
+</h1>
+<ul>
+<li><p>Add parameter <code>hc.method</code> in <code>dice</code> and <code>consensus_cluster</code> to pass to <code>method</code> parameter in <code><a href="http://www.rdocumentation.org/packages/stats/topics/hclust">stats::hclust</a></code> (<a href='http://github.com/JakeNel28'>@JakeNel28</a>, <a href='https://github.com/AlineTalhouk/diceR/issues/130'>#130</a>)</p></li>
+<li><p>Remove dependencies on <code>largeVis</code>: package will be archived</p></li>
+</ul>
+</div>
     <div id="dicer-0-5-0" class="section level1">
 <h1 class="page-header">
 <a href="#dicer-0-5-0" class="anchor"></a>diceR 0.5.0<small> 2018-05-05 </small>
@@ -174,6 +186,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#dicer-0-5-1">0.5.1</a></li>
         <li><a href="#dicer-0-5-0">0.5.0</a></li>
         <li><a href="#dicer-0-4-0">0.4.0</a></li>
         <li><a href="#dicer-0-3-2">0.3.2</a></li>

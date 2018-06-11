@@ -21,9 +21,11 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -33,6 +35,7 @@
 <meta property="og:description" content="Runs consensus clustering across subsamples of the data, clustering
 algorithms, and cluster sizes." />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -59,7 +62,7 @@ algorithms, and cluster sizes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.1</span>
       </span>
     </div>
 
@@ -108,12 +111,13 @@ algorithms, and cluster sizes.</p>
     </div>
 
     <pre class="usage"><span class='fu'>consensus_cluster</span>(<span class='no'>data</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>4</span>, <span class='kw'>p.item</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"brunet"</span>, <span class='st'>"lee"</span>), <span class='kw'>xdim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ydim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rlen</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.01</span>), <span class='kw'>minPts</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>distance</span> <span class='kw'>=</span> <span class='st'>"euclidean"</span>, <span class='kw'>prep.data</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"none"</span>, <span class='st'>"full"</span>, <span class='st'>"sampled"</span>),
-  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"conventional"</span>, <span class='st'>"robust"</span>, <span class='st'>"tsne"</span>, <span class='st'>"largevis"</span>),
-  <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>seed.nmf</span> <span class='kw'>=</span> <span class='fl'>123456</span>, <span class='kw'>seed.data</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>file.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time.saved</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nmf.method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"brunet"</span>, <span class='st'>"lee"</span>),
+  <span class='kw'>hc.method</span> <span class='kw'>=</span> <span class='st'>"average"</span>, <span class='kw'>xdim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ydim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rlen</span> <span class='kw'>=</span> <span class='fl'>200</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.01</span>), <span class='kw'>minPts</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='st'>"euclidean"</span>,
+  <span class='kw'>prep.data</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"none"</span>, <span class='st'>"full"</span>, <span class='st'>"sampled"</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"conventional"</span>, <span class='st'>"robust"</span>, <span class='st'>"tsne"</span>), <span class='kw'>min.var</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>seed.nmf</span> <span class='kw'>=</span> <span class='fl'>123456</span>, <span class='kw'>seed.data</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>file.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>time.saved</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,6 +151,11 @@ custom clustering algorithm can be used.</p></td>
       <th>nmf.method</th>
       <td><p>specify NMF-based algorithms to run. By default the
 "brunet" and "lee" algorithms are called. See <code><a href='http://www.rdocumentation.org/packages/NMF/topics/nmf'>NMF::nmf()</a></code> for details.</p></td>
+    </tr>
+    <tr>
+      <th>hc.method</th>
+      <td><p>agglomeration method for hierarchical clustering. The
+the "average" method is used by default. See<code><a href='http://www.rdocumentation.org/packages/stats/topics/hclust'>stats::hclust()</a></code> for details.</p></td>
     </tr>
     <tr>
       <th>xdim</th>
@@ -191,8 +200,7 @@ dataset, or "none" (default).</p></td>
       <td><p>if we use "conventional" measures (default), then the mean and
 standard deviation are used for centering and scaling, respectively. If
 "robust" measures are specified, the median and median absolute deviation
-(MAD) are used. Alternatively, we can apply "tsne" or "largevis" as other
-methods of dimension reduction.</p></td>
+(MAD) are used. Alternatively, we can apply "tsne" for dimension reduction.</p></td>
     </tr>
     <tr>
       <th>min.var</th>
