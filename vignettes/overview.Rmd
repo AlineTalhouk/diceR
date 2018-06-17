@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-Cluster analysis is a way of "slicing and dicing" data to allow the grouping together of similar entities and the separation of dissimilar ones. Issues arise due to the existence of a diverse number of clustering algorithms, each with different techniques and inputs, and with no universally optimal methodology. Thus, a framework for cluster analysis and validation methods are needed. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels. This ensures that the data has been considered from several angles and using a variety of methods. We have currently implemented about 15 clustering algorithms, and we provide a simple framework to add additional algorithms (see `example("consensus_cluster")`). Although results are dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering and select those that are most consistent with the data.
+Cluster analysis is a way of "slicing and dicing" data to allow the grouping together of similar entities and the separation of dissimilar ones. Issues arise due to the existence of a diverse number of clustering algorithms, each with different techniques and inputs, and with no universally optimal methodology. Thus, a framework for cluster analysis and validation methods are needed. Our approach is to use cluster ensembles from a diverse set of algorithms. This ensures that the data has been considered from several angles and using a variety of methods. We have currently implemented about 15 clustering algorithms, and we provide a simple framework to add additional algorithms (see `example("consensus_cluster")`). Although results are dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering outputs and select those that are most consistent with the data.
 
 You can install `diceR` from CRAN with:
 
@@ -77,7 +77,7 @@ The clustering algorithms can be categorized under different models or paradigms
   - Subspace Models: `"block"` clusters both samples and features, so is useful when you want to associate these pairs of cluster entities (e.g. are there functional gene groups that associate with sample subtypes?). Our implementation uses the latent block model.^6^
   - Neural Models: our implementation of `"som"` reduces the data to a two-dimensional subspace using a neural network model, before performing hierarchical clustering.^7^ A lot of the noise is phased out and cluster stability can be improved from using `"hc"` alone.
   - Spectral Clustering: Similar to `"som"`, `"sc"` also performs dimensionality reduction before clustering, but instead uses eigenvectors of a kernel matrix.^8^ We use a radial-basis kernel function in the package.
-  - Non-negative Matrix Factorization: the computational complexity with `"nmf"` is doubled compared to other algorithms because data manipulations need to performed to transform the input data into a non-negative matrix. Otherwise, NMF has a natural clustering result that can be used to group together samples and/or features.^9^
+  - Non-negative Matrix Factorization: the computational complexity with `"nmf"` is doubled compared to other algorithms because data manipulations need to be performed to transform the input data into a non-negative matrix. Otherwise, NMF has a natural clustering result that can be used to group together samples and/or features.^9^
 
 ## Distance Measures
 
