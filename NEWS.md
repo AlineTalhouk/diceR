@@ -1,5 +1,7 @@
 # diceR 0.5.1.9000
 
+* Fixed bug where scaled matrix using the "robust" method in `prepare_data()` was nested in the `data` element (@AlineTalhouk, #134)
+
 # diceR 0.5.1
 
 * Add parameter `hc.method` in `dice` and `consensus_cluster` to pass to `method` parameter in `stats::hclust` (@JakeNel28, #130)

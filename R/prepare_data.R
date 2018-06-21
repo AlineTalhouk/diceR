@@ -48,7 +48,7 @@ prepare_data <- function(data, scale = TRUE,
   if (scale) {
     dat <- switch(type,
                   conventional = scale(dat),
-                  robust = quantable::robustscale(dat))
+                  robust = quantable::robustscale(dat)$data)
   }
   dat
 }
