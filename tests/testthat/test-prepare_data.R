@@ -12,5 +12,5 @@ test_that("conventional and robust options reduce dimension but center/scale", {
   dat_con <- prepare_data(hgsc, type = "conventional")
   dat_rob <- prepare_data(hgsc, type = "robust")
   expect_lte(ncol(dat_con), ncol(hgsc))
-  expect_lte(ncol(dat_rob$data), ncol(hgsc))
+  expect_lte(ncol(dat_rob), ncol(hgsc))
 })
