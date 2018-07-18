@@ -33,7 +33,7 @@ Imports:
     clusterCrit,
     clValid,
     dbscan,
-    dplyr,
+    dplyr (>= 0.7.5),
     e1071,
     flux,
     ggplot2,
