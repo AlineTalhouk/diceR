@@ -20,7 +20,6 @@ before_install: |1
      CXX11=g++-6
 
 r_packages:
-  - RcppArmadillo
   - RcppProgress
 
 addons:
