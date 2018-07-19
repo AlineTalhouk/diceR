@@ -11,6 +11,23 @@ r:
   - release
   - devel
 
+before_install: |1
+     mkdir ~/.R
+     cat <<EOF > ~/.R/Makevars
+     CC=gcc-6
+     CXX=g++-6
+     CXX1X=g++-6
+     CXX11=g++-6
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-6
+      - g++-6
+      - gfortran-6
+
 after_success:
   - Rscript -e 'covr::codecov(line_exclusions = list("R/zzz.R"))'
 
