@@ -19,9 +19,6 @@ before_install: |1
      CXX1X=g++-6
      CXX11=g++-6
 
-r_packages:
-  - RcppProgress
-
 addons:
   apt:
     sources:
