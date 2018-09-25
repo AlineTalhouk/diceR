@@ -49,3 +49,4 @@ Other imputation functions: \code{\link{impute_knn}}
 \author{
 Aline Talhouk
 }
+\concept{imputation functions}

@@ -5,7 +5,8 @@
 \title{Evaluate, trim, and reweigh algorithms}
 \usage{
 consensus_evaluate(data, ..., cons.cl = NULL, ref.cl = NULL,
-  k.method = NULL, plot = FALSE, trim = FALSE, reweigh = FALSE, n = 5)
+  k.method = NULL, plot = FALSE, trim = FALSE, reweigh = FALSE,
+  n = 5)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}

@@ -38,3 +38,4 @@ Other imputation functions: \code{\link{impute_missing}}
 \author{
 Aline Talhouk
 }
+\concept{imputation functions}

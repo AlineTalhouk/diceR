@@ -7,12 +7,12 @@
 \title{diceR: Diverse Cluster Ensemble in R}
 \description{
 Performs cluster analysis using an ensemble clustering framework,
-Chiu & Talhouk (2018) <doi:10.1186/s12859-017-1996-y>.
-Results from a diverse set of algorithms are pooled together using methods
-such as majority voting, K-Modes, LinkCluE, and CSPA. There are options to
-compare cluster assignments across algorithms using internal and external
-indices, visualizations such as heatmaps, and significance testing for the
-existence of clusters.
+    Chiu & Talhouk (2018) <doi:10.1186/s12859-017-1996-y>.
+    Results from a diverse set of algorithms are pooled together using methods
+    such as majority voting, K-Modes, LinkCluE, and CSPA. There are options to
+    compare cluster assignments across algorithms using internal and external
+    indices, visualizations such as heatmaps, and significance testing for the
+    existence of clusters.
 }
 \seealso{
 Useful links:
