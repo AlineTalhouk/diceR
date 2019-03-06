@@ -1,8 +1,8 @@
 Type: Package
 Package: diceR
 Title: Diverse Cluster Ensemble in R
-Version: 0.5.1.9000
-Date: 2018-06-10
+Version: 0.5.2
+Date: 2019-03-06
 Authors@R: 
     c(person(given = "Derek",
              family = "Chiu",
