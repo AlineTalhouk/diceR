@@ -29,7 +29,7 @@ addons:
       - gfortran-6
 
 after_success:
-  - Rscript -e 'covr::codecov(line_exclusions = list("R/zzz.R"))'
+  - Rscript -e 'covr::codecov()'
 
 notifications:
   email:
