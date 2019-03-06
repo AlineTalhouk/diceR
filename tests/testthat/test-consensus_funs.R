@@ -16,6 +16,7 @@ test_that("k modes works with or without missing", {
   x <- array(rep(c(rep(1, 10), rep(2, 10), rep(3, 10)), times = 5), c(30, 6, 5))
   xf <- x
   dim(xf) <- c(30, 30)
+  suppressWarnings(RNGversion("3.5.0"))
   set.seed(1)
   kmo.old <- klaR::kmodes(xf, 3)$cluster
   kmo.new <- k_modes(x)
@@ -27,6 +28,7 @@ test_that("k modes works with or without missing", {
 })
 
 test_that("k modes only clusters if there are multiple assignment vectors", {
+  suppressWarnings(RNGversion("3.5.0"))
   set.seed(1)
   E <- matrix(sample(seq_len(6), 100, replace = TRUE), ncol = 1)
   expect_equal(E, unname(as.matrix(k_modes(E))))
