@@ -289,7 +289,7 @@ choose_k <- function(ref.cl, k.method, pac) {
                           as.numeric()) %>%
       as.integer() %>%
       min()
-  } else if (nrow(pac) == 1 || k.method == "all") {
+  } else if (any(nrow(pac) == 1 | k.method == "all")) {
     k <- pac$k
   } else if (purrr::is_scalar_integer(k.method) ||
              purrr::is_scalar_double(k.method)) {
