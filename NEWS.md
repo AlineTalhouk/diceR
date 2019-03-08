@@ -1,5 +1,7 @@
 # diceR 0.5.2
 
+* Fix `length > 1 in coercion to logical` error in `consensus_evaluate()` due to comparisons using `||` operator
+
 * Add `suppressWarnings(RNGversion("3.5.0"))` before call to `set.seed()` in examples, tests, and vignette to use old RNG sampling
 
 * Use `.covrignore` to exclude `zzz.R` from being considered in code coverage

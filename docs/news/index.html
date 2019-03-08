@@ -105,6 +105,7 @@
 <a href="#dicer-052" class="anchor"></a>diceR 0.5.2<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Fix <code>length &gt; 1 in coercion to logical</code> error in <code><a href="../reference/consensus_evaluate.html">consensus_evaluate()</a></code> due to comparisons using <code>||</code> operator</p></li>
 <li><p>Add <code><a href="https://www.rdocumentation.org/packages/base/topics/warning">suppressWarnings(RNGversion("3.5.0"))</a></code> before call to <code><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed()</a></code> in examples, tests, and vignette to use old RNG sampling</p></li>
 <li><p>Use <code>.covrignore</code> to exclude <code>zzz.R</code> from being considered in code coverage</p></li>
 <li><p>Use <code>dplyr</code> version &gt;= 0.7.5 to ensure <code>bind_rows()</code> works</p></li>
