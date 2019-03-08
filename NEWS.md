@@ -1,3 +1,5 @@
+# diceR (development version)
+
 # diceR 0.5.2
 
 * Fix `length > 1 in coercion to logical` error in `consensus_evaluate()` due to comparisons using `||` operator
