@@ -19,6 +19,7 @@
 #' @export
 #'
 #' @examples
+#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
 #'               FALSE)

@@ -5,8 +5,8 @@
 #'
 #' See examples for how to use custom algorithms and distance functions. The
 #' default clustering algorithms provided are:
-#' * "nmf": Nonnegative Matrix Factorization (using sequential coordinate-wise
-#'   descent or Lee's multiplicative algorithm; See Note for specifications.)
+#' * "nmf": Nonnegative Matrix Factorization (using Kullback-Leibler Divergence
+#' or Euclidean distance; See Note for specifications.)
 #' * "hc": Hierarchical Clustering
 #' * "diana": DIvisive ANAlysis Clustering
 #' * "km": K-Means Clustering
@@ -23,13 +23,13 @@
 #'
 #' The progress bar increments on every unit of `reps`.
 #'
-#' @note The `nmf.method` options are "scd" for sequential coordinate-wise
-#'   descent and "lee" for Lee's multiplicative algorithm. When "hdbscan" is
-#'   chosen as an algorithm to use, its results are excluded from the rest of
-#'   the consensus clusters. This is because there is no guarantee that the
-#'   cluster assignment will have every sample clustered; more often than not
-#'   there will be noise points or outliers. In addition, the number of distinct
-#'   clusters may not even be equal to `nk`.
+#' @note The `nmf.method` options are "brunet" (Kullback-Leibler Divergence) and
+#'   "lee" (Euclidean distance). When "hdbscan" is chosen as an algorithm to
+#'   use, its results are excluded from the rest of the consensus clusters. This
+#'   is because there is no guarantee that the cluster assignment will have
+#'   every sample clustered; more often than not there will be noise points or
+#'   outliers. In addition, the number of distinct clusters may not even be
+#'   equal to `nk`.
 #'
 #' @param data data matrix with rows as samples and columns as variables
 #' @param nk number of clusters (k) requested; can specify a single integer or a
@@ -41,11 +41,10 @@
 #'   clustering. Must be any number of the following: "nmf", "hc", "diana",
 #'   "km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan". A
 #'   custom clustering algorithm can be used.
-#' @param nmf.method specify NMF-based algorithms to run. By default both
-#'   "scd" and "lee" algorithms are called. See [NNLM::nnmf()] for details.
-#' @param nmf.loss specify loss function to use for NMF. Either "mse" for mean
-#'   square error (default) or "mkl" for mean KL-divergence. See [NNLM::nnmf()]
-#'   for details.
+#' @param nmf.method specify NMF-based algorithms to run. By default the
+#'   "brunet" and "lee" algorithms are called. See [NMF::nmf()] for details.
+#' @param hc.method agglomeration method for hierarchical clustering. The
+#'   the "average" method is used by default. See[stats::hclust()] for details.
 #' @param xdim x dimension of the SOM grid
 #' @param ydim y dimension of the SOM grid
 #' @param rlen the number of times the complete data set will be presented to
@@ -102,19 +101,17 @@
 #' str(cc)
 consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               algorithms = NULL,
-                              nmf.method = c("scd", "lee"),
-                              nmf.loss = c("mse", "mkl"),
+                              nmf.method = c("brunet", "lee"),
+                              hc.method = "average",
                               xdim = NULL, ydim = NULL, rlen = 200,
                               alpha = c(0.05, 0.01), minPts = 5,
                               distance = "euclidean",
                               prep.data = c("none", "full", "sampled"),
                               scale = TRUE,
-                              type = c("conventional", "robust", "tsne",
-                                       "largevis"),
+                              type = c("conventional", "robust", "tsne"),
                               min.var = 1, progress = TRUE,
                               seed.nmf = 123456, seed.data = 1,
                               file.name = NULL, time.saved = FALSE) {
-  nmf.loss <- match.arg(nmf.loss)
   prep.data <- match.arg(prep.data)
   if (prep.data == "full")
     data <- prepare_data(data, scale = scale, type = type, min.var = min.var)
@@ -140,9 +137,10 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   # Argument lists: Common, NMF, Distance, Other
   cargs <- dplyr::lst(data, nk, p.item, reps, seed.data, prep.data, scale, type,
                       min.var, pb, lalg, n)
-  nargs <- dplyr::lst(algs = algs$NALG, nmf.method, nmf.loss, seed.nmf)
-  dargs <- dplyr::lst(algs = algs$DALG, distance)
-  oargs <- dplyr::lst(algs = algs$OALG, xdim, ydim, rlen, alpha, minPts)
+  nargs <- dplyr::lst(algs = algs$NALG, nmf.method, seed.nmf)
+  dargs <- dplyr::lst(algs = algs$DALG, distance, hc.method)
+  oargs <- dplyr::lst(algs = algs$OALG, xdim, ydim, rlen, alpha, minPts,
+                      hc.method)
   args <- purrr::map(list(nargs, dargs, oargs), ~ c(cargs, .))
 
   # Run cc on all algorithms, combine on 3rd dim
@@ -170,7 +168,7 @@ cc <- function(fun, args) {
 
 #' Cluster NMF-based algorithms
 #' @noRd
-cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, nmf.loss, seed.nmf,
+cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
                    seed.data, prep.data, scale, type, min.var, pb, lalg, n) {
   alg <- paste(toupper(algs), Hmisc::capitalize(nmf.method), sep = "_")
   arr <- init_array(data, reps, alg, nk)
@@ -192,8 +190,7 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, nmf.loss, seed.nmf,
           pb$tick(tokens = list(num = j, den = sum(lalg), alg = alg[j],
                                 k = nk[k]))
         }
-        arr[ind.new, i, j, k] <-
-          nmf(x, nk[k], nmf.method[j], nmf.loss, seed.nmf)
+        arr[ind.new, i, j, k] <- nmf(x, nk[k], nmf.method[j], seed.nmf)
       }
     }
   }
@@ -202,8 +199,8 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, nmf.loss, seed.nmf,
 
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
-cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
-                    prep.data, scale, type, min.var, pb, lalg, n) {
+cc_dist <- function(data, nk, p.item, reps, algs, distance, hc.method,
+                    seed.data, prep.data, scale, type, min.var, pb, lalg, n) {
   alg <- paste(rep(toupper(algs), each = length(distance)),
                rep(Hmisc::capitalize(distance), length(algs)),
                sep = "_")
@@ -225,7 +222,11 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
             pb$tick(tokens = list(num = j + lalg["NALG"], den = sum(lalg),
                                   alg = alg[a], k = nk[k]))
           }
-          arr[ind.new, i, a, k] <- get(algs[j])(dists, nk[k]) # custom
+          if (algs[j] == "hc") {
+            arr[ind.new, i, a, k] <- get(algs[j])(dists, nk[k], hc.method)
+          } else {
+            arr[ind.new, i, a, k] <- get(algs[j])(dists, nk[k])
+          }
         }
       }
     }
@@ -236,8 +237,8 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, seed.data,
 #' Cluster other algorithms
 #' @noRd
 cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
-                     minPts, seed.data, prep.data, scale, type, min.var, pb,
-                     lalg, n) {
+                     minPts, hc.method, seed.data, prep.data, scale, type,
+                     min.var, pb, lalg, n) {
   alg <- toupper(algs)
   arr <- init_array(data, reps, alg, nk)
 
@@ -260,7 +261,7 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
                  sc = sc(x, nk[k]),
                  gmm = gmm(x, nk[k]),
                  block = block(x, nk[k]),
-                 som = som(x, nk[k], xdim, ydim, rlen, alpha),
+                 som = som(x, nk[k], xdim, ydim, rlen, alpha, hc.method),
                  cmeans = cmeans(x, nk[k]),
                  hdbscan = hdbscan(x, minPts)
           )

@@ -15,6 +15,7 @@
 #' @export
 #'
 #' @examples
+#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' E <- matrix(rep(sample(1:4, 800, replace = TRUE)), nrow = 100)
 #' CTS <- cts(E = E, dc = 0.8)

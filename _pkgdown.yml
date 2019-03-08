@@ -41,6 +41,6 @@ reference:
 - title: Data
   contents:
   - hgsc
-- title: Package Doc
+- title: Package Documentation
   contents:
-  - matches("diceR-package")
+  - diceR-package

@@ -5,7 +5,8 @@
 \title{Evaluate, trim, and reweigh algorithms}
 \usage{
 consensus_evaluate(data, ..., cons.cl = NULL, ref.cl = NULL,
-  k.method = NULL, plot = FALSE, trim = FALSE, reweigh = FALSE, n = 5)
+  k.method = NULL, plot = FALSE, trim = FALSE, reweigh = FALSE,
+  n = 5)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -72,6 +73,7 @@ Aggregation. Only the top \code{n} algorithms are kept, the rest are trimmed.
 }
 \examples{
 # Consensus clustering for multiple algorithms
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(911)
 x <- matrix(rnorm(500), ncol = 10)
 CC <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = c("ap", "km"),
@@ -79,6 +81,7 @@ progress = FALSE)
 
 # Evaluate algorithms on internal/external indices and trim algorithms:
 # remove those ranking low on internal indices
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(1)
 ref.cl <- sample(1:4, 50, replace = TRUE)
 z <- consensus_evaluate(x, CC, ref.cl = ref.cl, n = 1, trim = TRUE)

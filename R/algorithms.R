@@ -12,19 +12,8 @@ ALG_NAMES <- c(NALG, DALG, OALG)
 #' Nonnegative Matrix Factorization
 #' Transpose since input for NMF::nmf uses rows as vars, cols as samples
 #' @noRd
-nmf <- function(x, k, method, loss, seed) {
-  set.seed(seed = seed)
-  NNLM::nnmf(
-    A = t(x),
-    k = k,
-    method = method,
-    loss = loss,
-    check.k = FALSE,
-    verbose = 0
-  ) %>%
-    magrittr::extract2("H") %>%
-    t() %>%
-    max.col()
+nmf <- function(x, k, method, seed) {
+  NMF::predict(NMF::nmf(t(x), rank = k, method = method, seed = seed))
 }
 
 #' Transform to non-negative matrix by column-binding a negative replicate and
@@ -103,7 +92,7 @@ block <- function(x, k) {
 
 #' Self-Organizing Maps
 #' @noRd
-som <- function(x, k, xdim, ydim, rlen, alpha, method = "average") {
+som <- function(x, k, xdim, ydim, rlen, alpha, method) {
   x %>%
     purrr::when(is.matrix(.) ~ ., ~ as.matrix(.)) %>%
     som_train(xdim = xdim, ydim = ydim, rlen = rlen, alpha = alpha) %>%
@@ -130,30 +119,28 @@ som_train <- function(x, xdim, ydim, rlen, alpha, topo = "hexagonal") {
 #' @noRd
 som_cluster <- function(model, k, method) {
   # Get distance matrix, use hc to cluster the codebook vectors
-  cl <- hc(stats::dist(kohonen::getCodes(model, 1)),
-           k = k,
-           method = method)
+  cl <- hc(stats::dist(kohonen::getCodes(model, 1)), k = k, method = method)
   pred <- stats::predict(model)$unit.classif
   cl[pred]
 }
 
 #' Fuzzy C-Means (using best m via validity/performance measures)
+#'
+#' Fuzzifier m is a function of N and D (Equation 5 from ref.). If centers
+#' can't be calculated, use frequently used value of m = 2.
+#'
+#' @references https://academic.oup.com/bioinformatics/article/26/22/2841/227572
 #' @noRd
 cmeans <- function(x, k) {
-  fuzzy <- seq(1.1, 3, by = 0.1) %>%
-    purrr::map(~ e1071::cmeans(x = x, centers = k, m = .x))
-  mbest <- c("xie.beni", "fukuyama.sugeno", "partition.entropy") %>%
-    purrr::map(
-      ~ purrr::map(fuzzy,
-                   function(f) e1071::fclustIndex(y = f, x = x, index = .x)
-      )
-    ) %>%
-    purrr::map_int(which.min) %>%
-    table() %>%
-    which.max() %>%
-    names() %>%
-    as.integer()
-  fuzzy[[mbest]]$cluster
+  N <- nrow(x)
+  D <- ncol(x)
+  m <- 1 + (1418 / N + 22.05) * D ^ (-2) +
+    (12.33 / N + 0.243) * D ^ (-0.0406 * log(N) - 0.1134)
+  fuzzy <- e1071::cmeans(x = x, centers = k, m = m)
+  if (length(fuzzy$cluster) == 0) {
+    fuzzy <- e1071::cmeans(x = x, centers = k, m = 2)
+  }
+  fuzzy$cluster
 }
 
 #' Hierarchical Density-Based Spatial Clustering of Applications with Noise

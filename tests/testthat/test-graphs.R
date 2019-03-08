@@ -1,5 +1,6 @@
 context("Graphical displays")
 
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(911)
 x <- matrix(rnorm(100), nrow = 10)
 CC1 <- consensus_cluster(x, nk = 2:4, reps = 5,

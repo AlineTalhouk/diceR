@@ -1,5 +1,6 @@
 context("Consensus matrix")
 
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(1)
 x <- replicate(100, rbinom(100, 4, 0.2))
 w <- rexp(100)
@@ -26,6 +27,7 @@ test_that("missing entries are handled", {
 })
 
 test_that("single vector computation works", {
+  suppressWarnings(RNGversion("3.5.0"))
   set.seed(1)
   sv <- rbinom(100, 4, 0.2)
   expect_error(consensus_matrix(sv), NA)

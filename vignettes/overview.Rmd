@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-Cluster analysis is a way of "slicing and dicing" data to allow the grouping together of similar entities and the separation of dissimilar ones. Issues arise due to the existence of a diverse number of clustering algorithms, each with different techniques and inputs, and with no universally optimal methodology. Thus, a framework for cluster analysis and validation methods are needed. Our approach is to use cluster ensembles from a diverse set of algorithms so that the final class labels. This ensures that the data has been considered from several angles and using a variety of methods. We have currently implemented about 15 clustering algorithms, and we provide a simple framework to add additional algorithms (see `example("consensus_cluster")`). Although results are dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering and select those that are most consistent with the data.
+Cluster analysis is a way of "slicing and dicing" data to allow the grouping together of similar entities and the separation of dissimilar ones. Issues arise due to the existence of a diverse number of clustering algorithms, each with different techniques and inputs, and with no universally optimal methodology. Thus, a framework for cluster analysis and validation methods are needed. Our approach is to use cluster ensembles from a diverse set of algorithms. This ensures that the data has been considered from several angles and using a variety of methods. We have currently implemented about 15 clustering algorithms, and we provide a simple framework to add additional algorithms (see `example("consensus_cluster")`). Although results are dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering outputs and select those that are most consistent with the data.
 
 You can install `diceR` from CRAN with:
 
@@ -51,7 +51,7 @@ We load an excerpt of an expression data set from TCGA of `r nrow(hgsc)` high gr
 
 The list of clustering algorithms available for use are: 
 
-  - `"nmf"`: Nonnegative Matrix Factorization (using sequential coordinate-wise descent or Lee's multiplicative algorithm)
+  - `"nmf"`: Nonnegative Matrix Factorization (using Kullback-Leibler Divergence or Euclidean distance)
   - `"hc"`: Hierarchical Clustering
   - `"diana"`: DIvisive ANAlysis Clustering
   - `"km"`: K-Means Clustering
@@ -73,11 +73,11 @@ The clustering algorithms can be categorized under different models or paradigms
   - Connectivity Models: `"hc"` and `"diana"` are hierarchical models based on connecting objects using a particular similarity or distance metric.
   - Centroid Models: `"km"` and `"pam"` uses initial cluster centers calculated based on the mean of the objects, where `"pam"` restricts the centroid to be an actual object. These models are good for modeling data that produces spherical clusters. `"ap"` is similar to `"pam"` because it calculates "exemplars" (like centroids) of the data but is advantageous because initialization of k (number of clusters) is not required.^2^ `"cmeans"` is similar to `"km"` except that points can be assigned to more than one cluster.
   - Distribution Models: `"gmm"` assumes a Gaussian mixture model used by the EM algorithm for clustering.^3^ The gain in model complexity is traded with utility since the assumption is quite strong.
-  - Density Models: `"hdbscan"` runs hierarchical clustering on the DBSCAN result.^4,5^ These models assume that each cluster has high density, so when there are overlapping regions, the algortihms may not be able to separate objects that well.
+  - Density Models: `"hdbscan"` runs hierarchical clustering on the DBSCAN result.^4,5^ These models assume that each cluster has high density, so when there are overlapping regions, the algorithms may not be able to separate objects that well.
   - Subspace Models: `"block"` clusters both samples and features, so is useful when you want to associate these pairs of cluster entities (e.g. are there functional gene groups that associate with sample subtypes?). Our implementation uses the latent block model.^6^
   - Neural Models: our implementation of `"som"` reduces the data to a two-dimensional subspace using a neural network model, before performing hierarchical clustering.^7^ A lot of the noise is phased out and cluster stability can be improved from using `"hc"` alone.
   - Spectral Clustering: Similar to `"som"`, `"sc"` also performs dimensionality reduction before clustering, but instead uses eigenvectors of a kernel matrix.^8^ We use a radial-basis kernel function in the package.
-  - Non-negative Matrix Factorization: the computational complexity with `"nmf"` is doubled compared to other algorithms because data manipulations need to performed to transform the input data into a non-negative matrix. Otherwise, NMF has a natural clustering result that can be used to group together samples and/or features.^9^
+  - Non-negative Matrix Factorization: the computational complexity with `"nmf"` is doubled compared to other algorithms because data manipulations need to be performed to transform the input data into a non-negative matrix. Otherwise, NMF has a natural clustering result that can be used to group together samples and/or features.^9^
 
 ## Distance Measures
 
@@ -185,7 +185,18 @@ str(ccomb_matrix, max.level = 2)
 pandoc.table(head(ccomb_class$`4`), caption = "Consensus Classes")
 ```
 
-One can feed in `ccomb_class` (instead of `CC`) into `consensus_matrix()` to obtain a consensus matrix across both subsamples **and** algorithms.
+One can feed in `ccomb_class` (instead of `CC`) into `consensus_matrix()` to obtain a consensus matrix across subsamples and algorithms (and k).
+
+```{r consensus_matrix_ccomb_class}
+# consensus matrix across subsamples and algorithms within k = 3
+cm_k3 <- consensus_matrix(ccomb_class$`3`)
+
+# consensus matrix across subsamples and algorithms within k = 4
+cm_k4 <- consensus_matrix(ccomb_class$`4`)
+
+# consensus matrix across subsamples and algorithms and k
+cm_all <- consensus_matrix(ccomb_class)
+```
 
 A situation might also arise where we initially decided on using 3 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. `consensus_combine()` takes in any number of ensemble objects (e.g. `CC` and `CC2`) and combines the results.
 
@@ -199,7 +210,7 @@ ccomb_class2 <- consensus_combine(CC, CC2, element = "class")
 pandoc.table(head(ccomb_class2$`4`), caption = "Consensus Classes with KM added")
 ```
 
-### Evaluate, trim, and reweigh algortihms with `consensus_evaluate()`
+### Evaluate, trim, and reweigh algorithms with `consensus_evaluate()`
 
 Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between `lower` (defaults to 0) and `upper` (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each `k`, and choose the `k` with the greatest average PAC. If there *is* a reference class, `k` is the number of distinct classes in the reference.
 
@@ -233,6 +244,7 @@ The return value shows which algorithms were kept, removed (if any), and the tri
 To test whether there are four statistically distinct clusters (k = 4) versus no clusters (k = 1) using the PAM algorithm, we run `sigclust` with 50 simulations and generate a p-value for this significance test.
 
 ```{r sigclust}
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(1)
 pam_4 <- ccomb_class2$`4`[, "PAM_Euclidean"]
 sig_obj <- sigclust(hgsc, k = 4, nsim = 100, labflag = 0, label = pam_4)

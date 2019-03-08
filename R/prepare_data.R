@@ -6,17 +6,14 @@
 #' variables with low signal and (optionally) scales before consensus
 #' clustering. Or, we can use t-SNE dimension reduction to transform the data to
 #' just two variables. This lower-dimensional embedding allows algorithms such
-#' as hierarchical clustering to achieve greater performance. The largeVis
-#' algorithm is well-suited for visualizing datasets of high dimension by
-#' reducing to a lower-dimensional representation.
+#' as hierarchical clustering to achieve greater performance.
 #'
 #' @param data data matrix with rows as samples and columns as variables
 #' @param scale logical; should the data be centered and scaled?
 #' @param type if we use "conventional" measures (default), then the mean and
 #'   standard deviation are used for centering and scaling, respectively. If
 #'   "robust" measures are specified, the median and median absolute deviation
-#'   (MAD) are used. Alternatively, we can apply "tsne" or "largevis" as other
-#'   methods of dimension reduction.
+#'   (MAD) are used. Alternatively, we can apply "tsne" for dimension reduction.
 #' @param min.var minimum variability measure threshold used to filter the
 #'   feature space for only highly variable features. Only features with a
 #'   minimum variability measure across all samples greater than `min.var` will
@@ -26,13 +23,14 @@
 #' @author Derek Chiu
 #' @export
 #' @examples
+#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(2)
 #' x <- replicate(10, rnorm(100))
 #' x.prep <- prepare_data(x)
 #' dim(x)
 #' dim(x.prep)
 prepare_data <- function(data, scale = TRUE,
-                         type = c("conventional", "robust", "tsne", "largevis"),
+                         type = c("conventional", "robust", "tsne"),
                          min.var = 1) {
   type <- match.arg(type)
   if (type == "tsne") {
@@ -43,16 +41,6 @@ prepare_data <- function(data, scale = TRUE,
         magrittr::extract2("Y") %>%
         magrittr::set_rownames(rownames(data))
     )
-  } else if (type == "largevis") {
-    return(
-      data %>%
-        t() %>%
-        largeVis::largeVis() %>%
-        suppressWarnings() %>%
-        magrittr::extract2("coords") %>%
-        t() %>%
-        magrittr::set_rownames(rownames(data))
-    )
   }
   var.fun <- switch(type, conventional = stats::sd, robust = stats::mad)
   dat <- data %>%
@@ -61,7 +49,7 @@ prepare_data <- function(data, scale = TRUE,
   if (scale) {
     dat <- switch(type,
                   conventional = scale(dat),
-                  robust = quantable::robustscale(dat))
+                  robust = quantable::robustscale(dat)$data)
   }
   dat
 }

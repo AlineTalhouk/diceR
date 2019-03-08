@@ -43,3 +43,4 @@ Other consensus functions: \code{\link{CSPA}},
 \author{
 Aline Talhouk
 }
+\concept{consensus functions}

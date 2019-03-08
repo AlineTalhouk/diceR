@@ -1,9 +1,12 @@
-language: r
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
 sudo: required
 cache: packages
 dist: trusty
 
 r:
+  - 3.3
   - oldrel
   - release
   - devel
@@ -16,10 +19,6 @@ before_install: |1
      CXX1X=g++-6
      CXX11=g++-6
 
-r_packages:
-  - RcppArmadillo
-  - RcppProgress
-
 addons:
   apt:
     sources:
@@ -30,7 +29,7 @@ addons:
       - gfortran-6
 
 after_success:
-  - Rscript -e 'covr::codecov(line_exclusions = list("R/zzz.R"))'
+  - Rscript -e 'covr::codecov()'
 
 notifications:
   email:

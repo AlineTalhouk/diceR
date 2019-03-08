@@ -36,6 +36,7 @@ cluster stability. However, PAC is still agnostic any gold standard
 clustering result so we use it like an internal validity index.
 }
 \examples{
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(1)
 x <- replicate(100, rbinom(100, 4, 0.2))
 y <- consensus_matrix(x)

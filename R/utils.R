@@ -26,6 +26,7 @@ globalVariables(".")
 #' @export
 #' @examples
 #'
+#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' A <- matrix(sample(1:25, size = 25, rep = FALSE), 5, 5)
 #' min_fnorm(A)
@@ -52,6 +53,7 @@ min_fnorm <- function(A, B = diag(nrow(A))) {
 #' @author Aline Talhouk
 #' @export
 #' @examples
+#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(2)
 #' pred <- sample(1:4, 100, replace = TRUE)
 #' true <- sample(1:4, 100, replace = TRUE)

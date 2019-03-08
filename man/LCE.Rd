@@ -45,3 +45,4 @@ Other consensus functions: \code{\link{CSPA}},
 \author{
 Johnson Liu
 }
+\concept{consensus functions}

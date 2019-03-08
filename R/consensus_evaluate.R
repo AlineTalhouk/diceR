@@ -48,6 +48,7 @@
 #' @export
 #' @examples
 #' # Consensus clustering for multiple algorithms
+#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(911)
 #' x <- matrix(rnorm(500), ncol = 10)
 #' CC <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = c("ap", "km"),
@@ -55,6 +56,7 @@
 #'
 #' # Evaluate algorithms on internal/external indices and trim algorithms:
 #' # remove those ranking low on internal indices
+#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' ref.cl <- sample(1:4, 50, replace = TRUE)
 #' z <- consensus_evaluate(x, CC, ref.cl = ref.cl, n = 1, trim = TRUE)
@@ -287,7 +289,7 @@ choose_k <- function(ref.cl, k.method, pac) {
                           as.numeric()) %>%
       as.integer() %>%
       min()
-  } else if (nrow(pac) == 1 || k.method == "all") {
+  } else if (any(nrow(pac) == 1 | k.method == "all")) {
     k <- pac$k
   } else if (purrr::is_scalar_integer(k.method) ||
              purrr::is_scalar_double(k.method)) {
@@ -328,9 +330,11 @@ gcd <- function(x, y) {
 #' @export
 #'
 #' @examples
+#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
 #'               FALSE)
+#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' dat <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100, byrow = FALSE))
 #' compactness(dat, E[, 1])

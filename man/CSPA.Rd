@@ -32,3 +32,4 @@ Other consensus functions: \code{\link{LCE}},
 \author{
 Derek Chiu
 }
+\concept{consensus functions}

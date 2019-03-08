@@ -1,6 +1,7 @@
 context("Principal component Normal procedure")
 
 test_that("pcn simulation and selection works", {
+  suppressWarnings(RNGversion("3.5.0"))
   set.seed(9)
   A <- matrix(rnorm(300), nrow = 20)
   pc.dat <- pcn_simulate(A, n.sim = 50)

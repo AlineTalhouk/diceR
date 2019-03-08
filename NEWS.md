@@ -1,6 +1,34 @@
-# diceR 0.3.2.9000
+# diceR (development version)
+
+# diceR 0.5.2
+
+* Fix `length > 1 in coercion to logical` error in `consensus_evaluate()` due to comparisons using `||` operator
+
+* Add `suppressWarnings(RNGversion("3.5.0"))` before call to `set.seed()` in examples, tests, and vignette to use old RNG sampling
+
+* Use `.covrignore` to exclude `zzz.R` from being considered in code coverage
+
+* Use `dplyr` version >= 0.7.5 to ensure `bind_rows()` works
+
+* Fixed bug where scaled matrix using the "robust" method in `prepare_data()` was nested in the `data` element (@AlineTalhouk, #134)
+
+# diceR 0.5.1
+
+* Add parameter `hc.method` in `dice` and `consensus_cluster` to pass to `method` parameter in `stats::hclust` (@JakeNel28, #130)
+
+* Remove dependencies on `largeVis`: package will be archived
+
+# diceR 0.5.0
+
+* Revert back to using `NMF` since `NNLM` has been archived and `NMF` is back in active maintenance.
+
+* Choose fuzzifier m in `cmeans` using Equation 5 from https://academic.oup.com/bioinformatics/article/26/22/2841/227572 (thanks @Asduveneck)
+
+# diceR 0.4.0
 
 * Replace all code that depended on `NMF` with `NNLM` and `pheatmap`: CRAN notified that `NMF` will be archived because of inactive maintenance
+
+* Update `.yml` files default templates
 
 # diceR 0.3.2
 
