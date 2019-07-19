@@ -84,7 +84,7 @@ ev_confmat <- function(pred.lab, ref.lab) {
       NPV = TN / (N - rwm),
       `Detection Rate` = TP / N,
       Accuracy = (TP + TN) / N,
-      `Balanced Accuracy` = (Sensitivity + Specificity) / 2
+      `Balanced Accuracy` = (.data$Sensitivity + .data$Specificity) / 2
     ) %>%
     dplyr::rename_all(~ paste("Average", .)) %>%
     colMeans()
