@@ -77,13 +77,17 @@ ev_confmat <- function(pred.lab, ref.lab) {
 
   # Combine with averaged statistics
   avgd_stats <- data.frame(TP, TN, clm, rwm) %>%
-    dplyr::transmute_(.dots = stats::setNames(
-      list(~TP / clm, ~TN / (N - clm), ~TP / rwm, ~TN / (N - rwm), ~TP / N,
-           ~(TP + TN) / N, ~(Sensitivity + Specificity) / 2),
-      c("Sensitivity", "Specificity", "PPV", "NPV", "Detection Rate",
-        "Accuracy", "Balanced Accuracy"))) %>%
-    colMeans() %>%
-    magrittr::set_names(paste("Average", names(.)))
+    dplyr::transmute(
+      Sensitivity = TP / clm,
+      Specificity = TN / (N - clm),
+      PPV = TP / rwm,
+      NPV = TN / (N - rwm),
+      `Detection Rate` = TP / N,
+      Accuracy = (TP + TN) / N,
+      `Balanced Accuracy` = (Sensitivity + Specificity) / 2
+    ) %>%
+    dplyr::rename_all(~ paste("Average", .)) %>%
+    colMeans()
 
   c(overall, avgd_stats)
 }
