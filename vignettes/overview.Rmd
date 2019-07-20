@@ -91,7 +91,7 @@ The list of distance measures available for use are those found in `stats::dist`
   - `"minkowski"`: see `stats::dist`
   - `"spearman"`: based on `bioDist::spearman.dist`
   
-They are passed as a character vector into the `distance` parameter of `consensus_cluster()`. Only the `"hc"`, `"diana"`, `"km"`, `"pam"` algorithms use the `distance` parameter.
+They are passed as a character vector into the `distance` parameter of `consensus_cluster()`. Only the `"hc"`, `"diana"`, `"pam"` algorithms use the `distance` parameter.
 
 ## Validity Indices
 

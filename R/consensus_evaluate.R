@@ -247,7 +247,7 @@ ivi_table <- function(cl.df, data) {
     Connectivity = cl.df %>% purrr::map_dbl(
       ~ clValid::connectivity(Data = ndata, clusters = .))
   ) %>%
-    dplyr::mutate_all(dplyr::funs(structure(., names = colnames(cl.df))))
+    dplyr::mutate_all(list(~ structure(., names = colnames(cl.df))))
 }
 
 #' Table of external validity indices for each algorithm
@@ -267,7 +267,7 @@ evi_table <- function(cl.df, ref.cl) {
     cbind(cl.df %>%
             purrr::map(ev_confmat, ref.lab = ref.cl) %>%
             do.call(rbind, .)) %>%
-    dplyr::mutate_all(dplyr::funs(structure(., names = colnames(cl.df))))
+    dplyr::mutate_all(list(~ structure(., names = colnames(cl.df))))
 }
 
 #' Choose k using PAC

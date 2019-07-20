@@ -257,6 +257,7 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
         }
         arr[ind.new, i, j, k] <-
           switch(algs[j],
+                 km = km(x, nk[k]),
                  ap = ap(x, nk[k]),
                  sc = sc(x, nk[k]),
                  gmm = gmm(x, nk[k]),

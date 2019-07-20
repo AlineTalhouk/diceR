@@ -64,11 +64,9 @@ graph_cdf <- function(mat) {
 #' @export
 graph_delta_area <- function(mat) {
   dat <- get_cdf(mat) %>%
-    dplyr::group_by_("Method", "k") %>%
-    dplyr::summarize_(.dots = stats::setNames(
-      list(~ flux::auc(seq(0, 1, length.out = table(k)[1]), CDF)), "AUC")) %>%
-    dplyr::mutate_(.dots = stats::setNames(
-      list(~c(AUC[1], diff(AUC) / AUC[-length(AUC)])), "da"))
+    dplyr::group_by(.data$Method, .data$k) %>%
+    dplyr::summarize(AUC = flux::auc(seq(0, 1, length.out = table(.data$k)[1]), .data$CDF)) %>%
+    dplyr::mutate(da = c(.data$AUC[1], diff(.data$AUC) / .data$AUC[-length(.data$AUC)]))
   if (length(unique(dat$k)) > 1) {
     p <- ggplot(dat, aes_(x = ~k, y = ~da)) +
       geom_line(group = 1) +

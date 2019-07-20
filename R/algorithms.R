@@ -2,8 +2,8 @@
 # Name Constants ----------------------------------------------------------
 
 NALG <- "nmf"
-DALG <- c("hc", "diana", "km", "pam")
-OALG <- c("ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan")
+DALG <- c("hc", "diana", "pam")
+OALG <- c("km", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan")
 ALG_NAMES <- c(NALG, DALG, OALG)
 
 
@@ -40,12 +40,6 @@ diana <- function(d, k) {
   as.integer(stats::cutree(cluster::diana(d, diss = TRUE), k))
 }
 
-#' K-Means Clustering
-#' @noRd
-km <- function(d, k) {
-  as.integer(stats::kmeans(d, k)$cluster)
-}
-
 #' Partitioning Around Medoids
 #' @noRd
 pam <- function(d, k) {
@@ -54,6 +48,12 @@ pam <- function(d, k) {
 
 
 # All Other Algorithms ----------------------------------------------------
+
+#' K-Means Clustering
+#' @noRd
+km <- function(x, k) {
+  as.integer(stats::kmeans(x, k)$cluster)
+}
 
 #' Affinity Propagation
 #' @noRd
