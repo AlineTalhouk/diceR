@@ -10,7 +10,8 @@
 #'
 #' @param cons.funs consensus functions to use. Current options are "kmodes"
 #'   (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity
-#'   Partitioning Algorithm), "LCE" (linkage clustering ensemble)
+#'   Partitioning Algorithm), "LCE" (linkage clustering ensemble), "LCA" (latent
+#'   class analysis)
 #' @param evaluate logical; if `TRUE` (default), validity indices are returned.
 #'   Internal validity indices are always computed. If `ref.cl` is not `NULL`,
 #'   then external validity indices will also be computed.
@@ -46,7 +47,7 @@
 dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                  nmf.method = c("brunet", "lee"), hc.method = "average",
                  distance = "euclidean",
-                 cons.funs = c("kmodes", "majority", "CSPA", "LCE"),
+                 cons.funs = c("kmodes", "majority", "CSPA", "LCE", "LCA"),
                  sim.mat = c("cts", "srs", "asrs"),
                  prep.data = c("none", "full", "sampled"), min.var = 1,
                  seed = 1, trim = FALSE, reweigh = FALSE, n = 5,
@@ -90,7 +91,8 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
              kmodes = k_modes(.x),
              majority = majority_voting(.x),
              CSPA = CSPA(E, .y),
-             LCE = LCE(drop(.x), k = .y, sim.mat = sim.mat)
+             LCE = LCE(drop(.x), k = .y, sim.mat = sim.mat),
+             LCA = LCA(.x)
       ) %>% as.integer()
     }, integer(nrow(.x)))
   })

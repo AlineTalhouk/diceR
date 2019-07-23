@@ -7,10 +7,10 @@
 dice(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   nmf.method = c("brunet", "lee"), hc.method = "average",
   distance = "euclidean", cons.funs = c("kmodes", "majority", "CSPA",
-  "LCE"), sim.mat = c("cts", "srs", "asrs"), prep.data = c("none",
-  "full", "sampled"), min.var = 1, seed = 1, trim = FALSE,
-  reweigh = FALSE, n = 5, evaluate = TRUE, plot = FALSE,
-  ref.cl = NULL, progress = TRUE)
+  "LCE", "LCA"), sim.mat = c("cts", "srs", "asrs"),
+  prep.data = c("none", "full", "sampled"), min.var = 1, seed = 1,
+  trim = FALSE, reweigh = FALSE, n = 5, evaluate = TRUE,
+  plot = FALSE, ref.cl = NULL, progress = TRUE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -45,7 +45,8 @@ be used.}
 
 \item{cons.funs}{consensus functions to use. Current options are "kmodes"
 (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity
-Partitioning Algorithm), "LCE" (linkage clustering ensemble)}
+Partitioning Algorithm), "LCE" (linkage clustering ensemble), "LCA" (latent
+class analysis)}
 
 \item{sim.mat}{similarity matrix; choices are "cts", "srs", "asrs".}
 
