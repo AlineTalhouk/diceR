@@ -156,8 +156,8 @@ LCA <- function(E, is.relabelled = TRUE, seed = 1) {
   flat_E <- E %>%
     flatten_E(is.relabelled = is.relabelled) %>%
     as.data.frame()
-  f <-
-    as.formula(paste0("cbind(", paste(names(flat_E), collapse = ", "), ") ~ 1"))
+  res <- paste(names(flat_E), collapse = ", ")
+  f <- stats::as.formula(paste0("cbind(", res, ") ~ 1"))
   set.seed(seed)
   M <- poLCA::poLCA(
     formula = f,
