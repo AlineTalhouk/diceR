@@ -40,7 +40,8 @@ LCE(E = x_imputed, k = 4, sim.mat = "cts")
 }
 \seealso{
 Other consensus functions: \code{\link{CSPA}},
-  \code{\link{k_modes}}, \code{\link{majority_voting}}
+  \code{\link{LCA}}, \code{\link{k_modes}},
+  \code{\link{majority_voting}}
 }
 \author{
 Johnson Liu
