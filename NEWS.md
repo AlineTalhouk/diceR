@@ -2,7 +2,9 @@
 
 * Remove deprecated `dplyr` functions and use `.data` pronoun
 
-* k-means clustering should not support distance matrices as input
+* k-means clustering should not support distance matrices as input (@jerryji1993, #139)
+
+* Add LCA as a consensus function (@philstraforelli, #137)
 
 # diceR 0.5.2
 
