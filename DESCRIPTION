@@ -58,6 +58,7 @@ Imports:
     mclust,
     methods,
     NMF,
+    poLCA,
     progress,
     purrr (>= 0.2.3),
     quantable,
