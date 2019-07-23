@@ -153,6 +153,7 @@ LCE <- function(E, k, dc = 0.8, R = 10, sim.mat = c("cts", "srs", "asrs")) {
 #' FALSE)
 #' table(LCA(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 LCA <- function(E, is.relabelled = TRUE, seed = 1) {
+  attachNamespace("MASS")
   flat_E <- E %>%
     flatten_E(is.relabelled = is.relabelled) %>%
     as.data.frame()
