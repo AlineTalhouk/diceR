@@ -116,7 +116,6 @@ algorithm
 \item "cmeans": Fuzzy C-Means Clustering
 \item "hdbscan": Hierarchical Density-based Spatial Clustering of Applications
 with Noise (HDBSCAN)
-\item "lca": Latent Class Analysis
 }
 
 The progress bar increments on every unit of \code{reps}.

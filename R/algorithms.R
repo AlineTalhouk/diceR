@@ -3,7 +3,7 @@
 
 NALG <- "nmf"
 DALG <- c("hc", "diana", "pam")
-OALG <- c("km", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan", "lca")
+OALG <- c("km", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan")
 ALG_NAMES <- c(NALG, DALG, OALG)
 
 
@@ -165,12 +165,4 @@ hdbscan_summarize <- function(arr) {
   arr <- arr[, , -h.idx, , drop = FALSE]
   attr(arr, "hdbscan") <- h.obj
   arr
-}
-
-#' Latent Class Analysis
-#' @noRd
-lca <- function(x, k) {
-  f <- as.formula(paste0("cbind(", paste(names(x), collapse = ", "), ") ~ 1"))
-  M <- poLCA::poLCA(f, x, nclass = k, verbose = FALSE, nrep = 5)
-  M[["predclass"]]
 }

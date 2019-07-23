@@ -20,7 +20,6 @@
 #' * "cmeans": Fuzzy C-Means Clustering
 #' * "hdbscan": Hierarchical Density-based Spatial Clustering of Applications
 #'   with Noise (HDBSCAN)
-#' * "lca": Latent Class Analysis
 #'
 #' The progress bar increments on every unit of `reps`.
 #'
@@ -265,8 +264,7 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
                  block = block(x, nk[k]),
                  som = som(x, nk[k], xdim, ydim, rlen, alpha, hc.method),
                  cmeans = cmeans(x, nk[k]),
-                 hdbscan = hdbscan(x, minPts),
-                 lca = lca(x, nk[k])
+                 hdbscan = hdbscan(x, minPts)
           )
       }
     }
