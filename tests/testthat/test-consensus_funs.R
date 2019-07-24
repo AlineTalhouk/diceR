@@ -50,3 +50,8 @@ test_that("Check LCE with hgsc data with 3 consensus_cluster algorithms", {
   expect_is(y_srs, "integer")
   expect_is(y_asrs, "integer")
 })
+
+test_that("Check LCA works", {
+  expect_length(LCA(x), nrow(x))
+  expect_equal(dplyr::n_distinct(LCA(x)), 4)
+})
