@@ -29,6 +29,7 @@ reference:
   - k_modes
   - majority_voting
   - LCE
+  - LCA
   - PAC
   - cts
   - srs

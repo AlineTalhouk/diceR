@@ -53,12 +53,7 @@ k_modes <- function(E, is.relabelled = TRUE, seed = 1) {
 #' data perturbations by majority voting. The class of a sample is the cluster
 #' label which was selected most often across algorithms and subsamples.
 #'
-#' @param E a matrix of clusterings with number of rows equal to the number of
-#'   cases to be clustered, number of columns equal to the clustering obtained
-#'   by different resampling of the data, and the third dimension are the
-#'   different algorithms. Matrix may already be two-dimensional.
-#' @param is.relabelled logical; if `FALSE` the data will be relabelled using
-#'   the first clustering as the reference.
+#' @inheritParams k_modes
 #' @return a vector of cluster assignments based on majority voting
 #' @family consensus functions
 #' @author Aline Talhouk
@@ -140,4 +135,38 @@ LCE <- function(E, k, dc = 0.8, R = 10, sim.mat = c("cts", "srs", "asrs")) {
               srs = srs(E = E, dc = dc, R = R),
               asrs = asrs(E = E, dc = dc))
   hc(stats::dist(S), k)
+}
+
+#' Latent Class Analysis
+#'
+#' Combine clustering results using latent class analysis.
+#'
+#' @inheritParams k_modes
+#' @return a vector of cluster assignments based on LCA
+#' @family consensus functions
+#' @author Derek Chiu
+#' @export
+#' @examples
+#' data(hgsc)
+#' dat <- hgsc[1:100, 1:50]
+#' cc <- consensus_cluster(dat, nk = 4, reps = 6, algorithms = "pam", progress =
+#' FALSE)
+#' table(LCA(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
+LCA <- function(E, is.relabelled = TRUE, seed = 1) {
+  if (!"package:MASS" %in% search()) attachNamespace("MASS")
+  flat_E <- E %>%
+    flatten_E(is.relabelled = is.relabelled) %>%
+    as.data.frame()
+  res <- paste(names(flat_E), collapse = ", ")
+  f <- stats::as.formula(paste0("cbind(", res, ") ~ 1"))
+  set.seed(seed)
+  M <- poLCA::poLCA(
+    formula = f,
+    data = flat_E,
+    nclass = max(flat_E, na.rm = TRUE),
+    verbose = FALSE,
+    nrep = 5,
+    na.rm = FALSE
+  )
+  M[["predclass"]]
 }
