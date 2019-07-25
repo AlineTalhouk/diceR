@@ -1,7 +1,7 @@
 Type: Package
 Package: diceR
 Title: Diverse Cluster Ensemble in R
-Version: 0.6.0
+Version: 0.6.0.9000
 Authors@R: 
     c(person(given = "Derek",
              family = "Chiu",

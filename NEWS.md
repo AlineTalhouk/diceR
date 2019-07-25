@@ -1,3 +1,5 @@
+# diceR (development version)
+
 # diceR 0.6.0
 
 * Remove deprecated `dplyr` functions and use `.data` pronoun
