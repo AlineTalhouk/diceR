@@ -14,11 +14,13 @@ knitr::opts_chunk$set(
 ```
 # diceR
 
+<!-- badges: start -->
 [![Travis build status](https://travis-ci.org/AlineTalhouk/diceR.svg?branch=master)](https://travis-ci.org/AlineTalhouk/diceR)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?branch=master&svg=true)](https://ci.appveyor.com/project/dchiu911/diceR)
-[![Coverage status](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg)](https://codecov.io/gh/AlineTalhouk/diceR?branch=master)
-[![CRAN status](http://www.r-pkg.org/badges/version/diceR)](https://cran.r-project.org/package=diceR)
-[![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/diceR?color=orange)](http://cran.rstudio.com/web/packages/diceR/index.html)
+[![Codecov test coverage](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg)](https://codecov.io/gh/AlineTalhouk/diceR?branch=master)
+[![CRAN status](https://www.r-pkg.org/badges/version/diceR)](https://CRAN.R-project.org/package=diceR)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/diceR?color=orange)](https://cran.rstudio.com/web/packages/diceR/index.html)
+<!-- badges: end -->
 
 ## Overview
 
