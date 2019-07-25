@@ -13,7 +13,8 @@ status](https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?br
 coverage](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg)](https://codecov.io/gh/AlineTalhouk/diceR?branch=master)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/diceR)](https://CRAN.R-project.org/package=diceR)
-[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/diceR?color=orange)](https://cran.rstudio.com/web/packages/diceR/index.html)
+[![CRAN RStudio mirror
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/diceR?color=orange)](https://r-pkg.org/pkg/diceR)
 <!-- badges: end -->
 
 ## Overview
