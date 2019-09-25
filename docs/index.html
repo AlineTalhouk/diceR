@@ -26,7 +26,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -72,12 +72,7 @@
       
 
       </header><div class="row">
-  <div class="col-md-9 contents">
-    
-
-    
-    
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+  <div class="contents col-md-9">
 <div id="dicer" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#dicer" class="anchor"></a>diceR</h1></div>
@@ -95,7 +90,7 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"diceR"</span>)</span></code></pre></div>
 <p>Or get the latest development version from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># install.packages("devtools")</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/reexports.html">install_github</a></span>(<span class="st">"AlineTalhouk/diceR"</span>)</span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2"></a>devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"AlineTalhouk/diceR"</span>)</span></code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
@@ -107,7 +102,7 @@
 <span id="cb3-4"><a href="#cb3-4"></a>            <span class="dt">cons.funs =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"kmodes"</span>, <span class="st">"majority"</span>))</span></code></pre></div>
 <p>The first few cluster assignments are shown below:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(obj<span class="op">$</span>clusters))</span></code></pre></div>
-<table class="table table">
+<table class="table">
 <thead><tr class="header">
 <th></th>
 <th align="right">kmodes</th>
@@ -148,7 +143,25 @@
 </table>
 <p>You can also compare the base <code>algorithms</code> with the <code>cons.funs</code> using internal evaluation indices:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(obj<span class="op">$</span>indices<span class="op">$</span>ii<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>)</span></code></pre></div>
-<table class="table table">
+<table class="table">
+<colgroup>
+<col width="9%">
+<col width="10%">
+<col width="5%">
+<col width="4%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="8%">
+<col width="7%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="3%">
+<col width="6%">
+<col width="7%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">Algorithms</th>
 <th align="right">calinski_harabasz</th>
@@ -247,9 +260,7 @@
 <h2 class="hasAnchor">
 <a href="#pipeline" class="anchor"></a>Pipeline</h2>
 <p>This figure is a visual schematic of the pipeline that <code><a href="reference/dice.html">dice()</a></code> implements.</p>
-<div class="figure">
-<img src="reference/figures/pipeline.png" alt=""><p class="caption">Ensemble Clustering pipeline.</p>
-</div>
+<p><img src="reference/figures/pipeline.png" alt="Ensemble Clustering pipeline."></p>
 <p>Please visit the <a href="https://alinetalhouk.github.io/diceR/articles/overview.html" title="diceR overview">overview</a> page for more detail.</p>
 </div>
 </div>
@@ -284,20 +295,18 @@
 </ul>
 </div>
 
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/AlineTalhouk/diceR"><img src="https://travis-ci.org/AlineTalhouk/diceR.svg?branch=master" alt="Travis build status"></a></li>
-<li><a href="https://ci.appveyor.com/project/dchiu911/diceR"><img src="https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
+<li><a href="https://ci.appveyor.com/project/AlineTalhouk/diceR"><img src="https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
 <li><a href="https://codecov.io/gh/AlineTalhouk/diceR?branch=master"><img src="https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://CRAN.R-project.org/package=diceR"><img src="https://www.r-pkg.org/badges/version/diceR" alt="CRAN status"></a></li>
 <li><a href="https://r-pkg.org/pkg/diceR"><img src="https://cranlogs.r-pkg.org/badges/grand-total/diceR?color=orange" alt="CRAN RStudio mirror downloads"></a></li>
 </ul>
 </div>
 </div>
-
 </div>
-
 
 
       <footer><div class="copyright">
@@ -305,7 +314,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9100.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
 </div>
 
       </footer>

@@ -8,10 +8,12 @@
 
 <title>Combine algorithms — consensus_combine • diceR</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -32,11 +34,12 @@
 
 
 
-<meta property="og:title" content="Combine algorithms — consensus_combine" />
 
+<meta property="og:title" content="Combine algorithms — consensus_combine" />
 <meta property="og:description" content="Combines results for multiple objects from consensus_cluster() and outputs
 either the consensus matrices or consensus classes for all algorithms." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -67,7 +70,7 @@ either the consensus matrices or consensus classes for all algorithms." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -83,7 +86,6 @@ either the consensus matrices or consensus classes for all algorithms." />
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AlineTalhouk/diceR">
@@ -110,14 +112,12 @@ either the consensus matrices or consensus classes for all algorithms." />
     </div>
 
     <div class="ref-description">
-    
     <p>Combines results for multiple objects from <code><a href='consensus_cluster.html'>consensus_cluster()</a></code> and outputs
 either the consensus matrices or consensus classes for all algorithms.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>consensus_combine</span>(<span class='no'>...</span>, <span class='kw'>element</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"matrix"</span>, <span class='st'>"class"</span>))</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -131,19 +131,17 @@ either the consensus matrices or consensus classes for all algorithms.</p>
 consensus class, respectively.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>consensus_combine</code> returns either a list of all consensus matrices
 or a data frame showing all the consensus classes</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function is useful for collecting summaries because the original results
 from <code>consensus_cluster</code> were combined to a single object. For example,
 setting <code>element = "class"</code> returns a matrix of consensus cluster
 assignments, which can be visualized as a consensus matrix heatmap.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Consensus clustering for multiple algorithms</span>
@@ -178,11 +176,8 @@ assignments, which can be visualized as a consensus matrix heatmap.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -198,7 +193,7 @@ assignments, which can be visualized as a consensus matrix heatmap.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9100.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
 </div>
 
       </footer>

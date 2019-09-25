@@ -8,10 +8,12 @@
 
 <title>Significant Testing of Clustering Results — sigclust • diceR</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -32,11 +34,12 @@
 
 
 
-<meta property="og:title" content="Significant Testing of Clustering Results — sigclust" />
 
+<meta property="og:title" content="Significant Testing of Clustering Results — sigclust" />
 <meta property="og:description" content="Uses the SigClust K-Means algorithm to assess significance of clustering
 results." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -67,7 +70,7 @@ results." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -83,7 +86,6 @@ results." />
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AlineTalhouk/diceR">
@@ -110,14 +112,12 @@ results." />
     </div>
 
     <div class="ref-description">
-    
     <p>Uses the SigClust K-Means algorithm to assess significance of clustering
 results.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>sigclust</span>(<span class='no'>x</span>, <span class='no'>k</span>, <span class='no'>nsim</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>labflag</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>icovest</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -150,26 +150,23 @@ results.</p>
       <td><p>type of covariance matrix estimation</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>sigclust</code>. See <code><a href='https://rdrr.io/pkg/sigclust/man/sigclust.html'>sigclust::sigclust()</a></code> for
 details.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function is a wrapper for the original <code><a href='https://rdrr.io/pkg/sigclust/man/sigclust.html'>sigclust::sigclust()</a></code>, except
 that an additional parameter <code>k</code> is allows testing against any number of
 clusters. In addition, the default type of covariance estimation is also
 different.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Liu, Yufeng, Hayes, David Neil, Nobel, Andrew and Marron, J. S,
 2008, <em>Statistical Significance of Clustering for High-Dimension,
 Low-Sample Size Data</em>, <em>Journal of the American Statistical Association</em>
 <strong>103</strong>(483) 1281--1293.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>hgsc</span>)
@@ -200,13 +197,9 @@ Low-Sample Size Data</em>, <em>Journal of the American Statistical Association</
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
       <li><a href="#references">References</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -223,7 +216,7 @@ Low-Sample Size Data</em>, <em>Journal of the American Statistical Association</
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9100.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
 </div>
 
       </footer>
