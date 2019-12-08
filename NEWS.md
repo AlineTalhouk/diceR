@@ -1,5 +1,7 @@
 # diceR (development version)
 
+* update roxygen and docs
+
 # diceR 0.6.0
 
 * Remove deprecated `dplyr` functions and use `.data` pronoun
