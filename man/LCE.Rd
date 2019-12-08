@@ -39,9 +39,11 @@ x_imputed <- impute_missing(x, dat, nk = 4)
 LCE(E = x_imputed, k = 4, sim.mat = "cts")
 }
 \seealso{
-Other consensus functions: \code{\link{CSPA}},
-  \code{\link{LCA}}, \code{\link{k_modes}},
-  \code{\link{majority_voting}}
+Other consensus functions: 
+\code{\link{CSPA}()},
+\code{\link{LCA}()},
+\code{\link{k_modes}()},
+\code{\link{majority_voting}()}
 }
 \author{
 Johnson Liu

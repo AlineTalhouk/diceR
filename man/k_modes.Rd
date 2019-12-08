@@ -37,9 +37,11 @@ FALSE)
 table(k_modes(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 }
 \seealso{
-Other consensus functions: \code{\link{CSPA}},
-  \code{\link{LCA}}, \code{\link{LCE}},
-  \code{\link{majority_voting}}
+Other consensus functions: 
+\code{\link{CSPA}()},
+\code{\link{LCA}()},
+\code{\link{LCE}()},
+\code{\link{majority_voting}()}
 }
 \author{
 Aline Talhouk

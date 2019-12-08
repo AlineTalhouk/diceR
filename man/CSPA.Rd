@@ -26,9 +26,11 @@ progress = FALSE)
 CSPA(x, k = 4)
 }
 \seealso{
-Other consensus functions: \code{\link{LCA}},
-  \code{\link{LCE}}, \code{\link{k_modes}},
-  \code{\link{majority_voting}}
+Other consensus functions: 
+\code{\link{LCA}()},
+\code{\link{LCE}()},
+\code{\link{k_modes}()},
+\code{\link{majority_voting}()}
 }
 \author{
 Derek Chiu
