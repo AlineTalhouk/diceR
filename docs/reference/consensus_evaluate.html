@@ -18,8 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
@@ -118,9 +118,17 @@ algorithms can be trimmed from the ensemble. The remaining algorithms can be
 given weights before use in consensus functions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>consensus_evaluate</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>cons.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>k.method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reweigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)</pre>
+    <pre class="usage"><span class='fu'>consensus_evaluate</span>(
+  <span class='no'>data</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>cons.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ref.cl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>k.method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>reweigh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -234,7 +242,7 @@ Aggregation. Only the top <code>n</code> algorithms are kept, the rest are trimm
 #&gt;   ..$ top.list   :List of 1
 #&gt;   ..$ E.new      :List of 1</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>

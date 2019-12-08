@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cluster Analysis using `diceR` • diceR</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Cluster Analysis using `diceR`">
 <meta property="og:description" content="">
@@ -83,16 +83,16 @@
 <a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>Cluster analysis is a way of “slicing and dicing” data to allow the grouping together of similar entities and the separation of dissimilar ones. Issues arise due to the existence of a diverse number of clustering algorithms, each with different techniques and inputs, and with no universally optimal methodology. Thus, a framework for cluster analysis and validation methods are needed. Our approach is to use cluster ensembles from a diverse set of algorithms. This ensures that the data has been considered from several angles and using a variety of methods. We have currently implemented about 15 clustering algorithms, and we provide a simple framework to add additional algorithms (see <code><a href="https://rdrr.io/r/utils/example.html">example("consensus_cluster")</a></code>). Although results are dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering outputs and select those that are most consistent with the data.</p>
 <p>You can install <code>diceR</code> from CRAN with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"diceR"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"diceR"</span>)</a></code></pre></div>
 <p>Or get the latest development version from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># install.packages("devtools")</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"AlineTalhouk/diceR"</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(diceR)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(pander)</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(hgsc)</span>
-<span id="cb3-6"><a href="#cb3-6"></a>hgsc &lt;-<span class="st"> </span>hgsc[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">50</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb2-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"AlineTalhouk/diceR"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(diceR)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(pander)</a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(hgsc)</a>
+<a class="sourceLine" id="cb3-6" title="6">hgsc &lt;-<span class="st"> </span>hgsc[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">50</span>]</a></code></pre></div>
 <p>We load an excerpt of an expression data set from TCGA of 100 high grade serous carcinoma samples measured on 50 genes.</p>
 </div>
 <div id="clustering-algorithms" class="section level2">
@@ -207,18 +207,18 @@
 <a href="#consensus-clustering" class="anchor"></a>Consensus Clustering</h2>
 <p>When Monti et al. (2003) first introduced consensus clustering, the idea was to use one clustering algorithm on bootstrapped subsamples of the data. We implement some extensions where a consensus is reached across subsamples <em>and</em> across algorithms. The final cluster assignment is then computed using statistical transformations on the ensemble cluster.</p>
 <p>The base function of this package is <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>, which outputs cluster assignments across subsamples and algorithms, for different k (number of clusters). For example, let’s say we were interested in clustering the <code>hgsc</code> data into 3 or 4 clusters, using 80% resampling on 5 replicates, for these clustering algorithms: Hierarchical Clustering, PAM, and DIvisive ANAlysis Clustering (DIANA). Euclidean distance is used for all algorithms.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>CC &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,</span>
-<span id="cb4-2"><a href="#cb4-2"></a>                        <span class="dt">algorithms =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">CC &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,</a>
+<a class="sourceLine" id="cb4-2" title="2">                        <span class="dt">algorithms =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span>))</a></code></pre></div>
 <p>The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each “box” (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the DIANA algorithm for k = 3.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>co &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/capture.output.html">capture.output</a></span>(<span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(CC))</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="kw"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span>(co, <span class="dt">width =</span> <span class="dv">80</span>)</span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; [1] "int [1:100, 1:5, 1:3, 1:2] 1 3 1 3 1 1 1 NA 1 1 ..."                   </span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; [2] "- attr(*, \"dimnames\")=List of 4"                                     </span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; [3] "..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""     </span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; [4] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                   </span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt; [5] "..$ : chr [1:5] \"R1\" \"R2\" \"R3\" \"R4\" ..."                       </span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt; [6] "..$ : chr [1:3] \"HC_Euclidean\" \"PAM_Euclidean\" \"DIANA_Euclidean\""</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; [7] "..$ : chr [1:2] \"3\" \"4\""</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">co &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/capture.output.html">capture.output</a></span>(<span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(CC))</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span>(co, <span class="dt">width =</span> <span class="dv">80</span>)</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt; [1] "int [1:100, 1:5, 1:3, 1:2] 1 3 1 3 1 1 1 NA 1 1 ..."                   </span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt; [2] "- attr(*, \"dimnames\")=List of 4"                                     </span></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt; [3] "..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""     </span></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="co">#&gt; [4] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                   </span></a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt; [5] "..$ : chr [1:5] \"R1\" \"R2\" \"R3\" \"R4\" ..."                       </span></a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt; [6] "..$ : chr [1:3] \"HC_Euclidean\" \"PAM_Euclidean\" \"DIANA_Euclidean\""</span></a>
+<a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt; [7] "..$ : chr [1:2] \"3\" \"4\""</span></a></code></pre></div>
 <table class="table">
 <caption>Cluster Assignments for DIANA, k = 3</caption>
 <colgroup>
@@ -289,12 +289,12 @@
 </tbody>
 </table>
 <p>Note the unavoidable presence of <code>NA</code>s because we used 80% subsampling. This can be problematic in certain downstream ensemble methods, so we can impute missing values using K-Nearest Neighbours beforehand. There might still be <code>NA</code>s after KNN because of how the decision threshold was set. The remaining missing values can be imputed using majority voting.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>CC &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(CC, <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>, impute_knn, <span class="dt">data =</span> hgsc, <span class="dt">seed =</span> <span class="dv">1</span>)</span>
-<span id="cb6-2"><a href="#cb6-2"></a>CC_imputed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/impute_missing.html">impute_missing</a></span>(CC, hgsc, <span class="dt">nk =</span> <span class="dv">4</span>)</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(CC))</span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; [1] 5</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(CC_imputed))</span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">CC &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(CC, <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>, impute_knn, <span class="dt">data =</span> hgsc, <span class="dt">seed =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb6-2" title="2">CC_imputed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/impute_missing.html">impute_missing</a></span>(CC, hgsc, <span class="dt">nk =</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(CC))</a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt; [1] 5</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(CC_imputed))</a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt; [1] 0</span></a></code></pre></div>
 <p>We can carry on the analysis using either <code>CC</code> or <code>CC_imputed</code>.</p>
 </div>
 <div id="consensus-functions" class="section level2">
@@ -311,11 +311,11 @@
 <a href="#compute-consensus-matrix-with-consensus_matrix" class="anchor"></a>Compute consensus matrix with <code>consensus_matrix()</code>
 </h3>
 <p>The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one’s. Suppose we wanted to compute the consensus matrix for PAM, k = 4, and visualize using <code><a href="../reference/graphs.html">graph_heatmap()</a></code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>pam<span class="fl">.4</span> &lt;-<span class="st"> </span>CC[, , <span class="st">"PAM_Euclidean"</span>, <span class="st">"4"</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
-<span id="cb7-2"><a href="#cb7-2"></a>cm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(pam<span class="fl">.4</span>)</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(cm)</span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; [1] 100 100</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>hm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/graphs.html">graph_heatmap</a></span>(pam<span class="fl">.4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">pam<span class="fl">.4</span> &lt;-<span class="st"> </span>CC[, , <span class="st">"PAM_Euclidean"</span>, <span class="st">"4"</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]</a>
+<a class="sourceLine" id="cb7-2" title="2">cm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(pam<span class="fl">.4</span>)</a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(cm)</a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; [1] 100 100</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">hm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/graphs.html">graph_heatmap</a></span>(pam<span class="fl">.4</span>)</a></code></pre></div>
 <p><img src="overview_files/figure-html/graph_heatmap-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="combine-consensus-summaries-with-consensus_combine" class="section level3">
@@ -323,18 +323,18 @@
 <a href="#combine-consensus-summaries-with-consensus_combine" class="anchor"></a>Combine consensus summaries with <code>consensus_combine()</code>
 </h3>
 <p>If we wish to separately extract consensus matrices and consensus classes for every algorithm, <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> is a convenient wrapper to do so. Setting <code>element = "matrix"</code> returns a list of consensus matrices. On the other hand, setting <code>element = "class"</code> returns a matrix with rows as samples, and columns as clustering assignments for each algorithm.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>ccomb_matrix &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, <span class="dt">element =</span> <span class="st">"matrix"</span>)</span>
-<span id="cb9-2"><a href="#cb9-2"></a>ccomb_class &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, <span class="dt">element =</span> <span class="st">"class"</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(ccomb_matrix, <span class="dt">max.level =</span> <span class="dv">2</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; List of 2</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt;  $ 3:List of 3</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.4 1 0.4 1 1 1 1 1 0.8 ...</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 1 0.2 1 0 1 1 0.8 0 0 ...</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.6 0 0 0 1 1 0 0 1 ...</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt;  $ 4:List of 3</span></span>
-<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.2 1 0 1 1 1 1 1 0.8 ...</span></span>
-<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 0.8 0 0.4 0 1 1 0.8 0 0 ...</span></span>
-<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.6 0 0 0 1 1 0 0 1 ...</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">ccomb_matrix &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, <span class="dt">element =</span> <span class="st">"matrix"</span>)</a>
+<a class="sourceLine" id="cb9-2" title="2">ccomb_class &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, <span class="dt">element =</span> <span class="st">"class"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(ccomb_matrix, <span class="dt">max.level =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="co">#&gt; List of 2</span></a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="co">#&gt;  $ 3:List of 3</span></a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.4 1 0.4 1 1 1 1 1 0.8 ...</span></a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 1 0.2 1 0 1 1 0.8 0 0 ...</span></a>
+<a class="sourceLine" id="cb10-6" title="6"><span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.6 0 0 0 1 1 0 0 1 ...</span></a>
+<a class="sourceLine" id="cb10-7" title="7"><span class="co">#&gt;  $ 4:List of 3</span></a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.2 1 0 1 1 1 1 1 0.8 ...</span></a>
+<a class="sourceLine" id="cb10-9" title="9"><span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 0.8 0 0.4 0 1 1 0.8 0 0 ...</span></a>
+<a class="sourceLine" id="cb10-10" title="10"><span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.6 0 0 0 1 1 0 0 1 ...</span></a></code></pre></div>
 <table class="table">
 <caption>Consensus Classes</caption>
 <colgroup>
@@ -381,18 +381,18 @@
 </tbody>
 </table>
 <p>One can feed in <code>ccomb_class</code> (instead of <code>CC</code>) into <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code> to obtain a consensus matrix across subsamples and algorithms (and k).</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># consensus matrix across subsamples and algorithms within k = 3</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>cm_k3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(ccomb_class<span class="op">$</span><span class="st">`</span><span class="dt">3</span><span class="st">`</span>)</span>
-<span id="cb11-3"><a href="#cb11-3"></a></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="co"># consensus matrix across subsamples and algorithms within k = 4</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a>cm_k4 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(ccomb_class<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>)</span>
-<span id="cb11-6"><a href="#cb11-6"></a></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># consensus matrix across subsamples and algorithms and k</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a>cm_all &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(ccomb_class)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="co"># consensus matrix across subsamples and algorithms within k = 3</span></a>
+<a class="sourceLine" id="cb11-2" title="2">cm_k3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(ccomb_class<span class="op">$</span><span class="st">`</span><span class="dt">3</span><span class="st">`</span>)</a>
+<a class="sourceLine" id="cb11-3" title="3"></a>
+<a class="sourceLine" id="cb11-4" title="4"><span class="co"># consensus matrix across subsamples and algorithms within k = 4</span></a>
+<a class="sourceLine" id="cb11-5" title="5">cm_k4 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(ccomb_class<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>)</a>
+<a class="sourceLine" id="cb11-6" title="6"></a>
+<a class="sourceLine" id="cb11-7" title="7"><span class="co"># consensus matrix across subsamples and algorithms and k</span></a>
+<a class="sourceLine" id="cb11-8" title="8">cm_all &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span>(ccomb_class)</a></code></pre></div>
 <p>A situation might also arise where we initially decided on using 3 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> takes in any number of ensemble objects (e.g. <code>CC</code> and <code>CC2</code>) and combines the results.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,</span>
-<span id="cb12-2"><a href="#cb12-2"></a>                         <span class="dt">algorithms =</span> <span class="st">"km"</span>)</span>
-<span id="cb12-3"><a href="#cb12-3"></a>ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, CC2, <span class="dt">element =</span> <span class="st">"class"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">CC2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span>(hgsc, <span class="dt">nk =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">p.item =</span> <span class="fl">0.8</span>, <span class="dt">reps =</span> <span class="dv">5</span>,</a>
+<a class="sourceLine" id="cb12-2" title="2">                         <span class="dt">algorithms =</span> <span class="st">"km"</span>)</a>
+<a class="sourceLine" id="cb12-3" title="3">ccomb_class2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_combine.html">consensus_combine</a></span>(CC, CC2, <span class="dt">element =</span> <span class="st">"class"</span>)</a></code></pre></div>
 <table class="table">
 <caption>Consensus Classes with KM added</caption>
 <colgroup>
@@ -452,7 +452,7 @@
 <a href="#evaluate-trim-and-reweigh-algorithms-with-consensus_evaluate" class="anchor"></a>Evaluate, trim, and reweigh algorithms with <code>consensus_evaluate()</code>
 </h3>
 <p>Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between <code>lower</code> (defaults to 0) and <code>upper</code> (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each <code>k</code>, and choose the <code>k</code> with the greatest average PAC. If there <em>is</em> a reference class, <code>k</code> is the number of distinct classes in the reference.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>ccomp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">ccomp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <table class="table">
 <caption>Internal Indices for k = 4 (continued below)</caption>
 <colgroup>
@@ -585,26 +585,26 @@
 <p>We see that the biclustering algorithm is the least ambiguous and also most well-clustered (high compactness and separability).</p>
 <p>Some algorithms perform too poorly to deserve membership in the cluster ensemble. We consider the relative ranks of each algorithm across all internal indices, and compute their sum. All algorithms below a certain quantile for the sum rank are trimmed (removed). By default this quantile is 75%.</p>
 <p>After trimming, we can optionally choose to reweigh the algorithms based on the internal index magnitudes. Of course, we take into account the direction of optimality (higher is better is lower is better). Algorithms reweighed are then fed into the consensus functions. This is done by replicating each algorithm by a scalar factor that is proportional to its weight. For example, if we have two algorithms A and B, and A is given a weight of 80% and B is given a weight of 20%, then we make 4 copies of A and 1 copy of B. To minimize computational time, the total number of copies out of all algorithms has an upper bound of 100. Without reweighing, each algorithm is given equal weight.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>ctrim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">trim =</span> <span class="ot">TRUE</span>, <span class="dt">reweigh =</span> <span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="dv">2</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(ctrim, <span class="dt">max.level =</span> <span class="dv">2</span>)</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#&gt; List of 5</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="co">#&gt;  $ k       : int 3</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#&gt;  $ pac     :'data.frame':    2 obs. of  5 variables:</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt;   ..$ k              : chr [1:2] "3" "4"</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt;   ..$ HC_Euclidean   : num [1:2] 0.487 0.432</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:2] 0.248 0.251</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:2] 0.215 0.242</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#&gt;   ..$ KM             : num [1:2] 0.122 0.131</span></span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="co">#&gt;  $ ii      :List of 2</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#&gt;   ..$ 3:'data.frame':    4 obs. of  16 variables:</span></span>
-<span id="cb15-12"><a href="#cb15-12"></a><span class="co">#&gt;   ..$ 4:'data.frame':    4 obs. of  16 variables:</span></span>
-<span id="cb15-13"><a href="#cb15-13"></a><span class="co">#&gt;  $ ei      : NULL</span></span>
-<span id="cb15-14"><a href="#cb15-14"></a><span class="co">#&gt;  $ trim.obj:List of 5</span></span>
-<span id="cb15-15"><a href="#cb15-15"></a><span class="co">#&gt;   ..$ alg.keep   : chr [1:2] "HC_Euclidean" "KM"</span></span>
-<span id="cb15-16"><a href="#cb15-16"></a><span class="co">#&gt;   ..$ alg.remove : chr [1:2] "PAM_Euclidean" "DIANA_Euclidean"</span></span>
-<span id="cb15-17"><a href="#cb15-17"></a><span class="co">#&gt;   ..$ rank.matrix:List of 1</span></span>
-<span id="cb15-18"><a href="#cb15-18"></a><span class="co">#&gt;   ..$ top.list   :List of 1</span></span>
-<span id="cb15-19"><a href="#cb15-19"></a><span class="co">#&gt;   ..$ E.new      :List of 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">ctrim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span>(hgsc, CC, CC2, <span class="dt">trim =</span> <span class="ot">TRUE</span>, <span class="dt">reweigh =</span> <span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(ctrim, <span class="dt">max.level =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="co">#&gt; List of 5</span></a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="co">#&gt;  $ k       : int 3</span></a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="co">#&gt;  $ pac     :'data.frame':    2 obs. of  5 variables:</span></a>
+<a class="sourceLine" id="cb15-5" title="5"><span class="co">#&gt;   ..$ k              : chr [1:2] "3" "4"</span></a>
+<a class="sourceLine" id="cb15-6" title="6"><span class="co">#&gt;   ..$ HC_Euclidean   : num [1:2] 0.487 0.432</span></a>
+<a class="sourceLine" id="cb15-7" title="7"><span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:2] 0.248 0.251</span></a>
+<a class="sourceLine" id="cb15-8" title="8"><span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:2] 0.215 0.242</span></a>
+<a class="sourceLine" id="cb15-9" title="9"><span class="co">#&gt;   ..$ KM             : num [1:2] 0.122 0.131</span></a>
+<a class="sourceLine" id="cb15-10" title="10"><span class="co">#&gt;  $ ii      :List of 2</span></a>
+<a class="sourceLine" id="cb15-11" title="11"><span class="co">#&gt;   ..$ 3:'data.frame':    4 obs. of  16 variables:</span></a>
+<a class="sourceLine" id="cb15-12" title="12"><span class="co">#&gt;   ..$ 4:'data.frame':    4 obs. of  16 variables:</span></a>
+<a class="sourceLine" id="cb15-13" title="13"><span class="co">#&gt;  $ ei      : NULL</span></a>
+<a class="sourceLine" id="cb15-14" title="14"><span class="co">#&gt;  $ trim.obj:List of 5</span></a>
+<a class="sourceLine" id="cb15-15" title="15"><span class="co">#&gt;   ..$ alg.keep   : chr [1:2] "HC_Euclidean" "KM"</span></a>
+<a class="sourceLine" id="cb15-16" title="16"><span class="co">#&gt;   ..$ alg.remove : chr [1:2] "PAM_Euclidean" "DIANA_Euclidean"</span></a>
+<a class="sourceLine" id="cb15-17" title="17"><span class="co">#&gt;   ..$ rank.matrix:List of 1</span></a>
+<a class="sourceLine" id="cb15-18" title="18"><span class="co">#&gt;   ..$ top.list   :List of 1</span></a>
+<a class="sourceLine" id="cb15-19" title="19"><span class="co">#&gt;   ..$ E.new      :List of 1</span></a></code></pre></div>
 <p>The return value shows which algorithms were kept, removed (if any), and the trimmed (and potentially reweighed) cluster ensemble.</p>
 </div>
 </div>
@@ -612,27 +612,27 @@
 <h2 class="hasAnchor">
 <a href="#significance-testing" class="anchor"></a>Significance Testing</h2>
 <p>To test whether there are four statistically distinct clusters (k = 4) versus no clusters (k = 1) using the PAM algorithm, we run <code>sigclust</code> with 50 simulations and generate a p-value for this significance test.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Random.html">RNGversion</a></span>(<span class="st">"3.5.0"</span>))</span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>)</span>
-<span id="cb16-3"><a href="#cb16-3"></a>pam_<span class="dv">4</span> &lt;-<span class="st"> </span>ccomb_class2<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>[, <span class="st">"PAM_Euclidean"</span>]</span>
-<span id="cb16-4"><a href="#cb16-4"></a>sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sigclust.html">sigclust</a></span>(hgsc, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">nsim =</span> <span class="dv">100</span>, <span class="dt">labflag =</span> <span class="dv">0</span>, <span class="dt">label =</span> pam_<span class="dv">4</span>)</span>
-<span id="cb16-5"><a href="#cb16-5"></a>co &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/capture.output.html">capture.output</a></span>(<span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(sig_obj))</span>
-<span id="cb16-6"><a href="#cb16-6"></a><span class="kw"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span>(co, <span class="dt">width =</span> <span class="dv">80</span>)</span>
-<span id="cb16-7"><a href="#cb16-7"></a><span class="co">#&gt;  [1] "Formal class 'sigclust' [package \"sigclust\"] with 10 slots"               </span></span>
-<span id="cb16-8"><a href="#cb16-8"></a><span class="co">#&gt;  [2] "..@ raw.data : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ..."</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a><span class="co">#&gt;  [3] ".. ..- attr(*, \"dimnames\")=List of 2"                                     </span></span>
-<span id="cb16-10"><a href="#cb16-10"></a><span class="co">#&gt;  [4] ".. .. ..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""    </span></span>
-<span id="cb16-11"><a href="#cb16-11"></a><span class="co">#&gt;  [5] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                        </span></span>
-<span id="cb16-12"><a href="#cb16-12"></a><span class="co">#&gt;  [6] ".. .. ..$ : chr [1:50] \"ABAT\" \"ABHD2\" \"ACTB\" \"ACTR2\" ..."           </span></span>
-<span id="cb16-13"><a href="#cb16-13"></a><span class="co">#&gt;  [7] "..@ veigval : num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                     </span></span>
-<span id="cb16-14"><a href="#cb16-14"></a><span class="co">#&gt;  [8] "..@ vsimeigval: num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                   </span></span>
-<span id="cb16-15"><a href="#cb16-15"></a><span class="co">#&gt;  [9] "..@ simbackvar: num 0.42"                                                   </span></span>
-<span id="cb16-16"><a href="#cb16-16"></a><span class="co">#&gt; [10] "..@ icovest : num 2"                                                        </span></span>
-<span id="cb16-17"><a href="#cb16-17"></a><span class="co">#&gt; [11] "..@ nsim : num 100"                                                         </span></span>
-<span id="cb16-18"><a href="#cb16-18"></a><span class="co">#&gt; [12] "..@ simcindex : num [1:100] 0.67 0.634 0.641 0.637 0.606 ..."               </span></span>
-<span id="cb16-19"><a href="#cb16-19"></a><span class="co">#&gt; [13] "..@ pval : num 0.14"                                                        </span></span>
-<span id="cb16-20"><a href="#cb16-20"></a><span class="co">#&gt; [14] "..@ pvalnorm : num 0.163"                                                   </span></span>
-<span id="cb16-21"><a href="#cb16-21"></a><span class="co">#&gt; [15] "..@ xcindex : num 0.63"</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Random.html">RNGversion</a></span>(<span class="st">"3.5.0"</span>))</a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb16-3" title="3">pam_<span class="dv">4</span> &lt;-<span class="st"> </span>ccomb_class2<span class="op">$</span><span class="st">`</span><span class="dt">4</span><span class="st">`</span>[, <span class="st">"PAM_Euclidean"</span>]</a>
+<a class="sourceLine" id="cb16-4" title="4">sig_obj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sigclust.html">sigclust</a></span>(hgsc, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">nsim =</span> <span class="dv">100</span>, <span class="dt">labflag =</span> <span class="dv">0</span>, <span class="dt">label =</span> pam_<span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb16-5" title="5">co &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/capture.output.html">capture.output</a></span>(<span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(sig_obj))</a>
+<a class="sourceLine" id="cb16-6" title="6"><span class="kw"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span>(co, <span class="dt">width =</span> <span class="dv">80</span>)</a>
+<a class="sourceLine" id="cb16-7" title="7"><span class="co">#&gt;  [1] "Formal class 'sigclust' [package \"sigclust\"] with 10 slots"               </span></a>
+<a class="sourceLine" id="cb16-8" title="8"><span class="co">#&gt;  [2] "..@ raw.data : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ..."</span></a>
+<a class="sourceLine" id="cb16-9" title="9"><span class="co">#&gt;  [3] ".. ..- attr(*, \"dimnames\")=List of 2"                                     </span></a>
+<a class="sourceLine" id="cb16-10" title="10"><span class="co">#&gt;  [4] ".. .. ..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""    </span></a>
+<a class="sourceLine" id="cb16-11" title="11"><span class="co">#&gt;  [5] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                        </span></a>
+<a class="sourceLine" id="cb16-12" title="12"><span class="co">#&gt;  [6] ".. .. ..$ : chr [1:50] \"ABAT\" \"ABHD2\" \"ACTB\" \"ACTR2\" ..."           </span></a>
+<a class="sourceLine" id="cb16-13" title="13"><span class="co">#&gt;  [7] "..@ veigval : num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                     </span></a>
+<a class="sourceLine" id="cb16-14" title="14"><span class="co">#&gt;  [8] "..@ vsimeigval: num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                   </span></a>
+<a class="sourceLine" id="cb16-15" title="15"><span class="co">#&gt;  [9] "..@ simbackvar: num 0.42"                                                   </span></a>
+<a class="sourceLine" id="cb16-16" title="16"><span class="co">#&gt; [10] "..@ icovest : num 2"                                                        </span></a>
+<a class="sourceLine" id="cb16-17" title="17"><span class="co">#&gt; [11] "..@ nsim : num 100"                                                         </span></a>
+<a class="sourceLine" id="cb16-18" title="18"><span class="co">#&gt; [12] "..@ simcindex : num [1:100] 0.67 0.634 0.641 0.637 0.606 ..."               </span></a>
+<a class="sourceLine" id="cb16-19" title="19"><span class="co">#&gt; [13] "..@ pval : num 0.14"                                                        </span></a>
+<a class="sourceLine" id="cb16-20" title="20"><span class="co">#&gt; [14] "..@ pvalnorm : num 0.163"                                                   </span></a>
+<a class="sourceLine" id="cb16-21" title="21"><span class="co">#&gt; [15] "..@ xcindex : num 0.63"</span></a></code></pre></div>
 <p>The p-value is 0.14, indicating we do not have sufficient evidence to conclude there are four distinct clusters. Note that we did not use the full <code>hgsc</code> data set in this example, so the underlying biological mechanisms may not be fully captured.</p>
 </div>
 <div id="references" class="section level2">
@@ -652,7 +652,7 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
         <div id="tocnav">
       <h2 class="hasAnchor">
