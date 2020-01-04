@@ -42,6 +42,8 @@ Imports:
     clusterCrit,
     clValid,
     dbscan,
+    doRNG,
+    doParallel,
     dplyr (>= 0.7.5),
     e1071,
     flux,
