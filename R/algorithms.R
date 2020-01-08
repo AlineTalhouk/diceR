@@ -13,7 +13,7 @@ ALG_NAMES <- c(NALG, DALG, OALG)
 #' Transpose since input for NMF::nmf uses rows as vars, cols as samples
 #' @noRd
 nmf <- function(x, k, method, seed) {
-  NMF::predict(NMF::nmf(t(x), rank = k, method = method, seed = seed))
+  NMF::predict(NMF::nmf(t(x), rank = k, method = method, seed = seed, .options = list(parallel = FALSE)))
 }
 
 #' Transform to non-negative matrix by column-binding a negative replicate and

@@ -44,8 +44,7 @@ E_imputed <- impute_missing(E, dat, 4)
 sum(is.na(E_imputed))
 }
 \seealso{
-Other imputation functions: 
-\code{\link{impute_knn}()}
+Other imputation functions: \code{\link{impute_knn}}
 }
 \author{
 Aline Talhouk

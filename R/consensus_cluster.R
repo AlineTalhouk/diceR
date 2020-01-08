@@ -68,6 +68,9 @@
 #'   with `file.name` as the file name.
 #' @param time.saved logical; if `TRUE`, the date saved is appended to
 #'   `file.name`. Only applicable when `file.name` is not `NULL`.
+#' @param nthread number of threads for parallel computation. If parallel backend
+#'   is not already registered, register parallel backend with specified number
+#'   of cores and restore on exit.
 #' @return An array of dimension `nrow(x)` by `reps` by `length(algorithms)` by
 #'   `length(nk)`. Each cube of the array represents a different k. Each slice
 #'   of a cube is a matrix showing consensus clustering results for algorithms.
@@ -79,6 +82,8 @@
 #'   attributes: the proportion of outliers and the number of clusters.
 #' @author Derek Chiu, Aline Talhouk
 #' @importFrom mclust mclustBIC
+#' @importFrom doRNG "%dorng%"
+#' @importFrom foreach "%dopar%"
 #' @export
 #' @examples
 #' data(hgsc)
@@ -111,7 +116,17 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               type = c("conventional", "robust", "tsne"),
                               min.var = 1, progress = TRUE,
                               seed.nmf = 123456, seed.data = 1,
-                              file.name = NULL, time.saved = FALSE) {
+                              file.name = NULL, time.saved = FALSE, nthread = 1) {
+
+  # Register parallel backend if not already registered, and restore on exit
+  if(nthread > 1 && foreach::getDoParWorkers() == 1){
+    if(nthread > parallel::detectCores()) stop("Number of parallel threads exceeds maximum available CPU cores")
+    cl <- parallel::makeCluster(nthread)
+    doParallel::registerDoParallel(cl)
+    on.exit(parallel::stopCluster(cl), add = TRUE)
+    on.exit(foreach::registerDoSEQ(), add = TRUE)
+  }
+
   prep.data <- match.arg(prep.data)
   if (prep.data == "full")
     data <- prepare_data(data, scale = scale, type = type, min.var = min.var)
@@ -124,19 +139,10 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   lalg <- lengths(algs) * lengths(list(nmf.method, distance, 1))
   n <- nrow(data)
 
-  if (progress) {
-    pb <- progress::progress_bar$new(
-      format = "Clustering Algorithm :num of :den: :alg (k = :k) [:bar] :percent eta: :eta",
-      total = length(nk) * sum(lalg) * reps,
-      clear = FALSE
-    )
-  } else {
-    pb <- NULL
-  }
 
   # Argument lists: Common, NMF, Distance, Other
   cargs <- dplyr::lst(data, nk, p.item, reps, seed.data, prep.data, scale, type,
-                      min.var, pb, lalg, n)
+                      min.var, progress, lalg, n)
   nargs <- dplyr::lst(algs = algs$NALG, nmf.method, seed.nmf)
   dargs <- dplyr::lst(algs = algs$DALG, distance, hc.method)
   oargs <- dplyr::lst(algs = algs$OALG, xdim, ydim, rlen, alpha, minPts,
@@ -169,7 +175,7 @@ cc <- function(fun, args) {
 #' Cluster NMF-based algorithms
 #' @noRd
 cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
-                   seed.data, prep.data, scale, type, min.var, pb, lalg, n) {
+                   seed.data, prep.data, scale, type, min.var, progress, lalg, n) {
   alg <- paste(toupper(algs), Hmisc::capitalize(nmf.method), sep = "_")
   arr <- init_array(data, reps, alg, nk)
   x_nmf <- nmf_transform(data)
@@ -177,7 +183,23 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
   for (j in seq_along(nmf.method)) {
     for (k in seq_along(nk)) {
       set.seed(seed.data)
-      for (i in seq_len(reps)) {
+      if (progress){
+        message("Clustering Algorithm ", j," of ", sum(lalg), ": NMF_",Hmisc::capitalize(nmf.method[j]), " (k = ",nk[k],")\t", appendLF = TRUE)
+        pb <- txtProgressBar(min = 0, max = reps, style = 3)
+      }
+
+      # parallelized
+      clus_reps <- foreach::foreach(i = seq_len(reps),
+                                    .multicombine = TRUE,
+                                    .packages = c("NMF"),
+                                    .options.RNG = seed.data,
+                                    .errorhandling = "pass", # in case of failed iteration
+                                    .verbose = FALSE
+      ) %dorng% {
+
+        if(progress){
+          setTxtProgressBar(pb, i)
+        }
         ind.new <- sample(n, floor(n * p.item))
         # In case the subsample has all-zero vars, remove them to speed up comp
         x <- x_nmf[ind.new, ] %>% magrittr::extract(colSums(.) != 0)
@@ -186,11 +208,21 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
             prepare_data(scale = scale, type = type, min.var = min.var) %>%
             nmf_transform()
         }
-        if (!is.null(pb)) {
-          pb$tick(tokens = list(num = j, den = sum(lalg), alg = alg[j],
-                                k = nk[k]))
+        r <- list(ind.new=ind.new, clus=nmf(x, nk[k], nmf.method[j], seed.nmf))
+        rm(x) # important in freeing memory
+        r
+      }
+
+      if(progress){
+        close(pb)
+      }
+
+      clus_reps <- setNames(clus_reps, seq_len(reps))
+
+      for (i in seq_len(reps)) {
+        if(length(clus_reps[[i]]$clus) > 0) { # prevent logical(0) error
+          arr[clus_reps[[i]]$ind.new, i, j, k] <- clus_reps[[i]]$clus
         }
-        arr[ind.new, i, j, k] <- nmf(x, nk[k], nmf.method[j], seed.nmf)
       }
     }
   }
@@ -200,7 +232,7 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
 cc_dist <- function(data, nk, p.item, reps, algs, distance, hc.method,
-                    seed.data, prep.data, scale, type, min.var, pb, lalg, n) {
+                    seed.data, prep.data, scale, type, min.var, progress, lalg, n) {
   alg <- paste(rep(toupper(algs), each = length(distance)),
                rep(Hmisc::capitalize(distance), length(algs)),
                sep = "_")
@@ -210,22 +242,46 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, hc.method,
     for (k in seq_along(nk)) {
       for (d in seq_along(distance)) {
         set.seed(seed.data)
-        for (i in seq_len(reps)) {
+        a <- (j - 1) * length(distance) + d
+        if(progress){
+          message("Clustering Algorithm ", a + lalg["NALG"], " of ", sum(lalg), ": ", alg[a], " (k = ",nk[k],")\t", appendLF = TRUE)
+          pb <- txtProgressBar(min = 0, max = reps, style = 3)
+        }
+
+        # parallelized
+        clus_reps <- foreach::foreach(i = seq_len(reps),
+                                      .multicombine = TRUE,
+                                      .packages = c("stats","cluster"),
+                                      .options.RNG = seed.data,
+                                      .errorhandling = "pass", # in case of failed iteration
+                                      .verbose = FALSE
+        ) %dorng% {
+          if(progress){
+            setTxtProgressBar(pb, i)
+          }
           ind.new <- sample(n, floor(n * p.item))
           x <- data[ind.new, ]
           if (prep.data == "sampled") {
             x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
           }
           dists <- cdist(x, distance[d])
-          a <- (j - 1) * length(distance) + d
-          if (!is.null(pb)) {
-            pb$tick(tokens = list(num = j + lalg["NALG"], den = sum(lalg),
-                                  alg = alg[a], k = nk[k]))
-          }
           if (algs[j] == "hc") {
-            arr[ind.new, i, a, k] <- get(algs[j])(dists, nk[k], hc.method)
+            r <- list(ind.new=ind.new, clus=get(algs[j])(dists, nk[k], hc.method))
           } else {
-            arr[ind.new, i, a, k] <- get(algs[j])(dists, nk[k])
+            r <- list(ind.new=ind.new, clus=get(algs[j])(dists, nk[k]))
+          }
+          r
+        }
+        if(progress){
+          close(pb)
+        }
+
+        clus_reps <- setNames(clus_reps, seq_len(reps))
+
+        # assign to array
+        for (i in seq_len(reps)) {
+          if(length(clus_reps[[i]]$clus) > 0) { # prevent logical(0) error
+            arr[clus_reps[[i]]$ind.new, i, a, k] <- clus_reps[[i]]$clus
           }
         }
       }
@@ -238,34 +294,58 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, hc.method,
 #' @noRd
 cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
                      minPts, hc.method, seed.data, prep.data, scale, type,
-                     min.var, pb, lalg, n) {
+                     min.var, progress, lalg, n) {
   alg <- toupper(algs)
   arr <- init_array(data, reps, alg, nk)
 
   for (j in seq_along(algs)) {
     for (k in seq_along(nk)) {
       set.seed(seed.data)
-      for (i in seq_len(reps)) {
+      if(progress){
+        message("Clustering Algorithm ",j + sum(lalg[c("NALG", "DALG")]), " of ", sum(lalg), ": ", alg[j], " (k = ", nk[k], ")\t", appendLF = TRUE)
+        pb <- txtProgressBar(min = 0, max = reps, style = 3)
+      }
+      # parallelized
+      clus_reps <- foreach::foreach(i = seq_len(reps),
+                                    .multicombine = TRUE,
+                                    .packages = c("stats","apcluster","kernlab","mclust","blockcluster","purrr","kohonen"),
+                                    .options.RNG = seed.data,
+                                    .errorhandling = "pass", # in case of failed iteration
+                                    .verbose = FALSE
+      ) %dorng% {
+        if(progress){
+          setTxtProgressBar(pb, i)
+        }
         ind.new <- sample(n, floor(n * p.item))
         x <- data[ind.new, ]
         if (prep.data == "sampled") {
           x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
         }
-        if (!is.null(pb)) {
-          pb$tick(tokens = list(num = j + sum(lalg[c("NALG", "DALG")]),
-                                den = sum(lalg), alg = alg[j], k = nk[k]))
+
+        r <- list(ind.new = ind.new,
+                  clus = switch(algs[j],
+                                km = km(x, nk[k]),
+                                ap = ap(x, nk[k]),
+                                sc = sc(x, nk[k]),
+                                gmm = gmm(x, nk[k]),
+                                block = block(x, nk[k]),
+                                som = som(x, nk[k], xdim, ydim, rlen, alpha, hc.method),
+                                cmeans = cmeans(x, nk[k]),
+                                hdbscan = hdbscan(x, minPts)
+                  ))
+        r
+      }
+
+      if(progress){
+        close(pb)
+      }
+
+      clus_reps <- setNames(clus_reps, seq_len(reps))
+      # assign to array
+      for (i in seq_len(reps)) {
+        if(length(clus_reps[[i]]$clus) > 0) { # prevent logical(0) error
+          arr[clus_reps[[i]]$ind.new, i, j, k] <- clus_reps[[i]]$clus
         }
-        arr[ind.new, i, j, k] <-
-          switch(algs[j],
-                 km = km(x, nk[k]),
-                 ap = ap(x, nk[k]),
-                 sc = sc(x, nk[k]),
-                 gmm = gmm(x, nk[k]),
-                 block = block(x, nk[k]),
-                 som = som(x, nk[k], xdim, ydim, rlen, alpha, hc.method),
-                 cmeans = cmeans(x, nk[k]),
-                 hdbscan = hdbscan(x, minPts)
-          )
       }
     }
   }

@@ -4,30 +4,14 @@
 \alias{consensus_cluster}
 \title{Consensus clustering}
 \usage{
-consensus_cluster(
-  data,
-  nk = 2:4,
-  p.item = 0.8,
-  reps = 1000,
-  algorithms = NULL,
-  nmf.method = c("brunet", "lee"),
-  hc.method = "average",
-  xdim = NULL,
-  ydim = NULL,
-  rlen = 200,
-  alpha = c(0.05, 0.01),
-  minPts = 5,
-  distance = "euclidean",
-  prep.data = c("none", "full", "sampled"),
-  scale = TRUE,
-  type = c("conventional", "robust", "tsne"),
-  min.var = 1,
-  progress = TRUE,
-  seed.nmf = 123456,
-  seed.data = 1,
-  file.name = NULL,
-  time.saved = FALSE
-)
+consensus_cluster(data, nk = 2:4, p.item = 0.8, reps = 1000,
+  algorithms = NULL, nmf.method = c("brunet", "lee"),
+  hc.method = "average", xdim = NULL, ydim = NULL, rlen = 200,
+  alpha = c(0.05, 0.01), minPts = 5, distance = "euclidean",
+  prep.data = c("none", "full", "sampled"), scale = TRUE,
+  type = c("conventional", "robust", "tsne"), min.var = 1,
+  progress = TRUE, seed.nmf = 123456, seed.data = 1,
+  file.name = NULL, time.saved = FALSE, nthread = 1)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}
@@ -97,6 +81,10 @@ with \code{file.name} as the file name.}
 
 \item{time.saved}{logical; if \code{TRUE}, the date saved is appended to
 \code{file.name}. Only applicable when \code{file.name} is not \code{NULL}.}
+
+\item{nthread}{number of threads for parallel computation. If parallel backend
+is not already registered, register parallel backend with specified number
+of cores and restore on exit.}
 }
 \value{
 An array of dimension \code{nrow(x)} by \code{reps} by \code{length(algorithms)} by

@@ -52,3 +52,9 @@ test_that("t-SNE dimension reduction works", {
                           type = "tsne")
   expect_error(x7, NA)
 })
+
+test_that("parallel computing works", {
+  x8 <- consensus_cluster(hgsc, nk = 4, reps = 5, progress = TRUE, nthread = 2)
+
+  expect_error(x8, NA)
+})

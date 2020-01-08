@@ -4,28 +4,13 @@
 \alias{dice}
 \title{Diverse Clustering Ensemble}
 \usage{
-dice(
-  data,
-  nk,
-  reps = 10,
-  algorithms = NULL,
-  k.method = NULL,
-  nmf.method = c("brunet", "lee"),
-  hc.method = "average",
-  distance = "euclidean",
-  cons.funs = c("kmodes", "majority", "CSPA", "LCE", "LCA"),
-  sim.mat = c("cts", "srs", "asrs"),
-  prep.data = c("none", "full", "sampled"),
-  min.var = 1,
-  seed = 1,
-  trim = FALSE,
-  reweigh = FALSE,
-  n = 5,
-  evaluate = TRUE,
-  plot = FALSE,
-  ref.cl = NULL,
-  progress = TRUE
-)
+dice(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
+  nmf.method = c("brunet", "lee"), hc.method = "average",
+  distance = "euclidean", cons.funs = c("kmodes", "majority", "CSPA",
+  "LCE", "LCA"), sim.mat = c("cts", "srs", "asrs"),
+  prep.data = c("none", "full", "sampled"), min.var = 1, seed = 1,
+  trim = FALSE, reweigh = FALSE, n = 5, evaluate = TRUE,
+  plot = FALSE, ref.cl = NULL, progress = TRUE)
 }
 \arguments{
 \item{data}{data matrix with rows as samples and columns as variables}

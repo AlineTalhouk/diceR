@@ -31,11 +31,9 @@ FALSE)
 table(LCA(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 }
 \seealso{
-Other consensus functions: 
-\code{\link{CSPA}()},
-\code{\link{LCE}()},
-\code{\link{k_modes}()},
-\code{\link{majority_voting}()}
+Other consensus functions: \code{\link{CSPA}},
+  \code{\link{LCE}}, \code{\link{k_modes}},
+  \code{\link{majority_voting}}
 }
 \author{
 Derek Chiu
