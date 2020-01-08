@@ -52,7 +52,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                  prep.data = c("none", "full", "sampled"), min.var = 1,
                  seed = 1, trim = FALSE, reweigh = FALSE, n = 5,
                  evaluate = TRUE, plot = FALSE, ref.cl = NULL,
-                 progress = TRUE) {
+                 progress = TRUE, nthread = 1) {
 
   # Check that inputs are correct
   assertthat::assert_that(length(dim(data)) == 2)
@@ -63,7 +63,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                          algorithms = algorithms, nmf.method = nmf.method,
                          hc.method = hc.method, distance = distance,
                          prep.data = prep.data, min.var = min.var,
-                         progress = progress)
+                         progress = progress, nthread = nthread)
   # KNN imputation
   Eknn <- apply(E, 2:4, impute_knn, data = data, seed = seed)
 
