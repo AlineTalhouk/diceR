@@ -33,8 +33,7 @@ x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("km", "hc",
 x <- apply(x, 2:4, impute_knn, data = dat, seed = 1)
 }
 \seealso{
-Other imputation functions: 
-\code{\link{impute_missing}()}
+Other imputation functions: \code{\link{impute_missing}}
 }
 \author{
 Aline Talhouk
