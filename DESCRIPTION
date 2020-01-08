@@ -47,6 +47,7 @@ Imports:
     dplyr (>= 0.7.5),
     e1071,
     flux,
+    foreach,
     ggplot2,
     gplots,
     grDevices,
