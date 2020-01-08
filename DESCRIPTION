@@ -63,6 +63,7 @@ Imports:
     progress,
     purrr (>= 0.2.3),
     quantable,
+    rngtools (>= 1.3),
     RankAggreg,
     RColorBrewer,
     Rcpp,
