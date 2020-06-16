@@ -191,7 +191,7 @@ consensus_rank <- function(ii, n) {
     rank.matrix <- cbind(max.bests, min.bests) %>%
       scale(center = FALSE, scale = TRUE) %>%
       as.data.frame() %>%
-      purrr::map_df(~ ii$Algorithms[order(.x, sample(length(.x)))]) %>%
+      purrr::map_dfc(~ ii$Algorithms[order(.x, sample(length(.x)))]) %>%
       t()
     top.list <- RankAggreg::RankAggreg(rank.matrix, ncol(rank.matrix),
                                        method = "GA", verbose = FALSE)$top.list
