@@ -5,9 +5,9 @@ set.seed(911)
 x <- matrix(rnorm(100), nrow = 10)
 CC1 <- consensus_cluster(x, nk = 2:4, reps = 5,
                          algorithms = c("hc", "ap", "km"), progress = FALSE)
-p1 <- graph_cdf(CC1)
 
 test_that("graph_cdf object can have added/modified ggplot layers", {
+  p1 <- graph_cdf(CC1)
   p2 <- p1 +
     labs(y = "Probability") +
     stat_ecdf(aes(colour = Method)) +
@@ -26,7 +26,6 @@ test_that("graph_heatmap can have same plot but different titles", {
   phm1 <- graph_heatmap(CC1[, , 1, 1, drop = FALSE])
   phm2 <- graph_heatmap(CC1[, , 1, 1, drop = FALSE], main = "A2")
   expect_identical(phm1[1], phm2[1])  # 2nd element = titles, 3rd element = cols
-  file.remove(list.files(pattern = "Rplots"))
 })
 
 test_that("error in graph_heatmap if too few titles", {
@@ -51,3 +50,6 @@ test_that("algii_heatmap works when there is more than one k", {
          plot = TRUE, progress = FALSE),
     NA)
 })
+
+dev.off()
+if (file.exists("Rplots.pdf")) file.remove("Rplots.pdf")
