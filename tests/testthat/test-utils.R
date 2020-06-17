@@ -3,7 +3,6 @@ context("Utility functions")
 cl <- seq_len(4)
 
 test_that("relabelling outputs a integer", {
-  suppressWarnings(RNGversion("3.5.0"))
   set.seed(2)
   pred <- sample(cl, 100, replace = TRUE)
   true <- sample(cl, 100, replace = TRUE)

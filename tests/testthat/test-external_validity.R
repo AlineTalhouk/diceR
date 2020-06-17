@@ -1,6 +1,5 @@
 context("External validity indices")
 
-suppressWarnings(RNGversion("3.5.0"))
 set.seed(1)
 x <- sample(1:4, 100, replace = TRUE)
 y1 <- sample(1:4, 100, replace = TRUE)

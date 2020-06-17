@@ -23,7 +23,6 @@
 #' @author Derek Chiu
 #' @export
 #' @examples
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(2)
 #' x <- replicate(10, rnorm(100))
 #' x.prep <- prepare_data(x)

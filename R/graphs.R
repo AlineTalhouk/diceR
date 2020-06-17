@@ -25,7 +25,6 @@
 #' @examples
 #' # Consensus clustering for 3 algorithms
 #' library(ggplot2)
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(911)
 #' x <- matrix(rnorm(80), ncol = 10)
 #' CC1 <- consensus_cluster(x, nk = 2:4, reps = 3,

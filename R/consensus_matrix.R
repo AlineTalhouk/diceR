@@ -28,7 +28,6 @@
 #' @author Derek Chiu
 #' @export
 #' @examples
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(2)
 #' x <- replicate(100, rbinom(100, 4, 0.2))
 #' w <- rexp(100)
