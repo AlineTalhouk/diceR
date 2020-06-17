@@ -42,7 +42,6 @@ null distributions with univariate Normal distributions using \code{pcn_simulate
 Then a subset of these distributions is chosen using \code{pcn_select}.
 }
 \examples{
-suppressWarnings(RNGversion("3.5.0"))
 set.seed(9)
 A <- matrix(rnorm(300), nrow = 20)
 pc.dat <- pcn_simulate(A, n.sim = 50)
