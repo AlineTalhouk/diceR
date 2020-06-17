@@ -1,5 +1,17 @@
 # diceR (development version)
 
+* Remove `suppressWarnings(RNGversion("3.5.0"))` after updating R version
+
+* Run `LCA()` unit test on imputed clustering object
+
+* Remove internal validity measures with any `Inf` entries for `consensus_reweigh()`
+
+* Use a cleaner, more robust method of removing `Rplots.pdf` after running `test-graphs.R`
+
+* Ensure column binding with `purrr::map_dfc()` in `consensus_rank()`
+
+* Replaced `dplyr::bind_cols()` with `purrr::flatten_dfc()` to suppress warning "Outer names are only allowed for unnamed scalar" in `get_cdf()`
+
 * update roxygen and docs
 
 # diceR 0.6.0
