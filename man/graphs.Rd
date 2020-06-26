@@ -13,11 +13,11 @@ graph_cdf(mat)
 
 graph_delta_area(mat)
 
-graph_heatmap(mat, main = NULL, ...)
+graph_heatmap(mat, main = NULL)
 
 graph_tracking(cl)
 
-graph_all(x, ...)
+graph_all(x)
 }
 \arguments{
 \item{mat}{same as \code{x}, or a list of consensus matrices computed from \code{x} for
@@ -25,8 +25,6 @@ faster results}
 
 \item{main}{heatmap title. If \code{NULL} (default), the titles will be taken from
 names in \code{mat}}
-
-\item{...}{additional arguments to \code{\link[gplots:heatmap.2]{gplots::heatmap.2()}}}
 
 \item{cl}{same as \code{x}, or a matrix of consensus classes computed from \code{x} for
 faster results}
@@ -36,7 +34,7 @@ faster results}
 \value{
 Various plots from \code{graph_*{}} functions. All plots are
 generated using \code{ggplot}, except for \code{graph_heatmap}, which uses
-\code{\link[gplots:heatmap.2]{gplots::heatmap.2()}}. Colours used in \code{graph_heatmap} and \code{graph_tracking}
+\code{\link[NMF:aheatmap]{NMF::aheatmap()}}. Colours used in \code{graph_heatmap} and \code{graph_tracking}
 utilize \code{\link[RColorBrewer:RColorBrewer]{RColorBrewer::RColorBrewer()}} palettes.
 }
 \description{
