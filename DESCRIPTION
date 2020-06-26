@@ -46,7 +46,6 @@ Imports:
     e1071,
     flux,
     ggplot2,
-    gplots,
     grDevices,
     Hmisc,
     infotheo,
