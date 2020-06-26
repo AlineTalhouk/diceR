@@ -170,7 +170,7 @@ cc <- function(fun, args) {
 #' @noRd
 cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
                    seed.data, prep.data, scale, type, min.var, pb, lalg, n) {
-  alg <- paste(toupper(algs), Hmisc::capitalize(nmf.method), sep = "_")
+  alg <- paste(toupper(algs), stringr::str_to_title(nmf.method), sep = "_")
   arr <- init_array(data, reps, alg, nk)
   x_nmf <- nmf_transform(data)
 
@@ -202,7 +202,7 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
 cc_dist <- function(data, nk, p.item, reps, algs, distance, hc.method,
                     seed.data, prep.data, scale, type, min.var, pb, lalg, n) {
   alg <- paste(rep(toupper(algs), each = length(distance)),
-               rep(Hmisc::capitalize(distance), length(algs)),
+               rep(stringr::str_to_title(distance), length(algs)),
                sep = "_")
   arr <- init_array(data, reps, alg, nk)
 

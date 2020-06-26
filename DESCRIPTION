@@ -47,7 +47,6 @@ Imports:
     flux,
     ggplot2,
     grDevices,
-    Hmisc,
     infotheo,
     kernlab,
     klaR,
