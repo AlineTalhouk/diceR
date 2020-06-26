@@ -17,7 +17,7 @@
 #'   faster results
 #' @return Various plots from \code{graph_*{}} functions. All plots are
 #'   generated using `ggplot`, except for `graph_heatmap`, which uses
-#'   [gplots::heatmap.2()]. Colours used in `graph_heatmap` and `graph_tracking`
+#'   [NMF::aheatmap()]. Colours used in `graph_heatmap` and `graph_tracking`
 #'   utilize [RColorBrewer::RColorBrewer()] palettes.
 #' @name graphs
 #' @author Derek Chiu
@@ -94,11 +94,10 @@ get_cdf <- function(mat) {
 
 #' @param main heatmap title. If `NULL` (default), the titles will be taken from
 #'   names in `mat`
-#' @param ... additional arguments to [gplots::heatmap.2()]
 #'
 #' @rdname graphs
 #' @export
-graph_heatmap <- function(mat, main = NULL, ...) {
+graph_heatmap <- function(mat, main = NULL) {
   if (inherits(mat, "array")) {
     mat <- consensus_combine(mat, element = "matrix")
   }
@@ -110,18 +109,30 @@ graph_heatmap <- function(mat, main = NULL, ...) {
   main <- paste(main %||% names(dat), "Consensus Matrix")
   assertthat::assert_that(length(main) == length(purrr::flatten(mat)))
 
-  cs.col <- RColorBrewer::brewer.pal(8, "Set2")
-  cc <- purrr::map2(dat, rep(as.numeric(names(mat)),
-                             each = unique(purrr::map_int(mat, length))),
-                    ~ sample(cs.col)[hc(stats::dist(.x), k = .y)])
-  purrr::pwalk(list(dat, main, cc), function(dat, main, cc)
-    gplots::heatmap.2(x = dat, main = main, ColSideColors = cc,
-                      col = grDevices::colorRampPalette(
-                        RColorBrewer::brewer.pal(n = 9, "PuBuGn"))(256),
-                      labRow = "", labCol = "", trace = "none",
-                      hclustfun = function(d)
-                        stats::hclust(d, method = "average"),
-                      dendrogram = "column", ...))
+  annCol <- purrr::map2(dat, rep(as.numeric(names(mat)),
+                                 each = unique(purrr::map_int(mat, length))),
+                        ~ data.frame(Cluster = paste0("C", hc(stats::dist(.x), k = .y))))
+  pal <- RColorBrewer::brewer.pal(8, "Set2")
+  annColors <- annCol %>%
+    purrr::map(~ list(Cluster = stats::setNames(
+      head(pal, dplyr::n_distinct(.)),
+      levels(unlist(.))
+    )))
+
+  purrr::pwalk(list(dat, annCol, annColors, main), ~ {
+    NMF::aheatmap(
+      x = ..1,
+      color = "PuBuGn",
+      Rowv = FALSE,
+      Colv = TRUE,
+      labRow = NA,
+      labCol = NA,
+      hclustfun = function(d) stats::hclust(d, method = "average"),
+      annCol = ..2,
+      annColors = ..3,
+      main = ..4
+    )
+  })
 }
 
 #' @rdname graphs
@@ -153,12 +164,12 @@ graph_tracking <- function(cl) {
 
 #' @rdname graphs
 #' @export
-graph_all <- function(x, ...) {
+graph_all <- function(x) {
   mat <- consensus_combine(x, element = "matrix")
   cl <- consensus_combine(x, element = "class")
   graph_cdf(mat)
   graph_delta_area(mat)
-  graph_heatmap(mat, ...)
+  graph_heatmap(mat)
   graph_tracking(cl)
 }
 
