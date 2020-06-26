@@ -64,7 +64,8 @@ graph_cdf <- function(mat) {
 graph_delta_area <- function(mat) {
   dat <- get_cdf(mat) %>%
     dplyr::group_by(.data$Method, .data$k) %>%
-    dplyr::summarize(AUC = flux::auc(seq(0, 1, length.out = table(.data$k)[1]), .data$CDF)) %>%
+    dplyr::summarize(AUC = pracma::trapz(seq(0, 1, length.out = table(.data$k)[1]),
+                                         .data$CDF)) %>%
     dplyr::mutate(da = c(.data$AUC[1], diff(.data$AUC) / .data$AUC[-length(.data$AUC)]))
   if (length(unique(dat$k)) > 1) {
     p <- ggplot(dat, aes_(x = ~k, y = ~da)) +
