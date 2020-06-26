@@ -4,6 +4,7 @@ language: R
 sudo: required
 cache: packages
 dist: trusty
+bioc_required: true
 
 r:
   - 3.5
