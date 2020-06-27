@@ -18,7 +18,7 @@
 #' @return Various plots from \code{graph_*{}} functions. All plots are
 #'   generated using `ggplot`, except for `graph_heatmap`, which uses
 #'   [NMF::aheatmap()]. Colours used in `graph_heatmap` and `graph_tracking`
-#'   utilize [RColorBrewer::brewer.pal.info] palettes.
+#'   utilize [RColorBrewer::brewer.pal()] palettes.
 #' @name graphs
 #' @author Derek Chiu
 #' @export
