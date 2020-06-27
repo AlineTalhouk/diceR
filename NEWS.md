@@ -1,5 +1,23 @@
 # diceR (development version)
 
+## Decreased dependencies
+
+The following steps were taken to ensure that `diceR` can still run on R 3.5:
+
+* Set minimum version to R (>= 3.5) for `klaR` dependency `questionr`
+
+* In `graph_heatmap()`, use `NMF::aheatmap()` instead of `gplots::heatmap.2()`. `gplots` depends on `caTools`, which now relies on R (>= 3.6)
+
+* In `consensus_cluster()`, use `stringr::str_to_title()` instead of `Hmisc::capitalize()`. `Hmisc` depends on `latticeExtra`, which now relies on R (>= 3.6)
+
+* In `graph_delta_area()`, use `pracma::trapz()` instead of `flux::auc()`. `flux` also depends on `caTools`
+
+* In `prepare_data()`, use own implementation of `quantable::robustscale()` with all of the former function's defaults. `quantable` also depends on `caTools`
+
+* Specify Bioconductor installation on Travis since `NMF` now Imports `Biobase`
+
+## Minor improvements and bug fixes
+
 * Remove `suppressWarnings(RNGversion("3.5.0"))` after updating R version
 
 * Run `LCA()` unit test on imputed clustering object
