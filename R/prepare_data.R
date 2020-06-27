@@ -56,9 +56,9 @@ prepare_data <- function(data, scale = TRUE,
 #' Same as `quantable::robustscale()` with all default arguments
 #' @noRd
 robust_scale <- function(data) {
-  medians <- apply(data, 2, median, na.rm = TRUE)
+  medians <- apply(data, 2, stats::median, na.rm = TRUE)
   data <- sweep(data, 2, medians, "-")
-  mads <- apply(data, 2, mad, na.rm = TRUE)
+  mads <- apply(data, 2, stats::mad, na.rm = TRUE)
   mads <- mads / mean(mads)
   data <- sweep(data, 2, mads, "/")
   data
