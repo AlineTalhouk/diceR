@@ -35,7 +35,7 @@ faster results}
 Various plots from \code{graph_*{}} functions. All plots are
 generated using \code{ggplot}, except for \code{graph_heatmap}, which uses
 \code{\link[NMF:aheatmap]{NMF::aheatmap()}}. Colours used in \code{graph_heatmap} and \code{graph_tracking}
-utilize \code{\link[RColorBrewer:RColorBrewer]{RColorBrewer::RColorBrewer()}} palettes.
+utilize \link[RColorBrewer:brewer.pal.info]{RColorBrewer::brewer.pal.info} palettes.
 }
 \description{
 Graph cumulative distribution function (CDF) graphs, relative change in area
