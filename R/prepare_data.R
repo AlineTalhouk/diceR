@@ -48,7 +48,7 @@ prepare_data <- function(data, scale = TRUE,
   if (scale) {
     dat <- switch(type,
                   conventional = scale(dat),
-                  robust = robust_scale(dat)$data)
+                  robust = robust_scale(dat))
   }
   dat
 }
