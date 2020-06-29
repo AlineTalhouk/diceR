@@ -263,9 +263,7 @@ evi_table <- function(cl.df, ref.cl) {
     ),
     NMI = cl.df %>% purrr::map_dbl(ev_nmi, ref.lab = ref.cl)
   ) %>%
-    cbind(cl.df %>%
-            purrr::map(ev_confmat, ref.lab = ref.cl) %>%
-            do.call(rbind, .)) %>%
+    cbind(cl.df %>% purrr::map_dfr(ev_confmat, ref.lab = ref.cl)) %>%
     dplyr::mutate_all(list(~ structure(., names = colnames(cl.df))))
 }
 
