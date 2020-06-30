@@ -259,11 +259,17 @@ evi_table <- function(cl.df, ref.cl) {
     cl.df %>% purrr::map_df(
       clusterCrit::extCriteria,
       part2 = ref.cl,
-      crit = c("Hubert", "Jaccard", "McNemar", "Precision", "Rand", "Recall")
+      crit = c("Hubert", "Jaccard", "McNemar", "Rand")
     ),
     NMI = cl.df %>% purrr::map_dbl(ev_nmi, ref.lab = ref.cl)
   ) %>%
-    cbind(cl.df %>% purrr::map_dfr(ev_confmat, ref.lab = ref.cl)) %>%
+    dplyr::inner_join(
+      cl.df %>%
+        purrr::map_dfr(ev_confmat, ref.lab = ref.cl, .id = "Algorithms") %>%
+        dplyr::select(-.data$.estimator) %>%
+        tidyr::pivot_wider(names_from = ".metric", values_from = ".estimate"),
+      by = "Algorithms"
+    ) %>%
     dplyr::mutate_all(list(~ structure(., names = colnames(cl.df))))
 }
 

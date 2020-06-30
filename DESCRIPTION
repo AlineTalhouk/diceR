@@ -34,7 +34,6 @@ Imports:
     apcluster,
     assertthat,
     blockcluster,
-    caret,
     class,
     cli,
     clue,
@@ -65,7 +64,8 @@ Imports:
     sigclust,
     stringr,
     tibble,
-    tidyr
+    tidyr,
+    yardstick
 Suggests: 
     covr,
     knitr,

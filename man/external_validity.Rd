@@ -21,12 +21,22 @@ ev_confmat(pred.lab, ref.lab)
 \value{
 \code{ev_nmi} returns the normalized mutual information.
 
-\code{ev_confmat} returns a vector of the following metrics: overall
-accuracy, Cohen's kappa, no information rate, accuracy p-value. Statistics
-are difficult to compare when there are multiclass comparisons. We hence
-also report averaged statistics for: sensitivity, specificity, PPV, NPV,
-prevalence, detection rate, detection prevalence, accuracy, and balanced
-accuracy.
+\code{ev_confmat} returns a tibble of the following summary statistics using \code{\link[yardstick:summary.conf_mat]{yardstick::summary.conf_mat()}}:
+\itemize{
+\item \code{accuracy}: Accuracy
+\item \code{kap}: Cohen's kappa
+\item \code{sens}: Sensitivity
+\item \code{spec}: Specificity
+\item \code{ppv}: Positive predictive value
+\item \code{npv}: Negative predictive value
+\item \code{mcc}: Matthews correlation coefficient
+\item \code{j_index}: Youden's J statistic
+\item \code{bal_accuracy}: Balanced accuracy
+\item \code{detection_prevalence}: Detection prevalence
+\item \code{precision}: alias for \code{ppv}
+\item \code{recall}: alias for \code{sens}
+\item \code{f_meas}: F Measure
+}
 }
 \description{
 \strong{E}xternal \strong{v}alidity indices compare a predicted clustering
@@ -36,7 +46,9 @@ result with a reference class or gold standard.
 \code{ev_nmi} calculates the normalized mutual information
 
 \code{ev_confmat} calculates a variety of statistics associated with
-confusion matrices.
+confusion matrices. Accuracy, Cohen's kappa, and Matthews correlation
+coefficient have direct multiclass definitions, whereas all other
+metrics use macro-averaging.
 }
 \note{
 \code{ev_nmi} is adapted from \code{\link[infotheo:mutinformation]{infotheo::mutinformation()}}
