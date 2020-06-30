@@ -37,13 +37,17 @@ hc <- function(d, k, method = "average") {
 #' DIvisive ANAlysis Clustering
 #' @noRd
 diana <- function(d, k) {
-  as.integer(stats::cutree(cluster::diana(d, diss = TRUE), k))
+  if (requireNamespace("cluster", quietly = TRUE)) {
+    as.integer(stats::cutree(cluster::diana(d, diss = TRUE), k))
+  }
 }
 
 #' Partitioning Around Medoids
 #' @noRd
 pam <- function(d, k) {
-  as.integer(cluster::pam(d, k, cluster.only = TRUE))
+  if (requireNamespace("cluster", quietly = TRUE)) {
+    as.integer(cluster::pam(d, k, cluster.only = TRUE))
+  }
 }
 
 
@@ -58,17 +62,21 @@ km <- function(x, k) {
 #' Affinity Propagation
 #' @noRd
 ap <- function(x, k) {
-  suppressWarnings(
-    apcluster::apclusterK(apcluster::negDistMat, x, k, verbose = FALSE)@idx
-  ) %>%
-    dplyr::dense_rank() %>%
-    purrr::when(length(.) > 0 ~ ., ~ NA)
+  if (requireNamespace("apcluster", quietly = TRUE)) {
+    suppressWarnings(
+      apcluster::apclusterK(apcluster::negDistMat, x, k, verbose = FALSE)@idx
+    ) %>%
+      dplyr::dense_rank() %>%
+      purrr::when(length(.) > 0 ~ ., ~ NA)
+  }
 }
 
 #' Spectral Clustering (Radial-Basis Kernel)
 #' @noRd
 sc <- function(x, k) {
-  kernlab::specc(as.matrix(x), k, kernel = "rbfdot")@.Data
+  if (requireNamespace("kernlab", quietly = TRUE)) {
+    kernlab::specc(as.matrix(x), k, kernel = "rbfdot")@.Data
+  }
 }
 
 #' Gaussian Mixture Model
@@ -80,23 +88,27 @@ gmm <- function(x, k) {
 #' Block Clustering (Co-clustering)
 #' @noRd
 block <- function(x, k) {
-  tryCatch(
-    sink_output(
-      blockcluster::cocluster(as.matrix(x), "continuous",
-                              nbcocluster = c(k, k))@rowclass + 1
-    ),
-    error = function(e) return(NA)
-  ) %>%
-    purrr::when(length(.) > 0 ~ ., ~ NA)
+  if (requireNamespace("blockcluster", quietly = TRUE)) {
+    tryCatch(
+      sink_output(
+        blockcluster::cocluster(as.matrix(x), "continuous",
+                                nbcocluster = c(k, k))@rowclass + 1
+      ),
+      error = function(e) return(NA)
+    ) %>%
+      purrr::when(length(.) > 0 ~ ., ~ NA)
+  }
 }
 
 #' Self-Organizing Maps
 #' @noRd
 som <- function(x, k, xdim, ydim, rlen, alpha, method) {
-  x %>%
-    purrr::when(is.matrix(.) ~ ., ~ as.matrix(.)) %>%
-    som_train(xdim = xdim, ydim = ydim, rlen = rlen, alpha = alpha) %>%
-    som_cluster(k = k, method = method)
+  if (requireNamespace("kohonen", quietly = TRUE)) {
+    x %>%
+      purrr::when(is.matrix(.) ~ ., ~ as.matrix(.)) %>%
+      som_train(xdim = xdim, ydim = ydim, rlen = rlen, alpha = alpha) %>%
+      som_cluster(k = k, method = method)
+  }
 }
 
 #' Train the SOM, specifiy grid size and other optional parameters based on the
@@ -132,21 +144,25 @@ som_cluster <- function(model, k, method) {
 #' @references https://academic.oup.com/bioinformatics/article/26/22/2841/227572
 #' @noRd
 cmeans <- function(x, k) {
-  N <- nrow(x)
-  D <- ncol(x)
-  m <- 1 + (1418 / N + 22.05) * D ^ (-2) +
-    (12.33 / N + 0.243) * D ^ (-0.0406 * log(N) - 0.1134)
-  fuzzy <- e1071::cmeans(x = x, centers = k, m = m)
-  if (length(fuzzy$cluster) == 0) {
-    fuzzy <- e1071::cmeans(x = x, centers = k, m = 2)
+  if (requireNamespace("e1071", quietly = TRUE)) {
+    N <- nrow(x)
+    D <- ncol(x)
+    m <- 1 + (1418 / N + 22.05) * D ^ (-2) +
+      (12.33 / N + 0.243) * D ^ (-0.0406 * log(N) - 0.1134)
+    fuzzy <- e1071::cmeans(x = x, centers = k, m = m)
+    if (length(fuzzy$cluster) == 0) {
+      fuzzy <- e1071::cmeans(x = x, centers = k, m = 2)
+    }
+    fuzzy$cluster
   }
-  fuzzy$cluster
 }
 
 #' Hierarchical Density-Based Spatial Clustering of Applications with Noise
 #' @noRd
 hdbscan <- function(x, minPts) {
-  dbscan::hdbscan(x = x, minPts = minPts)$cluster
+  if (requireNamespace("dbscan", quietly = TRUE)) {
+    dbscan::hdbscan(x = x, minPts = minPts)$cluster
+  }
 }
 
 #' Summarize the proportion of outliers and number of clusters

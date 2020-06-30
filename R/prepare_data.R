@@ -32,7 +32,7 @@ prepare_data <- function(data, scale = TRUE,
                          type = c("conventional", "robust", "tsne"),
                          min.var = 1) {
   type <- match.arg(type)
-  if (type == "tsne") {
+  if (type == "tsne" && requireNamespace("Rtsne", quietly = TRUE)) {
     return(
       data %>%
         as.matrix() %>%
