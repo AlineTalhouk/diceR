@@ -2,11 +2,17 @@
 
 ## Decreased dependencies
 
-The following steps were taken to ensure that `diceR` can still run on R 3.5:
+The following steps were taken to minimize dependencies and ensure that `diceR` can still run on R 3.5:
+
+* Moved `apcluster`, `blockcluster`, `cluster`, `dbscan`, `e1071`, `kernlab`, and `kohonen` to `Suggests`, use their specific clustering algorithms conditionally. `mclust` needs to be in `Imports` because `mclust::mclustBIC()` needs to be imported
+
+* Moved `Rtsne` to `Suggests`, use within `prepare_data()` conditionally
+
+* Removed old dependency `grDevices` from `Imports`
 
 * Set minimum version to R (>= 3.5) for `klaR` dependency `questionr`
 
-* In `ev_confmat()`, use `yardstick::conf_mat()` instead of `caret::confusionMatrix()`. `caret` has many dependencies, so best to avoid using on it
+* In `ev_confmat()`, use `yardstick::conf_mat()` instead of `caret::confusionMatrix()`. `caret` has many dependencies, so best to avoid using it
 
 * In `graph_heatmap()`, use `NMF::aheatmap()` instead of `gplots::heatmap.2()`. `gplots` depends on `caTools`, which now relies on R (>= 3.6)
 
@@ -16,7 +22,7 @@ The following steps were taken to ensure that `diceR` can still run on R 3.5:
 
 * In `prepare_data()`, use own implementation of `quantable::robustscale()` with all of the former function's defaults. `quantable` also depends on `caTools`
 
-* Specify Bioconductor installation on Travis since `NMF` now Imports `Biobase`
+* Specify Bioconductor installation on Travis and AppVeyor since `NMF` now Imports `Biobase`
 
 ## Minor improvements and bug fixes
 
