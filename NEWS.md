@@ -6,6 +6,8 @@ The following steps were taken to ensure that `diceR` can still run on R 3.5:
 
 * Set minimum version to R (>= 3.5) for `klaR` dependency `questionr`
 
+* In `ev_confmat()`, use `yardstick::conf_mat()` instead of `caret::confusionMatrix()`. `caret` has many dependencies, so best to avoid using on it
+
 * In `graph_heatmap()`, use `NMF::aheatmap()` instead of `gplots::heatmap.2()`. `gplots` depends on `caTools`, which now relies on R (>= 3.6)
 
 * In `consensus_cluster()`, use `stringr::str_to_title()` instead of `Hmisc::capitalize()`. `Hmisc` depends on `latticeExtra`, which now relies on R (>= 3.6)
