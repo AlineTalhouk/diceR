@@ -164,7 +164,7 @@ LCA <- function(E, is.relabelled = TRUE, seed = 1) {
     formula = f,
     data = flat_E,
     nclass = max(flat_E, na.rm = TRUE),
-    verbose = TRUE,
+    verbose = FALSE,
     nrep = 5,
     na.rm = FALSE
   )
