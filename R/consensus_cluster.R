@@ -78,7 +78,6 @@
 #'   array in the consensus result. Instead, we report two summary statistics as
 #'   attributes: the proportion of outliers and the number of clusters.
 #' @author Derek Chiu, Aline Talhouk
-#' @importFrom mclust mclustBIC
 #' @export
 #' @examples
 #' data(hgsc)
