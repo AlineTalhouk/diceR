@@ -44,9 +44,7 @@ Imports:
     mclust,
     methods,
     NMF,
-    poLCA,
     pracma,
-    progress,
     purrr (>= 0.2.3),
     RankAggreg,
     Rcpp,
@@ -66,6 +64,8 @@ Suggests:
     knitr,
     kohonen,
     pander,
+    poLCA,
+    progress,
     rmarkdown,
     Rtsne,
     testthat

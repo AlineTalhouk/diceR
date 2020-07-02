@@ -153,20 +153,22 @@ LCE <- function(E, k, dc = 0.8, R = 10, sim.mat = c("cts", "srs", "asrs")) {
 #' FALSE)
 #' table(LCA(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 LCA <- function(E, is.relabelled = TRUE, seed = 1) {
-  if (!"package:MASS" %in% search()) attachNamespace("MASS")
-  flat_E <- E %>%
-    flatten_E(is.relabelled = is.relabelled) %>%
-    as.data.frame()
-  res <- paste(names(flat_E), collapse = ", ")
-  f <- stats::as.formula(paste0("cbind(", res, ") ~ 1"))
-  set.seed(seed)
-  M <- poLCA::poLCA(
-    formula = f,
-    data = flat_E,
-    nclass = max(flat_E, na.rm = TRUE),
-    verbose = FALSE,
-    nrep = 5,
-    na.rm = FALSE
-  )
-  M[["predclass"]]
+  if (requireNamespace("poLCA", quietly = TRUE)) {
+    if (!"package:MASS" %in% search()) attachNamespace("MASS")
+    flat_E <- E %>%
+      flatten_E(is.relabelled = is.relabelled) %>%
+      as.data.frame()
+    res <- paste(names(flat_E), collapse = ", ")
+    f <- stats::as.formula(paste0("cbind(", res, ") ~ 1"))
+    set.seed(seed)
+    M <- poLCA::poLCA(
+      formula = f,
+      data = flat_E,
+      nclass = max(flat_E, na.rm = TRUE),
+      verbose = FALSE,
+      nrep = 5,
+      na.rm = FALSE
+    )
+    M[["predclass"]]
+  }
 }
