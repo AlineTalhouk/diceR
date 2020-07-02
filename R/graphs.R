@@ -113,7 +113,8 @@ graph_heatmap <- function(mat, main = NULL) {
   annCol <- purrr::map2(dat, rep(as.numeric(names(mat)),
                                  each = unique(purrr::map_int(mat, length))),
                         ~ data.frame(Cluster = paste0("C", hc(stats::dist(.x), k = .y))))
-  pal <- RColorBrewer::brewer.pal(8, "Set2")
+  pal <- c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F",
+           "#E5C494", "#B3B3B3")  # RColorBrewer Set2
   annColors <- annCol %>%
     purrr::map(~ list(Cluster = stats::setNames(
       head(pal, dplyr::n_distinct(.)),
