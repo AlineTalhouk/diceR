@@ -44,7 +44,6 @@ Imports:
     mclust,
     methods,
     NMF,
-    pracma,
     purrr (>= 0.2.3),
     RankAggreg,
     Rcpp,

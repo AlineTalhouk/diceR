@@ -75,6 +75,9 @@ graph_heatmap(CC2)
 # Track how cluster assignments change between algorithms
 p <- graph_tracking(CC1)
 }
+\references{
+https://stackoverflow.com/questions/4954507/calculate-the-area-under-a-curve
+}
 \author{
 Derek Chiu
 }
