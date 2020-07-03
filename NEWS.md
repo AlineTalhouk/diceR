@@ -4,7 +4,13 @@
 
 The following steps were taken to minimize dependencies and ensure that `diceR` can still run on R 3.5:
 
+* Removed `cli`, `RColorBrewer`, and `sigclust` from Imports
+
 * Moved `apcluster`, `blockcluster`, `cluster`, `dbscan`, `e1071`, `kernlab`, and `kohonen` to `Suggests`, use their specific clustering algorithms conditionally. `mclust` needs to be in `Imports` because `mclust::mclustBIC()` needs to be imported
+
+* Moved `progress` to `Suggests`, use within `consensus_cluster()` conditionally
+
+* Moved `poLCA` to `Suggests`, use within `dice()` conditionally
 
 * Moved `Rtsne` to `Suggests`, use within `prepare_data()` conditionally
 
@@ -18,7 +24,7 @@ The following steps were taken to minimize dependencies and ensure that `diceR` 
 
 * In `consensus_cluster()`, use `stringr::str_to_title()` instead of `Hmisc::capitalize()`. `Hmisc` depends on `latticeExtra`, which now relies on R (>= 3.6)
 
-* In `graph_delta_area()`, use `pracma::trapz()` instead of `flux::auc()`. `flux` also depends on `caTools`
+* In `graph_delta_area()`, use base solution instead of `flux::auc()`. `flux` also depends on `caTools`
 
 * In `prepare_data()`, use own implementation of `quantable::robustscale()` with all of the former function's defaults. `quantable` also depends on `caTools`
 
