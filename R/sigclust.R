@@ -40,7 +40,7 @@ sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
                      icovest = 2) {
   n <- dim(x)[1]
   p <- dim(x)[2]
-  if (n > 1) {
+  if (n > 1 & requireNamespace("sigclust", quietly = TRUE)) {
     x <- as.matrix(x)
     if (labflag == 0) {
       xclust <- .cluster(x, k)
@@ -51,7 +51,7 @@ sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
         xcindex <- xclust$cindex
       }
     }
-    xvareigen <- .vareigen(x, n, p, icovest)
+    xvareigen <- sigclust::.vareigen(x, n, p, icovest)
     simcindex <- rep(0, nsim)
     for (i in 1:nsim) {
       xsim <- .simnull(xvareigen$vsimeigval, n, p, k)
@@ -114,79 +114,4 @@ sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
   simnorm <- t(replicate(n, stats::rnorm(p, sd = sqrt(vsimeigval))))
   simclust <- .cluster(simnorm, k)
   list(cindex = simclust$cindex)
-}
-
-#' @noRd
-.vareigen <- function(x, n, p, icovest) {
-  if (dim(x)[1] == n & dim(x)[2] == p) {
-    mad1 <- mad(x)
-    simbackvar <- mad1^2
-    xcov <- cov(x)
-    xeig <- eigen(xcov, symmetric = TRUE, only.values = TRUE)
-    veigval <- xeig$values
-    vsimeigval <- xeig$values
-    if (icovest == 1) {
-      taub = 0
-      tauu <- .sigclustcovest(veigval, simbackvar)$tau
-      etau = (tauu - taub)/100
-      ids = rep(0, 100)
-      for (i in 1:100) {
-        taus = taub + (i - 1) * etau
-        eigval.temp <- veigval - taus
-        eigval.temp[eigval.temp < simbackvar] <- simbackvar
-        ids[i] <- eigval.temp[1]/sum(eigval.temp)
-      }
-      tau <- taub + (which.max(ids) - 1) * etau
-      vsimeigval <- veigval - tau
-      vsimeigval[vsimeigval < simbackvar] <- simbackvar
-    }
-    if (icovest == 2) {
-      vsimeigval[veigval < 0] <- 0
-    }
-    if (icovest == 3) {
-      vsimeigval[veigval < simbackvar] <- simbackvar
-    }
-    list(veigval = veigval, simbackvar = simbackvar, vsimeigval = vsimeigval)
-  }
-  else {
-    print("Wrong size of matrix x!")
-    return(0)
-  }
-}
-
-#' @noRd
-.sigclustcovest <- function(vsampeigv, sig2b) {
-  d <- length(vsampeigv)
-  vtaucand <- vsampeigv - sig2b
-  which <- which(vtaucand <= 0)
-  icut <- which[1] - 1
-  powertail <- sum(vsampeigv[(icut + 1):d])
-  power2shift <- sig2b * (d - icut) - powertail
-  vi <- c(1:icut)
-  vcumtaucand <- sort(cumsum(sort(vtaucand[vi])), decreasing = TRUE)
-  vpowershifted <- (vi - 1) * vtaucand[vi] + vcumtaucand
-  flag <- vpowershifted < power2shift
-  if (sum(flag) == 0) {
-    itau <- 0
-  }
-  else {
-    which <- which(flag > 0)
-    itau <- which[1]
-  }
-  if (itau == 1) {
-    powerprop <- power2shift/vpowershifted
-    tau <- powerprop * vtaucand[1]
-  }
-  else if (itau == 0) {
-    powerprop <- power2shift/vpowershifted[icut]
-    tau <- powerprop * vtaucand[icut]
-  }
-  else {
-    powerprop <- (power2shift - vpowershifted[itau])/(vpowershifted[itau - 1] - vpowershifted[itau])
-    tau <- vtaucand[itau] + powerprop * (vtaucand[itau - 1] - vtaucand[itau])
-  }
-  veigvest <- vsampeigv - tau
-  flag <- veigvest > sig2b
-  veigvest <- flag * veigvest + (1 - flag) * (sig2b * rep(1, d))
-  list(veigvest = veigvest, tau = tau)
 }

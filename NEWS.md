@@ -4,9 +4,11 @@
 
 The following steps were taken to minimize dependencies and ensure that `diceR` can still run on R 3.5:
 
-* Removed `cli`, `RColorBrewer`, and `sigclust` from Imports
+* Removed `cli` and `RColorBrewer` from Imports
 
 * Moved `apcluster`, `blockcluster`, `cluster`, `dbscan`, `e1071`, `kernlab`, and `kohonen` to `Suggests`, use their specific clustering algorithms conditionally. `mclust` needs to be in `Imports` because `mclust::mclustBIC()` needs to be imported
+
+* Moved `sigclust` to `Suggests`, use within `sigclust()` conditionally
 
 * Moved `progress` to `Suggests`, use within `consensus_cluster()` conditionally
 

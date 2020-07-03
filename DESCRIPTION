@@ -66,6 +66,7 @@ Suggests:
     progress,
     rmarkdown,
     Rtsne,
+    sigclust,
     testthat
 LinkingTo: 
     Rcpp
