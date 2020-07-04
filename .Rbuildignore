@@ -11,3 +11,4 @@
 ^docs$
 ^cran-comments\.md$
 ^\.covrignore$
+^LICENSE\.md$
