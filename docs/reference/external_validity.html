@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,7 +42,6 @@
 <meta property="og:title" content="External validity indices — external_validity" />
 <meta property="og:description" content="External validity indices compare a predicted clustering
 result with a reference class or gold standard." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -56,7 +59,7 @@ result with a reference class or gold standard." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -70,7 +73,7 @@ result with a reference class or gold standard." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9005</span>
       </span>
     </div>
 
@@ -141,17 +144,29 @@ result with a reference class or gold standard.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>ev_nmi</code> returns the normalized mutual information.</p>
-<p><code>ev_confmat</code> returns a vector of the following metrics: overall
-accuracy, Cohen's kappa, no information rate, accuracy p-value. Statistics
-are difficult to compare when there are multiclass comparisons. We hence
-also report averaged statistics for: sensitivity, specificity, PPV, NPV,
-prevalence, detection rate, detection prevalence, accuracy, and balanced
-accuracy.</p>
+<p><code>ev_confmat</code> returns a tibble of the following summary statistics using <code><a href='https://rdrr.io/pkg/yardstick/man/summary.conf_mat.html'>yardstick::summary.conf_mat()</a></code>:</p><ul>
+<li><p><code>accuracy</code>: Accuracy</p></li>
+<li><p><code>kap</code>: Cohen's kappa</p></li>
+<li><p><code>sens</code>: Sensitivity</p></li>
+<li><p><code>spec</code>: Specificity</p></li>
+<li><p><code>ppv</code>: Positive predictive value</p></li>
+<li><p><code>npv</code>: Negative predictive value</p></li>
+<li><p><code>mcc</code>: Matthews correlation coefficient</p></li>
+<li><p><code>j_index</code>: Youden's J statistic</p></li>
+<li><p><code>bal_accuracy</code>: Balanced accuracy</p></li>
+<li><p><code>detection_prevalence</code>: Detection prevalence</p></li>
+<li><p><code>precision</code>: alias for <code>ppv</code></p></li>
+<li><p><code>recall</code>: alias for <code>sens</code></p></li>
+<li><p><code>f_meas</code>: F Measure</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>ev_nmi</code> calculates the normalized mutual information</p>
 <p><code>ev_confmat</code> calculates a variety of statistics associated with
-confusion matrices.</p>
+confusion matrices. Accuracy, Cohen's kappa, and Matthews correlation
+coefficient have direct multiclass definitions, whereas all other
+metrics use macro-averaging.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p><code>ev_nmi</code> is adapted from <code><a href='https://rdrr.io/pkg/infotheo/man/mutinformation.html'>infotheo::mutinformation()</a></code></p>
@@ -161,34 +176,32 @@ confusion matrices.</p>
 for combining multiple partitions. J. Mach. Learn. Res. 2002;3:583-617.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>RNGversion</a></span>(<span class='st'>"3.5.0"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
 <span class='no'>E</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='fl'>1000</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>byrow</span> <span class='kw'>=</span>
               <span class='fl'>FALSE</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='fl'>100</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='fl'>100</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'>ev_nmi</span>(<span class='no'>x</span>, <span class='no'>y</span>)</div><div class='output co'>#&gt; [1] 0.02372827</div><div class='input'><span class='fu'>ev_confmat</span>(<span class='no'>x</span>, <span class='no'>y</span>)</div><div class='output co'>#&gt;          Overall Accuracy             Cohen's kappa       No Information Rate 
-#&gt;                0.31000000                0.07716999                0.32000000 
-#&gt;       P-Value [Acc &gt; NIR]       Average Sensitivity       Average Specificity 
-#&gt;                0.62159446                0.30251157                0.77010015 
-#&gt;               Average PPV               Average NPV    Average Detection Rate 
-#&gt;                0.30685185                0.76935412                0.07750000 
-#&gt;          Average Accuracy Average Balanced Accuracy 
-#&gt;                0.65500000                0.53630586 </div></pre>
+<span class='fu'>ev_nmi</span>(<span class='no'>x</span>, <span class='no'>y</span>)</div><div class='output co'>#&gt; [1] 0.02372827</div><div class='input'><span class='fu'>ev_confmat</span>(<span class='no'>x</span>, <span class='no'>y</span>)</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 13 x 3</span><span>
+#&gt;    .metric              .estimator .estimate
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> accuracy             multiclass    0.31  
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> kap                  multiclass    0.077</span><span style='text-decoration: underline;'>2</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> sens                 macro         0.303 
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> spec                 macro         0.770 
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> ppv                  macro         0.307 
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> npv                  macro         0.769 
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> mcc                  multiclass    0.077</span><span style='text-decoration: underline;'>7</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> j_index              macro         0.072</span><span style='text-decoration: underline;'>6</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> bal_accuracy         macro         0.536 
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> detection_prevalence macro         0.25  
+#&gt; </span><span style='color: #BCBCBC;'>11</span><span> precision            macro         0.307 
+#&gt; </span><span style='color: #BCBCBC;'>12</span><span> recall               macro         0.303 
+#&gt; </span><span style='color: #BCBCBC;'>13</span><span> f_meas               macro         0.302 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Johnson Liu, Derek Chiu</p>
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -199,7 +212,7 @@ for combining multiple partitions. J. Mach. Learn. Res. 2002;3:583-617.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

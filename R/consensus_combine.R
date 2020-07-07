@@ -17,7 +17,6 @@
 #' @export
 #' @examples
 #' # Consensus clustering for multiple algorithms
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(911)
 #' x <- matrix(rnorm(500), ncol = 10)
 #' CC1 <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = "ap",

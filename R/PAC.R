@@ -27,7 +27,6 @@
 #'   4.
 #' @export
 #' @examples
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' x <- replicate(100, rbinom(100, 4, 0.2))
 #' y <- consensus_matrix(x)

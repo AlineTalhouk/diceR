@@ -5,4 +5,5 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom purrr "%||%"
 #' @importFrom Rcpp sourceCpp
+#' @importFrom mclust mclustBIC
 "_PACKAGE"

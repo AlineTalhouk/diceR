@@ -13,11 +13,11 @@ graph_cdf(mat)
 
 graph_delta_area(mat)
 
-graph_heatmap(mat, main = NULL, ...)
+graph_heatmap(mat, main = NULL)
 
 graph_tracking(cl)
 
-graph_all(x, ...)
+graph_all(x)
 }
 \arguments{
 \item{mat}{same as \code{x}, or a list of consensus matrices computed from \code{x} for
@@ -25,8 +25,6 @@ faster results}
 
 \item{main}{heatmap title. If \code{NULL} (default), the titles will be taken from
 names in \code{mat}}
-
-\item{...}{additional arguments to \code{\link[gplots:heatmap.2]{gplots::heatmap.2()}}}
 
 \item{cl}{same as \code{x}, or a matrix of consensus classes computed from \code{x} for
 faster results}
@@ -36,8 +34,8 @@ faster results}
 \value{
 Various plots from \code{graph_*{}} functions. All plots are
 generated using \code{ggplot}, except for \code{graph_heatmap}, which uses
-\code{\link[gplots:heatmap.2]{gplots::heatmap.2()}}. Colours used in \code{graph_heatmap} and \code{graph_tracking}
-utilize \code{\link[RColorBrewer:RColorBrewer]{RColorBrewer::RColorBrewer()}} palettes.
+\code{\link[NMF:aheatmap]{NMF::aheatmap()}}. Colours used in \code{graph_heatmap} and \code{graph_tracking}
+utilize \code{\link[RColorBrewer:ColorBrewer]{RColorBrewer::brewer.pal()}} palettes.
 }
 \description{
 Graph cumulative distribution function (CDF) graphs, relative change in area
@@ -54,7 +52,6 @@ functions.
 \examples{
 # Consensus clustering for 3 algorithms
 library(ggplot2)
-suppressWarnings(RNGversion("3.5.0"))
 set.seed(911)
 x <- matrix(rnorm(80), ncol = 10)
 CC1 <- consensus_cluster(x, nk = 2:4, reps = 3,
@@ -77,6 +74,9 @@ graph_heatmap(CC2)
 
 # Track how cluster assignments change between algorithms
 p <- graph_tracking(CC1)
+}
+\references{
+https://stackoverflow.com/questions/4954507/calculate-the-area-under-a-curve
 }
 \author{
 Derek Chiu

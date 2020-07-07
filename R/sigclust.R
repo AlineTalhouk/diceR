@@ -34,14 +34,13 @@
 #' progress = FALSE)
 #' cl.mat <- consensus_combine(cc, element = "class")
 #' lab <- cl.mat$`4`[, 1]
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' str(sigclust(x = dat, k = nk, nsim = 50, labflag = 1, label = lab))
 sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
                      icovest = 2) {
   n <- dim(x)[1]
   p <- dim(x)[2]
-  if (n > 1) {
+  if (n > 1 & requireNamespace("sigclust", quietly = TRUE)) {
     x <- as.matrix(x)
     if (labflag == 0) {
       xclust <- .cluster(x, k)

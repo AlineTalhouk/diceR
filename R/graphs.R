@@ -17,15 +17,14 @@
 #'   faster results
 #' @return Various plots from \code{graph_*{}} functions. All plots are
 #'   generated using `ggplot`, except for `graph_heatmap`, which uses
-#'   [gplots::heatmap.2()]. Colours used in `graph_heatmap` and `graph_tracking`
-#'   utilize [RColorBrewer::RColorBrewer()] palettes.
+#'   [NMF::aheatmap()]. Colours used in `graph_heatmap` and `graph_tracking`
+#'   utilize [RColorBrewer::brewer.pal()] palettes.
 #' @name graphs
 #' @author Derek Chiu
 #' @export
 #' @examples
 #' # Consensus clustering for 3 algorithms
 #' library(ggplot2)
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(911)
 #' x <- matrix(rnorm(80), ncol = 10)
 #' CC1 <- consensus_cluster(x, nk = 2:4, reps = 3,
@@ -61,11 +60,13 @@ graph_cdf <- function(mat) {
 }
 
 #' @rdname graphs
+#' @references https://stackoverflow.com/questions/4954507/calculate-the-area-under-a-curve
 #' @export
 graph_delta_area <- function(mat) {
   dat <- get_cdf(mat) %>%
     dplyr::group_by(.data$Method, .data$k) %>%
-    dplyr::summarize(AUC = flux::auc(seq(0, 1, length.out = table(.data$k)[1]), .data$CDF)) %>%
+    dplyr::summarize(AUC = sum(diff(seq(0, 1, length.out = length(.data$k))) *
+                                 (utils::head(.data$CDF, -1) + utils::tail(.data$CDF, -1))) / 2) %>%
     dplyr::mutate(da = c(.data$AUC[1], diff(.data$AUC) / .data$AUC[-length(.data$AUC)]))
   if (length(unique(dat$k)) > 1) {
     p <- ggplot(dat, aes_(x = ~k, y = ~da)) +
@@ -88,18 +89,17 @@ get_cdf <- function(mat) {
   mat %>%
     purrr::modify_depth(2, ~ .x[lower.tri(.x, diag = TRUE)]) %>%
     purrr::imap(~ purrr::set_names(.x, paste(.y, names(.x), sep = "."))) %>%
-    dplyr::bind_cols() %>%
+    purrr::flatten_dfc() %>%
     tidyr::gather_("Group", "CDF", names(.)) %>%
     tidyr::separate_("Group", c("k", "Method"), sep = "\\.")
 }
 
 #' @param main heatmap title. If `NULL` (default), the titles will be taken from
 #'   names in `mat`
-#' @param ... additional arguments to [gplots::heatmap.2()]
 #'
 #' @rdname graphs
 #' @export
-graph_heatmap <- function(mat, main = NULL, ...) {
+graph_heatmap <- function(mat, main = NULL) {
   if (inherits(mat, "array")) {
     mat <- consensus_combine(mat, element = "matrix")
   }
@@ -111,18 +111,31 @@ graph_heatmap <- function(mat, main = NULL, ...) {
   main <- paste(main %||% names(dat), "Consensus Matrix")
   assertthat::assert_that(length(main) == length(purrr::flatten(mat)))
 
-  cs.col <- RColorBrewer::brewer.pal(8, "Set2")
-  cc <- purrr::map2(dat, rep(as.numeric(names(mat)),
-                             each = unique(purrr::map_int(mat, length))),
-                    ~ sample(cs.col)[hc(stats::dist(.x), k = .y)])
-  purrr::pwalk(list(dat, main, cc), function(dat, main, cc)
-    gplots::heatmap.2(x = dat, main = main, ColSideColors = cc,
-                      col = grDevices::colorRampPalette(
-                        RColorBrewer::brewer.pal(n = 9, "PuBuGn"))(256),
-                      labRow = "", labCol = "", trace = "none",
-                      hclustfun = function(d)
-                        stats::hclust(d, method = "average"),
-                      dendrogram = "column", ...))
+  annCol <- purrr::map2(dat, rep(as.numeric(names(mat)),
+                                 each = unique(purrr::map_int(mat, length))),
+                        ~ data.frame(Cluster = paste0("C", hc(stats::dist(.x), k = .y))))
+  pal <- c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F",
+           "#E5C494", "#B3B3B3")  # RColorBrewer Set2
+  annColors <- annCol %>%
+    purrr::map(~ list(Cluster = stats::setNames(
+      head(pal, dplyr::n_distinct(.)),
+      levels(unlist(.))
+    )))
+
+  purrr::pwalk(list(dat, annCol, annColors, main), ~ {
+    NMF::aheatmap(
+      x = ..1,
+      color = "PuBuGn",
+      Rowv = FALSE,
+      Colv = TRUE,
+      labRow = NA,
+      labCol = NA,
+      hclustfun = function(d) stats::hclust(d, method = "average"),
+      annCol = ..2,
+      annColors = ..3,
+      main = ..4
+    )
+  })
 }
 
 #' @rdname graphs
@@ -154,12 +167,12 @@ graph_tracking <- function(cl) {
 
 #' @rdname graphs
 #' @export
-graph_all <- function(x, ...) {
+graph_all <- function(x) {
   mat <- consensus_combine(x, element = "matrix")
   cl <- consensus_combine(x, element = "class")
   graph_cdf(mat)
   graph_delta_area(mat)
-  graph_heatmap(mat, ...)
+  graph_heatmap(mat)
   graph_tracking(cl)
 }
 

@@ -23,7 +23,6 @@
 #' @author Derek Chiu
 #' @export
 #' @examples
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(2)
 #' x <- replicate(10, rnorm(100))
 #' x.prep <- prepare_data(x)
@@ -33,7 +32,7 @@ prepare_data <- function(data, scale = TRUE,
                          type = c("conventional", "robust", "tsne"),
                          min.var = 1) {
   type <- match.arg(type)
-  if (type == "tsne") {
+  if (type == "tsne" && requireNamespace("Rtsne", quietly = TRUE)) {
     return(
       data %>%
         as.matrix() %>%
@@ -49,7 +48,18 @@ prepare_data <- function(data, scale = TRUE,
   if (scale) {
     dat <- switch(type,
                   conventional = scale(dat),
-                  robust = quantable::robustscale(dat)$data)
+                  robust = robust_scale(dat))
   }
   dat
+}
+
+#' Same as `quantable::robustscale()` with all default arguments
+#' @noRd
+robust_scale <- function(data) {
+  medians <- apply(data, 2, stats::median, na.rm = TRUE)
+  data <- sweep(data, 2, medians, "-")
+  mads <- apply(data, 2, stats::mad, na.rm = TRUE)
+  mads <- mads / mean(mads)
+  data <- sweep(data, 2, mads, "/")
+  data
 }

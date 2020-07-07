@@ -4,7 +4,9 @@
 \name{hgsc}
 \alias{hgsc}
 \title{Gene expression data for High Grade Serous Carcinoma from TCGA}
-\format{A data frame with 489 rows and 321 columns.}
+\format{
+A data frame with 489 rows and 321 columns.
+}
 \usage{
 hgsc
 }

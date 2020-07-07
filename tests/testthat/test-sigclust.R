@@ -9,7 +9,6 @@ cl.mat <- consensus_combine(cc, element = "class")
 ref_label <- cl.mat$`4`[, 1]
 
 test_that("sigclust works regardless of labflag param", {
-  suppressWarnings(RNGversion("3.5.0"))
   set.seed(1)
   expect_error(sigclust(x = dat, k = nk, nsim = 10, labflag = 0,
                         label = ref_label), NA)
@@ -18,7 +17,6 @@ test_that("sigclust works regardless of labflag param", {
 })
 
 test_that("cindex loop and condition work", {
-  suppressWarnings(RNGversion("3.5.0"))
   set.seed(4)
   expect_error(sigclust(x = dat, k = nk, nsim = 10, nrep = 100, labflag = 0,
                         label = ref_label), NA)

@@ -19,7 +19,6 @@
 #' @export
 #'
 #' @examples
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
 #'               FALSE)
@@ -38,14 +37,24 @@ ev_nmi <- function(pred.lab, ref.lab, method = "emp") {
 }
 
 #' @details `ev_confmat` calculates a variety of statistics associated with
-#'   confusion matrices.
+#'   confusion matrices. Accuracy, Cohen's kappa, and Matthews correlation
+#'   coefficient have direct multiclass definitions, whereas all other
+#'   metrics use macro-averaging.
 #'
-#' @return `ev_confmat` returns a vector of the following metrics: overall
-#'   accuracy, Cohen's kappa, no information rate, accuracy p-value. Statistics
-#'   are difficult to compare when there are multiclass comparisons. We hence
-#'   also report averaged statistics for: sensitivity, specificity, PPV, NPV,
-#'   prevalence, detection rate, detection prevalence, accuracy, and balanced
-#'   accuracy.
+#' @return `ev_confmat` returns a tibble of the following summary statistics using [yardstick::summary.conf_mat()]:
+#' * `accuracy`: Accuracy
+#' * `kap`: Cohen's kappa
+#' * `sens`: Sensitivity
+#' * `spec`: Specificity
+#' * `ppv`: Positive predictive value
+#' * `npv`: Negative predictive value
+#' * `mcc`: Matthews correlation coefficient
+#' * `j_index`: Youden's J statistic
+#' * `bal_accuracy`: Balanced accuracy
+#' * `detection_prevalence`: Detection prevalence
+#' * `precision`: alias for `ppv`
+#' * `recall`: alias for `sens`
+#' * `f_meas`: F Measure
 #' @rdname external_validity
 #' @export
 ev_confmat <- function(pred.lab, ref.lab) {
@@ -57,37 +66,7 @@ ev_confmat <- function(pred.lab, ref.lab) {
   pred.relab <- relabel_class(pred.lab, ref.lab) %>%
     factor(levels = sort(unique(ref.lab)))
 
-  # Confusion matrix, column/row sums, total, true/false positives/negatives
+  # Confusion matrix and summary statistics
   CM <- table(pred.relab, ref.lab)
-  clm <- colSums(CM)
-  rwm <- rowSums(CM)
-  N <-  sum(CM)
-  TP <- diag(CM)
-  FP <- clm - TP
-  FN <- rwm - TP
-  TN <- N - (TP + FP + FN)
-
-  # Overall confusion matrix statistics
-  overall <- caret::confusionMatrix(CM) %>%
-    magrittr::use_series(overall) %>%
-    magrittr::extract(c("Accuracy", "Kappa", "AccuracyNull",
-                        "AccuracyPValue")) %>%
-    magrittr::set_names(c("Overall Accuracy", "Cohen's kappa",
-                          "No Information Rate", "P-Value [Acc > NIR]"))
-
-  # Combine with averaged statistics
-  avgd_stats <- data.frame(TP, TN, clm, rwm) %>%
-    dplyr::transmute(
-      Sensitivity = TP / clm,
-      Specificity = TN / (N - clm),
-      PPV = TP / rwm,
-      NPV = TN / (N - rwm),
-      `Detection Rate` = TP / N,
-      Accuracy = (TP + TN) / N,
-      `Balanced Accuracy` = (.data$Sensitivity + .data$Specificity) / 2
-    ) %>%
-    dplyr::rename_all(~ paste("Average", .)) %>%
-    colMeans()
-
-  c(overall, avgd_stats)
+  summary(yardstick::conf_mat(CM))
 }

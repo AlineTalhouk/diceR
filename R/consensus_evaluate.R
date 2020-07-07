@@ -48,7 +48,6 @@
 #' @export
 #' @examples
 #' # Consensus clustering for multiple algorithms
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(911)
 #' x <- matrix(rnorm(500), ncol = 10)
 #' CC <- consensus_cluster(x, nk = 3:4, reps = 10, algorithms = c("ap", "km"),
@@ -56,7 +55,6 @@
 #'
 #' # Evaluate algorithms on internal/external indices and trim algorithms:
 #' # remove those ranking low on internal indices
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' ref.cl <- sample(1:4, 50, replace = TRUE)
 #' z <- consensus_evaluate(x, CC, ref.cl = ref.cl, n = 1, trim = TRUE)
@@ -191,7 +189,7 @@ consensus_rank <- function(ii, n) {
     rank.matrix <- cbind(max.bests, min.bests) %>%
       scale(center = FALSE, scale = TRUE) %>%
       as.data.frame() %>%
-      purrr::map_df(~ ii$Algorithms[order(.x, sample(length(.x)))]) %>%
+      purrr::map_dfc(~ ii$Algorithms[order(.x, sample(length(.x)))]) %>%
       t()
     top.list <- RankAggreg::RankAggreg(rank.matrix, ncol(rank.matrix),
                                        method = "GA", verbose = FALSE)$top.list
@@ -206,6 +204,7 @@ consensus_reweigh <- function(E.new, rank.obj, alg.keep, alg.all) {
   multiples <- rank.obj %>%
     magrittr::extract(c("max.bests", "min.bests")) %>%
     dplyr::bind_cols() %>% # Recombine internal validity indices
+    dplyr::select_if(~ !any(is.infinite(.))) %>% # Remove indices with Inf
     magrittr::extract(match(alg.keep, alg.all), ) %>% # Extract algs to keep
     as.matrix() %>% # Cannot calculate proportions on data.frame
     prop.table(2) %>% # Proportion for each index
@@ -260,13 +259,17 @@ evi_table <- function(cl.df, ref.cl) {
     cl.df %>% purrr::map_df(
       clusterCrit::extCriteria,
       part2 = ref.cl,
-      crit = c("Hubert", "Jaccard", "McNemar", "Precision", "Rand", "Recall")
+      crit = c("Hubert", "Jaccard", "McNemar", "Rand")
     ),
     NMI = cl.df %>% purrr::map_dbl(ev_nmi, ref.lab = ref.cl)
   ) %>%
-    cbind(cl.df %>%
-            purrr::map(ev_confmat, ref.lab = ref.cl) %>%
-            do.call(rbind, .)) %>%
+    dplyr::inner_join(
+      cl.df %>%
+        purrr::map_dfr(ev_confmat, ref.lab = ref.cl, .id = "Algorithms") %>%
+        dplyr::select(-.data$.estimator) %>%
+        tidyr::pivot_wider(names_from = ".metric", values_from = ".estimate"),
+      by = "Algorithms"
+    ) %>%
     dplyr::mutate_all(list(~ structure(., names = colnames(cl.df))))
 }
 
@@ -330,11 +333,9 @@ gcd <- function(x, y) {
 #' @export
 #'
 #' @examples
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' E <- matrix(rep(sample(1:4, 1000, replace = TRUE)), nrow = 100, byrow =
 #'               FALSE)
-#' suppressWarnings(RNGversion("3.5.0"))
 #' set.seed(1)
 #' dat <- as.data.frame(matrix(runif(1000, -10, 10), nrow = 100, byrow = FALSE))
 #' compactness(dat, E[, 1])

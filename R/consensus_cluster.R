@@ -78,7 +78,6 @@
 #'   array in the consensus result. Instead, we report two summary statistics as
 #'   attributes: the proportion of outliers and the number of clusters.
 #' @author Derek Chiu, Aline Talhouk
-#' @importFrom mclust mclustBIC
 #' @export
 #' @examples
 #' data(hgsc)
@@ -124,7 +123,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   lalg <- lengths(algs) * lengths(list(nmf.method, distance, 1))
   n <- nrow(data)
 
-  if (progress) {
+  if (progress && requireNamespace("progress", quietly = TRUE)) {
     pb <- progress::progress_bar$new(
       format = "Clustering Algorithm :num of :den: :alg (k = :k) [:bar] :percent eta: :eta",
       total = length(nk) * sum(lalg) * reps,
@@ -170,7 +169,7 @@ cc <- function(fun, args) {
 #' @noRd
 cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
                    seed.data, prep.data, scale, type, min.var, pb, lalg, n) {
-  alg <- paste(toupper(algs), Hmisc::capitalize(nmf.method), sep = "_")
+  alg <- paste(toupper(algs), stringr::str_to_title(nmf.method), sep = "_")
   arr <- init_array(data, reps, alg, nk)
   x_nmf <- nmf_transform(data)
 
@@ -202,7 +201,7 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
 cc_dist <- function(data, nk, p.item, reps, algs, distance, hc.method,
                     seed.data, prep.data, scale, type, min.var, pb, lalg, n) {
   alg <- paste(rep(toupper(algs), each = length(distance)),
-               rep(Hmisc::capitalize(distance), length(algs)),
+               rep(stringr::str_to_title(distance), length(algs)),
                sep = "_")
   arr <- init_array(data, reps, alg, nk)
 

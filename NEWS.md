@@ -1,4 +1,50 @@
-# diceR (development version)
+# diceR 1.0.0
+
+## Decreased dependencies
+
+The following steps were taken to minimize dependencies and ensure that `diceR` can still run on R 3.5:
+
+* Removed `cli` and `RColorBrewer` from Imports
+
+* Moved `apcluster`, `blockcluster`, `cluster`, `dbscan`, `e1071`, `kernlab`, and `kohonen` to `Suggests`, use their specific clustering algorithms conditionally. `mclust` needs to be in `Imports` because `mclust::mclustBIC()` needs to be imported
+
+* Moved `sigclust` to `Suggests`, use within `sigclust()` conditionally
+
+* Moved `progress` to `Suggests`, use within `consensus_cluster()` conditionally
+
+* Moved `poLCA` to `Suggests`, use within `dice()` conditionally
+
+* Moved `Rtsne` to `Suggests`, use within `prepare_data()` conditionally
+
+* Removed old dependency `grDevices` from `Imports`
+
+* Set minimum version to R (>= 3.5) for `klaR` dependency `questionr`
+
+* In `ev_confmat()`, use `yardstick::conf_mat()` instead of `caret::confusionMatrix()`. `caret` has many dependencies, so best to avoid using it
+
+* In `graph_heatmap()`, use `NMF::aheatmap()` instead of `gplots::heatmap.2()`. `gplots` depends on `caTools`, which now relies on R (>= 3.6)
+
+* In `consensus_cluster()`, use `stringr::str_to_title()` instead of `Hmisc::capitalize()`. `Hmisc` depends on `latticeExtra`, which now relies on R (>= 3.6)
+
+* In `graph_delta_area()`, use base solution instead of `flux::auc()`. `flux` also depends on `caTools`
+
+* In `prepare_data()`, use own implementation of `quantable::robustscale()` with all of the former function's defaults. `quantable` also depends on `caTools`
+
+* Specify Bioconductor installation on Travis and AppVeyor since `NMF` now Imports `Biobase`
+
+## Minor improvements and bug fixes
+
+* Remove `suppressWarnings(RNGversion("3.5.0"))` after updating R version
+
+* Run `LCA()` unit test on imputed clustering object
+
+* Remove internal validity measures with any `Inf` entries for `consensus_reweigh()`
+
+* Use a cleaner, more robust method of removing `Rplots.pdf` after running `test-graphs.R`
+
+* Ensure column binding with `purrr::map_dfc()` in `consensus_rank()`
+
+* Replaced `dplyr::bind_cols()` with `purrr::flatten_dfc()` to suppress warning "Outer names are only allowed for unnamed scalar" in `get_cdf()`
 
 * update roxygen and docs
 

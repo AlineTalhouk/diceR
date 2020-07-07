@@ -19,7 +19,6 @@ Relabel clustering categories to match to a standard by minimizing the
 Frobenius norm between the two labels.
 }
 \examples{
-suppressWarnings(RNGversion("3.5.0"))
 set.seed(2)
 pred <- sample(1:4, 100, replace = TRUE)
 true <- sample(1:4, 100, replace = TRUE)

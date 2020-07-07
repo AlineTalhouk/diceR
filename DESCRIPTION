@@ -1,7 +1,7 @@
 Type: Package
 Package: diceR
 Title: Diverse Cluster Ensemble in R
-Version: 0.6.0.9000
+Version: 1.0.0
 Authors@R: 
     c(person(given = "Derek",
              family = "Chiu",
@@ -28,52 +28,45 @@ URL: https://github.com/AlineTalhouk/diceR,
     https://alinetalhouk.github.io/diceR
 BugReports: https://github.com/AlineTalhouk/diceR/issues
 Depends: 
-    R (>= 3.3)
+    R (>= 3.5)
 Imports: 
     abind,
-    apcluster,
     assertthat,
-    blockcluster,
-    caret,
     class,
-    cli,
     clue,
-    cluster,
     clusterCrit,
     clValid,
-    dbscan,
     dplyr (>= 0.7.5),
-    e1071,
-    flux,
     ggplot2,
-    gplots,
-    grDevices,
-    Hmisc,
     infotheo,
-    kernlab,
     klaR,
-    kohonen,
     magrittr,
     mclust,
     methods,
     NMF,
-    poLCA,
-    progress,
     purrr (>= 0.2.3),
-    quantable,
     RankAggreg,
-    RColorBrewer,
     Rcpp,
-    Rtsne,
-    sigclust,
     stringr,
     tibble,
-    tidyr
+    tidyr,
+    yardstick
 Suggests: 
+    apcluster,
+    blockcluster,
+    cluster,
     covr,
+    dbscan,
+    e1071,
+    kernlab,
     knitr,
+    kohonen,
     pander,
+    poLCA,
+    progress,
     rmarkdown,
+    Rtsne,
+    sigclust,
     testthat
 LinkingTo: 
     Rcpp
@@ -82,4 +75,4 @@ VignetteBuilder:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
