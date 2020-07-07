@@ -1,4 +1,4 @@
-# diceR (development version)
+# diceR 1.0.0
 
 ## Decreased dependencies
 
