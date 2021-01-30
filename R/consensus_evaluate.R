@@ -244,7 +244,7 @@ ivi_table <- function(cl.df, data) {
                "Silhouette", "S_Dbw")),
     Compactness = cl.df %>% purrr::map_dbl(compactness, data = data),
     Connectivity = cl.df %>% purrr::map_dbl(
-      ~ clValid::connectivity(Data = ndata, clusters = .))
+      ~ suppressWarnings(clValid::connectivity(Data = ndata, clusters = .)))
   ) %>%
     dplyr::mutate_all(list(~ structure(., names = colnames(cl.df))))
 }
