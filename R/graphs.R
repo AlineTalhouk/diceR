@@ -207,7 +207,7 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
 
   # Heatmap: order algorithms by ranked ii, remove indices with NaN
   hm <- ii %>%
-    tibble::column_to_rownames("Algorithms") %>%
+    dplyr::select(-.data$Algorithms) %>%
     magrittr::extract(match(consensus_rank(ii, 1)$top.list, rownames(.)),
                       purrr::map_lgl(., ~ all(!is.nan(.x))))
 
