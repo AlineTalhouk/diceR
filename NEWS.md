@@ -1,4 +1,8 @@
-# diceR (development version)
+# diceR 1.0.1
+
+* Suppress warnings when `clValid::connectivity()` is called regarding comparison with more than one class. Since R-4.0.0, a `matrix` object also inherits from class `array`
+
+* In `algii_heatmap()`, the object `ii` already has row names passed from columns which are named vectors (issue also identified in #148, thanks @romainfrancois)
 
 # diceR 1.0.0
 
