@@ -22,6 +22,7 @@ environment:
 
   matrix:
   - R_VERSION: release
+    BIOC_USE_DEVEL: FALSE
 
 build_script:
   - travis-tool.sh install_bioc Biobase
