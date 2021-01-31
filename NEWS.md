@@ -1,3 +1,5 @@
+# diceR (development version)
+
 # diceR 1.0.1
 
 * Suppress warnings when `clValid::connectivity()` is called regarding comparison with more than one class. Since R-4.0.0, a `matrix` object also inherits from class `array`
