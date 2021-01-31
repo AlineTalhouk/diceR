@@ -73,7 +73,7 @@ either the consensus matrices or consensus classes for all algorithms." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@ either the consensus matrices or consensus classes for all algorithms." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AlineTalhouk/diceR">
-    <span class="fa fa-github"></span>
+    <span class="fas fa-github"></span>
      
   </a>
 </li>
@@ -119,7 +119,7 @@ either the consensus matrices or consensus classes for all algorithms." />
 either the consensus matrices or consensus classes for all algorithms.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>consensus_combine</span>(<span class='no'>...</span>, <span class='kw'>element</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"matrix"</span>, <span class='st'>"class"</span>))</pre>
+    <pre class="usage"><span class='fu'>consensus_combine</span><span class='op'>(</span><span class='va'>...</span>, element <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"matrix"</span>, <span class='st'>"class"</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,31 +145,36 @@ or a data frame showing all the consensus classes</p>
 from <code>consensus_cluster</code> were combined to a single object. For example,
 setting <code>element = "class"</code> returns a matrix of consensus cluster
 assignments, which can be visualized as a consensus matrix heatmap.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Derek Chiu</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Consensus clustering for multiple algorithms</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>911</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>500</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10</span>)
-<span class='no'>CC1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>x</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>3</span>:<span class='fl'>4</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='st'>"ap"</span>,
-<span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>CC2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span>(<span class='no'>x</span>, <span class='kw'>nk</span> <span class='kw'>=</span> <span class='fl'>3</span>:<span class='fl'>4</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>algorithms</span> <span class='kw'>=</span> <span class='st'>"km"</span>,
-<span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>911</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>500</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+<span class='va'>CC1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span><span class='op'>(</span><span class='va'>x</span>, nk <span class='op'>=</span> <span class='fl'>3</span><span class='op'>:</span><span class='fl'>4</span>, reps <span class='op'>=</span> <span class='fl'>10</span>, algorithms <span class='op'>=</span> <span class='st'>"ap"</span>,
+progress <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='va'>CC2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='consensus_cluster.html'>consensus_cluster</a></span><span class='op'>(</span><span class='va'>x</span>, nk <span class='op'>=</span> <span class='fl'>3</span><span class='op'>:</span><span class='fl'>4</span>, reps <span class='op'>=</span> <span class='fl'>10</span>, algorithms <span class='op'>=</span> <span class='st'>"km"</span>,
+progress <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'># Combine and return either matrices or classes</span>
-<span class='no'>y1</span> <span class='kw'>&lt;-</span> <span class='fu'>consensus_combine</span>(<span class='no'>CC1</span>, <span class='no'>CC2</span>, <span class='kw'>element</span> <span class='kw'>=</span> <span class='st'>"matrix"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>y1</span>)</div><div class='output co'>#&gt; List of 2
+<span class='va'>y1</span> <span class='op'>&lt;-</span> <span class='fu'>consensus_combine</span><span class='op'>(</span><span class='va'>CC1</span>, <span class='va'>CC2</span>, element <span class='op'>=</span> <span class='st'>"matrix"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>y1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 2
 #&gt;  $ 3:List of 2
-#&gt;   ..$ AP: num [1:50, 1:50] 1 0.429 0.375 0.222 0.714 ...
-#&gt;   ..$ KM: num [1:50, 1:50] 1 0.25 0 0.25 1 0.75 0 0 0 0 ...
+#&gt;   ..$ AP: num [1:50, 1:50] 1 0.429 0.167 0.429 1 ...
+#&gt;   ..$ KM: num [1:50, 1:50] 1 0.625 0 0.429 1 ...
 #&gt;  $ 4:List of 2
-#&gt;   ..$ AP: num [1:50, 1:50] 1 0.143 0 0 0.857 ...
-#&gt;   ..$ KM: num [1:50, 1:50] 1 0.667 0 0 1 ...</div><div class='input'><span class='no'>y2</span> <span class='kw'>&lt;-</span> <span class='fu'>consensus_combine</span>(<span class='no'>CC1</span>, <span class='no'>CC2</span>, <span class='kw'>element</span> <span class='kw'>=</span> <span class='st'>"class"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>y2</span>)</div><div class='output co'>#&gt; List of 2
-#&gt;  $ 3: int [1:50, 1:2] 1 2 1 2 1 2 1 1 3 1 ...
+#&gt;   ..$ AP: num [1:50, 1:50] 1 0.143 0.167 0 1 ...
+#&gt;   ..$ KM: num [1:50, 1:50] 1 0.25 0 0.125 1 ...</div><div class='input'><span class='va'>y2</span> <span class='op'>&lt;-</span> <span class='fu'>consensus_combine</span><span class='op'>(</span><span class='va'>CC1</span>, <span class='va'>CC2</span>, element <span class='op'>=</span> <span class='st'>"class"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>y2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 2
+#&gt;  $ 3: int [1:50, 1:2] 1 1 2 1 1 1 2 1 3 2 ...
 #&gt;   ..- attr(*, "dimnames")=List of 2
 #&gt;   .. ..$ : NULL
 #&gt;   .. ..$ : chr [1:2] "AP" "KM"
-#&gt;  $ 4: int [1:50, 1:2] 1 2 3 2 1 2 3 2 4 3 ...
+#&gt;  $ 4: int [1:50, 1:2] 1 2 3 2 1 2 3 3 4 3 ...
 #&gt;   ..- attr(*, "dimnames")=List of 2
 #&gt;   .. ..$ : NULL
 #&gt;   .. ..$ : chr [1:2] "AP" "KM"</div></pre>
@@ -188,7 +193,7 @@ assignments, which can be visualized as a consensus matrix heatmap.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

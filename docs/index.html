@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -57,7 +57,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/AlineTalhouk/diceR">
-    <span class="fa fa-github"></span>
+    <span class="fas fa-github"></span>
      
   </a>
 </li>
@@ -87,21 +87,25 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install <code>diceR</code> from CRAN with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"diceR"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"diceR"</span><span class="op">)</span></code></pre></div>
 <p>Or get the latest development version from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="co"># install.packages("devtools")</span>
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"AlineTalhouk/diceR"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"AlineTalhouk/diceR"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p>The following example shows how to use the main function of the package, <code><a href="reference/dice.html">dice()</a></code>. A data matrix <code>hgsc</code> contains a subset of gene expression measurements of High Grade Serous Carcinoma Ovarian cancer patients from the Cancer Genome Atlas publicly available datasets. Samples as rows, features as columns. The function below runs the package through the <code><a href="reference/dice.html">dice()</a></code> function. We specify (a range of) <code>nk</code> clusters over <code>reps</code> subsamples of the data containing 80% of the full samples. We also specify the clustering <code>algorithms</code> to be used and the ensemble functions used to aggregated them in <code>cons.funs</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">diceR</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">hgsc</span>)
-<span class="no">obj</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/dice.html">dice</a></span>(<span class="no">hgsc</span>, <span class="kw">nk</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">reps</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">algorithms</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hc"</span>, <span class="st">"diana"</span>),
-            <span class="kw">cons.funs</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"kmodes"</span>, <span class="st">"majority"</span>))</pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlineTalhouk/diceR">diceR</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span>
+<span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dice.html">dice</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">5</span>, algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"diana"</span><span class="op">)</span>,
+            cons.funs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"kmodes"</span>, <span class="st">"majority"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The first few cluster assignments are shown below:</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">obj</span>$<span class="no">clusters</span>))</pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="va">clusters</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left"></th>
@@ -142,7 +146,8 @@
 </tbody>
 </table>
 <p>You can also compare the base <code>algorithms</code> with the <code>cons.funs</code> using internal evaluation indices:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="no">obj</span>$<span class="no">indices</span>$<span class="no">ii</span>$<span class="no">`4`</span>)</pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="va">indices</span><span class="op">$</span><span class="va">ii</span><span class="op">$</span><span class="va">`4`</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="9%">
@@ -313,7 +318,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

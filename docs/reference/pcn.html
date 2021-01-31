@@ -74,7 +74,7 @@ Then a subset of these distributions is chosen using pcn_select." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -93,7 +93,7 @@ Then a subset of these distributions is chosen using pcn_select." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AlineTalhouk/diceR">
-    <span class="fa fa-github"></span>
+    <span class="fas fa-github"></span>
      
   </a>
 </li>
@@ -121,9 +121,9 @@ null distributions with univariate Normal distributions using <code>pcn_simulate
 Then a subset of these distributions is chosen using <code>pcn_select</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pcn_simulate</span>(<span class='no'>data</span>, <span class='kw'>n.sim</span> <span class='kw'>=</span> <span class='fl'>50</span>)
+    <pre class="usage"><span class='fu'>pcn_simulate</span><span class='op'>(</span><span class='va'>data</span>, n.sim <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
 
-<span class='fu'>pcn_select</span>(<span class='no'>data.sim</span>, <span class='no'>cl</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"rep"</span>, <span class='st'>"range"</span>), <span class='kw'>int</span> <span class='kw'>=</span> <span class='fl'>5</span>)</pre>
+<span class='fu'>pcn_select</span><span class='op'>(</span><span class='va'>data.sim</span>, <span class='va'>cl</span>, type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"rep"</span>, <span class='st'>"range"</span><span class='op'>)</span>, int <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,13 +166,17 @@ simulated matrix using this "Principal Component Normal" (pcn) procedure.</p>
 <li><p><code>dat</code>: simulation data representation of all in pcNormal</p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Derek Chiu</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>9</span>)
-<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>300</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>20</span>)
-<span class='no'>pc.dat</span> <span class='kw'>&lt;-</span> <span class='fu'>pcn_simulate</span>(<span class='no'>A</span>, <span class='kw'>n.sim</span> <span class='kw'>=</span> <span class='fl'>50</span>)
-<span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='fl'>20</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>pc.select</span> <span class='kw'>&lt;-</span> <span class='fu'>pcn_select</span>(<span class='no'>pc.dat</span>, <span class='no'>cl</span>, <span class='st'>"rep"</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>9</span><span class='op'>)</span>
+<span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>300</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
+<span class='va'>pc.dat</span> <span class='op'>&lt;-</span> <span class='fu'>pcn_simulate</span><span class='op'>(</span><span class='va'>A</span>, n.sim <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
+<span class='va'>cl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='fl'>20</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>pc.select</span> <span class='op'>&lt;-</span> <span class='fu'>pcn_select</span><span class='op'>(</span><span class='va'>pc.dat</span>, <span class='va'>cl</span>, <span class='st'>"rep"</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -188,7 +192,7 @@ simulated matrix using this "Principal Component Normal" (pcn) procedure.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
