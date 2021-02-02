@@ -63,6 +63,7 @@ Suggests:
     pander,
     poLCA,
     progress,
+    RColorBrewer,
     rmarkdown,
     Rtsne,
     sigclust,
