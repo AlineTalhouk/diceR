@@ -48,7 +48,6 @@ Imports:
     RankAggreg,
     Rcpp,
     stringr,
-    tibble,
     tidyr,
     yardstick
 Suggests: 
