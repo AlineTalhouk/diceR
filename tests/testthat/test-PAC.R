@@ -1,5 +1,3 @@
-context("Proportion of Ambiguous Clusterings")
-
 test_that("PAC can have different bounds", {
   set.seed(1)
   x <- replicate(100, rbinom(100, 4, 0.2))

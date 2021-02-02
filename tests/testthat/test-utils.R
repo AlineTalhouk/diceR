@@ -1,5 +1,3 @@
-context("Utility functions")
-
 cl <- seq_len(4)
 
 test_that("relabelling outputs a integer", {

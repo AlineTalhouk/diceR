@@ -1,5 +1,3 @@
-context("Consensus functions")
-
 data(hgsc)
 dat <- hgsc[1:40, 1:30]
 k <- 4

@@ -1,5 +1,3 @@
-context("Signifance Testing")
-
 data(hgsc)
 dat <- hgsc[1:100, 1:50]
 nk <- 4

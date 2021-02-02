@@ -1,5 +1,3 @@
-context("Consensus matrix")
-
 set.seed(1)
 x <- replicate(100, rbinom(100, 4, 0.2))
 w <- rexp(100)

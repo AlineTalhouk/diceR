@@ -1,5 +1,3 @@
-context("Principal component Normal procedure")
-
 test_that("pcn simulation and selection works", {
   set.seed(9)
   A <- matrix(rnorm(300), nrow = 20)

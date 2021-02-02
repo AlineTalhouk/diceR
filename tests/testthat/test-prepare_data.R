@@ -1,5 +1,3 @@
-context("prepare_data")
-
 data(hgsc)
 hgsc <- hgsc[1:40, 1:30]
 

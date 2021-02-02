@@ -1,5 +1,3 @@
-context("Consensus clustering")
-
 data(hgsc)
 hgsc <- hgsc[1:40, 1:30]
 

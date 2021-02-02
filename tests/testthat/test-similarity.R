@@ -1,5 +1,3 @@
-context("Similarity matrices")
-
 set.seed(1)
 E <- matrix(rep(sample(1:4, 500, replace = TRUE)), nrow = 100)
 dc <- 0.8

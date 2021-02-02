@@ -1,5 +1,3 @@
-context("Consensus combine, evaluate, trim, and weigh")
-
 set.seed(911)
 x <- matrix(rnorm(300), nrow = 100)
 CC1 <- consensus_cluster(x, nk = 2:4, reps = 5, algorithms = "ap",

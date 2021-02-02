@@ -1,5 +1,3 @@
-context("External validity indices")
-
 set.seed(1)
 x <- sample(1:4, 100, replace = TRUE)
 y1 <- sample(1:4, 100, replace = TRUE)

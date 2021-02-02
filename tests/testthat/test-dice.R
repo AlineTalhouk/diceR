@@ -1,5 +1,3 @@
-context("Diverse Cluster Ensemble")
-
 library(dplyr)
 data(hgsc)
 ref.cl <- strsplit(rownames(hgsc), "_") %>%

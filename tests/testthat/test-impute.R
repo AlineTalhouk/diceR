@@ -1,5 +1,3 @@
-context("Impute missing values")
-
 data(hgsc)
 hgsc <- hgsc[1:40, 1:30]
 E <- consensus_cluster(hgsc, nk = 4, reps = 5,
