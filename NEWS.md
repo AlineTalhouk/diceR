@@ -1,5 +1,13 @@
 # diceR (development version)
 
+* Remove deprecated `context()` in tests
+
+* Add `RColorBrewer` to Suggests because it is cross referenced in `?graphs`
+
+* Add trailing slash for URLs in DESCRIPTION
+
+* Remove `tibble` from Imports, no longer used
+
 # diceR 1.0.1
 
 * Suppress warnings when `clValid::connectivity()` is called regarding comparison with more than one class. Since R-4.0.0, a `matrix` object also inherits from class `array`
