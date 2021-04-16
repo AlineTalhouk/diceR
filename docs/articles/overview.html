@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -120,8 +120,6 @@
 <li>
 <code>"gmm"</code>: Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm</li>
 <li>
-<code>"block"</code>: Biclustering using a latent block model</li>
-<li>
 <code>"som"</code>: Self-Organizing Map (SOM) with Hierarchical Clustering</li>
 <li>
 <code>"cmeans"</code>: Fuzzy C-Means Clustering</li>
@@ -138,8 +136,6 @@
 <li>Centroid Models: <code>"km"</code> and <code>"pam"</code> uses initial cluster centers calculated based on the mean of the objects, where <code>"pam"</code> restricts the centroid to be an actual object. These models are good for modeling data that produces spherical clusters. <code>"ap"</code> is similar to <code>"pam"</code> because it calculates “exemplars” (like centroids) of the data but is advantageous because initialization of k (number of clusters) is not required.<sup>2</sup><code>"cmeans"</code> is similar to <code>"km"</code> except that points can be assigned to more than one cluster.</li>
 <li>Distribution Models: <code>"gmm"</code> assumes a Gaussian mixture model used by the EM algorithm for clustering.<sup>3</sup> The gain in model complexity is traded with utility since the assumption is quite strong.</li>
 <li>Density Models: <code>"hdbscan"</code> runs hierarchical clustering on the DBSCAN result.<sup>4,5</sup> These models assume that each cluster has high density, so when there are overlapping regions, the algorithms may not be able to separate objects that well.</li>
-<li>Subspace Models: <code>"block"</code> clusters both samples and features, so is useful when you want to associate these pairs of cluster entities (e.g. are there functional gene groups that associate with sample subtypes?). Our implementation uses the latent block model.<sup>6</sup>
-</li>
 <li>Neural Models: our implementation of <code>"som"</code> reduces the data to a two-dimensional subspace using a neural network model, before performing hierarchical clustering.<sup>7</sup> A lot of the noise is phased out and cluster stability can be improved from using <code>"hc"</code> alone.</li>
 <li>Spectral Clustering: Similar to <code>"som"</code>, <code>"sc"</code> also performs dimensionality reduction before clustering, but instead uses eigenvectors of a kernel matrix.<sup>8</sup> We use a radial-basis kernel function in the package.</li>
 <li>Non-negative Matrix Factorization: the computational complexity with <code>"nmf"</code> is doubled compared to other algorithms because data manipulations need to be performed to transform the input data into a non-negative matrix. Otherwise, NMF has a natural clustering result that can be used to group together samples and/or features.<sup>9</sup>
