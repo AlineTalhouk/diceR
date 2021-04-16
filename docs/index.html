@@ -6,6 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Diverse Cluster Ensemble in R • diceR</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -20,6 +26,7 @@
     assignments across algorithms using internal and external indices,
     visualizations such as heatmaps, and significance testing for the
     existence of clusters.">
+<meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -73,9 +80,10 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="dicer" class="section level1">
+<div id="dicer-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#dicer" class="anchor"></a>diceR</h1></div>
+<a href="#dicer-" class="anchor"></a>diceR <a href="https://alinetalhouk.github.io/diceR"><img src="reference/figures/logo.png" align="right" height="139"></a>
+</h1></div>
 <!-- badges: start -->
 
 <div id="overview" class="section level2">
@@ -115,33 +123,33 @@
 <tbody>
 <tr class="odd">
 <td align="left">TCGA.04.1331_PRO.C5</td>
-<td align="right">3</td>
-<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
 <td align="left">TCGA.04.1332_MES.C1</td>
-<td align="right">3</td>
-<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">TCGA.04.1336_DIF.C4</td>
-<td align="right">1</td>
-<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
 <td align="left">TCGA.04.1337_MES.C1</td>
-<td align="right">3</td>
-<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">TCGA.04.1338_MES.C1</td>
-<td align="right">3</td>
-<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
 <td align="left">TCGA.04.1341_PRO.C5</td>
-<td align="right">3</td>
-<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
 </tr>
 </tbody>
 </table>
@@ -150,24 +158,26 @@
 <code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="va">indices</span><span class="op">$</span><span class="va">ii</span><span class="op">$</span><span class="va">`4`</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
+<col width="8%">
+<col width="8%">
 <col width="9%">
-<col width="10%">
-<col width="5%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="7%">
+<col width="6%">
+<col width="4%">
+<col width="4%">
 <col width="4%">
 <col width="5%">
-<col width="5%">
-<col width="5%">
-<col width="8%">
-<col width="7%">
-<col width="5%">
-<col width="5%">
-<col width="5%">
-<col width="5%">
 <col width="3%">
+<col width="5%">
 <col width="6%">
-<col width="7%">
 </colgroup>
 <thead><tr class="header">
+<th align="left"></th>
 <th align="left">Algorithms</th>
 <th align="right">calinski_harabasz</th>
 <th align="right">dunn</th>
@@ -188,75 +198,79 @@
 <tbody>
 <tr class="odd">
 <td align="left">HC_Euclidean</td>
-<td align="right">4.945499</td>
-<td align="right">0.3025234</td>
-<td align="right">38.34704</td>
-<td align="right">0.1992999</td>
-<td align="right">0.5598731</td>
-<td align="right">0.3122823</td>
-<td align="right">2.585780</td>
-<td align="right">0.8237540</td>
-<td align="right">0.1795670</td>
-<td align="right">3.0886000</td>
-<td align="right">0.0278858</td>
-<td align="right">0.0300838</td>
+<td align="left">HC_Euclidean</td>
+<td align="right">3.104106</td>
+<td align="right">0.2608547</td>
+<td align="right">59.73711</td>
+<td align="right">0.1994677</td>
+<td align="right">0.6349401</td>
+<td align="right">0.2844073</td>
+<td align="right">1.839182</td>
+<td align="right">0.8009149</td>
+<td align="right">0.1306062</td>
+<td align="right">1.4765665</td>
+<td align="right">0.0180141</td>
 <td align="right">NaN</td>
-<td align="right">24.81662</td>
-<td align="right">49.69405</td>
+<td align="right">NaN</td>
+<td align="right">24.83225</td>
+<td align="right">41.62183</td>
 </tr>
 <tr class="even">
 <td align="left">DIANA_Euclidean</td>
-<td align="right">51.332198</td>
+<td align="left">DIANA_Euclidean</td>
+<td align="right">53.647400</td>
 <td align="right">0.3348103</td>
-<td align="right">32.92726</td>
-<td align="right">0.4271483</td>
-<td align="right">0.6216897</td>
-<td align="right">0.1639431</td>
-<td align="right">2.782694</td>
-<td align="right">0.8077658</td>
-<td align="right">0.2034291</td>
-<td align="right">3.1687896</td>
-<td align="right">0.0892952</td>
-<td align="right">0.0700862</td>
+<td align="right">33.87817</td>
+<td align="right">0.4296601</td>
+<td align="right">0.6314448</td>
+<td align="right">0.1589442</td>
+<td align="right">2.824201</td>
+<td align="right">0.8051915</td>
+<td align="right">0.2119281</td>
+<td align="right">3.2978986</td>
+<td align="right">0.0853202</td>
+<td align="right">0.0692233</td>
 <td align="right">NaN</td>
-<td align="right">22.05147</td>
-<td align="right">227.34841</td>
+<td align="right">21.93396</td>
+<td align="right">241.66310</td>
 </tr>
 <tr class="odd">
 <td align="left">kmodes</td>
-<td align="right">39.127460</td>
-<td align="right">0.3352598</td>
-<td align="right">49.27019</td>
-<td align="right">0.3907289</td>
-<td align="right">0.5528538</td>
-<td align="right">0.2020221</td>
-<td align="right">1.669753</td>
-<td align="right">0.8254116</td>
-<td align="right">0.1046540</td>
-<td align="right">1.1356906</td>
-<td align="right">0.1116735</td>
+<td align="left">kmodes</td>
+<td align="right">55.336853</td>
+<td align="right">0.3396909</td>
+<td align="right">50.73168</td>
+<td align="right">0.4553051</td>
+<td align="right">0.6600223</td>
+<td align="right">0.1455632</td>
+<td align="right">2.010999</td>
+<td align="right">0.7974362</td>
+<td align="right">0.1180643</td>
+<td align="right">1.1528004</td>
+<td align="right">0.0808925</td>
+<td align="right">0.1250821</td>
 <td align="right">NaN</td>
-<td align="right">NaN</td>
-<td align="right">22.66419</td>
-<td align="right">148.61865</td>
+<td align="right">21.90504</td>
+<td align="right">204.58333</td>
 </tr>
 <tr class="even">
 <td align="left">majority</td>
-<td align="right">5.645220</td>
-<td align="right">0.4315581</td>
-<td align="right">96.93674</td>
-<td align="right">0.2221915</td>
-<td align="right">0.7330421</td>
-<td align="right">0.2458043</td>
-<td align="right">1.393811</td>
-<td align="right">0.7781939</td>
-<td align="right">0.0948754</td>
-<td align="right">0.8261741</td>
-<td align="right">0.0122634</td>
+<td align="left">majority</td>
+<td align="right">19.373248</td>
+<td align="right">0.3544371</td>
+<td align="right">85.05173</td>
+<td align="right">0.3694313</td>
+<td align="right">0.6529652</td>
+<td align="right">0.2102487</td>
+<td align="right">1.622799</td>
+<td align="right">0.8019453</td>
+<td align="right">0.1108674</td>
+<td align="right">0.9200511</td>
+<td align="right">0.0555431</td>
+<td align="right">0.1884934</td>
 <td align="right">NaN</td>
-<td align="right">NaN</td>
-<td align="right">24.70600</td>
-<td align="right">24.35079</td>
+<td align="right">23.85408</td>
+<td align="right">64.04921</td>
 </tr>
 </tbody>
 </table>

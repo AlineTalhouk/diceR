@@ -1,5 +1,7 @@
 # diceR 1.0.3
 
+* Add package logo using `hexSticker`
+
 * Package `blockcluster` has been archived, remove from Suggests
 
 # diceR 1.0.2

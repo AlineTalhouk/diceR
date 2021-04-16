@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# diceR
+# diceR <a href='https://alinetalhouk.github.io/diceR'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/AlineTalhouk/diceR.svg?branch=master)](https://travis-ci.org/AlineTalhouk/diceR)
