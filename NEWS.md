@@ -1,4 +1,4 @@
-# diceR (development version)
+# diceR 1.0.3
 
 * Package `blockcluster` has been archived, remove from Suggests
 
