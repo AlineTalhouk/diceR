@@ -42,7 +42,7 @@ algorithm}
 
 \item{algorithms}{vector of clustering algorithms for performing consensus
 clustering. Must be any number of the following: "nmf", "hc", "diana",
-"km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan". A
+"km", "pam", "ap", "sc", "gmm", "som", "cmeans", "hdbscan". A
 custom clustering algorithm can be used.}
 
 \item{nmf.method}{specify NMF-based algorithms to run. By default the
@@ -127,7 +127,6 @@ or Euclidean distance; See Note for specifications.)
 \item "sc": Spectral Clustering using Radial-Basis kernel function
 \item "gmm": Gaussian Mixture Model using Bayesian Information Criterion on EM
 algorithm
-\item "block": Biclustering using a latent block model
 \item "som": Self-Organizing Map (SOM) with Hierarchical Clustering
 \item "cmeans": Fuzzy C-Means Clustering
 \item "hdbscan": Hierarchical Density-based Spatial Clustering of Applications

@@ -15,7 +15,6 @@
 #' * "sc": Spectral Clustering using Radial-Basis kernel function
 #' * "gmm": Gaussian Mixture Model using Bayesian Information Criterion on EM
 #'   algorithm
-#' * "block": Biclustering using a latent block model
 #' * "som": Self-Organizing Map (SOM) with Hierarchical Clustering
 #' * "cmeans": Fuzzy C-Means Clustering
 #' * "hdbscan": Hierarchical Density-based Spatial Clustering of Applications
@@ -39,7 +38,7 @@
 #' @param reps number of subsamples
 #' @param algorithms vector of clustering algorithms for performing consensus
 #'   clustering. Must be any number of the following: "nmf", "hc", "diana",
-#'   "km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan". A
+#'   "km", "pam", "ap", "sc", "gmm", "som", "cmeans", "hdbscan". A
 #'   custom clustering algorithm can be used.
 #' @param nmf.method specify NMF-based algorithms to run. By default the
 #'   "brunet" and "lee" algorithms are called. See [NMF::nmf()] for details.
@@ -260,7 +259,6 @@ cc_other <- function(data, nk, p.item, reps, algs, xdim, ydim, rlen, alpha,
                  ap = ap(x, nk[k]),
                  sc = sc(x, nk[k]),
                  gmm = gmm(x, nk[k]),
-                 block = block(x, nk[k]),
                  som = som(x, nk[k], xdim, ydim, rlen, alpha, hc.method),
                  cmeans = cmeans(x, nk[k]),
                  hdbscan = hdbscan(x, minPts)

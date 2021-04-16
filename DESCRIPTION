@@ -52,7 +52,6 @@ Imports:
     yardstick
 Suggests: 
     apcluster,
-    blockcluster,
     cluster,
     covr,
     dbscan,

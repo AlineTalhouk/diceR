@@ -1,5 +1,7 @@
 # diceR (development version)
 
+* Package `blockcluster` has been archived, remove from Suggests
+
 # diceR 1.0.2
 
 * Remove deprecated `context()` in tests
