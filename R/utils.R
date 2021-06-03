@@ -71,7 +71,7 @@ relabel_class <- function(pred.cl, ref.cl) {
 flatten_E <- function(E, is.relabelled) {
   # take E imputed and reshape into a flat matrix
   if (length(dim(E)) > 2) {
-    flat_E <- matrix(E, nrow = dim(E)[1], ncol = prod(dim(E)[2:3]))
+    flat_E <- matrix(E, nrow = dim(E)[1], ncol = prod(dim(E)[-1]))
   } else {
     flat_E <- E
   }
