@@ -23,7 +23,8 @@ nmf_transform <- function(x) {
   x %>%
     cbind(-.) %>%
     as.data.frame() %>%
-    purrr::map_dfc(~ ifelse(.x < 0, 0, .x))
+    purrr::map_dfc(~ ifelse(.x < 0, 0, .x)) %>%
+    suppressMessages()
 }
 
 # Distance-Based ----------------------------------------------------------
