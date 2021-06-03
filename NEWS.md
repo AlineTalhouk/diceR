@@ -1,3 +1,9 @@
+# diceR 1.0.4
+
+* Suppress new names messages from transformed NMF data
+
+* Flattened matrices include 4th dimension of clustering array
+
 # diceR 1.0.3
 
 * Add package logo using `hexSticker`
