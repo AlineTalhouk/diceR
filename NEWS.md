@@ -1,3 +1,5 @@
+# diceR (development version)
+
 # diceR 1.0.4
 
 * Suppress new names messages from transformed NMF data
