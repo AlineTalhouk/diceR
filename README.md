@@ -15,6 +15,7 @@ coverage](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg
 status](https://www.r-pkg.org/badges/version/diceR)](https://CRAN.R-project.org/package=diceR)
 [![CRAN RStudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/diceR?color=orange)](https://r-pkg.org/pkg/diceR)
+[![R-CMD-check](https://github.com/AlineTalhouk/diceR/workflows/R-CMD-check/badge.svg)](https://github.com/AlineTalhouk/diceR/actions)
 <!-- badges: end -->
 
 ## Overview
