@@ -3,7 +3,7 @@
 
 NALG <- "nmf"
 DALG <- c("hc", "diana", "pam")
-OALG <- c("km", "ap", "sc", "gmm", "som", "cmeans", "hdbscan")
+OALG <- c("km", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan")
 ALG_NAMES <- c(NALG, DALG, OALG)
 
 
@@ -84,6 +84,21 @@ sc <- function(x, k) {
 #' @noRd
 gmm <- function(x, k) {
   mclust::Mclust(x, k, verbose = FALSE)$classification
+}
+
+#' Block Clustering (Co-clustering)
+#' @noRd
+block <- function(x, k) {
+  if (requireNamespace("blockcluster", quietly = TRUE)) {
+    tryCatch(
+      sink_output(
+        blockcluster::cocluster(as.matrix(x), "continuous",
+                                nbcocluster = c(k, k))@rowclass + 1
+      ),
+      error = function(e) return(NA)
+    ) %>%
+      purrr::when(length(.) > 0 ~ ., ~ NA)
+  }
 }
 
 #' Self-Organizing Maps
