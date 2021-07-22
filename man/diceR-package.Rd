@@ -27,7 +27,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Derek Chiu \email{derek.chiu@ubc.ca}
+\strong{Maintainer}: Derek Chiu \email{dchiu@bccrc.ca}
 
 Authors:
 \itemize{
