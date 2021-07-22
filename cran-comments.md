@@ -8,6 +8,6 @@
 0 errors | 0 warnings | 1 note
 
 * Note: information on .o files for i386 is not available
-Note: information on .o files for x64 is not available
+* Note: information on .o files for x64 is not available
 
-Suspected false positive note.
+Suspected false positive notes.
