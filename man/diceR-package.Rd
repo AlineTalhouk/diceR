@@ -27,11 +27,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Derek Chiu \email{dchiu@bccrc.ca}
+\strong{Maintainer}: Derek Chiu \email{derek.chiu@ubc.ca}
 
 Authors:
 \itemize{
-  \item Aline Talhouk \email{atalhouk@bccrc.ca}
+  \item Aline Talhouk \email{a.talhouk@ubc.ca}
 }
 
 Other contributors:
