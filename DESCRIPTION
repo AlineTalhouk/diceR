@@ -1,16 +1,16 @@
 Type: Package
 Package: diceR
 Title: Diverse Cluster Ensemble in R
-Version: 1.0.4.9000
+Version: 1.1.0
 Authors@R: 
     c(person(given = "Derek",
              family = "Chiu",
              role = c("aut", "cre"),
-             email = "dchiu@bccrc.ca"),
+             email = "derek.chiu@ubc.ca"),
       person(given = "Aline",
              family = "Talhouk",
              role = "aut",
-             email = "atalhouk@bccrc.ca"),
+             email = "a.talhouk@ubc.ca"),
       person(given = "Johnson",
              family = "Liu",
              role = c("ctb", "com"),
@@ -52,6 +52,7 @@ Imports:
     yardstick
 Suggests: 
     apcluster,
+    blockcluster,
     cluster,
     covr,
     dbscan,

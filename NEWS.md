@@ -1,4 +1,8 @@
-# diceR (development version)
+# diceR 1.1.0
+
+* Reinstate `blockcluster` package as it is under active maintenance again
+
+* Update maintainer email
 
 # diceR 1.0.4
 

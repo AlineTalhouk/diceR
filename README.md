@@ -5,10 +5,7 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.org/AlineTalhouk/diceR.svg?branch=master)](https://travis-ci.org/AlineTalhouk/diceR)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/AlineTalhouk/diceR?branch=master&svg=true)](https://ci.appveyor.com/project/AlineTalhouk/diceR)
+[![R-CMD-check](https://github.com/AlineTalhouk/diceR/workflows/R-CMD-check/badge.svg)](https://github.com/AlineTalhouk/diceR/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg)](https://codecov.io/gh/AlineTalhouk/diceR?branch=master)
 [![CRAN

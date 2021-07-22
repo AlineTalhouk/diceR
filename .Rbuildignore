@@ -13,3 +13,4 @@
 ^\.covrignore$
 ^LICENSE\.md$
 ^pkgdown$
+^\.github$
