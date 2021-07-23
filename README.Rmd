@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# diceR <a href='https://alinetalhouk.github.io/diceR'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# diceR <a href='https://alinetalhouk.github.io/diceR/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/AlineTalhouk/diceR/workflows/R-CMD-check/badge.svg)](https://github.com/AlineTalhouk/diceR/actions)
