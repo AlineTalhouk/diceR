@@ -38,7 +38,10 @@ hc <- function(d, k, method = "average") {
 #' DIvisive ANAlysis Clustering
 #' @noRd
 diana <- function(d, k) {
-  if (requireNamespace("cluster", quietly = TRUE)) {
+  if (!requireNamespace("cluster", quietly = TRUE)) {
+    stop("Package \"cluster\" is needed. Please install it.",
+         call. = FALSE)
+  } else {
     as.integer(stats::cutree(cluster::diana(d, diss = TRUE), k))
   }
 }
@@ -46,7 +49,10 @@ diana <- function(d, k) {
 #' Partitioning Around Medoids
 #' @noRd
 pam <- function(d, k) {
-  if (requireNamespace("cluster", quietly = TRUE)) {
+  if (!requireNamespace("cluster", quietly = TRUE)) {
+    stop("Package \"cluster\" is needed. Please install it.",
+         call. = FALSE)
+  } else {
     as.integer(cluster::pam(d, k, cluster.only = TRUE))
   }
 }
@@ -63,7 +69,10 @@ km <- function(x, k) {
 #' Affinity Propagation
 #' @noRd
 ap <- function(x, k) {
-  if (requireNamespace("apcluster", quietly = TRUE)) {
+  if (!requireNamespace("apcluster", quietly = TRUE)) {
+    stop("Package \"apcluster\" is needed. Please install it.",
+         call. = FALSE)
+  } else {
     suppressWarnings(
       apcluster::apclusterK(apcluster::negDistMat, x, k, verbose = FALSE)@idx
     ) %>%
@@ -75,7 +84,10 @@ ap <- function(x, k) {
 #' Spectral Clustering (Radial-Basis Kernel)
 #' @noRd
 sc <- function(x, k) {
-  if (requireNamespace("kernlab", quietly = TRUE)) {
+  if (!requireNamespace("kernlab", quietly = TRUE)) {
+    stop("Package \"kernlab\" is needed. Please install it.",
+         call. = FALSE)
+  } else {
     kernlab::specc(as.matrix(x), k, kernel = "rbfdot")@.Data
   }
 }
@@ -89,7 +101,10 @@ gmm <- function(x, k) {
 #' Block Clustering (Co-clustering)
 #' @noRd
 block <- function(x, k) {
-  if (requireNamespace("blockcluster", quietly = TRUE)) {
+  if (!requireNamespace("blockcluster", quietly = TRUE)) {
+    stop("Package \"blockcluster\" is needed. Please install it.",
+         call. = FALSE)
+  } else {
     tryCatch(
       sink_output(
         blockcluster::cocluster(as.matrix(x), "continuous",
@@ -104,7 +119,10 @@ block <- function(x, k) {
 #' Self-Organizing Maps
 #' @noRd
 som <- function(x, k, xdim, ydim, rlen, alpha, method) {
-  if (requireNamespace("kohonen", quietly = TRUE)) {
+  if (!requireNamespace("kohonen", quietly = TRUE)) {
+    stop("Package \"kohonen\" is needed. Please install it.",
+         call. = FALSE)
+  } else {
     x %>%
       purrr::when(is.matrix(.) ~ ., ~ as.matrix(.)) %>%
       som_train(xdim = xdim, ydim = ydim, rlen = rlen, alpha = alpha) %>%
@@ -145,7 +163,10 @@ som_cluster <- function(model, k, method) {
 #' @references https://academic.oup.com/bioinformatics/article/26/22/2841/227572
 #' @noRd
 cmeans <- function(x, k) {
-  if (requireNamespace("e1071", quietly = TRUE)) {
+  if (!requireNamespace("e1071", quietly = TRUE)) {
+    stop("Package \"e1071\" is needed. Please install it.",
+         call. = FALSE)
+  } else {
     N <- nrow(x)
     D <- ncol(x)
     m <- 1 + (1418 / N + 22.05) * D ^ (-2) +
@@ -161,7 +182,10 @@ cmeans <- function(x, k) {
 #' Hierarchical Density-Based Spatial Clustering of Applications with Noise
 #' @noRd
 hdbscan <- function(x, minPts) {
-  if (requireNamespace("dbscan", quietly = TRUE)) {
+  if (!requireNamespace("dbscan", quietly = TRUE)) {
+    stop("Package \"dbscan\" is needed. Please install it.",
+         call. = FALSE)
+  } else {
     dbscan::hdbscan(x = x, minPts = minPts)$cluster
   }
 }

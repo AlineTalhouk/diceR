@@ -32,14 +32,19 @@ prepare_data <- function(data, scale = TRUE,
                          type = c("conventional", "robust", "tsne"),
                          min.var = 1) {
   type <- match.arg(type)
-  if (type == "tsne" && requireNamespace("Rtsne", quietly = TRUE)) {
-    return(
-      data %>%
-        as.matrix() %>%
-        Rtsne::Rtsne(perplexity = 5, max_iter = 500) %>%
-        magrittr::extract2("Y") %>%
-        magrittr::set_rownames(rownames(data))
-    )
+  if (type == "tsne") {
+    if (!requireNamespace("Rtsne", quietly = TRUE)) {
+      stop("Package \"Rtsne\" is needed. Please install it.",
+           call. = FALSE)
+    } else {
+      return(
+        data %>%
+          as.matrix() %>%
+          Rtsne::Rtsne(perplexity = 5, max_iter = 500) %>%
+          magrittr::extract2("Y") %>%
+          magrittr::set_rownames(rownames(data))
+      )
+    }
   }
   var.fun <- switch(type, conventional = stats::sd, robust = stats::mad)
   dat <- data %>%

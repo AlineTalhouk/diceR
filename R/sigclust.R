@@ -40,56 +40,61 @@ sigclust <- function(x, k, nsim, nrep = 1, labflag = 0, label = 0,
                      icovest = 2) {
   n <- dim(x)[1]
   p <- dim(x)[2]
-  if (n > 1 & requireNamespace("sigclust", quietly = TRUE)) {
-    x <- as.matrix(x)
-    if (labflag == 0) {
-      xclust <- .cluster(x, k)
-      for (i in 1:nrep) {
-        clust.temp <- .cluster(x, k)
-        if (clust.temp$cindex < xclust$cindex)
-          xclust <- clust.temp
-        xcindex <- xclust$cindex
+  if (n > 1) {
+    if (!requireNamespace("sigclust", quietly = TRUE)) {
+      stop("Package \"sigclust\" is needed. Please install it.",
+           call. = FALSE)
+    } else {
+      x <- as.matrix(x)
+      if (labflag == 0) {
+        xclust <- .cluster(x, k)
+        for (i in 1:nrep) {
+          clust.temp <- .cluster(x, k)
+          if (clust.temp$cindex < xclust$cindex)
+            xclust <- clust.temp
+          xcindex <- xclust$cindex
+        }
       }
+      xvareigen <- sigclust::.vareigen(x, n, p, icovest)
+      simcindex <- rep(0, nsim)
+      for (i in 1:nsim) {
+        xsim <- .simnull(xvareigen$vsimeigval, n, p, k)
+        simcindex[i] <- xsim$cindex
+      }
+      if (labflag == 0) {
+        index <- simcindex <= xclust$cindex
+        mindex <- mean(simcindex)
+        sindex <- stats::sd(simcindex)
+        pval <- sum(index) / nsim
+        pvalnorm <- stats::pnorm(xclust$cindex, mindex, sindex)
+      }
+      if (labflag == 1) {
+        meanpl <- vapply(sort(unique(label)),
+                         function(y) colMeans(x[label == y, , drop = FALSE]),
+                         FUN.VALUE = double(p))
+        txdiffl <- lapply(sort(unique(label)),
+                          function(y) t(x[label == y, ]) - meanpl[, y])
+        withinsum <- sum(vapply(txdiffl,
+                                function(y) sum(y ^ 2),
+                                FUN.VALUE = double(1)))
+        meanp <- colMeans(x)
+        tx <- t(x)
+        txdiff <- tx - meanp
+        totalsum <- sum(txdiff ^ 2)
+        cindexlab <- withinsum / totalsum
+        index <- simcindex <= cindexlab
+        mindex <- mean(simcindex)
+        sindex <- stats::sd(simcindex)
+        pval <- sum(index) / nsim
+        pvalnorm <- stats::pnorm(cindexlab, mindex, sindex)
+        xcindex <- cindexlab
+      }
+      return(methods::new("sigclust", raw.data = x, veigval = xvareigen$veigval,
+                          vsimeigval = xvareigen$vsimeigval,
+                          simbackvar = xvareigen$simbackvar,
+                          icovest = icovest, nsim = nsim, simcindex = simcindex,
+                          pval = pval, pvalnorm = pvalnorm, xcindex = xcindex))
     }
-    xvareigen <- sigclust::.vareigen(x, n, p, icovest)
-    simcindex <- rep(0, nsim)
-    for (i in 1:nsim) {
-      xsim <- .simnull(xvareigen$vsimeigval, n, p, k)
-      simcindex[i] <- xsim$cindex
-    }
-    if (labflag == 0) {
-      index <- simcindex <= xclust$cindex
-      mindex <- mean(simcindex)
-      sindex <- stats::sd(simcindex)
-      pval <- sum(index) / nsim
-      pvalnorm <- stats::pnorm(xclust$cindex, mindex, sindex)
-    }
-    if (labflag == 1) {
-      meanpl <- vapply(sort(unique(label)),
-                       function(y) colMeans(x[label == y, , drop = FALSE]),
-                       FUN.VALUE = double(p))
-      txdiffl <- lapply(sort(unique(label)),
-                        function(y) t(x[label == y, ]) - meanpl[, y])
-      withinsum <- sum(vapply(txdiffl,
-                              function(y) sum(y ^ 2),
-                              FUN.VALUE = double(1)))
-      meanp <- colMeans(x)
-      tx <- t(x)
-      txdiff <- tx - meanp
-      totalsum <- sum(txdiff ^ 2)
-      cindexlab <- withinsum / totalsum
-      index <- simcindex <= cindexlab
-      mindex <- mean(simcindex)
-      sindex <- stats::sd(simcindex)
-      pval <- sum(index) / nsim
-      pvalnorm <- stats::pnorm(cindexlab, mindex, sindex)
-      xcindex <- cindexlab
-    }
-    return(methods::new("sigclust", raw.data = x, veigval = xvareigen$veigval,
-                        vsimeigval = xvareigen$vsimeigval,
-                        simbackvar = xvareigen$simbackvar,
-                        icovest = icovest, nsim = nsim, simcindex = simcindex,
-                        pval = pval, pvalnorm = pvalnorm, xcindex = xcindex))
   }
   else {
     print("Only one sample left, no need for clustering!")

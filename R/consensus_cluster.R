@@ -123,12 +123,17 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   lalg <- lengths(algs) * lengths(list(nmf.method, distance, 1))
   n <- nrow(data)
 
-  if (progress && requireNamespace("progress", quietly = TRUE)) {
-    pb <- progress::progress_bar$new(
-      format = "Clustering Algorithm :num of :den: :alg (k = :k) [:bar] :percent eta: :eta",
-      total = length(nk) * sum(lalg) * reps,
-      clear = FALSE
-    )
+  if (progress) {
+    if (!requireNamespace("progress", quietly = TRUE)) {
+      stop("Package \"progress\" is needed. Please install it.",
+           call. = FALSE)
+    } else {
+      pb <- progress::progress_bar$new(
+        format = "Clustering Algorithm :num of :den: :alg (k = :k) [:bar] :percent eta: :eta",
+        total = length(nk) * sum(lalg) * reps,
+        clear = FALSE
+      )
+    }
   } else {
     pb <- NULL
   }
