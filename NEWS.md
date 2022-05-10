@@ -1,4 +1,6 @@
-# diceR (development version)
+# diceR 1.2.0
+
+* Fix problems regarding conditional usage of packages in Suggests
 
 # diceR 1.1.0
 
