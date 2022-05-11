@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -56,7 +58,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/AlineTalhouk/diceR">
+  <a href="https://github.com/AlineTalhouk/diceR" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -71,47 +73,62 @@
 
       
 
-      </header><script src="overview_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cluster Analysis using <code>diceR</code>
 </h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/AlineTalhouk/diceR/blob/master/vignettes/overview.Rmd"><code>vignettes/overview.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AlineTalhouk/diceR/blob/HEAD/vignettes/overview.Rmd" class="external-link"><code>vignettes/overview.Rmd</code></a></small>
       <div class="hidden name"><code>overview.Rmd</code></div>
 
     </div>
 
     
     
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>Cluster analysis is a way of “slicing and dicing” data to allow the grouping together of similar entities and the separation of dissimilar ones. Issues arise due to the existence of a diverse number of clustering algorithms, each with different techniques and inputs, and with no universally optimal methodology. Thus, a framework for cluster analysis and validation methods are needed. Our approach is to use cluster ensembles from a diverse set of algorithms. This ensures that the data has been considered from several angles and using a variety of methods. We have currently implemented about 15 clustering algorithms, and we provide a simple framework to add additional algorithms (see <code><a href="https://rdrr.io/r/utils/example.html">example("consensus_cluster")</a></code>). Although results are dependent on the subset of algorithms chosen for the ensemble, the intent is that we capture a variety of clustering outputs and select those that are most consistent with the data.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>Cluster analysis is a way of “slicing and dicing” data to allow the
+grouping together of similar entities and the separation of dissimilar
+ones. Issues arise due to the existence of a diverse number of
+clustering algorithms, each with different techniques and inputs, and
+with no universally optimal methodology. Thus, a framework for cluster
+analysis and validation methods are needed. Our approach is to use
+cluster ensembles from a diverse set of algorithms. This ensures that
+the data has been considered from several angles and using a variety of
+methods. We have currently implemented about 15 clustering algorithms,
+and we provide a simple framework to add additional algorithms (see
+<code>example("consensus_cluster")</code>). Although results are
+dependent on the subset of algorithms chosen for the ensemble, the
+intent is that we capture a variety of clustering outputs and select
+those that are most consistent with the data.</p>
 <p>You can install <code>diceR</code> from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"diceR"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"diceR"</span><span class="op">)</span></code></pre></div>
 <p>Or get the latest development version from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"AlineTalhouk/diceR"</span><span class="op">)</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AlineTalhouk/diceR"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlineTalhouk/diceR/">diceR</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rapporter.github.io/pander/">pander</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlineTalhouk/diceR/" class="external-link">diceR</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rapporter.github.io/pander/" class="external-link">pander</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span>
 <span class="va">hgsc</span> <span class="op">&lt;-</span> <span class="va">hgsc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span></code></pre></div>
-<p>We load an excerpt of an expression data set from TCGA of 100 high grade serous carcinoma samples measured on 50 genes.</p>
+<p>We load an excerpt of an expression data set from TCGA of 100 high
+grade serous carcinoma samples measured on 50 genes.</p>
 </div>
-<div id="clustering-algorithms" class="section level2">
-<h2 class="hasAnchor">
-<a href="#clustering-algorithms" class="anchor"></a>Clustering Algorithms</h2>
+<div class="section level2">
+<h2 id="clustering-algorithms">Clustering Algorithms<a class="anchor" aria-label="anchor" href="#clustering-algorithms"></a>
+</h2>
 <p>The list of clustering algorithms available for use are:</p>
 <ul>
 <li>
-<code>"nmf"</code>: Nonnegative Matrix Factorization (using Kullback-Leibler Divergence or Euclidean distance)</li>
+<code>"nmf"</code>: Nonnegative Matrix Factorization (using
+Kullback-Leibler Divergence or Euclidean distance)</li>
 <li>
 <code>"hc"</code>: Hierarchical Clustering</li>
 <li>
@@ -123,107 +140,180 @@
 <li>
 <code>"ap"</code>: Affinity Propagation</li>
 <li>
-<code>"sc"</code>: Spectral Clustering using Radial-Basis kernel function</li>
+<code>"sc"</code>: Spectral Clustering using Radial-Basis kernel
+function</li>
 <li>
-<code>"gmm"</code>: Gaussian Mixture Model using Bayesian Information Criterion on EM algorithm</li>
+<code>"gmm"</code>: Gaussian Mixture Model using Bayesian
+Information Criterion on EM algorithm</li>
 <li>
 <code>"block"</code>: Biclustering using a latent block model</li>
 <li>
-<code>"som"</code>: Self-Organizing Map (SOM) with Hierarchical Clustering</li>
+<code>"som"</code>: Self-Organizing Map (SOM) with Hierarchical
+Clustering</li>
 <li>
 <code>"cmeans"</code>: Fuzzy C-Means Clustering</li>
 <li>
-<code>"hdbscan"</code>: Hierarchical Density-based Spatial Clustering of Applications with Noise (HDBSCAN)</li>
+<code>"hdbscan"</code>: Hierarchical Density-based Spatial
+Clustering of Applications with Noise (HDBSCAN)</li>
 </ul>
-<p>They are passed as a character vector into the <code>algorithms</code> parameter of <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>. Note that the list continues to evolve as we implement more algorithms into <code>diceR</code>.</p>
-<div id="cluster-models" class="section level3">
-<h3 class="hasAnchor">
-<a href="#cluster-models" class="anchor"></a>Cluster Models</h3>
-<p>The clustering algorithms can be categorized under different models or paradigms based on how the clusters are formed. We provide a brief overview to guide the initial selection of algorithms since no single algorithm works for every data model.<sup>1</sup></p>
+<p>They are passed as a character vector into the
+<code>algorithms</code> parameter of <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>.
+Note that the list continues to evolve as we implement more algorithms
+into <code>diceR</code>.</p>
+<div class="section level3">
+<h3 id="cluster-models">Cluster Models<a class="anchor" aria-label="anchor" href="#cluster-models"></a>
+</h3>
+<p>The clustering algorithms can be categorized under different models
+or paradigms based on how the clusters are formed. We provide a brief
+overview to guide the initial selection of algorithms since no single
+algorithm works for every data model.<sup>1</sup></p>
 <ul>
-<li>Connectivity Models: <code>"hc"</code> and <code>"diana"</code> are hierarchical models based on connecting objects using a particular similarity or distance metric.</li>
-<li>Centroid Models: <code>"km"</code> and <code>"pam"</code> uses initial cluster centers calculated based on the mean of the objects, where <code>"pam"</code> restricts the centroid to be an actual object. These models are good for modeling data that produces spherical clusters. <code>"ap"</code> is similar to <code>"pam"</code> because it calculates “exemplars” (like centroids) of the data but is advantageous because initialization of k (number of clusters) is not required.<sup>2</sup><code>"cmeans"</code> is similar to <code>"km"</code> except that points can be assigned to more than one cluster.</li>
-<li>Distribution Models: <code>"gmm"</code> assumes a Gaussian mixture model used by the EM algorithm for clustering.<sup>3</sup> The gain in model complexity is traded with utility since the assumption is quite strong.</li>
-<li>Density Models: <code>"hdbscan"</code> runs hierarchical clustering on the DBSCAN result.<sup>4,5</sup> These models assume that each cluster has high density, so when there are overlapping regions, the algorithms may not be able to separate objects that well.</li>
-<li>Subspace Models: <code>"block"</code> clusters both samples and features, so is useful when you want to associate these pairs of cluster entities (e.g. are there functional gene groups that associate with sample subtypes?). Our implementation uses the latent block model.<sup>6</sup>
+<li>Connectivity Models: <code>"hc"</code> and <code>"diana"</code> are
+hierarchical models based on connecting objects using a particular
+similarity or distance metric.</li>
+<li>Centroid Models: <code>"km"</code> and <code>"pam"</code> uses
+initial cluster centers calculated based on the mean of the objects,
+where <code>"pam"</code> restricts the centroid to be an actual object.
+These models are good for modeling data that produces spherical
+clusters. <code>"ap"</code> is similar to <code>"pam"</code> because it
+calculates “exemplars” (like centroids) of the data but is advantageous
+because initialization of k (number of clusters) is not
+required.<sup>2</sup><code>"cmeans"</code> is similar to
+<code>"km"</code> except that points can be assigned to more than one
+cluster.</li>
+<li>Distribution Models: <code>"gmm"</code> assumes a Gaussian mixture
+model used by the EM algorithm for clustering.<sup>3</sup> The gain in
+model complexity is traded with utility since the assumption is quite
+strong.</li>
+<li>Density Models: <code>"hdbscan"</code> runs hierarchical clustering
+on the DBSCAN result.<sup>4,5</sup> These models assume that each
+cluster has high density, so when there are overlapping regions, the
+algorithms may not be able to separate objects that well.</li>
+<li>Subspace Models: <code>"block"</code> clusters both samples and
+features, so is useful when you want to associate these pairs of cluster
+entities (e.g. are there functional gene groups that associate with
+sample subtypes?). Our implementation uses the latent block
+model.<sup>6</sup>
 </li>
-<li>Neural Models: our implementation of <code>"som"</code> reduces the data to a two-dimensional subspace using a neural network model, before performing hierarchical clustering.<sup>7</sup> A lot of the noise is phased out and cluster stability can be improved from using <code>"hc"</code> alone.</li>
-<li>Spectral Clustering: Similar to <code>"som"</code>, <code>"sc"</code> also performs dimensionality reduction before clustering, but instead uses eigenvectors of a kernel matrix.<sup>8</sup> We use a radial-basis kernel function in the package.</li>
-<li>Non-negative Matrix Factorization: the computational complexity with <code>"nmf"</code> is doubled compared to other algorithms because data manipulations need to be performed to transform the input data into a non-negative matrix. Otherwise, NMF has a natural clustering result that can be used to group together samples and/or features.<sup>9</sup>
+<li>Neural Models: our implementation of <code>"som"</code> reduces the
+data to a two-dimensional subspace using a neural network model, before
+performing hierarchical clustering.<sup>7</sup> A lot of the noise is
+phased out and cluster stability can be improved from using
+<code>"hc"</code> alone.</li>
+<li>Spectral Clustering: Similar to <code>"som"</code>,
+<code>"sc"</code> also performs dimensionality reduction before
+clustering, but instead uses eigenvectors of a kernel
+matrix.<sup>8</sup> We use a radial-basis kernel function in the
+package.</li>
+<li>Non-negative Matrix Factorization: the computational complexity with
+<code>"nmf"</code> is doubled compared to other algorithms because data
+manipulations need to be performed to transform the input data into a
+non-negative matrix. Otherwise, NMF has a natural clustering result that
+can be used to group together samples and/or features.<sup>9</sup>
 </li>
 </ul>
 </div>
 </div>
-<div id="distance-measures" class="section level2">
-<h2 class="hasAnchor">
-<a href="#distance-measures" class="anchor"></a>Distance Measures</h2>
-<p>The list of distance measures available for use are those found in <code><a href="https://rdrr.io/r/stats/dist.html">stats::dist</a></code> and the spearman distance:</p>
+<div class="section level2">
+<h2 id="distance-measures">Distance Measures<a class="anchor" aria-label="anchor" href="#distance-measures"></a>
+</h2>
+<p>The list of distance measures available for use are those found in
+<code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a></code> and the spearman distance:</p>
 <ul>
 <li>
-<code>"euclidean"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html">stats::dist</a></code>
+<code>"euclidean"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a></code>
 </li>
 <li>
-<code>"maximum"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html">stats::dist</a></code>
+<code>"maximum"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a></code>
 </li>
 <li>
-<code>"manhattan"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html">stats::dist</a></code>
+<code>"manhattan"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a></code>
 </li>
 <li>
-<code>"canberra"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html">stats::dist</a></code>
+<code>"canberra"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a></code>
 </li>
 <li>
-<code>"binary"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html">stats::dist</a></code>
+<code>"binary"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a></code>
 </li>
 <li>
-<code>"minkowski"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html">stats::dist</a></code>
+<code>"minkowski"</code>: see <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a></code>
 </li>
 <li>
-<code>"spearman"</code>: based on <code>bioDist::spearman.dist</code>
+<code>"spearman"</code>: based on
+<code>bioDist::spearman.dist</code>
 </li>
 </ul>
-<p>They are passed as a character vector into the <code>distance</code> parameter of <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>. Only the <code>"hc"</code>, <code>"diana"</code>, <code>"pam"</code> algorithms use the <code>distance</code> parameter.</p>
+<p>They are passed as a character vector into the <code>distance</code>
+parameter of <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>. Only the
+<code>"hc"</code>, <code>"diana"</code>, <code>"pam"</code> algorithms
+use the <code>distance</code> parameter.</p>
 </div>
-<div id="validity-indices" class="section level2">
-<h2 class="hasAnchor">
-<a href="#validity-indices" class="anchor"></a>Validity Indices</h2>
-<div id="internal" class="section level3">
-<h3 class="hasAnchor">
-<a href="#internal" class="anchor"></a>Internal</h3>
-<p>The list of internal validity indices used for evaluating clusters are:</p>
+<div class="section level2">
+<h2 id="validity-indices">Validity Indices<a class="anchor" aria-label="anchor" href="#validity-indices"></a>
+</h2>
+<div class="section level3">
+<h3 id="internal">Internal<a class="anchor" aria-label="anchor" href="#internal"></a>
+</h3>
+<p>The list of internal validity indices used for evaluating clusters
+are:</p>
 <ul>
-<li>“C_index”, “Calinski_Harabasz”, “Davies_Bouldin”, “Dunn”, “McClain_Rao”, “PBM”, “SD_Dis”, “Ray_Turi”, “Tau”, “Gamma”, “G_plus”, “Silhouette”, “S_Dbw” from <code><a href="https://rdrr.io/pkg/clusterCrit/man/intCriteria.html">clusterCrit::intCriteria</a></code>
+<li>“C_index”, “Calinski_Harabasz”, “Davies_Bouldin”, “Dunn”,
+“McClain_Rao”, “PBM”, “SD_Dis”, “Ray_Turi”, “Tau”, “Gamma”, “G_plus”,
+“Silhouette”, “S_Dbw” from <code><a href="https://rdrr.io/pkg/clusterCrit/man/intCriteria.html" class="external-link">clusterCrit::intCriteria</a></code>
 </li>
 <li>“Compactness” from the <code>LinkCluE</code> package</li>
-<li>“Connectivity” from <code><a href="https://rdrr.io/pkg/clValid/man/connectivity.html">clValid::connectivity</a></code>
+<li>“Connectivity” from <code><a href="https://rdrr.io/pkg/clValid/man/connectivity.html" class="external-link">clValid::connectivity</a></code>
 </li>
 </ul>
 </div>
-<div id="external" class="section level3">
-<h3 class="hasAnchor">
-<a href="#external" class="anchor"></a>External</h3>
-<p>The list of external validity indices used for evaluating clusters are:</p>
+<div class="section level3">
+<h3 id="external">External<a class="anchor" aria-label="anchor" href="#external"></a>
+</h3>
+<p>The list of external validity indices used for evaluating clusters
+are:</p>
 <ul>
-<li>“Hubert”, “Jaccard”, “McNemar”, “Precision”, “Rand”, “Recall” from <code><a href="https://rdrr.io/pkg/clusterCrit/man/extCriteria.html">clusterCrit::extCriteria</a></code>
+<li>“Hubert”, “Jaccard”, “McNemar”, “Precision”, “Rand”, “Recall” from
+<code><a href="https://rdrr.io/pkg/clusterCrit/man/extCriteria.html" class="external-link">clusterCrit::extCriteria</a></code>
 </li>
-<li>“NMI” calculated using <code><a href="https://rdrr.io/pkg/infotheo/man/entropy.html">infotheo::entropy</a></code>
+<li>“NMI” calculated using <code><a href="https://rdrr.io/pkg/infotheo/man/entropy.html" class="external-link">infotheo::entropy</a></code>
 </li>
-<li>Overall confusion matrix statistics from <code><a href="https://rdrr.io/pkg/caret/man/confusionMatrix.html">caret::confusionMatrix</a></code>: “Overall Accuracy”, “Cohen’s kappa”, “No Information Rate”, “P-Value [Acc &gt; NIR]”</li>
-<li>Averaged class-specific confusion matrix statistics: “Sensitivity”, “Specificity”, “PPV”, “NPV”, “Detection Rate”, “Accuracy”, “Balanced Accuracy”</li>
+<li>Overall confusion matrix statistics from
+<code><a href="https://rdrr.io/pkg/caret/man/confusionMatrix.html" class="external-link">caret::confusionMatrix</a></code>: “Overall Accuracy”, “Cohen’s
+kappa”, “No Information Rate”, “P-Value [Acc &gt; NIR]”</li>
+<li>Averaged class-specific confusion matrix statistics: “Sensitivity”,
+“Specificity”, “PPV”, “NPV”, “Detection Rate”, “Accuracy”, “Balanced
+Accuracy”</li>
 </ul>
 </div>
 </div>
-<div id="consensus-clustering" class="section level2">
-<h2 class="hasAnchor">
-<a href="#consensus-clustering" class="anchor"></a>Consensus Clustering</h2>
-<p>When Monti et al. (2003) first introduced consensus clustering, the idea was to use one clustering algorithm on bootstrapped subsamples of the data. We implement some extensions where a consensus is reached across subsamples <em>and</em> across algorithms. The final cluster assignment is then computed using statistical transformations on the ensemble cluster.</p>
-<p>The base function of this package is <code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>, which outputs cluster assignments across subsamples and algorithms, for different k (number of clusters). For example, let’s say we were interested in clustering the <code>hgsc</code> data into 3 or 4 clusters, using 80% resampling on 5 replicates, for these clustering algorithms: Hierarchical Clustering, PAM, and DIvisive ANAlysis Clustering (DIANA). Euclidean distance is used for all algorithms.</p>
+<div class="section level2">
+<h2 id="consensus-clustering">Consensus Clustering<a class="anchor" aria-label="anchor" href="#consensus-clustering"></a>
+</h2>
+<p>When Monti et al. (2003) first introduced consensus clustering, the
+idea was to use one clustering algorithm on bootstrapped subsamples of
+the data. We implement some extensions where a consensus is reached
+across subsamples <em>and</em> across algorithms. The final cluster
+assignment is then computed using statistical transformations on the
+ensemble cluster.</p>
+<p>The base function of this package is
+<code><a href="../reference/consensus_cluster.html">consensus_cluster()</a></code>, which outputs cluster assignments
+across subsamples and algorithms, for different k (number of clusters).
+For example, let’s say we were interested in clustering the
+<code>hgsc</code> data into 3 or 4 clusters, using 80% resampling on 5
+replicates, for these clustering algorithms: Hierarchical Clustering,
+PAM, and DIvisive ANAlysis Clustering (DIANA). Euclidean distance is
+used for all algorithms.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">CC</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, p.item <span class="op">=</span> <span class="fl">0.8</span>, reps <span class="op">=</span> <span class="fl">5</span>,
-                        algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>The output is a 4-dimensional array: rows are samples, columns are different bootstrap subsample replicates, slices are algorithms, and each “box” (4th dimension) is for a different k. Below are the first few cluster assignments for each replicate in the DIANA algorithm for k = 3.</p>
+                        algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>The output is a 4-dimensional array: rows are samples, columns are
+different bootstrap subsample replicates, slices are algorithms, and
+each “box” (4th dimension) is for a different k. Below are the first few
+cluster assignments for each replicate in the DIANA algorithm for k =
+3.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">co</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">CC</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span><span class="op">(</span><span class="va">co</span>, width <span class="op">=</span> <span class="fl">80</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">co</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">CC</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/strwrap.html" class="external-link">strwrap</a></span><span class="op">(</span><span class="va">co</span>, width <span class="op">=</span> <span class="fl">80</span><span class="op">)</span>
 <span class="co">#&gt; [1] "int [1:100, 1:5, 1:3, 1:2] 1 1 NA NA NA 1 1 NA 1 NA ..."               </span>
 <span class="co">#&gt; [2] "- attr(*, \"dimnames\")=List of 4"                                     </span>
 <span class="co">#&gt; [3] "..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""     </span>
@@ -231,7 +321,7 @@
 <span class="co">#&gt; [5] "..$ : chr [1:5] \"R1\" \"R2\" \"R3\" \"R4\" ..."                       </span>
 <span class="co">#&gt; [6] "..$ : chr [1:3] \"HC_Euclidean\" \"PAM_Euclidean\" \"DIANA_Euclidean\""</span>
 <span class="co">#&gt; [7] "..$ : chr [1:2] \"3\" \"4\""</span></code></pre></div>
-<table class="table">
+<table style="width:71%;" class="table">
 <caption>Cluster Assignments for DIANA, k = 3</caption>
 <colgroup>
 <col width="36%">
@@ -300,49 +390,66 @@
 </tr>
 </tbody>
 </table>
-<p>Note the unavoidable presence of <code>NA</code>s because we used 80% subsampling. This can be problematic in certain downstream ensemble methods, so we can impute missing values using K-Nearest Neighbours beforehand. There might still be <code>NA</code>s after KNN because of how the decision threshold was set. The remaining missing values can be imputed using majority voting.</p>
+<p>Note the unavoidable presence of <code>NA</code>s because we used 80%
+subsampling. This can be problematic in certain downstream ensemble
+methods, so we can impute missing values using K-Nearest Neighbours
+beforehand. There might still be <code>NA</code>s after KNN because of
+how the decision threshold was set. The remaining missing values can be
+imputed using majority voting.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">CC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">CC</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, <span class="va">impute_knn</span>, data <span class="op">=</span> <span class="va">hgsc</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">CC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">CC</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, <span class="va">impute_knn</span>, data <span class="op">=</span> <span class="va">hgsc</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 <span class="va">CC_imputed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/impute_missing.html">impute_missing</a></span><span class="op">(</span><span class="va">CC</span>, <span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">CC</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">CC</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2</span>
-<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">CC_imputed</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">CC_imputed</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0</span></code></pre></div>
-<p>We can carry on the analysis using either <code>CC</code> or <code>CC_imputed</code>.</p>
+<p>We can carry on the analysis using either <code>CC</code> or
+<code>CC_imputed</code>.</p>
 </div>
-<div id="consensus-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#consensus-functions" class="anchor"></a>Consensus Functions</h2>
-<p><code>diceR</code> provides functions for retrieving useful summaries and other results for consensus clustering.</p>
+<div class="section level2">
+<h2 id="consensus-functions">Consensus Functions<a class="anchor" aria-label="anchor" href="#consensus-functions"></a>
+</h2>
+<p><code>diceR</code> provides functions for retrieving useful summaries
+and other results for consensus clustering.</p>
 <ul>
 <li><a href="#compute-consensus-matrix-with-consensus_matrix"><code>consensus_matrix()</code></a></li>
 <li><a href="#combine-consensus-summaries-with-consensus_combine"><code>consensus_combine()</code></a></li>
 <li><a href="#compare-algortihms-with-consensus_evaluate"><code>consensus_evaluate()</code></a></li>
 </ul>
-<div id="compute-consensus-matrix-with-consensus_matrix" class="section level3">
-<h3 class="hasAnchor">
-<a href="#compute-consensus-matrix-with-consensus_matrix" class="anchor"></a>Compute consensus matrix with <code>consensus_matrix()</code>
+<div class="section level3">
+<h3 id="compute-consensus-matrix-with-consensus_matrix">Compute consensus matrix with <code>consensus_matrix()</code><a class="anchor" aria-label="anchor" href="#compute-consensus-matrix-with-consensus_matrix"></a>
 </h3>
-<p>The consensus matrix is an n by n matrix, where n is the number of samples. Each element is a real-valued number between 0 and 1 inclusive, representing the proportion of times that two samples were clustered together out of the times that the same samples were chosen in the bootstrap resampling. The diagonal are all one’s. Suppose we wanted to compute the consensus matrix for PAM, k = 4, and visualize using <code><a href="../reference/graphs.html">graph_heatmap()</a></code>:</p>
+<p>The consensus matrix is an n by n matrix, where n is the number of
+samples. Each element is a real-valued number between 0 and 1 inclusive,
+representing the proportion of times that two samples were clustered
+together out of the times that the same samples were chosen in the
+bootstrap resampling. The diagonal are all one’s. Suppose we wanted to
+compute the consensus matrix for PAM, k = 4, and visualize using
+<code><a href="../reference/graphs.html">graph_heatmap()</a></code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pam.4</span> <span class="op">&lt;-</span> <span class="va">CC</span><span class="op">[</span>, , <span class="st">"PAM_Euclidean"</span>, <span class="st">"4"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>
 <span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span><span class="op">(</span><span class="va">pam.4</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">cm</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">cm</span><span class="op">)</span>
 <span class="co">#&gt; [1] 100 100</span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">hm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/graphs.html">graph_heatmap</a></span><span class="op">(</span><span class="va">pam.4</span><span class="op">)</span></code></pre></div>
 <p><img src="overview_files/figure-html/graph_heatmap-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
-<div id="combine-consensus-summaries-with-consensus_combine" class="section level3">
-<h3 class="hasAnchor">
-<a href="#combine-consensus-summaries-with-consensus_combine" class="anchor"></a>Combine consensus summaries with <code>consensus_combine()</code>
+<div class="section level3">
+<h3 id="combine-consensus-summaries-with-consensus_combine">Combine consensus summaries with
+<code>consensus_combine()</code><a class="anchor" aria-label="anchor" href="#combine-consensus-summaries-with-consensus_combine"></a>
 </h3>
-<p>If we wish to separately extract consensus matrices and consensus classes for every algorithm, <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> is a convenient wrapper to do so. Setting <code>element = "matrix"</code> returns a list of consensus matrices. On the other hand, setting <code>element = "class"</code> returns a matrix with rows as samples, and columns as clustering assignments for each algorithm.</p>
+<p>If we wish to separately extract consensus matrices and consensus
+classes for every algorithm, <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> is a
+convenient wrapper to do so. Setting <code>element = "matrix"</code>
+returns a list of consensus matrices. On the other hand, setting
+<code>element = "class"</code> returns a matrix with rows as samples,
+and columns as clustering assignments for each algorithm.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ccomb_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_combine.html">consensus_combine</a></span><span class="op">(</span><span class="va">CC</span>, element <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span>
 <span class="va">ccomb_class</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_combine.html">consensus_combine</a></span><span class="op">(</span><span class="va">CC</span>, element <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">ccomb_matrix</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ccomb_matrix</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="co">#&gt; List of 2</span>
 <span class="co">#&gt;  $ 3:List of 3</span>
 <span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.8 1 0.8 1 1 1 1 1 1 ...</span>
@@ -352,7 +459,7 @@
 <span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.6 1 0.6 1 1 1 1 1 0.8 ...</span>
 <span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 1 0.2 0.8 0 0.8 0.8 0.6 0 0 ...</span>
 <span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.8 0 0 0 1 1 0 0 1 ...</span></code></pre></div>
-<table class="table">
+<table style="width:68%;" class="table">
 <caption>Consensus Classes</caption>
 <colgroup>
 <col width="20%">
@@ -397,7 +504,9 @@
 </tr>
 </tbody>
 </table>
-<p>One can feed in <code>ccomb_class</code> (instead of <code>CC</code>) into <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code> to obtain a consensus matrix across subsamples and algorithms (and k).</p>
+<p>One can feed in <code>ccomb_class</code> (instead of <code>CC</code>)
+into <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code> to obtain a consensus matrix across
+subsamples and algorithms (and k).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># consensus matrix across subsamples and algorithms within k = 3</span>
 <span class="va">cm_k3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span><span class="op">(</span><span class="va">ccomb_class</span><span class="op">$</span><span class="va">`3`</span><span class="op">)</span>
@@ -407,12 +516,16 @@
 
 <span class="co"># consensus matrix across subsamples and algorithms and k</span>
 <span class="va">cm_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span><span class="op">(</span><span class="va">ccomb_class</span><span class="op">)</span></code></pre></div>
-<p>A situation might also arise where we initially decided on using 3 clustering algorithms for the ensemble, but later wish to add additional algorithms for analysis. <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> takes in any number of ensemble objects (e.g. <code>CC</code> and <code>CC2</code>) and combines the results.</p>
+<p>A situation might also arise where we initially decided on using 3
+clustering algorithms for the ensemble, but later wish to add additional
+algorithms for analysis. <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> takes in any
+number of ensemble objects (e.g. <code>CC</code> and <code>CC2</code>)
+and combines the results.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">CC2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, p.item <span class="op">=</span> <span class="fl">0.8</span>, reps <span class="op">=</span> <span class="fl">5</span>,
                          algorithms <span class="op">=</span> <span class="st">"km"</span><span class="op">)</span>
 <span class="va">ccomb_class2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_combine.html">consensus_combine</a></span><span class="op">(</span><span class="va">CC</span>, <span class="va">CC2</span>, element <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<table style="width:75%;" class="table">
 <caption>Consensus Classes with KM added</caption>
 <colgroup>
 <col width="20%">
@@ -466,14 +579,25 @@
 </tbody>
 </table>
 </div>
-<div id="evaluate-trim-and-reweigh-algorithms-with-consensus_evaluate" class="section level3">
-<h3 class="hasAnchor">
-<a href="#evaluate-trim-and-reweigh-algorithms-with-consensus_evaluate" class="anchor"></a>Evaluate, trim, and reweigh algorithms with <code>consensus_evaluate()</code>
+<div class="section level3">
+<h3 id="evaluate-trim-and-reweigh-algorithms-with-consensus_evaluate">Evaluate, trim, and reweigh algorithms with
+<code>consensus_evaluate()</code><a class="anchor" aria-label="anchor" href="#evaluate-trim-and-reweigh-algorithms-with-consensus_evaluate"></a>
 </h3>
-<p>Internal cluster validation indices assess the performance of results by taking into account the compactness and separability of the clusters. We choose a variety of indices on which to compare the collection of clustering algorithms. We use the PAC (Proportion of Ambiguous Clusters), the proportion of entries in a consensus matrix that are strictly between <code>lower</code> (defaults to 0) and <code>upper</code> (defaults to 1), to give a measure of cluster stability. In addition, if no reference class is provided, we calculate the average PAC across algorithms within each <code>k</code>, and choose the <code>k</code> with the greatest average PAC. If there <em>is</em> a reference class, <code>k</code> is the number of distinct classes in the reference.</p>
+<p>Internal cluster validation indices assess the performance of results
+by taking into account the compactness and separability of the clusters.
+We choose a variety of indices on which to compare the collection of
+clustering algorithms. We use the PAC (Proportion of Ambiguous
+Clusters), the proportion of entries in a consensus matrix that are
+strictly between <code>lower</code> (defaults to 0) and
+<code>upper</code> (defaults to 1), to give a measure of cluster
+stability. In addition, if no reference class is provided, we calculate
+the average PAC across algorithms within each <code>k</code>, and choose
+the <code>k</code> with the greatest average PAC. If there <em>is</em> a
+reference class, <code>k</code> is the number of distinct classes in the
+reference.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ccomp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span><span class="op">(</span><span class="va">hgsc</span>, <span class="va">CC</span>, <span class="va">CC2</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <caption>Internal Indices for k = 4 (continued below)</caption>
 <colgroup>
 <col width="23%">
@@ -637,13 +761,27 @@
 </tr>
 </tbody>
 </table>
-<p>We see that the biclustering algorithm is the least ambiguous and also most well-clustered (high compactness and separability).</p>
-<p>Some algorithms perform too poorly to deserve membership in the cluster ensemble. We consider the relative ranks of each algorithm across all internal indices, and compute their sum. All algorithms below a certain quantile for the sum rank are trimmed (removed). By default this quantile is 75%.</p>
-<p>After trimming, we can optionally choose to reweigh the algorithms based on the internal index magnitudes. Of course, we take into account the direction of optimality (higher is better is lower is better). Algorithms reweighed are then fed into the consensus functions. This is done by replicating each algorithm by a scalar factor that is proportional to its weight. For example, if we have two algorithms A and B, and A is given a weight of 80% and B is given a weight of 20%, then we make 4 copies of A and 1 copy of B. To minimize computational time, the total number of copies out of all algorithms has an upper bound of 100. Without reweighing, each algorithm is given equal weight.</p>
+<p>We see that the biclustering algorithm is the least ambiguous and
+also most well-clustered (high compactness and separability).</p>
+<p>Some algorithms perform too poorly to deserve membership in the
+cluster ensemble. We consider the relative ranks of each algorithm
+across all internal indices, and compute their sum. All algorithms below
+a certain quantile for the sum rank are trimmed (removed). By default
+this quantile is 75%.</p>
+<p>After trimming, we can optionally choose to reweigh the algorithms
+based on the internal index magnitudes. Of course, we take into account
+the direction of optimality (higher is better is lower is better).
+Algorithms reweighed are then fed into the consensus functions. This is
+done by replicating each algorithm by a scalar factor that is
+proportional to its weight. For example, if we have two algorithms A and
+B, and A is given a weight of 80% and B is given a weight of 20%, then
+we make 4 copies of A and 1 copy of B. To minimize computational time,
+the total number of copies out of all algorithms has an upper bound of
+100. Without reweighing, each algorithm is given equal weight.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ctrim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span><span class="op">(</span><span class="va">hgsc</span>, <span class="va">CC</span>, <span class="va">CC2</span>, trim <span class="op">=</span> <span class="cn">TRUE</span>, reweigh <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">ctrim</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ctrim</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="co">#&gt; List of 5</span>
 <span class="co">#&gt;  $ k       : int 4</span>
 <span class="co">#&gt;  $ pac     :'data.frame':    2 obs. of  5 variables:</span>
@@ -662,19 +800,23 @@
 <span class="co">#&gt;   ..$ rank.matrix:List of 1</span>
 <span class="co">#&gt;   ..$ top.list   :List of 1</span>
 <span class="co">#&gt;   ..$ E.new      :List of 1</span></code></pre></div>
-<p>The return value shows which algorithms were kept, removed (if any), and the trimmed (and potentially reweighed) cluster ensemble.</p>
+<p>The return value shows which algorithms were kept, removed (if any),
+and the trimmed (and potentially reweighed) cluster ensemble.</p>
 </div>
 </div>
-<div id="significance-testing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#significance-testing" class="anchor"></a>Significance Testing</h2>
-<p>To test whether there are four statistically distinct clusters (k = 4) versus no clusters (k = 1) using the PAM algorithm, we run <code>sigclust</code> with 50 simulations and generate a p-value for this significance test.</p>
+<div class="section level2">
+<h2 id="significance-testing">Significance Testing<a class="anchor" aria-label="anchor" href="#significance-testing"></a>
+</h2>
+<p>To test whether there are four statistically distinct clusters (k =
+4) versus no clusters (k = 1) using the PAM algorithm, we run
+<code>sigclust</code> with 50 simulations and generate a p-value for
+this significance test.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">pam_4</span> <span class="op">&lt;-</span> <span class="va">ccomb_class2</span><span class="op">$</span><span class="va">`4`</span><span class="op">[</span>, <span class="st">"PAM_Euclidean"</span><span class="op">]</span>
 <span class="va">sig_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sigclust.html">sigclust</a></span><span class="op">(</span><span class="va">hgsc</span>, k <span class="op">=</span> <span class="fl">4</span>, nsim <span class="op">=</span> <span class="fl">100</span>, labflag <span class="op">=</span> <span class="fl">0</span>, label <span class="op">=</span> <span class="va">pam_4</span><span class="op">)</span>
-<span class="va">co</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">sig_obj</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span><span class="op">(</span><span class="va">co</span>, width <span class="op">=</span> <span class="fl">80</span><span class="op">)</span>
+<span class="va">co</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sig_obj</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/strwrap.html" class="external-link">strwrap</a></span><span class="op">(</span><span class="va">co</span>, width <span class="op">=</span> <span class="fl">80</span><span class="op">)</span>
 <span class="co">#&gt;  [1] "Formal class 'sigclust' [package \"sigclust\"] with 10 slots"               </span>
 <span class="co">#&gt;  [2] "..@ raw.data : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ..."</span>
 <span class="co">#&gt;  [3] ".. ..- attr(*, \"dimnames\")=List of 2"                                     </span>
@@ -690,21 +832,44 @@
 <span class="co">#&gt; [13] "..@ pval : num 0.23"                                                        </span>
 <span class="co">#&gt; [14] "..@ pvalnorm : num 0.206"                                                   </span>
 <span class="co">#&gt; [15] "..@ xcindex : num 0.63"</span></code></pre></div>
-<p>The p-value is 0.23, indicating we do not have sufficient evidence to conclude there are four distinct clusters. Note that we did not use the full <code>hgsc</code> data set in this example, so the underlying biological mechanisms may not be fully captured.</p>
+<p>The p-value is 0.23, indicating we do not have sufficient evidence to
+conclude there are four distinct clusters. Note that we did not use the
+full <code>hgsc</code> data set in this example, so the underlying
+biological mechanisms may not be fully captured.</p>
 </div>
-<div id="references" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <ol style="list-style-type: decimal">
-<li>Estivill-Castro, Vladimir (20 June 2002). “Why so many clustering algorithms — A Position Paper”. ACM SIGKDD Explorations Newsletter. 4 (1): 65–75.</li>
-<li>Brendan J. Frey; Delbert Dueck (2007). “Clustering by passing messages between data points”. Science. 315 (5814): 972–976.</li>
-<li>C. Fraley, A. E. Raftery, T. B. Murphy and L. Scrucca (2012). mclust Version 4 for R: Normal Mixture Modeling for Model-Based Clustering, Classification, and Density Estimation. Technical Report No. 597, Department of Statistics, University of Washington.</li>
-<li>Campello, R. J. G. B.; Moulavi, D.; Sander, J. (2013). Density-Based Clustering Based on Hierarchical Density Estimates. Proceedings of the 17th Pacific-Asia Conference on Knowledge Discovery in Databases, PAKDD 2013, Lecture Notes in Computer Science 7819, p. 160.</li>
-<li>Campello, Ricardo JGB, et al. “Hierarchical density estimates for data clustering, visualization, and outlier detection.” ACM Transactions on Knowledge Discovery from Data (TKDD) 10.1 (2015): 5.</li>
-<li>G. Govaert and M. Nadif. Latent block model for contingency table. Communications in Statistics - Theory and Methods, 39(3):416–425, 2010.</li>
-<li>Isa, Dino, V. P. Kallimani, and Lam Hong Lee. “Using the self organizing map for clustering of text documents.” Expert Systems with Applications 36.5 (2009): 9584-9591.</li>
-<li>Andrew Y. Ng, Michael I. Jordan, Yair Weiss On Spectral Clustering: Analysis and an Algorithm Neural Information Processing Symposium 2001</li>
-<li>Brunet J, Tamayo P, Golub TR and Mesirov JP (2004). “Metagenes and molecular pattern discovery using matrix factorization.” Proceedings of the National Academy of Sciences of the United States of America, 101(12), pp. 4164-9.</li>
+<li>Estivill-Castro, Vladimir (20 June 2002). “Why so many clustering
+algorithms — A Position Paper”. ACM SIGKDD Explorations Newsletter. 4
+(1): 65–75.</li>
+<li>Brendan J. Frey; Delbert Dueck (2007). “Clustering by passing
+messages between data points”. Science. 315 (5814): 972–976.</li>
+<li>C. Fraley, A. E. Raftery, T. B. Murphy and L. Scrucca (2012). mclust
+Version 4 for R: Normal Mixture Modeling for Model-Based Clustering,
+Classification, and Density Estimation. Technical Report No. 597,
+Department of Statistics, University of Washington.</li>
+<li>Campello, R. J. G. B.; Moulavi, D.; Sander, J. (2013). Density-Based
+Clustering Based on Hierarchical Density Estimates. Proceedings of the
+17th Pacific-Asia Conference on Knowledge Discovery in Databases, PAKDD
+2013, Lecture Notes in Computer Science 7819, p. 160.</li>
+<li>Campello, Ricardo JGB, et al. “Hierarchical density estimates for
+data clustering, visualization, and outlier detection.” ACM Transactions
+on Knowledge Discovery from Data (TKDD) 10.1 (2015): 5.</li>
+<li>G. Govaert and M. Nadif. Latent block model for contingency table.
+Communications in Statistics - Theory and Methods, 39(3):416–425,
+2010.</li>
+<li>Isa, Dino, V. P. Kallimani, and Lam Hong Lee. “Using the self
+organizing map for clustering of text documents.” Expert Systems with
+Applications 36.5 (2009): 9584-9591.</li>
+<li>Andrew Y. Ng, Michael I. Jordan, Yair Weiss On Spectral Clustering:
+Analysis and an Algorithm Neural Information Processing Symposium
+2001</li>
+<li>Brunet J, Tamayo P, Golub TR and Mesirov JP (2004). “Metagenes and
+molecular pattern discovery using matrix factorization.” Proceedings of
+the National Academy of Sciences of the United States of America,
+101(12), pp. 4164-9.</li>
 </ol>
 </div>
   </div>
@@ -720,11 +885,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Derek Chiu, Aline Talhouk.</p>
+  <p></p>
+<p>Developed by Derek Chiu, Aline Talhouk.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -732,6 +899,8 @@
 
   
 
+
+  
 
   </body>
 </html>

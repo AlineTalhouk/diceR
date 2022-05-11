@@ -33,6 +33,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -45,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -63,7 +65,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/AlineTalhouk/diceR">
+  <a href="https://github.com/AlineTalhouk/diceR" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -80,40 +82,40 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="dicer-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#dicer-" class="anchor"></a>diceR <a href="https://alinetalhouk.github.io/diceR/"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<div class="section level1">
+<div class="page-header"><h1 id="dicer-">diceR <a href="https://alinetalhouk.github.io/diceR/" class="external-link"><img src="reference/figures/logo.png" align="right" width="120"></a>
+<a class="anchor" aria-label="anchor" href="#dicer-"></a>
 </h1></div>
 <!-- badges: start -->
 
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
-<p>The goal of <code>diceR</code> is to provide a systematic framework for generating diverse cluster ensembles in R. There are a lot of nuances in cluster analysis to consider. We provide a process and a suite of functions and tools to implement a systematic framework for cluster discovery, guiding the user through the generation of a diverse clustering solutions from data, ensemble formation, algorithm selection and the arrival at a final consensus solution. We have additionally developed visual and analytical validation tools to help with the assessment of the final result. We implemented a wrapper function <code><a href="reference/dice.html">dice()</a></code> that allows the user to easily obtain results and assess them. Thus, the package is accessible to both end user with limited statistical knowledge. Full access to the package is available for informaticians and statisticians and the functions are easily expanded. More details can be found in our companion paper published at <a href="https://doi.org/10.1186/s12859-017-1996-y">BMC Bioinformatics</a>.</p>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p>The goal of <code>diceR</code> is to provide a systematic framework for generating diverse cluster ensembles in R. There are a lot of nuances in cluster analysis to consider. We provide a process and a suite of functions and tools to implement a systematic framework for cluster discovery, guiding the user through the generation of a diverse clustering solutions from data, ensemble formation, algorithm selection and the arrival at a final consensus solution. We have additionally developed visual and analytical validation tools to help with the assessment of the final result. We implemented a wrapper function <code><a href="reference/dice.html">dice()</a></code> that allows the user to easily obtain results and assess them. Thus, the package is accessible to both end user with limited statistical knowledge. Full access to the package is available for informaticians and statisticians and the functions are easily expanded. More details can be found in our companion paper published at <a href="https://doi.org/10.1186/s12859-017-1996-y" class="external-link">BMC Bioinformatics</a>.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>You can install <code>diceR</code> from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"diceR"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"diceR"</span><span class="op">)</span></code></pre></div>
 <p>Or get the latest development version from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"AlineTalhouk/diceR"</span><span class="op">)</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AlineTalhouk/diceR"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
 <p>The following example shows how to use the main function of the package, <code><a href="reference/dice.html">dice()</a></code>. A data matrix <code>hgsc</code> contains a subset of gene expression measurements of High Grade Serous Carcinoma Ovarian cancer patients from the Cancer Genome Atlas publicly available datasets. Samples as rows, features as columns. The function below runs the package through the <code><a href="reference/dice.html">dice()</a></code> function. We specify (a range of) <code>nk</code> clusters over <code>reps</code> subsamples of the data containing 80% of the full samples. We also specify the clustering <code>algorithms</code> to be used and the ensemble functions used to aggregated them in <code>cons.funs</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlineTalhouk/diceR/">diceR</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span>
-<span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dice.html">dice</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">5</span>, algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"diana"</span><span class="op">)</span>,
-            cons.funs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"kmodes"</span>, <span class="st">"majority"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlineTalhouk/diceR/" class="external-link">diceR</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span>
+<span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dice.html">dice</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">5</span>, algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"diana"</span><span class="op">)</span>,
+            cons.funs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"kmodes"</span>, <span class="st">"majority"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The first few cluster assignments are shown below:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="va">clusters</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="va">clusters</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left"></th>
@@ -155,25 +157,25 @@
 </table>
 <p>You can also compare the base <code>algorithms</code> with the <code>cons.funs</code> using internal evaluation indices:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="va">indices</span><span class="op">$</span><span class="va">ii</span><span class="op">$</span><span class="va">`4`</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="va">indices</span><span class="op">$</span><span class="va">ii</span><span class="op">$</span><span class="va">`4`</span><span class="op">)</span></code></pre></div>
+<table style="width:100%;" class="table">
 <colgroup>
+<col width="7%">
+<col width="7%">
 <col width="8%">
-<col width="8%">
-<col width="9%">
+<col width="5%">
 <col width="4%">
-<col width="4%">
-<col width="4%">
-<col width="4%">
-<col width="4%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
 <col width="7%">
 <col width="6%">
-<col width="4%">
-<col width="4%">
-<col width="4%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
 <col width="5%">
 <col width="3%">
-<col width="5%">
+<col width="6%">
 <col width="6%">
 </colgroup>
 <thead><tr class="header">
@@ -275,63 +277,75 @@
 </tbody>
 </table>
 </div>
-<div id="pipeline" class="section level2">
-<h2 class="hasAnchor">
-<a href="#pipeline" class="anchor"></a>Pipeline</h2>
+<div class="section level2">
+<h2 id="pipeline">Pipeline<a class="anchor" aria-label="anchor" href="#pipeline"></a>
+</h2>
 <p>This figure is a visual schematic of the pipeline that <code><a href="reference/dice.html">dice()</a></code> implements.</p>
-<p><img src="reference/figures/pipeline.png" alt="Ensemble Clustering pipeline."></p>
-<p>Please visit the <a href="https://alinetalhouk.github.io/diceR/articles/overview.html" title="diceR overview">overview</a> page for more detail.</p>
+<div class="figure">
+<img src="reference/figures/pipeline.png" alt=""><p class="caption">Ensemble Clustering pipeline.</p>
+</div>
+<p>Please visit the <a href="https://alinetalhouk.github.io/diceR/articles/overview.html" title="diceR overview" class="external-link">overview</a> page for more detail.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=diceR">https://​cloud.r-project.org/​package=diceR</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/AlineTalhouk/diceR/">https://​github.com/​AlineTalhouk/​diceR/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/AlineTalhouk/diceR/issues">https://​github.com/​AlineTalhouk/​diceR/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Derek Chiu <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Aline Talhouk <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://cloud.r-project.org/package=diceR" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/AlineTalhouk/diceR/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/AlineTalhouk/diceR/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/AlineTalhouk/diceR/actions"><img src="https://github.com/AlineTalhouk/diceR/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/gh/AlineTalhouk/diceR?branch=master"><img src="https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://CRAN.R-project.org/package=diceR"><img src="https://www.r-pkg.org/badges/version/diceR" alt="CRAN status"></a></li>
-<li><a href="https://r-pkg.org/pkg/diceR"><img src="https://cranlogs.r-pkg.org/badges/grand-total/diceR?color=orange" alt="CRAN RStudio mirror downloads"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing diceR</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Derek Chiu <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Aline Talhouk <br><small class="roles"> Author </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/AlineTalhouk/diceR/actions" class="external-link"><img src="https://github.com/AlineTalhouk/diceR/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/AlineTalhouk/diceR?branch=master" class="external-link"><img src="https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://CRAN.R-project.org/package=diceR" class="external-link"><img src="https://www.r-pkg.org/badges/version/diceR" alt="CRAN status"></a></li>
+<li><a href="https://r-pkg.org/pkg/diceR" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/diceR?color=orange" alt="CRAN RStudio mirror downloads"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Derek Chiu, Aline Talhouk.</p>
+  <p></p>
+<p>Developed by Derek Chiu, Aline Talhouk.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -339,6 +353,8 @@
 
   
 
+
+  
 
   </body>
 </html>
