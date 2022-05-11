@@ -4,12 +4,6 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -22,22 +16,13 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>/LICENSE.html</loc>
+  </url>
+  <url>
     <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/CSPA.html</loc>
-  </url>
-  <url>
-    <loc>/reference/E_imputed.html</loc>
-  </url>
-  <url>
-    <loc>/reference/LCA.html</loc>
-  </url>
-  <url>
-    <loc>/reference/LCE.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PAC.html</loc>
   </url>
   <url>
     <loc>/reference/compactness.html</loc>
@@ -61,6 +46,9 @@
     <loc>/reference/consensus_summary.html</loc>
   </url>
   <url>
+    <loc>/reference/CSPA.html</loc>
+  </url>
+  <url>
     <loc>/reference/dice.html</loc>
   </url>
   <url>
@@ -68,6 +56,9 @@
   </url>
   <url>
     <loc>/reference/external_validity.html</loc>
+  </url>
+  <url>
+    <loc>/reference/E_imputed.html</loc>
   </url>
   <url>
     <loc>/reference/graphs.html</loc>
@@ -88,10 +79,19 @@
     <loc>/reference/k_modes.html</loc>
   </url>
   <url>
+    <loc>/reference/LCA.html</loc>
+  </url>
+  <url>
+    <loc>/reference/LCE.html</loc>
+  </url>
+  <url>
     <loc>/reference/majority_voting.html</loc>
   </url>
   <url>
     <loc>/reference/min_fnorm.html</loc>
+  </url>
+  <url>
+    <loc>/reference/PAC.html</loc>
   </url>
   <url>
     <loc>/reference/pcn.html</loc>

@@ -52,7 +52,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.0" id="dicer-120">diceR 1.2.0<a class="anchor" aria-label="anchor" href="#dicer-120"></a></h2>
-<ul><li>Fix problems regarding conditional usage of packages in Suggests</li>
+<ul><li>Use <code><a href="https://testthat.r-lib.org/reference/skip.html" class="external-link">testthat::skip_if_not_installed()</a></code> to run tests conditionally when using packages in Suggests</li>
+<li>Use roxygen tag <code>@examplesIf</code> and <code><a href="https://rlang.r-lib.org/reference/is_installed.html" class="external-link">rlang::is_installed()</a></code> to run examples conditionally when using packages in Suggests</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.0" id="dicer-110">diceR 1.1.0<small>2021-07-23</small><a class="anchor" aria-label="anchor" href="#dicer-110"></a></h2>
