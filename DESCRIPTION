@@ -64,6 +64,7 @@ Suggests:
     poLCA,
     progress,
     RColorBrewer,
+    rlang,
     rmarkdown,
     Rtsne,
     sigclust,

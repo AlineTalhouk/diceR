@@ -23,7 +23,7 @@
 #' @author Aline Talhouk
 #' @family imputation functions
 #' @export
-#' @examples
+#' @examplesIf rlang::is_installed("kernlab")
 #' data(hgsc)
 #' dat <- hgsc[1:100, 1:50]
 #' E <- consensus_cluster(dat, nk = 3:4, reps = 10, algorithms = c("hc", "km",

@@ -46,7 +46,7 @@
 #'      * `top.list`: final order of ranked algorithms
 #'      * `E.new`: A new version of a `consensus_cluster` data object
 #' @export
-#' @examples
+#' @examplesIf rlang::is_installed("apcluster")
 #' # Consensus clustering for multiple algorithms
 #' set.seed(911)
 #' x <- matrix(rnorm(500), ncol = 10)

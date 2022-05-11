@@ -26,7 +26,7 @@
 #'   **103**(483) 1281--1293.
 #' @export
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("sigclust")
 #' data(hgsc)
 #' dat <- hgsc[1:100, 1:50]
 #' nk <- 4

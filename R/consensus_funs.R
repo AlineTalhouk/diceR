@@ -146,7 +146,7 @@ LCE <- function(E, k, dc = 0.8, R = 10, sim.mat = c("cts", "srs", "asrs")) {
 #' @family consensus functions
 #' @author Derek Chiu
 #' @export
-#' @examples
+#' @examplesIf rlang::is_installed("poLCA")
 #' data(hgsc)
 #' dat <- hgsc[1:100, 1:50]
 #' cc <- consensus_cluster(dat, nk = 4, reps = 6, algorithms = "pam", progress =

@@ -80,6 +80,7 @@ outputted. Algorithms are ranked across internal indices using Rank
 Aggregation. Only the top \code{n} algorithms are kept, the rest are trimmed.
 }
 \examples{
+\dontshow{if (rlang::is_installed("apcluster")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Consensus clustering for multiple algorithms
 set.seed(911)
 x <- matrix(rnorm(500), ncol = 10)
@@ -92,4 +93,5 @@ set.seed(1)
 ref.cl <- sample(1:4, 50, replace = TRUE)
 z <- consensus_evaluate(x, CC, ref.cl = ref.cl, n = 1, trim = TRUE)
 str(z, max.level = 2)
+\dontshow{\}) # examplesIf}
 }

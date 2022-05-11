@@ -15,7 +15,7 @@
 #'   or a data frame showing all the consensus classes
 #' @author Derek Chiu
 #' @export
-#' @examples
+#' @examplesIf rlang::is_installed("apcluster")
 #' # Consensus clustering for multiple algorithms
 #' set.seed(911)
 #' x <- matrix(rnorm(500), ncol = 10)
