@@ -1,7 +1,10 @@
+skip_if_not_installed("apcluster")
+
 set.seed(911)
 x <- matrix(rnorm(100), nrow = 10)
 CC1 <- consensus_cluster(x, nk = 2:4, reps = 5,
                          algorithms = c("hc", "ap", "km"), progress = FALSE)
+
 
 test_that("graph_cdf object can have added/modified ggplot layers", {
   p1 <- graph_cdf(CC1)

@@ -2,6 +2,12 @@ data(hgsc)
 hgsc <- hgsc[1:40, 1:30]
 
 test_that("No algorithms means all algorithms, output is an array", {
+  skip_if_not_installed("apcluster")
+  skip_if_not_installed("blockcluster")
+  skip_if_not_installed("cluster")
+  skip_if_not_installed("e1071")
+  skip_if_not_installed("kernlab")
+  skip_if_not_installed("kohonen")
   x1 <- consensus_cluster(hgsc, nk = 4, reps = 1, progress = FALSE)
   expect_error(x1, NA)
   expect_is(x1, "array")
@@ -18,6 +24,7 @@ test_that("Output can be saved with or without time in file name", {
 })
 
 test_that("Progress bar increments across entire function call", {
+  skip_if_not_installed("apcluster")
   assign("my_dist", function(x) stats::dist(x, method = "manhattan"), pos = 1)
   x3 <- consensus_cluster(hgsc, nk = 2, reps = 5,
                           algorithms = c("nmf", "hc", "ap"),
@@ -33,6 +40,7 @@ test_that("Able to call only spearman distance", {
 })
 
 test_that("Data preparation on bootstrap samples works", {
+  skip_if_not_installed("apcluster")
   x5 <- consensus_cluster(hgsc, nk = 3, reps = 3,
                           algorithms = c("nmf", "hc", "ap"), nmf.method = "lee",
                           prep.data = "sampled")

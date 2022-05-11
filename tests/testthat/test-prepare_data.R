@@ -2,6 +2,7 @@ data(hgsc)
 hgsc <- hgsc[1:40, 1:30]
 
 test_that("tsne option results in 2D representation", {
+  skip_if_not_installed("Rtsne")
   dat_tsne <- prepare_data(hgsc, type = "tsne")
   expect_equal(ncol(dat_tsne), 2)
 })

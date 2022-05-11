@@ -6,6 +6,8 @@ cc <- consensus_cluster(dat, nk = 4, reps = 2, algorithms = "hc",
 cl.mat <- consensus_combine(cc, element = "class")
 ref_label <- cl.mat$`4`[, 1]
 
+skip_if_not_installed("sigclust")
+
 test_that("sigclust works regardless of labflag param", {
   set.seed(1)
   expect_error(sigclust(x = dat, k = nk, nsim = 10, labflag = 0,
