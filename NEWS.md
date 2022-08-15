@@ -1,4 +1,6 @@
-# diceR (development version)
+# diceR 1.2.1
+
+* Update roxygen2 to avoid HTML5 documentation notes
 
 # diceR 1.2.0
 
