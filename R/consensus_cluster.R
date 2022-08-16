@@ -15,7 +15,7 @@
 #' * "sc": Spectral Clustering using Radial-Basis kernel function
 #' * "gmm": Gaussian Mixture Model using Bayesian Information Criterion on EM
 #'   algorithm
-#' * "block": Biclustering using a latent block model
+#' * "block": Co-clustering using a multiple latent block model
 #' * "som": Self-Organizing Map (SOM) with Hierarchical Clustering
 #' * "cmeans": Fuzzy C-Means Clustering
 #' * "hdbscan": Hierarchical Density-based Spatial Clustering of Applications
