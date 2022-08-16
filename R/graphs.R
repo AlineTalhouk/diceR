@@ -90,8 +90,8 @@ get_cdf <- function(mat) {
     purrr::modify_depth(2, ~ .x[lower.tri(.x, diag = TRUE)]) %>%
     purrr::imap(~ purrr::set_names(.x, paste(.y, names(.x), sep = "."))) %>%
     purrr::flatten_dfc() %>%
-    tidyr::gather_("Group", "CDF", names(.)) %>%
-    tidyr::separate_("Group", c("k", "Method"), sep = "\\.")
+    tidyr::gather("Group", "CDF", names(.)) %>%
+    tidyr::separate("Group", c("k", "Method"), sep = "\\.")
 }
 
 #' @param main heatmap title. If `NULL` (default), the titles will be taken from
@@ -148,8 +148,8 @@ graph_tracking <- function(cl) {
     purrr::imap(~ `colnames<-`(.x, paste(.y, colnames(.x), sep = "."))) %>%
     do.call(cbind, .) %>%
     as.data.frame() %>%
-    tidyr::gather_("Group", "Class", names(.)) %>%
-    tidyr::separate_("Group", c("k", "Method"), sep = "\\.") %>%
+    tidyr::gather("Group", "Class", names(.)) %>%
+    tidyr::separate("Group", c("k", "Method"), sep = "\\.") %>%
     cbind(Samples = seq_len(unique(purrr::map_int(cl, nrow)))) %>%
     dplyr::mutate_at(dplyr::vars(c("Class", "Method", "Samples")), factor)
   if (length(unique(dat$k)) > 1) {
