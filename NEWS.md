@@ -1,5 +1,6 @@
 # diceR 1.2.1
 
+* References added for `k_modes()` and `CSPA()` consensus functions (#157)
 * Update roxygen2 to avoid HTML5 documentation notes
 * Use `mixedClust` instead of `blockcluster` for co-clustering since the latter keeps getting archived
 

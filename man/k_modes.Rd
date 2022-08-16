@@ -36,6 +36,11 @@ cc <- consensus_cluster(dat, nk = 4, reps = 6, algorithms = "pam", progress =
 FALSE)
 table(k_modes(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 }
+\references{
+Luo, H., Kong, F., & Li, Y. (2006, August). Combining multiple
+clusterings via k-modes algorithm. In International Conference on Advanced
+Data Mining and Applications (pp. 308-315). Springer, Berlin, Heidelberg.
+}
 \seealso{
 Other consensus functions: 
 \code{\link{CSPA}()},

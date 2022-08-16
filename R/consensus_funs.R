@@ -17,6 +17,9 @@
 #' @return a vector of cluster assignments based on k-modes
 #' @family consensus functions
 #' @author Aline Talhouk
+#' @references Luo, H., Kong, F., & Li, Y. (2006, August). Combining multiple
+#'   clusterings via k-modes algorithm. In International Conference on Advanced
+#'   Data Mining and Applications (pp. 308-315). Springer, Berlin, Heidelberg.
 #' @export
 #' @examples
 #' data(hgsc)
@@ -81,6 +84,9 @@ majority_voting <- function(E, is.relabelled = TRUE) {
 #' @return cluster assignments for the consensus class
 #' @family consensus functions
 #' @author Derek Chiu
+#' @references Strehl, A., & Ghosh, J. (2002). Cluster ensembles---a knowledge
+#'   reuse framework for combining multiple partitions. Journal of machine
+#'   learning research, 3(Dec), 583-617.
 #' @export
 #' @examples
 #' data(hgsc)

@@ -25,6 +25,11 @@ x <- consensus_cluster(dat, nk = 4, reps = 4, algorithms = c("hc", "diana"),
 progress = FALSE)
 CSPA(x, k = 4)
 }
+\references{
+Strehl, A., & Ghosh, J. (2002). Cluster ensembles---a knowledge
+reuse framework for combining multiple partitions. Journal of machine
+learning research, 3(Dec), 583-617.
+}
 \seealso{
 Other consensus functions: 
 \code{\link{LCA}()},
