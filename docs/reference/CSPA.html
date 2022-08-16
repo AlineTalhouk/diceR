@@ -18,7 +18,7 @@ consensus class labels."><meta property="og:image" content="/logo.png"><!-- math
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -58,19 +58,30 @@ consensus class labels.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">CSPA</span><span class="op">(</span><span class="va">E</span>, <span class="va">k</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">CSPA</span><span class="op">(</span><span class="va">E</span>, <span class="va">k</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>E</dt>
 <dd><p>is an array of clustering results.</p></dd>
+
+
 <dt>k</dt>
 <dd><p>number of clusters</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>cluster assignments for the consensus class</p>
+    
+
+<p>cluster assignments for the consensus class</p>
+    </div>
+    <div id="references">
+    <h2>References</h2>
+    <p>Strehl, A., &amp; Ghosh, J. (2002). Cluster ensembles---a knowledge
+reuse framework for combining multiple partitions. Journal of machine
+learning research, 3(Dec), 583-617.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -87,11 +98,11 @@ consensus class labels.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">hgsc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">dat</span>, nk <span class="op">=</span> <span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">4</span>, algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"diana"</span><span class="op">)</span>,</span>
-<span class="r-in">progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">CSPA</span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">hgsc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">dat</span>, nk <span class="op">=</span> <span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">4</span>, algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"diana"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">CSPA</span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 1 1 2 2 2 1 1 2 2 1 2 2 1 1 3 2 1 1 2 1 1 1 1 1 2 1 1 1 1 1 1 1 1 2 1 1 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [38] 2 3 2 1 2 2 2 2 2 2 2 1 1 2 2 1 1 1 2 2 1 2 1 1 1 2 1 1 4 1 2 2 1 2 1 1 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [75] 1 2 1 1 3 1 2 1 2 2 1 2 1 1 3 2 2 2 1 2 2 1 1 2 1 1</span>
@@ -109,7 +120,7 @@ consensus class labels.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

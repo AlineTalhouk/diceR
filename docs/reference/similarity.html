@@ -19,7 +19,7 @@ simrank based similarity matrix."><meta property="og:image" content="/logo.png">
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -60,25 +60,32 @@ simrank based similarity matrix.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">cts</span><span class="op">(</span><span class="va">E</span>, <span class="va">dc</span><span class="op">)</span>
-
-<span class="fu">srs</span><span class="op">(</span><span class="va">E</span>, <span class="va">dc</span>, <span class="va">R</span><span class="op">)</span>
-
-<span class="fu">asrs</span><span class="op">(</span><span class="va">E</span>, <span class="va">dc</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cts</span><span class="op">(</span><span class="va">E</span>, <span class="va">dc</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">srs</span><span class="op">(</span><span class="va">E</span>, <span class="va">dc</span>, <span class="va">R</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">asrs</span><span class="op">(</span><span class="va">E</span>, <span class="va">dc</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>E</dt>
 <dd><p>an N by M matrix of cluster ensembles</p></dd>
+
+
 <dt>dc</dt>
 <dd><p>decay factor, ranges from 0 to 1 inclusive</p></dd>
+
+
 <dt>R</dt>
 <dd><p>number of iterations for <code>srs</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>an N by N CTS, SRS, or ASRS matrix</p>
+    
+
+<p>an N by N CTS, SRS, or ASRS matrix</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -92,12 +99,12 @@ Garrett</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">E</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">800</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">CTS</span> <span class="op">&lt;-</span> <span class="fu">cts</span><span class="op">(</span>E <span class="op">=</span> <span class="va">E</span>, dc <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">SRS</span> <span class="op">&lt;-</span> <span class="fu">srs</span><span class="op">(</span>E <span class="op">=</span> <span class="va">E</span>, dc <span class="op">=</span> <span class="fl">0.8</span>, R <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ASRS</span> <span class="op">&lt;-</span> <span class="fu">asrs</span><span class="op">(</span>E <span class="op">=</span> <span class="va">E</span>, dc <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">walk</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">CTS</span>, <span class="va">SRS</span>, <span class="va">ASRS</span><span class="op">)</span>, <span class="va">str</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">E</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">800</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">CTS</span> <span class="op">&lt;-</span> <span class="fu">cts</span><span class="op">(</span>E <span class="op">=</span> <span class="va">E</span>, dc <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">SRS</span> <span class="op">&lt;-</span> <span class="fu">srs</span><span class="op">(</span>E <span class="op">=</span> <span class="va">E</span>, dc <span class="op">=</span> <span class="fl">0.8</span>, R <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ASRS</span> <span class="op">&lt;-</span> <span class="fu">asrs</span><span class="op">(</span>E <span class="op">=</span> <span class="va">E</span>, dc <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">walk</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">CTS</span>, <span class="va">SRS</span>, <span class="va">ASRS</span><span class="op">)</span>, <span class="va">str</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  num [1:100, 1:100] 1 0.888 0.792 0.811 0.715 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  num [1:100, 1:100] 1 0.06901 0.03048 0.04348 0.00553 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  num [1:100, 1:100] 1 0.638 0.634 0.638 0.653 ...</span>
@@ -115,7 +122,7 @@ Garrett</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

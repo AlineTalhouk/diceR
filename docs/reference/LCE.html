@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -56,7 +56,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">LCE</span><span class="op">(</span><span class="va">E</span>, <span class="va">k</span>, dc <span class="op">=</span> <span class="fl">0.8</span>, R <span class="op">=</span> <span class="fl">10</span>, sim.mat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cts"</span>, <span class="st">"srs"</span>, <span class="st">"asrs"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">LCE</span><span class="op">(</span><span class="va">E</span>, <span class="va">k</span>, dc <span class="op">=</span> <span class="fl">0.8</span>, R <span class="op">=</span> <span class="fl">10</span>, sim.mat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cts"</span>, <span class="st">"srs"</span>, <span class="st">"asrs"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -64,18 +64,29 @@
     <dl><dt>E</dt>
 <dd><p>is an array of clustering results. An error is thrown if there are
 missing values. <code><a href="impute_missing.html">impute_missing()</a></code> can be used beforehand.</p></dd>
+
+
 <dt>k</dt>
 <dd><p>requested number of clusters</p></dd>
+
+
 <dt>dc</dt>
 <dd><p>decay constant for CTS, SRS, or ASRS matrix</p></dd>
+
+
 <dt>R</dt>
 <dd><p>number of repetitions for SRS matrix</p></dd>
+
+
 <dt>sim.mat</dt>
 <dd><p>similarity matrix; choices are "cts", "srs", "asrs".</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a vector containing the cluster assignment from either the CTS, SRS,
+    
+
+<p>a vector containing the cluster assignment from either the CTS, SRS,
 or ASRS similarity matrices</p>
     </div>
     <div id="see-also">
@@ -93,17 +104,17 @@ or ASRS similarity matrices</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">hgsc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">dat</span>, nk <span class="op">=</span> <span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">4</span>, algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"km"</span>, <span class="st">"hc"</span><span class="op">)</span>,</span>
-<span class="r-in">progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">LCE</span><span class="op">(</span>E <span class="op">=</span> <span class="va">x</span>, k <span class="op">=</span> <span class="fl">4</span>, sim.mat <span class="op">=</span> <span class="st">"asrs"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, <span class="va">impute_knn</span>, data <span class="op">=</span> <span class="va">dat</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x_imputed</span> <span class="op">&lt;-</span> <span class="fu"><a href="impute_missing.html">impute_missing</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">dat</span>, nk <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">LCE</span><span class="op">(</span>E <span class="op">=</span> <span class="va">x_imputed</span>, k <span class="op">=</span> <span class="fl">4</span>, sim.mat <span class="op">=</span> <span class="st">"cts"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">hgsc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">dat</span>, nk <span class="op">=</span> <span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">4</span>, algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"km"</span>, <span class="st">"hc"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">LCE</span><span class="op">(</span>E <span class="op">=</span> <span class="va">x</span>, k <span class="op">=</span> <span class="fl">4</span>, sim.mat <span class="op">=</span> <span class="st">"asrs"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, <span class="va">impute_knn</span>, data <span class="op">=</span> <span class="va">dat</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x_imputed</span> <span class="op">&lt;-</span> <span class="fu"><a href="impute_missing.html">impute_missing</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">dat</span>, nk <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">LCE</span><span class="op">(</span>E <span class="op">=</span> <span class="va">x_imputed</span>, k <span class="op">=</span> <span class="fl">4</span>, sim.mat <span class="op">=</span> <span class="st">"cts"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 1 1 1 1 1 1 1 1 1 2 1 1 2 1 3 1 1 2 1 1 2 1 2 1 1 1 2 1 2 1 1 1 1 1 2 2 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [38] 1 4 1 2 1 1 1 1 1 1 1 1 2 1 1 2 2 2 1 1 1 1 1 2 2 1 1 2 2 2 1 1 2 1 2 1 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [75] 1 1 1 1 4 2 1 1 1 1 1 1 1 1 3 1 1 1 2 1 1 2 2 1 2 1</span>
@@ -121,7 +132,7 @@ or ASRS similarity matrices</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

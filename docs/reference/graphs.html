@@ -18,7 +18,7 @@ under CDF curves, heatmaps, and cluster assignment tracking plots."><meta proper
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -58,15 +58,15 @@ under CDF curves, heatmaps, and cluster assignment tracking plots.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">graph_cdf</span><span class="op">(</span><span class="va">mat</span><span class="op">)</span>
-
-<span class="fu">graph_delta_area</span><span class="op">(</span><span class="va">mat</span><span class="op">)</span>
-
-<span class="fu">graph_heatmap</span><span class="op">(</span><span class="va">mat</span>, main <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">graph_tracking</span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
-
-<span class="fu">graph_all</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">graph_cdf</span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">graph_delta_area</span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">graph_heatmap</span><span class="op">(</span><span class="va">mat</span>, main <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">graph_tracking</span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">graph_all</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -74,20 +74,32 @@ under CDF curves, heatmaps, and cluster assignment tracking plots.</p>
     <dl><dt>mat</dt>
 <dd><p>same as <code>x</code>, or a list of consensus matrices computed from <code>x</code> for
 faster results</p></dd>
+
+
 <dt>main</dt>
 <dd><p>heatmap title. If <code>NULL</code> (default), the titles will be taken from
 names in <code>mat</code></p></dd>
+
+
 <dt>cl</dt>
 <dd><p>same as <code>x</code>, or a matrix of consensus classes computed from <code>x</code> for
 faster results</p></dd>
+
+
 <dt>x</dt>
 <dd><p>an object from <code><a href="consensus_cluster.html">consensus_cluster()</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Various plots from <code>graph_*{}</code> functions. All plots are
+    
+
+<p>Various plots from <code>graph_*{}</code> functions. All plots are
 generated using <code>ggplot</code>, except for <code>graph_heatmap</code>, which uses
-<code><a href="https://rdrr.io/pkg/NMF/man/aheatmap.html" class="external-link">NMF::aheatmap()</a></code>. Colours used in <code>graph_heatmap</code> and <code>graph_tracking</code>utilize <code><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">RColorBrewer::brewer.pal()</a></code> palettes.</p>
+<code><a href="https://rdrr.io/pkg/NMF/man/aheatmap.html" class="external-link">NMF::aheatmap()</a></code>. Colours used in <code>graph_heatmap</code> and <code>graph_tracking</code></p>
+
+
+<p>utilize <code><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">RColorBrewer::brewer.pal()</a></code> palettes.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -109,42 +121,34 @@ functions.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Consensus clustering for 3 algorithms</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">911</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">80</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">CC1</span> <span class="op">&lt;-</span> <span class="fu"><a href="consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">x</span>, nk <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">3</span>,</span>
-<span class="r-in">algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"km"</span><span class="op">)</span>, progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Plot CDF</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">graph_cdf</span><span class="op">(</span><span class="va">CC1</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`separate_()` was deprecated in tidyr 1.2.0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Please use `separate()` instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`gather_()` was deprecated in tidyr 1.2.0.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Please use `gather()` instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Consensus clustering for 3 algorithms</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">911</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">80</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">CC1</span> <span class="op">&lt;-</span> <span class="fu"><a href="consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">x</span>, nk <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"km"</span><span class="op">)</span>, progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Plot CDF</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">graph_cdf</span><span class="op">(</span><span class="va">CC1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="graphs-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Change y label and add colours</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Probability"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_ecdf.html" class="external-link">stat_ecdf</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">k</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set2"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Change y label and add colours</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Probability"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_ecdf.html" class="external-link">stat_ecdf</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">k</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set2"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="graphs-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Delta Area</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">graph_delta_area</span><span class="op">(</span><span class="va">CC1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Delta Area</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">graph_delta_area</span><span class="op">(</span><span class="va">CC1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="graphs-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Heatmaps with column side colours corresponding to clusters</span></span>
-<span class="r-in"><span class="va">CC2</span> <span class="op">&lt;-</span> <span class="fu"><a href="consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">x</span>, nk <span class="op">=</span> <span class="fl">3</span>, reps <span class="op">=</span> <span class="fl">3</span>, algorithms <span class="op">=</span> <span class="st">"hc"</span>, progress <span class="op">=</span></span>
-<span class="r-in"><span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">graph_heatmap</span><span class="op">(</span><span class="va">CC2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Heatmaps with column side colours corresponding to clusters</span></span></span>
+<span class="r-in"><span><span class="va">CC2</span> <span class="op">&lt;-</span> <span class="fu"><a href="consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">x</span>, nk <span class="op">=</span> <span class="fl">3</span>, reps <span class="op">=</span> <span class="fl">3</span>, algorithms <span class="op">=</span> <span class="st">"hc"</span>, progress <span class="op">=</span></span></span>
+<span class="r-in"><span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">graph_heatmap</span><span class="op">(</span><span class="va">CC2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="graphs-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Track how cluster assignments change between algorithms</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">graph_tracking</span><span class="op">(</span><span class="va">CC1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Track how cluster assignments change between algorithms</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">graph_tracking</span><span class="op">(</span><span class="va">CC1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="graphs-5.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -160,7 +164,7 @@ functions.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -18,7 +18,7 @@ algorithms, and cluster sizes."><meta property="og:image" content="/logo.png"><!
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -58,111 +58,158 @@ algorithms, and cluster sizes.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">consensus_cluster</span><span class="op">(</span>
-  <span class="va">data</span>,
-  nk <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>,
-  p.item <span class="op">=</span> <span class="fl">0.8</span>,
-  reps <span class="op">=</span> <span class="fl">1000</span>,
-  algorithms <span class="op">=</span> <span class="cn">NULL</span>,
-  nmf.method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"brunet"</span>, <span class="st">"lee"</span><span class="op">)</span>,
-  hc.method <span class="op">=</span> <span class="st">"average"</span>,
-  xdim <span class="op">=</span> <span class="cn">NULL</span>,
-  ydim <span class="op">=</span> <span class="cn">NULL</span>,
-  rlen <span class="op">=</span> <span class="fl">200</span>,
-  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.01</span><span class="op">)</span>,
-  minPts <span class="op">=</span> <span class="fl">5</span>,
-  distance <span class="op">=</span> <span class="st">"euclidean"</span>,
-  prep.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"full"</span>, <span class="st">"sampled"</span><span class="op">)</span>,
-  scale <span class="op">=</span> <span class="cn">TRUE</span>,
-  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conventional"</span>, <span class="st">"robust"</span>, <span class="st">"tsne"</span><span class="op">)</span>,
-  min.var <span class="op">=</span> <span class="fl">1</span>,
-  progress <span class="op">=</span> <span class="cn">TRUE</span>,
-  seed.nmf <span class="op">=</span> <span class="fl">123456</span>,
-  seed.data <span class="op">=</span> <span class="fl">1</span>,
-  file.name <span class="op">=</span> <span class="cn">NULL</span>,
-  time.saved <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">consensus_cluster</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  nk <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>  p.item <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  reps <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  algorithms <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nmf.method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"brunet"</span>, <span class="st">"lee"</span><span class="op">)</span>,</span>
+<span>  hc.method <span class="op">=</span> <span class="st">"average"</span>,</span>
+<span>  xdim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ydim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rlen <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.01</span><span class="op">)</span>,</span>
+<span>  minPts <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  distance <span class="op">=</span> <span class="st">"euclidean"</span>,</span>
+<span>  prep.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"full"</span>, <span class="st">"sampled"</span><span class="op">)</span>,</span>
+<span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conventional"</span>, <span class="st">"robust"</span>, <span class="st">"tsne"</span><span class="op">)</span>,</span>
+<span>  min.var <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed.nmf <span class="op">=</span> <span class="fl">123456</span>,</span>
+<span>  seed.data <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  file.name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  time.saved <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>data matrix with rows as samples and columns as variables</p></dd>
+
+
 <dt>nk</dt>
 <dd><p>number of clusters (k) requested; can specify a single integer or a
 range of integers to compute multiple k</p></dd>
+
+
 <dt>p.item</dt>
 <dd><p>proportion of items to be used in subsampling within an
 algorithm</p></dd>
+
+
 <dt>reps</dt>
 <dd><p>number of subsamples</p></dd>
+
+
 <dt>algorithms</dt>
 <dd><p>vector of clustering algorithms for performing consensus
 clustering. Must be any number of the following: "nmf", "hc", "diana",
 "km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan". A
 custom clustering algorithm can be used.</p></dd>
+
+
 <dt>nmf.method</dt>
 <dd><p>specify NMF-based algorithms to run. By default the
 "brunet" and "lee" algorithms are called. See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">NMF::nmf()</a></code> for details.</p></dd>
+
+
 <dt>hc.method</dt>
 <dd><p>agglomeration method for hierarchical clustering. The
 the "average" method is used by default. See<code><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">stats::hclust()</a></code> for details.</p></dd>
+
+
 <dt>xdim</dt>
 <dd><p>x dimension of the SOM grid</p></dd>
+
+
 <dt>ydim</dt>
 <dd><p>y dimension of the SOM grid</p></dd>
+
+
 <dt>rlen</dt>
 <dd><p>the number of times the complete data set will be presented to
 the SOM network.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>SOM learning rate, a vector of two numbers indicating the amount
 of change. Default is to decline linearly from 0.05 to 0.01 over <code>rlen</code>
 updates. Not used for the batch algorithm.</p></dd>
+
+
 <dt>minPts</dt>
 <dd><p>minimum size of clusters for HDBSCAN. Default is 5.</p></dd>
+
+
 <dt>distance</dt>
 <dd><p>a vector of distance functions. Defaults to "euclidean".
 Other options are given in <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist()</a></code>. A custom distance function can
 be used.</p></dd>
+
+
 <dt>prep.data</dt>
 <dd><p>Prepare the data on the "full" dataset, the "sampled"
 dataset, or "none" (default).</p></dd>
+
+
 <dt>scale</dt>
 <dd><p>logical; should the data be centered and scaled?</p></dd>
+
+
 <dt>type</dt>
 <dd><p>if we use "conventional" measures (default), then the mean and
 standard deviation are used for centering and scaling, respectively. If
 "robust" measures are specified, the median and median absolute deviation
 (MAD) are used. Alternatively, we can apply "tsne" for dimension reduction.</p></dd>
+
+
 <dt>min.var</dt>
 <dd><p>minimum variability measure threshold used to filter the
 feature space for only highly variable features. Only features with a
 minimum variability measure across all samples greater than <code>min.var</code> will
 be used. If <code>type = "conventional"</code>, the standard deviation is the measure
 used, and if <code>type = "robust"</code>, the MAD is the measure used.</p></dd>
+
+
 <dt>progress</dt>
 <dd><p>logical; should a progress bar be displayed?</p></dd>
+
+
 <dt>seed.nmf</dt>
 <dd><p>random seed to use for NMF-based algorithms</p></dd>
+
+
 <dt>seed.data</dt>
 <dd><p>seed to use to ensure each algorithm operates on the same
 set of subsamples</p></dd>
+
+
 <dt>file.name</dt>
 <dd><p>if not <code>NULL</code>, the returned array will be saved at each
 iteration as well as at the end of the function call to an <code>rds</code> object
 with <code>file.name</code> as the file name.</p></dd>
+
+
 <dt>time.saved</dt>
 <dd><p>logical; if <code>TRUE</code>, the date saved is appended to
 <code>file.name</code>. Only applicable when <code>file.name</code> is not <code>NULL</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An array of dimension <code>nrow(x)</code> by <code>reps</code> by <code>length(algorithms)</code> by
+    
+
+<p>An array of dimension <code>nrow(x)</code> by <code>reps</code> by <code>length(algorithms)</code> by
 <code>length(nk)</code>. Each cube of the array represents a different k. Each slice
 of a cube is a matrix showing consensus clustering results for algorithms.
 The matrices have a row for each sample, and a column for each subsample.
-Each entry represents a class membership.
-When "hdbscan" is part of <code>algorithms</code>, we do not include its clustering
+Each entry represents a class membership.</p>
+
+
+<p>When "hdbscan" is part of <code>algorithms</code>, we do not include its clustering
 array in the consensus result. Instead, we report two summary statistics as
 attributes: the proportion of outliers and the number of clusters.</p>
     </div>
@@ -179,7 +226,7 @@ or Euclidean distance; See Note for specifications.)</p></li>
 <li><p>"sc": Spectral Clustering using Radial-Basis kernel function</p></li>
 <li><p>"gmm": Gaussian Mixture Model using Bayesian Information Criterion on EM
 algorithm</p></li>
-<li><p>"block": Biclustering using a latent block model</p></li>
+<li><p>"block": Co-clustering using a multiple latent block model</p></li>
 <li><p>"som": Self-Organizing Map (SOM) with Hierarchical Clustering</p></li>
 <li><p>"cmeans": Fuzzy C-Means Clustering</p></li>
 <li><p>"hdbscan": Hierarchical Density-based Spatial Clustering of Applications
@@ -203,24 +250,24 @@ equal to <code>nk</code>.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">hgsc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Custom distance function</span></span>
-<span class="r-in"><span class="va">manh</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"manhattan"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Custom clustering algorithm</span></span>
-<span class="r-in"><span class="va">agnes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">d</span>, <span class="va">k</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/cutree.html" class="external-link">cutree</a></span><span class="op">(</span><span class="fu">cluster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/cluster/man/agnes.html" class="external-link">agnes</a></span><span class="op">(</span><span class="va">d</span>, diss <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="va">k</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/assign.html" class="external-link">assign</a></span><span class="op">(</span><span class="st">"agnes"</span>, <span class="va">agnes</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu">consensus_cluster</span><span class="op">(</span><span class="va">dat</span>, reps <span class="op">=</span> <span class="fl">6</span>, algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pam"</span>, <span class="st">"agnes"</span><span class="op">)</span>,</span>
-<span class="r-in">distance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"euclidean"</span>, <span class="st">"manh"</span><span class="op">)</span>, progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">cc</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">hgsc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Custom distance function</span></span></span>
+<span class="r-in"><span><span class="va">manh</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"manhattan"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Custom clustering algorithm</span></span></span>
+<span class="r-in"><span><span class="va">agnes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">d</span>, <span class="va">k</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/cutree.html" class="external-link">cutree</a></span><span class="op">(</span><span class="fu">cluster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/cluster/man/agnes.html" class="external-link">agnes</a></span><span class="op">(</span><span class="va">d</span>, diss <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="va">k</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/assign.html" class="external-link">assign</a></span><span class="op">(</span><span class="st">"agnes"</span>, <span class="va">agnes</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu">consensus_cluster</span><span class="op">(</span><span class="va">dat</span>, reps <span class="op">=</span> <span class="fl">6</span>, algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pam"</span>, <span class="st">"agnes"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>distance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"euclidean"</span>, <span class="st">"manh"</span><span class="op">)</span>, progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">cc</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  int [1:100, 1:6, 1:4, 1:3] 1 1 NA NA NA 1 1 NA 2 NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "dimnames")=List of 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : chr [1:100] "TCGA.04.1331_PRO.C5" "TCGA.04.1332_MES.C1" "TCGA.04.1336_DIF.C4" "TCGA.04.1337_MES.C1" ...</span>
@@ -241,7 +288,7 @@ equal to <code>nk</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

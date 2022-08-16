@@ -18,7 +18,7 @@ clusters (k)."><meta property="og:image" content="/logo.png"><!-- mathjax --><sc
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -58,44 +58,52 @@ clusters (k).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dice</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">nk</span>,
-  reps <span class="op">=</span> <span class="fl">10</span>,
-  algorithms <span class="op">=</span> <span class="cn">NULL</span>,
-  k.method <span class="op">=</span> <span class="cn">NULL</span>,
-  nmf.method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"brunet"</span>, <span class="st">"lee"</span><span class="op">)</span>,
-  hc.method <span class="op">=</span> <span class="st">"average"</span>,
-  distance <span class="op">=</span> <span class="st">"euclidean"</span>,
-  cons.funs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"kmodes"</span>, <span class="st">"majority"</span>, <span class="st">"CSPA"</span>, <span class="st">"LCE"</span>, <span class="st">"LCA"</span><span class="op">)</span>,
-  sim.mat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cts"</span>, <span class="st">"srs"</span>, <span class="st">"asrs"</span><span class="op">)</span>,
-  prep.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"full"</span>, <span class="st">"sampled"</span><span class="op">)</span>,
-  min.var <span class="op">=</span> <span class="fl">1</span>,
-  seed <span class="op">=</span> <span class="fl">1</span>,
-  trim <span class="op">=</span> <span class="cn">FALSE</span>,
-  reweigh <span class="op">=</span> <span class="cn">FALSE</span>,
-  n <span class="op">=</span> <span class="fl">5</span>,
-  evaluate <span class="op">=</span> <span class="cn">TRUE</span>,
-  plot <span class="op">=</span> <span class="cn">FALSE</span>,
-  ref.cl <span class="op">=</span> <span class="cn">NULL</span>,
-  progress <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dice</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">nk</span>,</span>
+<span>  reps <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  algorithms <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  k.method <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nmf.method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"brunet"</span>, <span class="st">"lee"</span><span class="op">)</span>,</span>
+<span>  hc.method <span class="op">=</span> <span class="st">"average"</span>,</span>
+<span>  distance <span class="op">=</span> <span class="st">"euclidean"</span>,</span>
+<span>  cons.funs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"kmodes"</span>, <span class="st">"majority"</span>, <span class="st">"CSPA"</span>, <span class="st">"LCE"</span>, <span class="st">"LCA"</span><span class="op">)</span>,</span>
+<span>  sim.mat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cts"</span>, <span class="st">"srs"</span>, <span class="st">"asrs"</span><span class="op">)</span>,</span>
+<span>  prep.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"full"</span>, <span class="st">"sampled"</span><span class="op">)</span>,</span>
+<span>  min.var <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  trim <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  reweigh <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  evaluate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  plot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ref.cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>data matrix with rows as samples and columns as variables</p></dd>
+
+
 <dt>nk</dt>
 <dd><p>number of clusters (k) requested; can specify a single integer or a
 range of integers to compute multiple k</p></dd>
+
+
 <dt>reps</dt>
 <dd><p>number of subsamples</p></dd>
+
+
 <dt>algorithms</dt>
 <dd><p>vector of clustering algorithms for performing consensus
 clustering. Must be any number of the following: "nmf", "hc", "diana",
 "km", "pam", "ap", "sc", "gmm", "block", "som", "cmeans", "hdbscan". A
 custom clustering algorithm can be used.</p></dd>
+
+
 <dt>k.method</dt>
 <dd><p>determines the method to choose k when no reference class is
 given. When <code>ref.cl</code> is not <code>NULL</code>, k is the number of distinct classes of
@@ -104,73 +112,111 @@ use the PAC to choose the best k(s). Specifying an integer as a
 user-desired k will override the best k chosen by PAC. Finally, specifying
 "all" will produce consensus results for all k. The "all" method is
 implicitly performed when there is only one k used.</p></dd>
+
+
 <dt>nmf.method</dt>
 <dd><p>specify NMF-based algorithms to run. By default the
 "brunet" and "lee" algorithms are called. See <code><a href="https://rdrr.io/pkg/NMF/man/nmf.html" class="external-link">NMF::nmf()</a></code> for details.</p></dd>
+
+
 <dt>hc.method</dt>
 <dd><p>agglomeration method for hierarchical clustering. The
 the "average" method is used by default. See<code><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">stats::hclust()</a></code> for details.</p></dd>
+
+
 <dt>distance</dt>
 <dd><p>a vector of distance functions. Defaults to "euclidean".
 Other options are given in <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist()</a></code>. A custom distance function can
 be used.</p></dd>
+
+
 <dt>cons.funs</dt>
 <dd><p>consensus functions to use. Current options are "kmodes"
 (k-modes), "majority" (majority voting), "CSPA" (Cluster-based Similarity
 Partitioning Algorithm), "LCE" (linkage clustering ensemble), "LCA" (latent
 class analysis)</p></dd>
+
+
 <dt>sim.mat</dt>
 <dd><p>similarity matrix; choices are "cts", "srs", "asrs".</p></dd>
+
+
 <dt>prep.data</dt>
 <dd><p>Prepare the data on the "full" dataset, the "sampled"
 dataset, or "none" (default).</p></dd>
+
+
 <dt>min.var</dt>
 <dd><p>minimum variability measure threshold used to filter the
 feature space for only highly variable features. Only features with a
 minimum variability measure across all samples greater than <code>min.var</code> will
 be used. If <code>type = "conventional"</code>, the standard deviation is the measure
 used, and if <code>type = "robust"</code>, the MAD is the measure used.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>random seed for knn imputation reproducibility</p></dd>
+
+
 <dt>trim</dt>
 <dd><p>logical; if <code>TRUE</code>, algorithms that score low on internal indices
 will be trimmed out</p></dd>
+
+
 <dt>reweigh</dt>
 <dd><p>logical; if <code>TRUE</code>, after trimming out poor performing
 algorithms, each algorithm is reweighed depending on its internal indices.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>an integer specifying the top <code>n</code> algorithms to keep after trimming
 off the poor performing ones using Rank Aggregation. If the total number of
 algorithms is less than <code>n</code> no trimming is done.</p></dd>
+
+
 <dt>evaluate</dt>
 <dd><p>logical; if <code>TRUE</code> (default), validity indices are returned.
 Internal validity indices are always computed. If <code>ref.cl</code> is not <code>NULL</code>,
 then external validity indices will also be computed.</p></dd>
+
+
 <dt>plot</dt>
 <dd><p>logical; if <code>TRUE</code>, <code>graph_all</code> is called and a summary
 evaluation heatmap of ranked algorithms vs. internal validity indices is
 plotted as well.</p></dd>
+
+
 <dt>ref.cl</dt>
 <dd><p>reference class</p></dd>
+
+
 <dt>progress</dt>
 <dd><p>logical; should a progress bar be displayed?</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list with the following elements</p>
+    
+
+<p>A list with the following elements</p>
 <dl><dt>E</dt>
 <dd><p>raw clustering ensemble object</p></dd>
+
 <dt>Eknn</dt>
 <dd><p>clustering ensemble object with knn imputation used on <code>E</code></p></dd>
+
 <dt>Ecomp</dt>
 <dd><p>flattened ensemble object with remaining missing entries imputed
 by majority voting</p></dd>
+
 <dt>clusters</dt>
 <dd><p>final clustering assignment from the diverse clustering
 ensemble method</p></dd>
+
 <dt>indices</dt>
 <dd><p>if <code>evaluate = TRUE</code>, shows cluster evaluation indices;
 otherwise <code>NULL</code></p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -186,7 +232,7 @@ datasets ("sampled").</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:MASS’:</span>
@@ -207,15 +253,15 @@ datasets ("sampled").</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     intersect, setdiff, setequal, union</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">hgsc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">ref.cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="st">"_"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dice.obj</span> <span class="op">&lt;-</span> <span class="fu">dice</span><span class="op">(</span><span class="va">dat</span>, nk <span class="op">=</span> <span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">5</span>, algorithms <span class="op">=</span> <span class="st">"hc"</span>, cons.funs <span class="op">=</span></span>
-<span class="r-in"><span class="st">"kmodes"</span>, ref.cl <span class="op">=</span> <span class="va">ref.cl</span>, progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">dice.obj</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">hgsc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">ref.cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="st">"_"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dice.obj</span> <span class="op">&lt;-</span> <span class="fu">dice</span><span class="op">(</span><span class="va">dat</span>, nk <span class="op">=</span> <span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">5</span>, algorithms <span class="op">=</span> <span class="st">"hc"</span>, cons.funs <span class="op">=</span></span></span>
+<span class="r-in"><span><span class="st">"kmodes"</span>, ref.cl <span class="op">=</span> <span class="va">ref.cl</span>, progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">dice.obj</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ E       : int [1:100, 1:5, 1, 1] 1 1 NA NA NA 1 1 NA 1 NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "dimnames")=List of 4</span>
@@ -245,7 +291,7 @@ datasets ("sampled").</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

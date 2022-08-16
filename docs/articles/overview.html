@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">diceR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -106,18 +106,18 @@ intent is that we capture a variety of clustering outputs and select
 those that are most consistent with the data.</p>
 <p>You can install <code>diceR</code> from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"diceR"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"diceR"</span><span class="op">)</span></span></code></pre></div>
 <p>Or get the latest development version from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AlineTalhouk/diceR"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AlineTalhouk/diceR"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlineTalhouk/diceR/" class="external-link">diceR</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rapporter.github.io/pander/" class="external-link">pander</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span>
-<span class="va">hgsc</span> <span class="op">&lt;-</span> <span class="va">hgsc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlineTalhouk/diceR/" class="external-link">diceR</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rapporter.github.io/pander/" class="external-link">pander</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span></span>
+<span><span class="va">hgsc</span> <span class="op">&lt;-</span> <span class="va">hgsc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span></span></code></pre></div>
 <p>We load an excerpt of an expression data set from TCGA of 100 high
 grade serous carcinoma samples measured on 50 genes.</p>
 </div>
@@ -304,23 +304,23 @@ replicates, for these clustering algorithms: Hierarchical Clustering,
 PAM, and DIvisive ANAlysis Clustering (DIANA). Euclidean distance is
 used for all algorithms.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">CC</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, p.item <span class="op">=</span> <span class="fl">0.8</span>, reps <span class="op">=</span> <span class="fl">5</span>,
-                        algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">CC</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, p.item <span class="op">=</span> <span class="fl">0.8</span>, reps <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>                        algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The output is a 4-dimensional array: rows are samples, columns are
 different bootstrap subsample replicates, slices are algorithms, and
 each “box” (4th dimension) is for a different k. Below are the first few
 cluster assignments for each replicate in the DIANA algorithm for k =
 3.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">co</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">CC</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/strwrap.html" class="external-link">strwrap</a></span><span class="op">(</span><span class="va">co</span>, width <span class="op">=</span> <span class="fl">80</span><span class="op">)</span>
-<span class="co">#&gt; [1] "int [1:100, 1:5, 1:3, 1:2] 1 1 NA NA NA 1 1 NA 1 NA ..."               </span>
-<span class="co">#&gt; [2] "- attr(*, \"dimnames\")=List of 4"                                     </span>
-<span class="co">#&gt; [3] "..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""     </span>
-<span class="co">#&gt; [4] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                   </span>
-<span class="co">#&gt; [5] "..$ : chr [1:5] \"R1\" \"R2\" \"R3\" \"R4\" ..."                       </span>
-<span class="co">#&gt; [6] "..$ : chr [1:3] \"HC_Euclidean\" \"PAM_Euclidean\" \"DIANA_Euclidean\""</span>
-<span class="co">#&gt; [7] "..$ : chr [1:2] \"3\" \"4\""</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">co</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">CC</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/strwrap.html" class="external-link">strwrap</a></span><span class="op">(</span><span class="va">co</span>, width <span class="op">=</span> <span class="fl">80</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "int [1:100, 1:5, 1:3, 1:2] 1 1 NA NA NA 1 1 NA 1 NA ..."               </span></span>
+<span><span class="co">#&gt; [2] "- attr(*, \"dimnames\")=List of 4"                                     </span></span>
+<span><span class="co">#&gt; [3] "..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""     </span></span>
+<span><span class="co">#&gt; [4] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                   </span></span>
+<span><span class="co">#&gt; [5] "..$ : chr [1:5] \"R1\" \"R2\" \"R3\" \"R4\" ..."                       </span></span>
+<span><span class="co">#&gt; [6] "..$ : chr [1:3] \"HC_Euclidean\" \"PAM_Euclidean\" \"DIANA_Euclidean\""</span></span>
+<span><span class="co">#&gt; [7] "..$ : chr [1:2] \"3\" \"4\""</span></span></code></pre></div>
 <table style="width:71%;" class="table">
 <caption>Cluster Assignments for DIANA, k = 3</caption>
 <colgroup>
@@ -397,12 +397,12 @@ beforehand. There might still be <code>NA</code>s after KNN because of
 how the decision threshold was set. The remaining missing values can be
 imputed using majority voting.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">CC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">CC</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, <span class="va">impute_knn</span>, data <span class="op">=</span> <span class="va">hgsc</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="va">CC_imputed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/impute_missing.html">impute_missing</a></span><span class="op">(</span><span class="va">CC</span>, <span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">CC</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 2</span>
-<span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">CC_imputed</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">CC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">CC</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, <span class="va">impute_knn</span>, data <span class="op">=</span> <span class="va">hgsc</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">CC_imputed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/impute_missing.html">impute_missing</a></span><span class="op">(</span><span class="va">CC</span>, <span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">CC</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 2</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">CC_imputed</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
 <p>We can carry on the analysis using either <code>CC</code> or
 <code>CC_imputed</code>.</p>
 </div>
@@ -427,12 +427,12 @@ bootstrap resampling. The diagonal are all one’s. Suppose we wanted to
 compute the consensus matrix for PAM, k = 4, and visualize using
 <code><a href="../reference/graphs.html">graph_heatmap()</a></code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pam.4</span> <span class="op">&lt;-</span> <span class="va">CC</span><span class="op">[</span>, , <span class="st">"PAM_Euclidean"</span>, <span class="st">"4"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>
-<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span><span class="op">(</span><span class="va">pam.4</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">cm</span><span class="op">)</span>
-<span class="co">#&gt; [1] 100 100</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pam.4</span> <span class="op">&lt;-</span> <span class="va">CC</span><span class="op">[</span>, , <span class="st">"PAM_Euclidean"</span>, <span class="st">"4"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
+<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span><span class="op">(</span><span class="va">pam.4</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">cm</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 100 100</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/graphs.html">graph_heatmap</a></span><span class="op">(</span><span class="va">pam.4</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">hm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/graphs.html">graph_heatmap</a></span><span class="op">(</span><span class="va">pam.4</span><span class="op">)</span></span></code></pre></div>
 <p><img src="overview_files/figure-html/graph_heatmap-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
@@ -446,19 +446,19 @@ returns a list of consensus matrices. On the other hand, setting
 <code>element = "class"</code> returns a matrix with rows as samples,
 and columns as clustering assignments for each algorithm.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ccomb_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_combine.html">consensus_combine</a></span><span class="op">(</span><span class="va">CC</span>, element <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span>
-<span class="va">ccomb_class</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_combine.html">consensus_combine</a></span><span class="op">(</span><span class="va">CC</span>, element <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ccomb_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_combine.html">consensus_combine</a></span><span class="op">(</span><span class="va">CC</span>, element <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span></span>
+<span><span class="va">ccomb_class</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_combine.html">consensus_combine</a></span><span class="op">(</span><span class="va">CC</span>, element <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ccomb_matrix</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="co">#&gt; List of 2</span>
-<span class="co">#&gt;  $ 3:List of 3</span>
-<span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.8 1 0.8 1 1 1 1 1 1 ...</span>
-<span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 1 0.2 0.8 0 1 1 0.8 0 0.2 ...</span>
-<span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.8 0 0 0 1 1 0 0 1 ...</span>
-<span class="co">#&gt;  $ 4:List of 3</span>
-<span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.6 1 0.6 1 1 1 1 1 0.8 ...</span>
-<span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 1 0.2 0.8 0 0.8 0.8 0.6 0 0 ...</span>
-<span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.8 0 0 0 1 1 0 0 1 ...</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ccomb_matrix</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 2</span></span>
+<span><span class="co">#&gt;  $ 3:List of 3</span></span>
+<span><span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.8 1 0.8 1 1 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 1 0.2 0.8 0 1 1 0.8 0 0.2 ...</span></span>
+<span><span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.8 0 0 0 1 1 0 0 1 ...</span></span>
+<span><span class="co">#&gt;  $ 4:List of 3</span></span>
+<span><span class="co">#&gt;   ..$ HC_Euclidean   : num [1:100, 1:100] 1 0.6 1 0.6 1 1 1 1 1 0.8 ...</span></span>
+<span><span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:100, 1:100] 1 1 0.2 0.8 0 0.8 0.8 0.6 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:100, 1:100] 1 0.8 0 0 0 1 1 0 0 1 ...</span></span></code></pre></div>
 <table style="width:68%;" class="table">
 <caption>Consensus Classes</caption>
 <colgroup>
@@ -508,23 +508,23 @@ and columns as clustering assignments for each algorithm.</p>
 into <code><a href="../reference/consensus_matrix.html">consensus_matrix()</a></code> to obtain a consensus matrix across
 subsamples and algorithms (and k).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># consensus matrix across subsamples and algorithms within k = 3</span>
-<span class="va">cm_k3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span><span class="op">(</span><span class="va">ccomb_class</span><span class="op">$</span><span class="va">`3`</span><span class="op">)</span>
-
-<span class="co"># consensus matrix across subsamples and algorithms within k = 4</span>
-<span class="va">cm_k4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span><span class="op">(</span><span class="va">ccomb_class</span><span class="op">$</span><span class="va">`4`</span><span class="op">)</span>
-
-<span class="co"># consensus matrix across subsamples and algorithms and k</span>
-<span class="va">cm_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span><span class="op">(</span><span class="va">ccomb_class</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># consensus matrix across subsamples and algorithms within k = 3</span></span>
+<span><span class="va">cm_k3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span><span class="op">(</span><span class="va">ccomb_class</span><span class="op">$</span><span class="va">`3`</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># consensus matrix across subsamples and algorithms within k = 4</span></span>
+<span><span class="va">cm_k4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span><span class="op">(</span><span class="va">ccomb_class</span><span class="op">$</span><span class="va">`4`</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># consensus matrix across subsamples and algorithms and k</span></span>
+<span><span class="va">cm_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_matrix.html">consensus_matrix</a></span><span class="op">(</span><span class="va">ccomb_class</span><span class="op">)</span></span></code></pre></div>
 <p>A situation might also arise where we initially decided on using 3
 clustering algorithms for the ensemble, but later wish to add additional
 algorithms for analysis. <code><a href="../reference/consensus_combine.html">consensus_combine()</a></code> takes in any
 number of ensemble objects (e.g. <code>CC</code> and <code>CC2</code>)
 and combines the results.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">CC2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, p.item <span class="op">=</span> <span class="fl">0.8</span>, reps <span class="op">=</span> <span class="fl">5</span>,
-                         algorithms <span class="op">=</span> <span class="st">"km"</span><span class="op">)</span>
-<span class="va">ccomb_class2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_combine.html">consensus_combine</a></span><span class="op">(</span><span class="va">CC</span>, <span class="va">CC2</span>, element <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">CC2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, p.item <span class="op">=</span> <span class="fl">0.8</span>, reps <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>                         algorithms <span class="op">=</span> <span class="st">"km"</span><span class="op">)</span></span>
+<span><span class="va">ccomb_class2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_combine.html">consensus_combine</a></span><span class="op">(</span><span class="va">CC</span>, <span class="va">CC2</span>, element <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span></code></pre></div>
 <table style="width:75%;" class="table">
 <caption>Consensus Classes with KM added</caption>
 <colgroup>
@@ -596,7 +596,7 @@ the <code>k</code> with the greatest average PAC. If there <em>is</em> a
 reference class, <code>k</code> is the number of distinct classes in the
 reference.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ccomp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span><span class="op">(</span><span class="va">hgsc</span>, <span class="va">CC</span>, <span class="va">CC2</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ccomp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span><span class="op">(</span><span class="va">hgsc</span>, <span class="va">CC</span>, <span class="va">CC2</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
 <caption>Internal Indices for k = 4 (continued below)</caption>
 <colgroup>
@@ -779,27 +779,27 @@ we make 4 copies of A and 1 copy of B. To minimize computational time,
 the total number of copies out of all algorithms has an upper bound of
 100. Without reweighing, each algorithm is given equal weight.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ctrim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span><span class="op">(</span><span class="va">hgsc</span>, <span class="va">CC</span>, <span class="va">CC2</span>, trim <span class="op">=</span> <span class="cn">TRUE</span>, reweigh <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ctrim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_evaluate.html">consensus_evaluate</a></span><span class="op">(</span><span class="va">hgsc</span>, <span class="va">CC</span>, <span class="va">CC2</span>, trim <span class="op">=</span> <span class="cn">TRUE</span>, reweigh <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ctrim</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="co">#&gt; List of 5</span>
-<span class="co">#&gt;  $ k       : int 4</span>
-<span class="co">#&gt;  $ pac     :'data.frame':    2 obs. of  5 variables:</span>
-<span class="co">#&gt;   ..$ k              : chr [1:2] "3" "4"</span>
-<span class="co">#&gt;   ..$ HC_Euclidean   : num [1:2] 0.134 0.397</span>
-<span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:2] 0.458 0.451</span>
-<span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:2] 0.248 0.233</span>
-<span class="co">#&gt;   ..$ KM             : num [1:2] 0.282 0.272</span>
-<span class="co">#&gt;  $ ii      :List of 2</span>
-<span class="co">#&gt;   ..$ 3:'data.frame':    4 obs. of  16 variables:</span>
-<span class="co">#&gt;   ..$ 4:'data.frame':    4 obs. of  16 variables:</span>
-<span class="co">#&gt;  $ ei      : NULL</span>
-<span class="co">#&gt;  $ trim.obj:List of 5</span>
-<span class="co">#&gt;   ..$ alg.keep   : chr [1:2] "HC_Euclidean" "KM"</span>
-<span class="co">#&gt;   ..$ alg.remove : chr [1:2] "PAM_Euclidean" "DIANA_Euclidean"</span>
-<span class="co">#&gt;   ..$ rank.matrix:List of 1</span>
-<span class="co">#&gt;   ..$ top.list   :List of 1</span>
-<span class="co">#&gt;   ..$ E.new      :List of 1</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ctrim</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 5</span></span>
+<span><span class="co">#&gt;  $ k       : int 4</span></span>
+<span><span class="co">#&gt;  $ pac     :'data.frame':    2 obs. of  5 variables:</span></span>
+<span><span class="co">#&gt;   ..$ k              : chr [1:2] "3" "4"</span></span>
+<span><span class="co">#&gt;   ..$ HC_Euclidean   : num [1:2] 0.134 0.397</span></span>
+<span><span class="co">#&gt;   ..$ PAM_Euclidean  : num [1:2] 0.458 0.451</span></span>
+<span><span class="co">#&gt;   ..$ DIANA_Euclidean: num [1:2] 0.248 0.233</span></span>
+<span><span class="co">#&gt;   ..$ KM             : num [1:2] 0.282 0.272</span></span>
+<span><span class="co">#&gt;  $ ii      :List of 2</span></span>
+<span><span class="co">#&gt;   ..$ 3:'data.frame':    4 obs. of  16 variables:</span></span>
+<span><span class="co">#&gt;   ..$ 4:'data.frame':    4 obs. of  16 variables:</span></span>
+<span><span class="co">#&gt;  $ ei      : NULL</span></span>
+<span><span class="co">#&gt;  $ trim.obj:List of 5</span></span>
+<span><span class="co">#&gt;   ..$ alg.keep   : chr [1:2] "HC_Euclidean" "KM"</span></span>
+<span><span class="co">#&gt;   ..$ alg.remove : chr [1:2] "PAM_Euclidean" "DIANA_Euclidean"</span></span>
+<span><span class="co">#&gt;   ..$ rank.matrix:List of 1</span></span>
+<span><span class="co">#&gt;   ..$ top.list   :List of 1</span></span>
+<span><span class="co">#&gt;   ..$ E.new      :List of 1</span></span></code></pre></div>
 <p>The return value shows which algorithms were kept, removed (if any),
 and the trimmed (and potentially reweighed) cluster ensemble.</p>
 </div>
@@ -812,26 +812,26 @@ and the trimmed (and potentially reweighed) cluster ensemble.</p>
 <code>sigclust</code> with 50 simulations and generate a p-value for
 this significance test.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">pam_4</span> <span class="op">&lt;-</span> <span class="va">ccomb_class2</span><span class="op">$</span><span class="va">`4`</span><span class="op">[</span>, <span class="st">"PAM_Euclidean"</span><span class="op">]</span>
-<span class="va">sig_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sigclust.html">sigclust</a></span><span class="op">(</span><span class="va">hgsc</span>, k <span class="op">=</span> <span class="fl">4</span>, nsim <span class="op">=</span> <span class="fl">100</span>, labflag <span class="op">=</span> <span class="fl">0</span>, label <span class="op">=</span> <span class="va">pam_4</span><span class="op">)</span>
-<span class="va">co</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sig_obj</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/strwrap.html" class="external-link">strwrap</a></span><span class="op">(</span><span class="va">co</span>, width <span class="op">=</span> <span class="fl">80</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "Formal class 'sigclust' [package \"sigclust\"] with 10 slots"               </span>
-<span class="co">#&gt;  [2] "..@ raw.data : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ..."</span>
-<span class="co">#&gt;  [3] ".. ..- attr(*, \"dimnames\")=List of 2"                                     </span>
-<span class="co">#&gt;  [4] ".. .. ..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""    </span>
-<span class="co">#&gt;  [5] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                        </span>
-<span class="co">#&gt;  [6] ".. .. ..$ : chr [1:50] \"ABAT\" \"ABHD2\" \"ACTB\" \"ACTR2\" ..."           </span>
-<span class="co">#&gt;  [7] "..@ veigval : num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                     </span>
-<span class="co">#&gt;  [8] "..@ vsimeigval: num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                   </span>
-<span class="co">#&gt;  [9] "..@ simbackvar: num 0.42"                                                   </span>
-<span class="co">#&gt; [10] "..@ icovest : num 2"                                                        </span>
-<span class="co">#&gt; [11] "..@ nsim : num 100"                                                         </span>
-<span class="co">#&gt; [12] "..@ simcindex : num [1:100] 0.624 0.692 0.664 0.672 0.637 ..."              </span>
-<span class="co">#&gt; [13] "..@ pval : num 0.23"                                                        </span>
-<span class="co">#&gt; [14] "..@ pvalnorm : num 0.206"                                                   </span>
-<span class="co">#&gt; [15] "..@ xcindex : num 0.63"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">pam_4</span> <span class="op">&lt;-</span> <span class="va">ccomb_class2</span><span class="op">$</span><span class="va">`4`</span><span class="op">[</span>, <span class="st">"PAM_Euclidean"</span><span class="op">]</span></span>
+<span><span class="va">sig_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sigclust.html">sigclust</a></span><span class="op">(</span><span class="va">hgsc</span>, k <span class="op">=</span> <span class="fl">4</span>, nsim <span class="op">=</span> <span class="fl">100</span>, labflag <span class="op">=</span> <span class="fl">0</span>, label <span class="op">=</span> <span class="va">pam_4</span><span class="op">)</span></span>
+<span><span class="va">co</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sig_obj</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/strwrap.html" class="external-link">strwrap</a></span><span class="op">(</span><span class="va">co</span>, width <span class="op">=</span> <span class="fl">80</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "Formal class 'sigclust' [package \"sigclust\"] with 10 slots"               </span></span>
+<span><span class="co">#&gt;  [2] "..@ raw.data : num [1:100, 1:50] -0.0107 -0.7107 0.8815 -1.0851 -0.9322 ..."</span></span>
+<span><span class="co">#&gt;  [3] ".. ..- attr(*, \"dimnames\")=List of 2"                                     </span></span>
+<span><span class="co">#&gt;  [4] ".. .. ..$ : chr [1:100] \"TCGA.04.1331_PRO.C5\" \"TCGA.04.1332_MES.C1\""    </span></span>
+<span><span class="co">#&gt;  [5] "\"TCGA.04.1336_DIF.C4\" \"TCGA.04.1337_MES.C1\" ..."                        </span></span>
+<span><span class="co">#&gt;  [6] ".. .. ..$ : chr [1:50] \"ABAT\" \"ABHD2\" \"ACTB\" \"ACTR2\" ..."           </span></span>
+<span><span class="co">#&gt;  [7] "..@ veigval : num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                     </span></span>
+<span><span class="co">#&gt;  [8] "..@ vsimeigval: num [1:50] 11.81 4.51 2.66 2.29 1.84 ..."                   </span></span>
+<span><span class="co">#&gt;  [9] "..@ simbackvar: num 0.42"                                                   </span></span>
+<span><span class="co">#&gt; [10] "..@ icovest : num 2"                                                        </span></span>
+<span><span class="co">#&gt; [11] "..@ nsim : num 100"                                                         </span></span>
+<span><span class="co">#&gt; [12] "..@ simcindex : num [1:100] 0.624 0.692 0.664 0.672 0.637 ..."              </span></span>
+<span><span class="co">#&gt; [13] "..@ pval : num 0.23"                                                        </span></span>
+<span><span class="co">#&gt; [14] "..@ pvalnorm : num 0.206"                                                   </span></span>
+<span><span class="co">#&gt; [15] "..@ xcindex : num 0.63"</span></span></code></pre></div>
 <p>The p-value is 0.23, indicating we do not have sufficient evidence to
 conclude there are four distinct clusters. Note that we did not use the
 full <code>hgsc</code> data set in this example, so the underlying
@@ -891,7 +891,7 @@ the National Academy of Sciences of the United States of America,
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
