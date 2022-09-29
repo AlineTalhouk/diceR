@@ -1,3 +1,7 @@
+# diceR 1.2.2
+
+* Pass `lower` and `upper` parameters from `PAC()` to `consensus_evaluate()` (#160)
+
 # diceR 1.2.1
 
 * References added for `k_modes()` and `CSPA()` consensus functions (#157)
