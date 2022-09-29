@@ -1,10 +1,10 @@
 template:
-  params:
-    bootswatch: cerulean
+  bootstrap: 5
+  bootswatch: cerulean
+  bslib:
+    primary: "#0054AD"
 
 navbar:
-  title: ~
-  type: default
   left:
   - text: Reference
     href: reference/index.html
@@ -12,9 +12,6 @@ navbar:
     href: articles/index.html
   - text: News
     href: news/index.html
-  right:
-  - icon: fa-github
-    href: https://github.com/AlineTalhouk/diceR
 
 reference:
 - title: Functions
