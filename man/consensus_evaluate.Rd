@@ -13,7 +13,9 @@ consensus_evaluate(
   plot = FALSE,
   trim = FALSE,
   reweigh = FALSE,
-  n = 5
+  n = 5,
+  lower = 0,
+  upper = 1
 )
 }
 \arguments{
@@ -45,6 +47,10 @@ algorithms, each algorithm is reweighed depending on its internal indices.}
 \item{n}{an integer specifying the top \code{n} algorithms to keep after trimming
 off the poor performing ones using Rank Aggregation. If the total number of
 algorithms is less than \code{n} no trimming is done.}
+
+\item{lower}{the lower bound that determines what is ambiguous}
+
+\item{upper}{the upper bound that determines what is ambiguous}
 }
 \value{
 \code{consensus_evaluate} returns a list with the following elements

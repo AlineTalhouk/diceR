@@ -29,6 +29,7 @@
 #'   off the poor performing ones using Rank Aggregation. If the total number of
 #'   algorithms is less than `n` no trimming is done.
 #' @inheritParams consensus_combine
+#' @inheritParams PAC
 #' @return `consensus_evaluate` returns a list with the following elements
 #' * `k`: if `ref.cl` is not `NULL`, this is the number of distinct classes
 #'   in the reference; otherwise the chosen `k` is determined by the one giving
@@ -61,7 +62,7 @@
 #' str(z, max.level = 2)
 consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
                                k.method = NULL, plot = FALSE, trim = FALSE,
-                               reweigh = FALSE, n = 5) {
+                               reweigh = FALSE, n = 5, lower = 0, upper = 1) {
   # Assertions
   if (!is.null(ref.cl))
     assertthat::assert_that(is.integer(ref.cl), nrow(data) == length(ref.cl))
@@ -74,7 +75,7 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
 
   # Calculate PAC and choose k
   pac <- cons.mat %>%
-    purrr::modify_depth(2, PAC) %>%
+    purrr::modify_depth(2, PAC, lower = lower, upper = upper) %>%
     purrr::map_df(data.frame, .id = "k")
   k <- choose_k(ref.cl, k.method, pac)
 
