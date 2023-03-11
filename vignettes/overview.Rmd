@@ -99,16 +99,17 @@ They are passed as a character vector into the `distance` parameter of `consensu
 
 The list of internal validity indices used for evaluating clusters are:
 
-  - "C_index", "Calinski_Harabasz", "Davies_Bouldin", "Dunn", "McClain_Rao", "PBM", "SD_Dis", "Ray_Turi", "Tau", "Gamma", "G_plus", "Silhouette", "S_Dbw" from `clusterCrit::intCriteria`
-  - "Compactness" from the `LinkCluE` package
-  - "Connectivity" from `clValid::connectivity`
+  - Calinski-Harabasz, Gamma, C-index, Davies-Bouldin, and Rousseeuw's Silhouette from the `clusterSim` R package
+  - Dunn index and Connectivity measure from the `clValid` R package
+  - SD and S_Dbw adapted from the archived `clusterCrit` R package
+  - Compactness measure from the `LinkCluE` MATLAB package
 
 ### External
 
 The list of external validity indices used for evaluating clusters are:
 
-  - "Hubert", "Jaccard", "McNemar", "Precision", "Rand", "Recall" from `clusterCrit::extCriteria`
-  - "NMI" calculated using `infotheo::entropy`
+  - Hubert, Jaccard, McNemar, and Rand indices adapted from the archived `clusterCrit` R package
+  - Normalized mutual information (NMI) calculated using `infotheo::entropy()`
   - Overall confusion matrix statistics from `caret::confusionMatrix`: "Overall Accuracy", "Cohen's kappa", "No Information Rate", "P-Value [Acc > NIR]"
   - Averaged class-specific confusion matrix statistics: "Sensitivity", "Specificity", "PPV", "NPV", "Detection Rate", "Accuracy", "Balanced Accuracy"
 
