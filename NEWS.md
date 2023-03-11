@@ -1,3 +1,19 @@
+# diceR 2.0.0
+
+Internal and external validity indices were refactored to avoid using helper functions from the `clusterCrit` package, which is scheduled to be archived. Please adapt your code if it extracts deprecated validity indices, as described below.
+
+* Calinski-Harabasz index now calculated using `clusterSim::index.G1()`
+* Dunn index now calculated using `clValid::dunn()`
+* Gamma index now calculated using `clusterSim::index.G2()`
+* C-index now calculated using `clusterSim::index.C()`
+* Davies-Bouldin now calculated using `clusterSim::index.DB()`
+* SD index now calculated _correctly_ using `clv::clv.SD()` and helper functions from `clv`. Previously only the total separation between clusters was returned.
+* S_Dbw index now calculated using `clv::clv.SDbw()` and helper functions from `clv`
+* Rousseeuw's Silhouette now calculated using `clusterSim::index.S()`
+* PBM, Tau, McClain-Rao, Ray-Turi, and G-plus indices were removed as equivalent implementations from other packages were not found. They may be reinstated in the future.
+* All external validity indices are now calculated manually using counts from the concordance matrix (Hubert, Jaccard, McNemar, and Rand indices)
+* Best index value (maximum or minimum) now calculated manually 
+
 # diceR 1.2.2
 
 * Pass `lower` and `upper` parameters from `PAC()` to `consensus_evaluate()` (#160)
