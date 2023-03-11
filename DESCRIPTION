@@ -34,7 +34,8 @@ Imports:
     assertthat,
     class,
     clue,
-    clusterCrit,
+    clusterSim,
+    clv,
     clValid,
     dplyr (>= 0.7.5),
     ggplot2,
@@ -76,4 +77,4 @@ VignetteBuilder:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3

@@ -167,21 +167,32 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
 #' Rank based on internal validity indices
 #' @noRd
 consensus_rank <- function(ii, n) {
-  # Extract internal indices from clusterCrit and remove NaN idx
+  # Extract internal indices and remove NaN idx
   ii.cc <- ii %>%
-    magrittr::extract(
-      !names(.) %in% c("Algorithms", "Compactness", "Connectivity") &
-        purrr::map_lgl(., ~ all(!is.nan(.x)))
-    )
+    magrittr::extract(!names(.) %in% c("Algorithms") &
+                        purrr::map_lgl(., ~ all(!is.nan(.x))))
 
   # Which algorithm is the best for each index?
-  bests <- purrr::imap_int(ii.cc, clusterCrit::bestCriterion)
+  bests <- purrr::imap_int(ii.cc, ~ {
+    switch(
+      .y,
+      calinski_harabasz = which.max(.x),
+      dunn = which.max(.x),
+      gamma = which.max(.x),
+      c_index = which.min(.x),
+      davies_bouldin = which.min(.x),
+      sd = which.min(.x),
+      s_dbw = which.min(.x),
+      silhouette = which.max(.x),
+      Compactness = which.min(.x),
+      Connectivity = which.min(.x)
+    )
+  })
   max.bests <- ii.cc %>%
     magrittr::extract(purrr::map_int(., which.max) == bests) %>%
     magrittr::multiply_by(-1)
   min.bests <- ii.cc %>%
-    magrittr::extract(purrr::map_int(., which.min) == bests) %>%
-    cbind(ii[c("Compactness", "Connectivity")]) # these two need to be minimized
+    magrittr::extract(purrr::map_int(., which.min) == bests)
 
   # Determine trimmed ensemble using rank aggregation
   if (nrow(ii) <= n) {
@@ -237,12 +248,14 @@ ivi_table <- function(cl.df, data) {
   ndata <- apply(data, 2, function(x) as.numeric(as.character(x)))
   data.frame(
     Algorithms = colnames(cl.df),
-    cl.df %>% purrr::map_df(
-      clusterCrit::intCriteria,
-      traj = ndata,
-      crit = c("Calinski_Harabasz", "Dunn", "PBM", "Tau", "Gamma", "C_index",
-               "Davies_Bouldin", "McClain_Rao", "SD_Dis", "Ray_Turi", "G_plus",
-               "Silhouette", "S_Dbw")),
+    calinski_harabasz = cl.df %>% purrr::map_dbl(clusterSim::index.G1, x = ndata),
+    dunn = cl.df %>% purrr::map_dbl(clValid::dunn, distance = stats::dist(ndata)),
+    gamma = cl.df %>% purrr::map_dbl(clusterSim::index.G2, d = stats::dist(ndata)),
+    c_index = cl.df %>% purrr::map_dbl(clusterSim::index.C, d = stats::dist(ndata)),
+    davies_bouldin = cl.df %>% purrr::map_dbl(~ clusterSim::index.DB(x = ndata, cl = ., q = 1)[["DB"]]),
+    sd = cl.df %>% purrr::map_dbl(SD, data = ndata),
+    s_dbw = cl.df %>% purrr::map_dbl(S_Dbw, data = ndata),
+    silhouette = cl.df %>% purrr::map_dbl(clusterSim::index.S, d = stats::dist(ndata)),
     Compactness = cl.df %>% purrr::map_dbl(compactness, data = data),
     Connectivity = cl.df %>% purrr::map_dbl(
       ~ suppressWarnings(clValid::connectivity(Data = ndata, clusters = .)))
@@ -257,11 +270,10 @@ ivi_table <- function(cl.df, data) {
 evi_table <- function(cl.df, ref.cl) {
   data.frame(
     Algorithms = colnames(cl.df),
-    cl.df %>% purrr::map_df(
-      clusterCrit::extCriteria,
-      part2 = ref.cl,
-      crit = c("Hubert", "Jaccard", "McNemar", "Rand")
-    ),
+    hubert = cl.df %>% purrr::map_dbl(ev_hubert, cl2 = ref.cl),
+    jaccard = cl.df %>% purrr::map_dbl(ev_jaccard, cl2 = ref.cl),
+    mcnemar = cl.df %>% purrr::map_dbl(ev_mcnemar, cl2 = ref.cl),
+    rand = cl.df %>% purrr::map_dbl(ev_rand, cl2 = ref.cl),
     NMI = cl.df %>% purrr::map_dbl(ev_nmi, ref.lab = ref.cl)
   ) %>%
     dplyr::inner_join(
@@ -354,4 +366,21 @@ compactness <- function(data, labels) {
     }
   }
   cp / length(labels)
+}
+
+#' SD validity index
+#' @noRd
+SD <- function(data, labels) {
+  scatt <- clv::clv.Scatt(data, labels)
+  dis <- clv::clv.Dis(cluster.center = scatt[["cluster.center"]])
+  alfa <- length(unique(labels))
+  clv::clv.SD(scatt[["Scatt"]], dis, alfa)
+}
+
+#' SDbw valdiity index
+#' @noRd
+S_Dbw <- function(data, labels) {
+  scatt <- clv::clv.Scatt(data, labels)
+  dens <- clv::clv.DensBw(data, labels, scatt, dist = "correlation")
+  clv::clv.SDbw(scatt[["Scatt"]], dens)
 }

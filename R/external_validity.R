@@ -70,3 +70,69 @@ ev_confmat <- function(pred.lab, ref.lab) {
   CM <- table(pred.relab, ref.lab)
   summary(yardstick::conf_mat(CM))
 }
+
+
+#' Concordance counts for all pairs of points between two cluster partitions
+#' @return A list with 4 elements
+#' * yy: number of points belonging to the same cluster both in cl1 and cl2
+#' * yn: number of points belonging to the same cluster both in cl1 but not in cl2
+#' * ny: number of points belonging to the same cluster both in cl2 but not in cl1
+#' * nn: number of points _not_ belonging to the same cluster both in cl1 and cl2
+#' @noRd
+concordance_counts <- function(cl1, cl2) {
+  n <- length(cl1)
+  yy <- yn <- ny <- nn <- 0
+  for (i in 1:(n - 1)) {
+    for (j in (i + 1):n) {
+      if (cl1[[i]] == cl1[[j]]) {
+        if (cl2[[i]] == cl2[[j]]) {
+          yy <- yy + 1
+        } else {
+          yn <- yn + 1
+        }
+      } else {
+        if (cl2[[i]] == cl2[[j]]) {
+          ny <- ny + 1
+        } else {
+          nn <- nn + 1
+        }
+      }
+    }
+  }
+  return(list(yy = yy, yn = yn, ny = ny, nn = nn))
+}
+
+#' Hubert index
+#' @noRd
+ev_hubert <- function(cl1, cl2) {
+  cc <- concordance_counts(cl1, cl2)
+  Nt <- Reduce(`+`, cc)
+  yy <- cc[["yy"]]
+  yn <- cc[["yn"]]
+  ny <- cc[["ny"]]
+  nn <- cc[["nn"]]
+  (Nt * yy - (yy + yn) * (yy + ny)) /
+    sqrt((yy + yn) * (yy + ny) * (nn + yn) * (nn + ny))
+}
+
+#' Jaccard index
+#' @noRd
+ev_jaccard <- function(cl1, cl2) {
+  cc <- concordance_counts(cl1, cl2)
+  cc[["yy"]] / c(cc[["yy"]] + cc[["yn"]] + cc[["ny"]])
+}
+
+#' McNemar index
+#' @noRd
+ev_mcnemar <- function(cl1, cl2) {
+  cc <- concordance_counts(cl1, cl2)
+  (cc[["yn"]] - cc[["ny"]]) / sqrt(cc[["yn"]] + cc[["ny"]])
+}
+
+#' Rand index
+#' @noRd
+ev_rand <- function(cl1, cl2) {
+  cc <- concordance_counts(cl1, cl2)
+  Nt <- Reduce(`+`, cc)
+  (cc[["yy"]] + cc[["nn"]]) / Nt
+}
