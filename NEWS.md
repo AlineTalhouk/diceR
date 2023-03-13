@@ -1,6 +1,6 @@
 # diceR (development version)
 
-* Pass `seed.data` argument to `dice()` (#162)
+* Pass `p.item` and `seed.data` arguments to `dice()` (#162, #165)
 
 # diceR 2.0.0
 

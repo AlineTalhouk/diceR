@@ -7,6 +7,7 @@
 dice(
   data,
   nk,
+  p.item = 0.8,
   reps = 10,
   algorithms = NULL,
   k.method = NULL,
@@ -33,6 +34,9 @@ dice(
 
 \item{nk}{number of clusters (k) requested; can specify a single integer or a
 range of integers to compute multiple k}
+
+\item{p.item}{proportion of items to be used in subsampling within an
+algorithm}
 
 \item{reps}{number of subsamples}
 

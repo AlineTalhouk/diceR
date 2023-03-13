@@ -44,7 +44,7 @@
 #' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = "hc", cons.funs =
 #' "kmodes", ref.cl = ref.cl, progress = FALSE)
 #' str(dice.obj, max.level = 2)
-dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
+dice <- function(data, nk, p.item = 0.8, reps = 10, algorithms = NULL, k.method = NULL,
                  nmf.method = c("brunet", "lee"), hc.method = "average",
                  distance = "euclidean",
                  cons.funs = c("kmodes", "majority", "CSPA", "LCE", "LCA"),
@@ -59,7 +59,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
   prep.data <- match.arg(prep.data)
 
   # Generate Diverse Cluster Ensemble
-  E <- consensus_cluster(data = data, nk = nk, reps = reps,
+  E <- consensus_cluster(data = data, nk = nk, p.item = p.item, reps = reps,
                          algorithms = algorithms, nmf.method = nmf.method,
                          hc.method = hc.method, distance = distance,
                          prep.data = prep.data, min.var = min.var,
