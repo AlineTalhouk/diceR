@@ -50,7 +50,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                  cons.funs = c("kmodes", "majority", "CSPA", "LCE", "LCA"),
                  sim.mat = c("cts", "srs", "asrs"),
                  prep.data = c("none", "full", "sampled"), min.var = 1,
-                 seed = 1, trim = FALSE, reweigh = FALSE, n = 5,
+                 seed = 1, seed.data = 1, trim = FALSE, reweigh = FALSE, n = 5,
                  evaluate = TRUE, plot = FALSE, ref.cl = NULL,
                  progress = TRUE) {
 
@@ -63,7 +63,7 @@ dice <- function(data, nk, reps = 10, algorithms = NULL, k.method = NULL,
                          algorithms = algorithms, nmf.method = nmf.method,
                          hc.method = hc.method, distance = distance,
                          prep.data = prep.data, min.var = min.var,
-                         progress = progress)
+                         seed.data = seed.data, progress = progress)
   # KNN imputation
   Eknn <- apply(E, 2:4, impute_knn, data = data, seed = seed)
 

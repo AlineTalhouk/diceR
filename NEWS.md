@@ -1,3 +1,5 @@
+# diceR (development version)
+
 # diceR 2.0.0
 
 Internal and external validity indices were refactored to avoid using helper functions from the `clusterCrit` package, which is scheduled to be archived. Please adapt your code if it extracts deprecated validity indices, as described below.
