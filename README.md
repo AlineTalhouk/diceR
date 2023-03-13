@@ -12,6 +12,7 @@ coverage](https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg
 status](https://www.r-pkg.org/badges/version/diceR)](https://CRAN.R-project.org/package=diceR)
 [![CRAN RStudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/diceR?color=orange)](https://r-pkg.org/pkg/diceR)
+[![R-CMD-check](https://github.com/AlineTalhouk/diceR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AlineTalhouk/diceR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Overview
@@ -88,12 +89,12 @@ internal evaluation indices:
 knitr::kable(obj$indices$ii$`4`)
 ```
 
-|                 | Algorithms      | calinski_harabasz |      dunn |      pbm |       tau |     gamma |   c_index | davies_bouldin | mcclain_rao |    sd_dis |  ray_turi |    g_plus | silhouette | s_dbw | Compactness | Connectivity |
-|:----------------|:----------------|------------------:|----------:|---------:|----------:|----------:|----------:|---------------:|------------:|----------:|----------:|----------:|-----------:|------:|------------:|-------------:|
-| HC_Euclidean    | HC_Euclidean    |          3.104106 | 0.2608547 | 59.73711 | 0.1994677 | 0.6349401 | 0.2844073 |       1.839182 |   0.8009149 | 0.1306062 | 1.4765665 | 0.0180141 |        NaN |   NaN |    24.83225 |     41.62183 |
-| DIANA_Euclidean | DIANA_Euclidean |         53.647400 | 0.3348103 | 33.87817 | 0.4296601 | 0.6314448 | 0.1589442 |       2.824201 |   0.8051915 | 0.2119281 | 3.2978986 | 0.0853202 |  0.0692233 |   NaN |    21.93396 |    241.66310 |
-| kmodes          | kmodes          |         55.336853 | 0.3396909 | 50.73168 | 0.4553051 | 0.6600223 | 0.1455632 |       2.010999 |   0.7974362 | 0.1180643 | 1.1528004 | 0.0808925 |  0.1250821 |   NaN |    21.90504 |    204.58333 |
-| majority        | majority        |         19.373248 | 0.3544371 | 85.05173 | 0.3694313 | 0.6529652 | 0.2102487 |       1.622799 |   0.8019453 | 0.1108674 | 0.9200511 | 0.0555431 |  0.1884934 |   NaN |    23.85408 |     64.04921 |
+|                 | Algorithms      | calinski_harabasz |      dunn |      gamma |   c_index | davies_bouldin |       sd |    s_dbw | silhouette | Compactness | Connectivity |
+|:----------------|:----------------|------------------:|----------:|-----------:|----------:|---------------:|---------:|---------:|-----------:|------------:|-------------:|
+| HC_Euclidean    | HC_Euclidean    |          3.104106 | 0.2608547 |  0.6349401 | 0.2844073 |       1.839182 | 2.846480 | 1.678968 | -0.1418603 |    24.83225 |     41.62183 |
+| DIANA_Euclidean | DIANA_Euclidean |         53.647400 | 0.3348103 | -1.9749903 | 0.1589442 |       2.824201 | 3.450173 | 1.809561 |  0.0564065 |    21.93396 |    241.66310 |
+| kmodes          | kmodes          |         55.138600 | 0.3396909 | -1.8704101 | 0.1453599 |       2.006752 | 3.986950 | 1.967467 |  0.1369288 |    21.91494 |    201.42540 |
+| majority        | majority        |         19.373248 | 0.3544371 |  0.6529653 | 0.2102487 |       1.622799 | 4.039708 | 1.982210 |  0.1504666 |    23.85408 |     64.04921 |
 
 ## Pipeline
 
