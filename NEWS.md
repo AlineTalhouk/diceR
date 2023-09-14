@@ -1,5 +1,7 @@
 # diceR (development version)
 
+* Sort cluster sizes `k` correctly in relative change in area under CDF curve (@IgnatiusPang, #167) and consensus matrix CDF graphs
+* Replace deprecated `aes_` calls with tidyeval idioms
 * Pass `p.item` and `seed.data` arguments to `dice()` (#162, #165)
 
 # diceR 2.0.0
