@@ -38,6 +38,7 @@ Imports:
     clv,
     clValid,
     dplyr (>= 0.7.5),
+    forcats,
     ggplot2,
     infotheo,
     klaR,

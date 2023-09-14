@@ -91,7 +91,8 @@ get_cdf <- function(mat) {
     purrr::imap(~ purrr::set_names(.x, paste(.y, names(.x), sep = "."))) %>%
     purrr::flatten_dfc() %>%
     tidyr::gather("Group", "CDF", names(.)) %>%
-    tidyr::separate("Group", c("k", "Method"), sep = "\\.")
+    tidyr::separate("Group", c("k", "Method"), sep = "\\.") %>%
+    dplyr::mutate(k = forcats::fct_inseq(k))
 }
 
 #' @param main heatmap title. If `NULL` (default), the titles will be taken from
