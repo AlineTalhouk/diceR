@@ -49,7 +49,7 @@
 #' p <- graph_tracking(CC1)
 graph_cdf <- function(mat) {
   dat <- get_cdf(mat)
-  p <- ggplot(dat, aes_(x = ~CDF, colour = ~k)) +
+  p <- ggplot(dat, aes(x = !!sym("CDF"), colour = !!sym("k"))) +
     stat_ecdf() +
     facet_wrap(~Method) +
     labs(x = "Consensus Index",
@@ -69,7 +69,7 @@ graph_delta_area <- function(mat) {
                                  (utils::head(.data$CDF, -1) + utils::tail(.data$CDF, -1))) / 2) %>%
     dplyr::mutate(da = c(.data$AUC[1], diff(.data$AUC) / .data$AUC[-length(.data$AUC)]))
   if (length(unique(dat$k)) > 1) {
-    p <- ggplot(dat, aes_(x = ~k, y = ~da)) +
+    p <- ggplot(dat, aes(x = !!sym("k"), y = !!sym("da"))) +
       geom_line(group = 1) +
       geom_point() +
       facet_wrap(~Method) +
@@ -154,8 +154,8 @@ graph_tracking <- function(cl) {
     cbind(Samples = seq_len(unique(purrr::map_int(cl, nrow)))) %>%
     dplyr::mutate_at(dplyr::vars(c("Class", "Method", "Samples")), factor)
   if (length(unique(dat$k)) > 1) {
-    p <- ggplot(dat, aes_(x = ~Samples, y = ~k)) +
-      geom_tile(aes_(fill = ~Class)) +
+    p <- ggplot(dat, aes(x = !!sym("Samples"), y = !!sym("k"))) +
+      geom_tile(aes(fill = !!sym("Class"))) +
       facet_wrap(~Method) +
       scale_fill_brewer(palette = "Set2") +
       ggtitle("Tracking Cluster Assignments Across k") +
