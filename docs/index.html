@@ -47,7 +47,7 @@
     
     <a class="navbar-brand me-2" href="index.html">diceR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -162,42 +162,32 @@
 <p>You can also compare the base <code>algorithms</code> with the <code>cons.funs</code> using internal evaluation indices:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="va">indices</span><span class="op">$</span><span class="va">ii</span><span class="op">$</span><span class="va">`4`</span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
+<table class="table">
 <colgroup>
+<col width="10%">
+<col width="10%">
+<col width="11%">
+<col width="6%">
 <col width="7%">
+<col width="6%">
+<col width="9%">
+<col width="6%">
+<col width="6%">
 <col width="7%">
 <col width="8%">
-<col width="5%">
-<col width="4%">
-<col width="5%">
-<col width="5%">
-<col width="5%">
-<col width="7%">
-<col width="6%">
-<col width="5%">
-<col width="5%">
-<col width="5%">
-<col width="5%">
-<col width="3%">
-<col width="6%">
-<col width="6%">
+<col width="8%">
 </colgroup>
 <thead><tr class="header">
 <th align="left"></th>
 <th align="left">Algorithms</th>
 <th align="right">calinski_harabasz</th>
 <th align="right">dunn</th>
-<th align="right">pbm</th>
-<th align="right">tau</th>
 <th align="right">gamma</th>
 <th align="right">c_index</th>
 <th align="right">davies_bouldin</th>
-<th align="right">mcclain_rao</th>
-<th align="right">sd_dis</th>
-<th align="right">ray_turi</th>
-<th align="right">g_plus</th>
-<th align="right">silhouette</th>
+<th align="right">sd</th>
 <th align="right">s_dbw</th>
+<th align="right">silhouette</th>
 <th align="right">Compactness</th>
 <th align="right">Connectivity</th>
 </tr></thead>
@@ -207,17 +197,12 @@
 <td align="left">HC_Euclidean</td>
 <td align="right">3.104106</td>
 <td align="right">0.2608547</td>
-<td align="right">59.73711</td>
-<td align="right">0.1994677</td>
 <td align="right">0.6349401</td>
 <td align="right">0.2844073</td>
 <td align="right">1.839182</td>
-<td align="right">0.8009149</td>
-<td align="right">0.1306062</td>
-<td align="right">1.4765665</td>
-<td align="right">0.0180141</td>
-<td align="right">NaN</td>
-<td align="right">NaN</td>
+<td align="right">2.846480</td>
+<td align="right">1.678968</td>
+<td align="right">-0.1418603</td>
 <td align="right">24.83225</td>
 <td align="right">41.62183</td>
 </tr>
@@ -226,55 +211,40 @@
 <td align="left">DIANA_Euclidean</td>
 <td align="right">53.647400</td>
 <td align="right">0.3348103</td>
-<td align="right">33.87817</td>
-<td align="right">0.4296601</td>
-<td align="right">0.6314448</td>
+<td align="right">-1.9749903</td>
 <td align="right">0.1589442</td>
 <td align="right">2.824201</td>
-<td align="right">0.8051915</td>
-<td align="right">0.2119281</td>
-<td align="right">3.2978986</td>
-<td align="right">0.0853202</td>
-<td align="right">0.0692233</td>
-<td align="right">NaN</td>
+<td align="right">3.450173</td>
+<td align="right">1.809561</td>
+<td align="right">0.0564065</td>
 <td align="right">21.93396</td>
 <td align="right">241.66310</td>
 </tr>
 <tr class="odd">
 <td align="left">kmodes</td>
 <td align="left">kmodes</td>
-<td align="right">55.336853</td>
+<td align="right">55.138600</td>
 <td align="right">0.3396909</td>
-<td align="right">50.73168</td>
-<td align="right">0.4553051</td>
-<td align="right">0.6600223</td>
-<td align="right">0.1455632</td>
-<td align="right">2.010999</td>
-<td align="right">0.7974362</td>
-<td align="right">0.1180643</td>
-<td align="right">1.1528004</td>
-<td align="right">0.0808925</td>
-<td align="right">0.1250821</td>
-<td align="right">NaN</td>
-<td align="right">21.90504</td>
-<td align="right">204.58333</td>
+<td align="right">-1.8704101</td>
+<td align="right">0.1453599</td>
+<td align="right">2.006752</td>
+<td align="right">3.986950</td>
+<td align="right">1.967467</td>
+<td align="right">0.1369288</td>
+<td align="right">21.91494</td>
+<td align="right">201.42540</td>
 </tr>
 <tr class="even">
 <td align="left">majority</td>
 <td align="left">majority</td>
 <td align="right">19.373248</td>
 <td align="right">0.3544371</td>
-<td align="right">85.05173</td>
-<td align="right">0.3694313</td>
-<td align="right">0.6529652</td>
+<td align="right">0.6529653</td>
 <td align="right">0.2102487</td>
 <td align="right">1.622799</td>
-<td align="right">0.8019453</td>
-<td align="right">0.1108674</td>
-<td align="right">0.9200511</td>
-<td align="right">0.0555431</td>
-<td align="right">0.1884934</td>
-<td align="right">NaN</td>
+<td align="right">4.039708</td>
+<td align="right">1.982210</td>
+<td align="right">0.1504666</td>
 <td align="right">23.85408</td>
 <td align="right">64.04921</td>
 </tr>
@@ -285,8 +255,8 @@
 <h2 id="pipeline">Pipeline<a class="anchor" aria-label="anchor" href="#pipeline"></a>
 </h2>
 <p>This figure is a visual schematic of the pipeline that <code><a href="reference/dice.html">dice()</a></code> implements.</p>
-<div class="figure">
-<img src="reference/figures/pipeline.png" alt=""><p class="caption">Ensemble Clustering pipeline.</p>
+<div class="float">
+<img src="reference/figures/pipeline.png" alt="Ensemble Clustering pipeline."><div class="figcaption">Ensemble Clustering pipeline.</div>
 </div>
 <p>Please visit the <a href="https://alinetalhouk.github.io/diceR/articles/overview.html" title="diceR overview" class="external-link">overview</a> page for more detail.</p>
 </div>
@@ -328,7 +298,7 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/AlineTalhouk/diceR/actions" class="external-link"><img src="https://github.com/AlineTalhouk/diceR/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/AlineTalhouk/diceR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/AlineTalhouk/diceR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/AlineTalhouk/diceR?branch=master" class="external-link"><img src="https://codecov.io/gh/AlineTalhouk/diceR/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://CRAN.R-project.org/package=diceR" class="external-link"><img src="https://www.r-pkg.org/badges/version/diceR" alt="CRAN status"></a></li>
 <li><a href="https://r-pkg.org/pkg/diceR" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/diceR?color=orange" alt="CRAN RStudio mirror downloads"></a></li>

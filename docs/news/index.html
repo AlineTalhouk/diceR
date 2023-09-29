@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">diceR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,12 @@
       <small>Source: <a href="https://github.com/AlineTalhouk/diceR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.1.0" id="dicer-210">diceR 2.1.0<a class="anchor" aria-label="anchor" href="#dicer-210"></a></h2><p class="text-muted">CRAN release: 2023-09-28</p>
+<ul><li>Sort cluster sizes <code>k</code> correctly in relative change in area under CDF curve (<a href="https://github.com/IgnatiusPang" class="external-link">@IgnatiusPang</a>, <a href="https://github.com/AlineTalhouk/diceR/issues/167" class="external-link">#167</a>) and consensus matrix CDF graphs</li>
+<li>Replace deprecated <code>aes_</code> calls with tidyeval idioms</li>
+<li>Pass <code>p.item</code> and <code>seed.data</code> arguments to <code><a href="../reference/dice.html">dice()</a></code> (<a href="https://github.com/AlineTalhouk/diceR/issues/162" class="external-link">#162</a>, <a href="https://github.com/AlineTalhouk/diceR/issues/165" class="external-link">#165</a>)</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.0" id="dicer-200">diceR 2.0.0<a class="anchor" aria-label="anchor" href="#dicer-200"></a></h2><p class="text-muted">CRAN release: 2023-03-11</p>
 <p>Internal and external validity indices were refactored to avoid using helper functions from the <code>clusterCrit</code> package, which is scheduled to be archived. Please adapt your code if it extracts deprecated validity indices, as described below.</p>
