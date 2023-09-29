@@ -1,3 +1,5 @@
+# diceR (development version)
+
 # diceR 2.1.0
 
 * Sort cluster sizes `k` correctly in relative change in area under CDF curve (@IgnatiusPang, #167) and consensus matrix CDF graphs
