@@ -23,9 +23,8 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::covr, any::testthat
+          extra-packages: any::covr, mixedClust=?ignore
           needs: coverage
-          dependencies: '"hard"'
 
       - name: Test coverage
         run: |
