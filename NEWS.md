@@ -1,5 +1,9 @@
 # diceR (development version)
 
+* New `abs` argument in `consensus_cluster()`: control whether to apply absolute value to Spearman and Pearson correlation matrices before subtracting from one (@tiagochst, #161)
+* New distance matrix option, `distance = "pearson"`
+* Update test in `consensus_cluster()` that skips when suggested packages not installed, as `mixedClust` is now archived
+
 # diceR 2.1.0
 
 * Sort cluster sizes `k` correctly in relative change in area under CDF curve (@IgnatiusPang, #167) and consensus matrix CDF graphs
