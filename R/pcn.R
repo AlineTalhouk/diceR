@@ -20,7 +20,7 @@
 #' pc.select <- pcn_select(pc.dat, cl, "rep")
 pcn_simulate <- function(data, n.sim = 50) {
   pc <- stats::princomp(data)
-  Yns <- purrr::rerun(n.sim, as.matrix(
+  Yns <- purrr::map(seq_len(n.sim), ~ as.matrix(
     purrr::map_df(pc$sdev, ~ stats::rnorm(pc$n.obs, sd = .x))
   ))
   Qns <- purrr::map(Yns, ~ .x %*% t(pc$loadings))
