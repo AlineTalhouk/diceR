@@ -56,6 +56,10 @@
 #' @param distance a vector of distance functions. Defaults to "euclidean".
 #'   Other options are given in [stats::dist()]. A custom distance function can
 #'   be used.
+#' @param abs only used for `distance = c("spearman", "pearson")`. If `TRUE`,
+#'   the absolute value is first applied to the distance before subtracting from
+#'   1, e.g., we use 1 - |SCD| instead of 1 - SCD for the spearman correlation
+#'   distance.
 #' @param prep.data Prepare the data on the "full" dataset, the "sampled"
 #'   dataset, or "none" (default).
 #' @inheritParams prepare_data
@@ -105,6 +109,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
                               xdim = NULL, ydim = NULL, rlen = 200,
                               alpha = c(0.05, 0.01), minPts = 5,
                               distance = "euclidean",
+                              abs = TRUE,
                               prep.data = c("none", "full", "sampled"),
                               scale = TRUE,
                               type = c("conventional", "robust", "tsne"),
@@ -142,7 +147,7 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
   cargs <- dplyr::lst(data, nk, p.item, reps, seed.data, prep.data, scale, type,
                       min.var, pb, lalg, n)
   nargs <- dplyr::lst(algs = algs$NALG, nmf.method, seed.nmf)
-  dargs <- dplyr::lst(algs = algs$DALG, distance, hc.method)
+  dargs <- dplyr::lst(algs = algs$DALG, distance, abs, hc.method)
   oargs <- dplyr::lst(algs = algs$OALG, xdim, ydim, rlen, alpha, minPts,
                       hc.method)
   args <- purrr::map(list(nargs, dargs, oargs), ~ c(cargs, .))
@@ -203,7 +208,7 @@ cc_nmf <- function(data, nk, p.item, reps, algs, nmf.method, seed.nmf,
 
 #' Cluster algorithms with dissimilarity specification
 #' @noRd
-cc_dist <- function(data, nk, p.item, reps, algs, distance, hc.method,
+cc_dist <- function(data, nk, p.item, reps, algs, distance, abs, hc.method,
                     seed.data, prep.data, scale, type, min.var, pb, lalg, n) {
   alg <- paste(rep(toupper(algs), each = length(distance)),
                rep(stringr::str_to_title(distance), length(algs)),
@@ -220,7 +225,7 @@ cc_dist <- function(data, nk, p.item, reps, algs, distance, hc.method,
           if (prep.data == "sampled") {
             x <- prepare_data(x, scale = scale, type = type, min.var = min.var)
           }
-          dists <- cdist(x, distance[d])
+          dists <- cdist(x = x, dist = distance[d], abs = abs)
           a <- (j - 1) * length(distance) + d
           if (!is.null(pb)) {
             pb$tick(tokens = list(num = j + lalg["NALG"], den = sum(lalg),
@@ -289,13 +294,16 @@ init_array <- function(data, r, a, k) {
 #' @param dist a character string of distance methods taken from stats::dist, or
 #'   "spearman", or a custom distance function in the current environment
 #' @noRd
-cdist <- function(x, dist) {
+cdist <- function(x, dist, abs) {
   # Change partial matching distance methods from stats::dist to full names
   M <- c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski")
   dist <- ifelse(dist %pin% M, M[pmatch(dist, M)], dist)
 
   # If spearman is specified, use spearman_dist()
-  if (dist %pin% "spearman") return(spearman_dist(x))
+  if (dist %pin% "spearman") return(spearman_dist(x = x, abs = abs))
+
+  # If pearson is specified, use pearson_dist()
+  if (dist %pin% "pearson") return(pearson_dist(x = x, abs = abs))
 
   # Identify custom distance functions from those found in stats::dist
   d <- try(stats::dist(x = x, method = dist), silent = TRUE)
@@ -307,15 +315,15 @@ cdist <- function(x, dist) {
 #' Calculate pairwise Spearman correlational distances using
 #' bioDist::spearman.dist defaults
 #' @references
-#' https://github.com/Bioconductor-mirror/bioDist/blob/master/R/spearman.dist.R
-#'
+#' https://github.com/Bioconductor/bioDist/blob/devel/R/spearman.dist.R
 #' @noRd
-spearman_dist <- function(x) {
-  x %>%
-    t() %>%
-    stats::cor(method = "spearman") %>%
-    abs() %>%
-    magrittr::subtract(1, .) %>%
+spearman_dist <- function(x, abs = TRUE) {
+  if (abs) {
+    scd <- 1 - abs(stats::cor(t(x), method = "spearman"))
+  } else {
+    scd <- 1 - stats::cor(t(x), method = "spearman")
+  }
+  scd %>%
     magrittr::extract(lower.tri(.)) %>%
     `attributes<-`(
       list(
@@ -324,6 +332,28 @@ spearman_dist <- function(x) {
         Diag = FALSE,
         Upper = FALSE,
         methods = "spearman",
+        class = "dist"
+      )
+    )
+}
+
+#' Pearson distance
+#' @noRd
+pearson_dist <- function(x, abs = TRUE) {
+  if (abs) {
+    pd <- 1 - abs(stats::cor(t(x), method = "pearson"))
+  } else {
+    pd <- 1 - stats::cor(t(x), method = "pearson")
+  }
+  pd %>%
+    magrittr::extract(lower.tri(.)) %>%
+    `attributes<-`(
+      list(
+        Size = nrow(x),
+        Labels = rownames(x),
+        Diag = FALSE,
+        Upper = FALSE,
+        methods = "pearson",
         class = "dist"
       )
     )

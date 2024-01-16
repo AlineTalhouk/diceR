@@ -18,6 +18,7 @@ consensus_cluster(
   alpha = c(0.05, 0.01),
   minPts = 5,
   distance = "euclidean",
+  abs = TRUE,
   prep.data = c("none", "full", "sampled"),
   scale = TRUE,
   type = c("conventional", "robust", "tsne"),
@@ -67,6 +68,11 @@ updates. Not used for the batch algorithm.}
 \item{distance}{a vector of distance functions. Defaults to "euclidean".
 Other options are given in \code{\link[stats:dist]{stats::dist()}}. A custom distance function can
 be used.}
+
+\item{abs}{only used for \code{distance = c("spearman", "pearson")}. If \code{TRUE},
+the absolute value is first applied to the distance before subtracting from
+1, e.g., we use 1 - |SCD| instead of 1 - SCD for the spearman correlation
+distance.}
 
 \item{prep.data}{Prepare the data on the "full" dataset, the "sampled"
 dataset, or "none" (default).}
