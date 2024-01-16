@@ -1,4 +1,4 @@
-# diceR (development version)
+# diceR 2.2.0
 
 * New `abs` argument in `consensus_cluster()`: control whether to apply absolute value to Spearman and Pearson correlation matrices before subtracting from one (@tiagochst, #161)
 * New distance matrix option, `distance = "pearson"`
