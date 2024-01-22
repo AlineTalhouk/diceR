@@ -5,9 +5,4 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
-
-Suggests or Enhances not in mainstream repositories:
-  mixedClust
-  
-I updated to skip certain unit tests if Suggested packages are unavailable. In the case of mixedClust, it is archived.
+0 errors | 0 warnings | 0 notes
