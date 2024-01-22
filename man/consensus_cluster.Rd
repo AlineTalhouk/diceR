@@ -133,7 +133,7 @@ or Euclidean distance; See Note for specifications.)
 \item "sc": Spectral Clustering using Radial-Basis kernel function
 \item "gmm": Gaussian Mixture Model using Bayesian Information Criterion on EM
 algorithm
-\item "block": Co-clustering using a multiple latent block model
+\item "block": Biclustering using a latent block model
 \item "som": Self-Organizing Map (SOM) with Hierarchical Clustering
 \item "cmeans": Fuzzy C-Means Clustering
 \item "hdbscan": Hierarchical Density-based Spatial Clustering of Applications

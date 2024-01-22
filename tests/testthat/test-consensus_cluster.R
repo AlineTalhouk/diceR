@@ -3,12 +3,12 @@ hgsc <- hgsc[1:40, 1:30]
 
 test_that("No algorithms means all algorithms, output is an array", {
   skip_if_not_installed("apcluster")
+  skip_if_not_installed("blockcluster")
   skip_if_not_installed("cluster")
   skip_if_not_installed("dbscan")
   skip_if_not_installed("e1071")
   skip_if_not_installed("kernlab")
   skip_if_not_installed("kohonen")
-  skip_if_not_installed("mixedClust")
   x1 <- consensus_cluster(hgsc, nk = 4, reps = 1, progress = FALSE)
   expect_error(x1, NA)
   expect_is(x1, "array")

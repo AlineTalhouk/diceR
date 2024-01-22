@@ -101,22 +101,14 @@ gmm <- function(x, k) {
 #' Block Clustering (Co-clustering)
 #' @noRd
 block <- function(x, k) {
-  if (!requireNamespace("mixedClust", quietly = TRUE)) {
-    stop("Package \"mixedClust\" is needed. Please install it.",
+  if (!requireNamespace("blockcluster", quietly = TRUE)) {
+    stop("Package \"blockcluster\" is needed. Please install it.",
          call. = FALSE)
   } else {
     tryCatch(
       sink_output(
-        mixedClust::mixedCoclust(
-          x = x,
-          distrib_names = "Gaussian",
-          kr = k,
-          kc = k,
-          init = "random",
-          nbSEM = 30,
-          nbSEMburn = 20,
-          nbindmini = 1
-        )@zr[, 1]
+        blockcluster::cocluster(as.matrix(x), "continuous",
+                                nbcocluster = c(k, k))@rowclass + 1
       ),
       error = function(e) return(NA)
     ) %>%
