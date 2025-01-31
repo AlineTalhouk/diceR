@@ -1,3 +1,8 @@
+# diceR 3.0.0
+
+* There were errors running tests on clang-UBSAN and gcc-UBSAN builds, due to usage of functions from `clusterSim`. Reinstate internal and external functions from `clusterCrit` package, which is no longer archived. 
+* Remove deprecated function usage
+
 # diceR 2.2.0
 
 * New `abs` argument in `consensus_cluster()`: control whether to apply absolute value to Spearman and Pearson correlation matrices before subtracting from one (@tiagochst, #161)
