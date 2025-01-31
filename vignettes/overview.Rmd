@@ -99,9 +99,8 @@ They are passed as a character vector into the `distance` parameter of `consensu
 
 The list of internal validity indices used for evaluating clusters are:
 
-  - Calinski-Harabasz, Gamma, C-index, Davies-Bouldin, and Rousseeuw's Silhouette from the `clusterSim` R package
+  - Calinski-Harabasz, Dunn, PBM, Tau, Gamma, C-index, Davies-Bouldin, McClain-Rao, SD, Ray-Turi, G-plus, Rousseeuw's Silhouette, and S-Dbw from the `clusterCri` R package
   - Dunn index and Connectivity measure from the `clValid` R package
-  - SD and S_Dbw adapted from the archived `clusterCrit` R package
   - Compactness measure from the `LinkCluE` MATLAB package
 
 ### External
@@ -165,7 +164,7 @@ cm <- consensus_matrix(pam.4)
 dim(cm)
 ```
 
-```{r graph_heatmap}
+```{r graph_heatmap, fig.cap='Consensus Matrix Heatmap'}
 hm <- graph_heatmap(pam.4)
 ```
 
