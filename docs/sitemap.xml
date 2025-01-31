@@ -1,102 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/overview.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/CSPA.html</loc>
-  </url>
-  <url>
-    <loc>/reference/LCA.html</loc>
-  </url>
-  <url>
-    <loc>/reference/LCE.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PAC.html</loc>
-  </url>
-  <url>
-    <loc>/reference/compactness.html</loc>
-  </url>
-  <url>
-    <loc>/reference/consensus_cluster.html</loc>
-  </url>
-  <url>
-    <loc>/reference/consensus_combine.html</loc>
-  </url>
-  <url>
-    <loc>/reference/consensus_evaluate.html</loc>
-  </url>
-  <url>
-    <loc>/reference/consensus_matrix.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dice.html</loc>
-  </url>
-  <url>
-    <loc>/reference/diceR-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/external_validity.html</loc>
-  </url>
-  <url>
-    <loc>/reference/graphs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/hgsc.html</loc>
-  </url>
-  <url>
-    <loc>/reference/impute_knn.html</loc>
-  </url>
-  <url>
-    <loc>/reference/impute_missing.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/k_modes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/majority_voting.html</loc>
-  </url>
-  <url>
-    <loc>/reference/min_fnorm.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pcn.html</loc>
-  </url>
-  <url>
-    <loc>/reference/prepare_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/relabel_class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sigclust.html</loc>
-  </url>
-  <url>
-    <loc>/reference/similarity.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://alinetalhouk.github.io/diceR/404.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/LICENSE-text.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/LICENSE.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/articles/index.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/articles/overview.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/authors.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/index.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/news/index.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/CSPA.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/LCA.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/LCE.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/PAC.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/compactness.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/consensus_cluster.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/consensus_combine.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/consensus_evaluate.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/consensus_matrix.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/dice.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/diceR-package.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/external_validity.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/graphs.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/hgsc.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/impute_knn.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/impute_missing.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/index.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/k_modes.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/majority_voting.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/min_fnorm.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/pcn.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/prepare_data.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/relabel_class.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/sigclust.html</loc></url>
+<url><loc>https://alinetalhouk.github.io/diceR/reference/similarity.html</loc></url>
 </urlset>
+
