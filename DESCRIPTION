@@ -25,7 +25,7 @@ Imports:
     assertthat,
     class,
     clue,
-    clusterSim,
+    clusterCrit,
     clv,
     clValid,
     dplyr (>= 0.7.5),
