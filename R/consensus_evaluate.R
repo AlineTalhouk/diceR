@@ -91,13 +91,13 @@ consensus_evaluate <- function(data, ..., cons.cl = NULL, ref.cl = NULL,
   ii <- cl.mat %>% purrr::map(ivi_table, data = data)
 
   # External indices if reference is given
-  ei <- ref.cl %>%
-    purrr::when(
-      !is.null(.) ~ cl.mat %>%
-        magrittr::extract(match(k, names(.))) %>% # for chosen k only
-        purrr::map(evi_table, ref.cl = ref.cl),
-      TRUE ~ NULL
-    )
+  if (!is.null(ref.cl)) {
+    ei <- cl.mat %>%
+      magrittr::extract(match(k, names(.))) %>% # for chosen k only
+      purrr::map(evi_table, ref.cl = ref.cl)
+  } else {
+    ei <- NULL
+  }
 
   # Only trim if more than one algorithm and trim is specified
   if (dim(E)[3] > 1 & trim) {
@@ -144,8 +144,11 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   top.list <- rank.obj$top.list
 
   # Algorithms to keep and remove based on top-ranked list
-  alg.keep <- top.list %>% purrr::when(is.null(.) ~ alg.all,
-                                       TRUE ~ .[seq_len(n)])
+  if (is.null(top.list)) {
+    alg.keep <- alg.all
+  } else {
+    alg.keep <- top.list[seq_len(n)]
+  }
   alg.remove <- as.character(alg.all[!(alg.all %in% alg.keep)])
   E.new <- E[, , alg.keep, k, drop = FALSE]
 
@@ -157,8 +160,9 @@ consensus_trim <- function(E, ii, k, k.method, reweigh, n) {
   # If k.method is to select "all", need to add suffixes to algorithms
   if (!is.null(k.method) && k.method == "all") {
     alg.keep <- paste_k(alg.keep, k)
-    alg.remove <- alg.remove %>%
-      purrr::when(length(.) > 0 ~ paste_k(., k), TRUE ~ .)
+    if (length(alg.remove) > 0) {
+      alg.remove <- paste_k(alg.remove, k)
+    }
     dimnames(E.new)[[3]] <- paste_k(dimnames(E.new)[[3]], k)
   }
   dplyr::lst(alg.keep, alg.remove, rank.matrix, top.list, E.new)
@@ -267,7 +271,7 @@ evi_table <- function(cl.df, ref.cl) {
     dplyr::inner_join(
       cl.df %>%
         purrr::map_dfr(ev_confmat, ref.lab = ref.cl, .id = "Algorithms") %>%
-        dplyr::select(".estimator") %>%
+        dplyr::select(-".estimator") %>%
         tidyr::pivot_wider(names_from = ".metric", values_from = ".estimate"),
       by = "Algorithms"
     ) %>%

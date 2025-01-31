@@ -105,10 +105,7 @@ graph_heatmap <- function(mat, main = NULL) {
     mat <- consensus_combine(mat, element = "matrix")
   }
   dat <- mat %>%
-    purrr::flatten() %>%
-    magrittr::set_names(list(purrr::map(mat, names)[[1]], names(mat)) %>%
-                          purrr::cross() %>%
-                          purrr::map_chr(paste, collapse = " k="))
+    purrr::list_flatten(name_spec = "{inner} k={outer}")
   main <- paste(main %||% names(dat), "Consensus Matrix")
   assertthat::assert_that(length(main) == length(purrr::flatten(mat)))
 
@@ -208,7 +205,7 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
 
   # Heatmap: order algorithms by ranked ii, remove indices with NaN
   hm <- ii %>%
-    dplyr::select(-.data$Algorithms) %>%
+    dplyr::select(-"Algorithms") %>%
     magrittr::extract(match(consensus_rank(ii, 1)$top.list, rownames(.)),
                       purrr::map_lgl(., ~ all(!is.nan(.x))))
 

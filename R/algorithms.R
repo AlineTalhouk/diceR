@@ -73,11 +73,15 @@ ap <- function(x, k) {
     stop("Package \"apcluster\" is needed. Please install it.",
          call. = FALSE)
   } else {
-    suppressWarnings(
-      apcluster::apclusterK(apcluster::negDistMat, x, k, verbose = FALSE)@idx
-    ) %>%
-      dplyr::dense_rank() %>%
-      purrr::when(length(.) > 0 ~ ., ~ NA)
+    ranks <-
+      apcluster::apclusterK(apcluster::negDistMat, x, k, verbose = FALSE)@idx %>%
+      suppressWarnings() %>%
+      dplyr::dense_rank()
+    if (length(ranks) > 0)  {
+      ranks
+    } else {
+      NA
+    }
   }
 }
 
@@ -105,14 +109,18 @@ block <- function(x, k) {
     stop("Package \"blockcluster\" is needed. Please install it.",
          call. = FALSE)
   } else {
-    tryCatch(
+    cl <- tryCatch(
       sink_output(
         blockcluster::cocluster(as.matrix(x), "continuous",
                                 nbcocluster = c(k, k))@rowclass + 1
       ),
       error = function(e) return(NA)
-    ) %>%
-      purrr::when(length(.) > 0 ~ ., ~ NA)
+    )
+    if (length(cl) > 0) {
+      cl
+    } else {
+      NA
+    }
   }
 }
 
@@ -123,8 +131,10 @@ som <- function(x, k, xdim, ydim, rlen, alpha, method) {
     stop("Package \"kohonen\" is needed. Please install it.",
          call. = FALSE)
   } else {
+    if (!is.matrix(x)) {
+      x <- as.matrix(x)
+    }
     x %>%
-      purrr::when(is.matrix(.) ~ ., ~ as.matrix(.)) %>%
       som_train(xdim = xdim, ydim = ydim, rlen = rlen, alpha = alpha) %>%
       som_cluster(k = k, method = method)
   }

@@ -172,7 +172,12 @@ consensus_cluster <- function(data, nk = 2:4, p.item = 0.8, reps = 1000,
 #' If algs from each group exist, invoke respective cc fun, otherwise NULL
 #' @noRd
 cc <- function(fun, args) {
-  length(args$algs) %>% purrr::when(. > 0 ~ purrr::invoke(fun, args), ~ NULL)
+  x <- length(args$algs)
+  if (x > 0) {
+    rlang::exec(fun, !!!args)
+  } else {
+    NULL
+  }
 }
 
 #' Cluster NMF-based algorithms
