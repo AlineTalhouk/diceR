@@ -11,6 +11,7 @@ test_that("dice works with one algorithm, one consensus funs", {
     nk = 4,
     algorithms = "hc",
     cons.funs = "kmodes",
+    progress = FALSE,
     verbose = FALSE
   )
   expect_length(dice.obj, 5)
@@ -28,6 +29,7 @@ test_that("dice works with multiple algorithms, consensus funs, trimming, and
               trim = TRUE,
               n = 2,
               ref.cl = ref.cl,
+              progress = FALSE,
               verbose = FALSE
             )
   expect_length(dice.obj, 5)
@@ -42,6 +44,7 @@ test_that("single algorithm and single consensus return same results", {
     algorithms = "km",
     cons.funs = "CSPA",
     ref.cl = ref.cl,
+    progress = FALSE,
     verbose = FALSE
   )
   ind.obj <- dice.obj$indices$ei$`4`
@@ -57,6 +60,7 @@ test_that("indices slot returns NULL if evaluate specified as FALSE", {
     cons.funs = "kmodes",
     ref.cl = ref.cl,
     evaluate = FALSE,
+    progress = FALSE,
     verbose = FALSE
   )
   expect_null(dice.obj$indices)
@@ -70,6 +74,7 @@ test_that("relabelling uses 1st col if more than 1 cons.funs and no ref.cl", {
     algorithms = "hc",
     cons.funs = c("kmodes", "majority"),
     evaluate = FALSE,
+    progress = FALSE,
     verbose = FALSE
   )
   expect_error(dice.obj, NA)
@@ -84,6 +89,7 @@ test_that("cluster size prepended when multiple k requested", {
     cons.funs = "kmodes",
     k.method = "all",
     evaluate = FALSE,
+    progress = FALSE,
     verbose = FALSE
   )
   expect_true(all(grepl("k=", colnames(dice.obj$clusters))))
@@ -99,6 +105,7 @@ test_that("algorithm vs internal index heatmap works", {
     ref.cl = ref.cl,
     evaluate = FALSE,
     plot = TRUE,
+    progress = FALSE,
     verbose = FALSE
   )
   expect_error(dice.obj, NA)
