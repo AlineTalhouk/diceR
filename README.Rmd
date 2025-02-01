@@ -48,8 +48,15 @@ The following example shows how to use the main function of the package, `dice()
 ```{r example, results='hide'}
 library(diceR)
 data(hgsc)
-obj <- dice(hgsc, nk = 4, reps = 5, algorithms = c("hc", "diana"),
-            cons.funs = c("kmodes", "majority"))
+obj <- dice(
+  hgsc,
+  nk = 4,
+  reps = 5,
+  algorithms = c("hc", "diana"),
+  cons.funs = c("kmodes", "majority"),
+  progress = FALSE,
+  verbose = FALSE
+)
 ```
 
 The first few cluster assignments are shown below:
