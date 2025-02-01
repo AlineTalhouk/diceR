@@ -18,6 +18,8 @@
 #' @param plot logical; if `TRUE`, `graph_all` is called and a summary
 #'   evaluation heatmap of ranked algorithms vs. internal validity indices is
 #'   plotted as well.
+#' @param verbose logical; if `TRUE`, console will print out messages for major
+#'   tasks in the consensus clustering
 #' @inheritParams consensus_cluster
 #' @inheritParams consensus_evaluate
 #' @inheritParams LCE
@@ -52,7 +54,7 @@ dice <- function(data, nk, p.item = 0.8, reps = 10, algorithms = NULL, k.method 
                  prep.data = c("none", "full", "sampled"), min.var = 1,
                  seed = 1, seed.data = 1, trim = FALSE, reweigh = FALSE, n = 5,
                  evaluate = TRUE, plot = FALSE, ref.cl = NULL,
-                 progress = TRUE) {
+                 progress = TRUE, verbose = TRUE) {
 
   # Check that inputs are correct
   assertthat::assert_that(length(dim(data)) == 2)
@@ -68,7 +70,7 @@ dice <- function(data, nk, p.item = 0.8, reps = 10, algorithms = NULL, k.method 
   Eknn <- apply(E, 2:4, impute_knn, data = data, seed = seed)
 
   # Select k and new (trimmed and reweighed) data
-  if (progress)
+  if (verbose)
     cat("Selecting k and imputing non-clustered cases\n")
 
   eval.obj <- consensus_evaluate(data = data, Eknn, ref.cl = ref.cl,
@@ -82,7 +84,7 @@ dice <- function(data, nk, p.item = 0.8, reps = 10, algorithms = NULL, k.method 
   Ecomp <- purrr::map2(Eknn, k, impute_missing, data = data)
 
   # Consensus functions
-  if (progress)
+  if (verbose)
     cat("Computing consensus functions\n")
 
   Final <- purrr::map2(Ecomp, k, ~ {
@@ -110,7 +112,7 @@ dice <- function(data, nk, p.item = 0.8, reps = 10, algorithms = NULL, k.method 
 
   # Return evaluation output including consensus function results
   if (evaluate) {
-    if (progress)
+    if (verbose)
       cat("Evaluating output with consensus function results\n")
 
     eval.obj2 <- consensus_evaluate(data = data, E, cons.cl = clusters,
@@ -129,7 +131,7 @@ dice <- function(data, nk, p.item = 0.8, reps = 10, algorithms = NULL, k.method 
     algii_heatmap(data, k, E, clusters, ref.cl)
 
   # Combine DICE with different E and indices
-  if (progress)
+  if (verbose)
     cat("Diverse Cluster Ensemble Completed\n")
 
   dplyr::lst(E, Eknn, Ecomp, clusters, indices) %>%

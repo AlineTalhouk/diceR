@@ -26,7 +26,8 @@ dice(
   evaluate = TRUE,
   plot = FALSE,
   ref.cl = NULL,
-  progress = TRUE
+  progress = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -105,6 +106,9 @@ plotted as well.}
 \item{ref.cl}{reference class}
 
 \item{progress}{logical; should a progress bar be displayed?}
+
+\item{verbose}{logical; if \code{TRUE}, console will print out messages for major
+tasks in the consensus clustering}
 }
 \value{
 A list with the following elements

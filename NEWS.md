@@ -1,6 +1,7 @@
 # diceR 3.0.0
 
 * There were errors running tests on clang-UBSAN and gcc-UBSAN builds, due to usage of functions from `clusterSim`. Reinstate internal and external functions from `clusterCrit` package, which is no longer archived. 
+* Use new parameter `verbose` in `dice()` to control console printouts of main tasks being performed instead of using `progress`
 * Remove deprecated function usage
 
 # diceR 2.2.0
