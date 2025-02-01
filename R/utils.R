@@ -25,7 +25,6 @@ globalVariables(".")
 #'   https://stat.ethz.ch/pipermail/r-help/2010-April/236664.html
 #' @export
 #' @examples
-#'
 #' set.seed(1)
 #' A <- matrix(sample(1:25, size = 25, rep = FALSE), 5, 5)
 #' min_fnorm(A)

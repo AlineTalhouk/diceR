@@ -132,15 +132,14 @@ enact \code{\link[=prepare_data]{prepare_data()}} on the full dataset ("full"), 
 datasets ("sampled").
 }
 \examples{
-library(dplyr)
 data(hgsc)
 dat <- hgsc[1:100, 1:50]
-ref.cl <- strsplit(rownames(dat), "_") \%>\%
-  purrr::map_chr(2) \%>\%
-  factor() \%>\%
+ref.cl <- strsplit(rownames(dat), "_") |>
+  purrr::map_chr(2) |>
+  factor() |>
   as.integer()
 dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = "hc", cons.funs =
-"kmodes", ref.cl = ref.cl, progress = FALSE)
+"kmodes", ref.cl = ref.cl, progress = FALSE, verbose = FALSE)
 str(dice.obj, max.level = 2)
 }
 \author{

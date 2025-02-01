@@ -36,15 +36,14 @@
 #' @author Aline Talhouk, Derek Chiu
 #' @export
 #' @examples
-#' library(dplyr)
 #' data(hgsc)
 #' dat <- hgsc[1:100, 1:50]
-#' ref.cl <- strsplit(rownames(dat), "_") %>%
-#'   purrr::map_chr(2) %>%
-#'   factor() %>%
+#' ref.cl <- strsplit(rownames(dat), "_") |>
+#'   purrr::map_chr(2) |>
+#'   factor() |>
 #'   as.integer()
 #' dice.obj <- dice(dat, nk = 4, reps = 5, algorithms = "hc", cons.funs =
-#' "kmodes", ref.cl = ref.cl, progress = FALSE)
+#' "kmodes", ref.cl = ref.cl, progress = FALSE, verbose = FALSE)
 #' str(dice.obj, max.level = 2)
 dice <- function(data, nk, p.item = 0.8, reps = 10, algorithms = NULL, k.method = NULL,
                  nmf.method = c("brunet", "lee"), hc.method = "average",

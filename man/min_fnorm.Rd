@@ -28,7 +28,6 @@ constructing a confusion matrix when we don't know the true class labels of a
 predicted class and want to compare to a reference class.
 }
 \examples{
-
 set.seed(1)
 A <- matrix(sample(1:25, size = 25, rep = FALSE), 5, 5)
 min_fnorm(A)
