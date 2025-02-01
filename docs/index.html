@@ -86,8 +86,15 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AlineTalhouk/diceR/" class="external-link">diceR</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hgsc</span><span class="op">)</span></span>
-<span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dice.html">dice</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">4</span>, reps <span class="op">=</span> <span class="fl">5</span>, algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"diana"</span><span class="op">)</span>,</span>
-<span>            cons.funs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"kmodes"</span>, <span class="st">"majority"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dice.html">dice</a></span><span class="op">(</span></span>
+<span>  <span class="va">hgsc</span>,</span>
+<span>  nk <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  reps <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"diana"</span><span class="op">)</span>,</span>
+<span>  cons.funs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"kmodes"</span>, <span class="st">"majority"</span><span class="op">)</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The first few cluster assignments are shown below:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="va">clusters</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -135,30 +142,40 @@
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="va">indices</span><span class="op">$</span><span class="va">ii</span><span class="op">$</span><span class="va">`4`</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
-<col width="8%">
-<col width="8%">
-<col width="8%">
-<col width="8%">
-<col width="8%">
-<col width="8%">
-<col width="8%">
-<col width="8%">
-<col width="8%">
-<col width="8%">
-<col width="8%">
-<col width="8%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
 </colgroup>
 <thead><tr class="header">
 <th align="left"></th>
 <th align="left">Algorithms</th>
 <th align="right">calinski_harabasz</th>
 <th align="right">dunn</th>
+<th align="right">pbm</th>
+<th align="right">tau</th>
 <th align="right">gamma</th>
 <th align="right">c_index</th>
 <th align="right">davies_bouldin</th>
-<th align="right">sd</th>
-<th align="right">s_dbw</th>
+<th align="right">mcclain_rao</th>
+<th align="right">sd_dis</th>
+<th align="right">ray_turi</th>
+<th align="right">g_plus</th>
 <th align="right">silhouette</th>
+<th align="right">s_dbw</th>
 <th align="right">Compactness</th>
 <th align="right">Connectivity</th>
 </tr></thead>
@@ -168,12 +185,17 @@
 <td align="left">HC_Euclidean</td>
 <td align="right">3.104106</td>
 <td align="right">0.2608547</td>
-<td align="right">0.6349401</td>
+<td align="right">59.73711</td>
+<td align="right">0</td>
+<td align="right">0.4285714</td>
 <td align="right">0.2844073</td>
 <td align="right">1.839182</td>
-<td align="right">2.846480</td>
-<td align="right">1.678968</td>
-<td align="right">-0.1418603</td>
+<td align="right">0.8009149</td>
+<td align="right">0.1306062</td>
+<td align="right">1.4765665</td>
+<td align="right">0</td>
+<td align="right">NaN</td>
+<td align="right">NaN</td>
 <td align="right">24.83225</td>
 <td align="right">41.62183</td>
 </tr>
@@ -182,12 +204,17 @@
 <td align="left">DIANA_Euclidean</td>
 <td align="right">53.647400</td>
 <td align="right">0.3348103</td>
-<td align="right">-1.9749903</td>
+<td align="right">33.87817</td>
+<td align="right">0</td>
+<td align="right">-1.8750000</td>
 <td align="right">0.1589442</td>
 <td align="right">2.824201</td>
-<td align="right">3.450173</td>
-<td align="right">1.809561</td>
-<td align="right">0.0564065</td>
+<td align="right">0.8051915</td>
+<td align="right">0.2119281</td>
+<td align="right">3.2978986</td>
+<td align="right">0</td>
+<td align="right">0.0692233</td>
+<td align="right">NaN</td>
 <td align="right">21.93396</td>
 <td align="right">241.66310</td>
 </tr>
@@ -196,12 +223,17 @@
 <td align="left">kmodes</td>
 <td align="right">55.138600</td>
 <td align="right">0.3396909</td>
-<td align="right">-1.8704101</td>
+<td align="right">50.51722</td>
+<td align="right">0</td>
+<td align="right">-0.6822430</td>
 <td align="right">0.1453599</td>
 <td align="right">2.006752</td>
-<td align="right">3.986950</td>
-<td align="right">1.967467</td>
-<td align="right">0.1369288</td>
+<td align="right">0.7972999</td>
+<td align="right">0.1170829</td>
+<td align="right">1.1408258</td>
+<td align="right">0</td>
+<td align="right">0.1253664</td>
+<td align="right">NaN</td>
 <td align="right">21.91494</td>
 <td align="right">201.42540</td>
 </tr>
@@ -210,12 +242,17 @@
 <td align="left">majority</td>
 <td align="right">19.373248</td>
 <td align="right">0.3544371</td>
-<td align="right">0.6529653</td>
+<td align="right">85.05173</td>
+<td align="right">0</td>
+<td align="right">-1.1651376</td>
 <td align="right">0.2102487</td>
 <td align="right">1.622799</td>
-<td align="right">4.039708</td>
-<td align="right">1.982210</td>
-<td align="right">0.1504666</td>
+<td align="right">0.8019453</td>
+<td align="right">0.1108674</td>
+<td align="right">0.9200511</td>
+<td align="right">0</td>
+<td align="right">0.1884934</td>
+<td align="right">NaN</td>
 <td align="right">23.85408</td>
 <td align="right">64.04921</td>
 </tr>

@@ -282,8 +282,14 @@ replicates, for these clustering algorithms: Hierarchical Clustering,
 PAM, and DIvisive ANAlysis Clustering (DIANA). Euclidean distance is
 used for all algorithms.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">CC</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, p.item <span class="op">=</span> <span class="fl">0.8</span>, reps <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>                        algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">CC</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span></span>
+<span>  <span class="va">hgsc</span>,</span>
+<span>  nk <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>  p.item <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  reps <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  algorithms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hc"</span>, <span class="st">"pam"</span>, <span class="st">"diana"</span><span class="op">)</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The output is a 4-dimensional array: rows are samples, columns are
 different bootstrap subsample replicates, slices are algorithms, and
 each “box” (4th dimension) is for a different k. Below are the first few
@@ -504,8 +510,14 @@ algorithms for analysis. <code><a href="../reference/consensus_combine.html">con
 number of ensemble objects (e.g. <code>CC</code> and <code>CC2</code>)
 and combines the results.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">CC2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span><span class="va">hgsc</span>, nk <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, p.item <span class="op">=</span> <span class="fl">0.8</span>, reps <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>                         algorithms <span class="op">=</span> <span class="st">"km"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">CC2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_cluster.html">consensus_cluster</a></span><span class="op">(</span></span>
+<span>  <span class="va">hgsc</span>,</span>
+<span>  nk <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>  p.item <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  reps <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  algorithms <span class="op">=</span> <span class="st">"km"</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">ccomb_class2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/consensus_combine.html">consensus_combine</a></span><span class="op">(</span><span class="va">CC</span>, <span class="va">CC2</span>, element <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span></code></pre></div>
 <table style="width:75%;" class="table">
 <caption>Consensus Classes with KM added</caption>
