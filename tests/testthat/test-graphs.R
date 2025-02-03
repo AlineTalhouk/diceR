@@ -45,9 +45,18 @@ test_that("algii_heatmap works when there is more than one k", {
                  iris[1:25, 1:4])
   assign("gowerd", function(x) cluster::daisy(x, metric = "gower"), pos = 1)
   expect_error(
-    dice(iris2, nk = 3:4, reps = 2, algorithms = c("km", "pam"),
-         distance = "gowerd", k.method = "all", cons.funs = "majority",
-         plot = TRUE, progress = FALSE),
+    dice(
+      iris2,
+      nk = 3:4,
+      reps = 2,
+      algorithms = c("km", "pam"),
+      distance = "gowerd",
+      k.method = "all",
+      cons.funs = "majority",
+      plot = TRUE,
+      progress = FALSE,
+      verbose = FALSE
+    ),
     NA)
 })
 
