@@ -44,9 +44,9 @@ test_that("Check LCE with hgsc data with 3 consensus_cluster algorithms", {
   expect_length(y_cts, 40)
   expect_length(y_srs, 40)
   expect_length(y_asrs, 40)
-  expect_is(y_cts, "integer")
-  expect_is(y_srs, "integer")
-  expect_is(y_asrs, "integer")
+  expect_type(y_cts, "integer")
+  expect_type(y_srs, "integer")
+  expect_type(y_asrs, "integer")
 })
 
 test_that("Check LCA works", {

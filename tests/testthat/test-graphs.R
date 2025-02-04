@@ -13,8 +13,8 @@ test_that("graph_cdf object can have added/modified ggplot layers", {
     stat_ecdf(aes(colour = Method)) +
     scale_color_brewer(palette = "Set2") +
     theme(legend.position = "none")
-  expect_is(p1, "ggplot")
-  expect_is(p2, "ggplot")
+  expect_s3_class(p1, "ggplot")
+  expect_s3_class(p2, "ggplot")
   expect_false(isTRUE(all.equal(p1, p2)))
 })
 

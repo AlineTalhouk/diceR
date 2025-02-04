@@ -11,7 +11,7 @@ test_that("No algorithms means all algorithms, output is an array", {
   skip_if_not_installed("kohonen")
   x1 <- consensus_cluster(hgsc, nk = 4, reps = 1, progress = FALSE)
   expect_error(x1, NA)
-  expect_is(x1, "array")
+  expect_true(is.array(x1))
 })
 
 test_that("Output can be saved with or without time in file name", {

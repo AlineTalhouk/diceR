@@ -1,8 +1,8 @@
-library(dplyr)
 data(hgsc)
-ref.cl <- strsplit(rownames(hgsc), "_") %>%
-  purrr::map_chr(2) %>%
-  factor() %>%
+ref.cl <- rownames(hgsc) |>
+  strsplit("_") |>
+  vapply(`[`, 2, FUN.VALUE = character(1)) |>
+  factor() |>
   as.integer()
 
 test_that("dice works with one algorithm, one consensus funs", {
@@ -33,7 +33,7 @@ test_that("dice works with multiple algorithms, consensus funs, trimming, and
               verbose = FALSE
             )
   expect_length(dice.obj, 5)
-  expect_is(dice.obj$clusters, "matrix")
+  expect_true(is.matrix(dice.obj$clusters))
 })
 
 test_that("single algorithm and single consensus return same results", {
