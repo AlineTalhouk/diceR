@@ -2,6 +2,7 @@
 
 * There were errors running tests on clang-UBSAN and gcc-UBSAN builds, due to usage of functions from `clusterSim`. Reinstate internal and external functions from `clusterCrit` package, which is no longer archived. 
 * Use new parameter `verbose` in `dice()` to control console printouts of main tasks being performed instead of using `progress`
+* Refactor `graph_heatmap()` to use `pheatmap::pheatmap()` since `NMF::aheatmap()` throws a `gridPLT()` error whenever it is run in a script or interactively, but not in R markdown documents. Thus there are run time errors when used in unit tests and examples. See renozao/NMF#65
 * Remove deprecated function usage
 
 # diceR 2.2.0
