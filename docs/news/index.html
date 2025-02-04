@@ -37,6 +37,7 @@
 <ul><li>There were errors running tests on clang-UBSAN and gcc-UBSAN builds, due to usage of functions from <code>clusterSim</code>. Reinstate internal and external functions from <code>clusterCrit</code> package, which is no longer archived.</li>
 <li>Use new parameter <code>verbose</code> in <code><a href="../reference/dice.html">dice()</a></code> to control console printouts of main tasks being performed instead of using <code>progress</code>
 </li>
+<li>Refactor <code><a href="../reference/graphs.html">graph_heatmap()</a></code> to use <code><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html" class="external-link">pheatmap::pheatmap()</a></code> since <code><a href="https://rdrr.io/pkg/NMF/man/aheatmap.html" class="external-link">NMF::aheatmap()</a></code> throws a <code>gridPLT()</code> error whenever it is run in a script or interactively, but not in R markdown documents. Thus there are run time errors when used in unit tests and examples. See renozao/NMF#65</li>
 <li>Remove deprecated function usage</li>
 </ul></div>
     <div class="section level2">
