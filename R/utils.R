@@ -130,3 +130,11 @@ sink_output <- function(expr) {
   on.exit(file.remove(tmp), add = TRUE)
   invisible(force(expr))
 }
+
+#' Callback function to reorder clustering dendrogram in heatmap
+#' @noRd
+callback = function(hc, mat) {
+  sv <- svd(t(mat))$v[, 1]
+  dend <- stats::reorder(stats::as.dendrogram(hc), wts = sv)
+  stats::as.hclust(dend)
+}

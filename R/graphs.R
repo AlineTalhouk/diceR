@@ -101,36 +101,71 @@ get_cdf <- function(mat) {
 #' @rdname graphs
 #' @export
 graph_heatmap <- function(mat, main = NULL) {
+  sample_names <- rownames(mat)
   if (inherits(mat, "array")) {
     mat <- consensus_combine(mat, element = "matrix")
   }
   dat <- mat %>%
-    purrr::list_flatten(name_spec = "{inner} k={outer}")
+    purrr::list_flatten(name_spec = "{inner} k={outer}") |>
+    purrr::map(~ {
+      .x |>
+        magrittr::set_colnames(sample_names) |>
+        magrittr::set_rownames(sample_names)
+    })
   main <- paste(main %||% names(dat), "Consensus Matrix")
   assertthat::assert_that(length(main) == length(purrr::flatten(mat)))
-
-  annCol <- purrr::map2(dat, rep(as.numeric(names(mat)),
-                                 each = unique(purrr::map_int(mat, length))),
-                        ~ data.frame(Cluster = paste0("C", hc(stats::dist(.x), k = .y))))
-  pal <- c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F",
-           "#E5C494", "#B3B3B3")  # RColorBrewer Set2
-  annColors <- annCol %>%
-    purrr::map(~ list(Cluster = stats::setNames(
-      head(pal, dplyr::n_distinct(.)),
-      levels(unlist(.))
-    )))
-
-  purrr::pwalk(list(dat, annCol, annColors, main), ~ {
-    NMF::aheatmap(
-      x = ..1,
-      color = "PuBuGn",
-      Rowv = FALSE,
-      Colv = TRUE,
-      labRow = NA,
-      labCol = NA,
-      hclustfun = function(d) stats::hclust(d, method = "average"),
-      annCol = ..2,
-      annColors = ..3,
+  # Number of clusters of each run
+  clusters <- mat |>
+    purrr::map_int(length) |>
+    purrr::imap(~ rep(.y, each = .x)) |>
+    purrr::flatten_chr() |>
+    as.numeric()
+  # Annotate samples with cluster index
+  annotation_col <- purrr::map2(dat, clusters, ~ {
+    data.frame(Cluster = paste0("C", hc(stats::dist(.x), k = .y))) |>
+      magrittr::set_rownames(sample_names)
+  })
+  # Annotation colour palette: RColorBrewer Set2
+  annotation_pal <- c(
+    "#66C2A5",
+    "#FC8D62",
+    "#8DA0CB",
+    "#E78AC3",
+    "#A6D854",
+    "#FFD92F",
+    "#E5C494",
+    "#B3B3B3"
+  )
+  # Map annotations to colour palette
+  annotation_colors <- purrr::map2(annotation_col, clusters, ~ {
+    list(Cluster = stats::setNames(head(annotation_pal, .y), unique(unlist(.x))))
+  })
+  # Heatmap colour palette: RColorBrewer PuBuGn
+  heatmap_pal <- c(
+    "#FFF7FB",
+    "#ECE2F0",
+    "#D0D1E6",
+    "#A6BDDB",
+    "#67A9CF",
+    "#3690C0",
+    "#02818A",
+    "#016C59",
+    "#014636"
+  )
+  # Create all heatmaps
+  purrr::pwalk(list(dat, annotation_col, annotation_colors, main), ~ {
+    pheatmap::pheatmap(
+      mat = ..1,
+      color = grDevices::colorRampPalette(heatmap_pal)(10),
+      clustering_callback = callback,
+      clustering_method = "average",
+      treeheight_row = 0,
+      border_color = NA,
+      show_rownames = FALSE,
+      show_colnames = FALSE,
+      annotation_col = ..2,
+      annotation_colors = ..3,
+      annotation_names_col = FALSE,
       main = ..4
     )
   })
@@ -170,7 +205,7 @@ graph_all <- function(x) {
   cl <- consensus_combine(x, element = "class")
   graph_cdf(mat)
   graph_delta_area(mat)
-  graph_heatmap(mat)
+  graph_heatmap(x)
   graph_tracking(cl)
 }
 
@@ -212,11 +247,47 @@ algii_heatmap <- function(data, nk, E, clusters, ref.cl = NULL) {
   # Plot heatmap with annotated colours, column scaling, no further reordering
   NMF::aheatmap(
     hm,
-    annCol = data.frame(Criteria = c(rep("Maximized", 5),
-                                     rep("Minimized", ncol(hm) - 5))),
-    annColors = list(Criteria = stats::setNames(c("darkgreen", "deeppink4"),
-                                                c("Maximized", "Minimized"))),
-    Colv = NA, Rowv = NA, scale = "column", col = "PiYG",
+    annCol = data.frame(Criteria = c(
+      rep("Maximized", 5), rep("Minimized", ncol(hm) - 5)
+    )),
+    annColors = list(Criteria = stats::setNames(
+      c("darkgreen", "deeppink4"), c("Maximized", "Minimized")
+    )),
+    Colv = NA,
+    Rowv = NA,
+    scale = "column",
+    col = "PiYG",
+    main = "Ranked Algorithms on Internal Validity Indices"
+  )
+  # Heatmap palette: RColorBrewer PiYg
+  heatmap_pal <- c(
+    "#8E0152",
+    "#C51B7D",
+    "#DE77AE",
+    "#F1B6DA",
+    "#FDE0EF",
+    "#F7F7F7",
+    "#E6F5D0",
+    "#B8E186",
+    "#7FBC41",
+    "#4D9221",
+    "#276419"
+  )
+  pheatmap::pheatmap(
+    mat = hm,
+    color = grDevices::colorRampPalette(heatmap_pal)(12),
+    border_color = NA,
+    scale = "column",
+    cluster_rows = FALSE,
+    cluster_cols = FALSE,
+    annotation_col = data.frame(Criteria = c(
+      rep("Maximized", 5), rep("Minimized", ncol(hm) - 5)
+    )) |>
+      magrittr::set_rownames(colnames(hm)),
+    annotation_colors = list(Criteria = stats::setNames(
+      c("darkgreen", "deeppink4"), c("Maximized", "Minimized")
+    )),
+    annotation_names_col = FALSE,
     main = "Ranked Algorithms on Internal Validity Indices"
   )
 }
