@@ -1,3 +1,7 @@
+# diceR 3.1.0
+
+* Remove deprecated helper functions package `clv` currently pending archival
+
 # diceR 3.0.0
 
 * There were errors running tests on clang-UBSAN and gcc-UBSAN builds, due to usage of functions from `clusterSim`. Reinstate internal and external functions from `clusterCrit` package, which is no longer archived. 

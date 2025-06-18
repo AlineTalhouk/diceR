@@ -359,20 +359,3 @@ compactness <- function(data, labels) {
   }
   cp / length(labels)
 }
-
-#' SD validity index
-#' @noRd
-SD <- function(data, labels) {
-  scatt <- clv::clv.Scatt(data, labels)
-  dis <- clv::clv.Dis(cluster.center = scatt[["cluster.center"]])
-  alfa <- length(unique(labels))
-  clv::clv.SD(scatt[["Scatt"]], dis, alfa)
-}
-
-#' SDbw valdiity index
-#' @noRd
-S_Dbw <- function(data, labels) {
-  scatt <- clv::clv.Scatt(data, labels)
-  dens <- clv::clv.DensBw(data, labels, scatt, dist = "correlation")
-  clv::clv.SDbw(scatt[["Scatt"]], dens)
-}
