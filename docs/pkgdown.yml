@@ -1,9 +1,9 @@
-pandoc: '3.2'
-pkgdown: 2.1.1
+pandoc: '3.4'
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   overview: overview.html
-last_built: 2025-02-04T21:15Z
+last_built: 2025-06-18T17:45Z
 urls:
   reference: https://alinetalhouk.github.io/diceR/reference
   article: https://alinetalhouk.github.io/diceR/articles
