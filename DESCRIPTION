@@ -26,7 +26,6 @@ Imports:
     class,
     clue,
     clusterCrit,
-    clv,
     clValid,
     dplyr (>= 0.7.5),
     ggplot2,
