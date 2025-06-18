@@ -1,6 +1,7 @@
 # diceR 3.1.0
 
 * Remove deprecated helper functions package `clv` currently pending archival
+* Improve documentation for parameter `k.method` in `consensus_evaluation()`
 
 # diceR 3.0.0
 

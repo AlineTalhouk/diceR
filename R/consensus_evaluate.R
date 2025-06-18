@@ -14,12 +14,12 @@
 #'   `kmodes` and `majority_voting`
 #' @param ref.cl reference class
 #' @param k.method determines the method to choose k when no reference class is
-#'   given. When `ref.cl` is not `NULL`, k is the number of distinct classes of
-#'   `ref.cl`. Otherwise the input from `k.method` chooses k. The default is to
-#'   use the PAC to choose the best k(s). Specifying an integer as a
-#'   user-desired k will override the best k chosen by PAC. Finally, specifying
-#'   "all" will produce consensus results for all k. The "all" method is
-#'   implicitly performed when there is only one k used.
+#'   given. If `ref.cl` is not `NULL`, this is the number of distinct classes in
+#'   the reference; otherwise the chosen k is determined by the one giving the
+#'   largest mean PAC across algorithms. Alternatively, specifying an integer
+#'   will override the best chosen k, and specifying "all" will produce
+#'   consensus results for all k values ("all" is implicitly used when there is
+#'   only one k).
 #' @param plot logical; if `TRUE`, `graph_all` is called
 #' @param trim logical; if `TRUE`, algorithms that score low on internal indices
 #'   will be trimmed out

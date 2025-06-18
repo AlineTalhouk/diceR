@@ -29,12 +29,12 @@ consensus_evaluate(
 \item{ref.cl}{reference class}
 
 \item{k.method}{determines the method to choose k when no reference class is
-given. When \code{ref.cl} is not \code{NULL}, k is the number of distinct classes of
-\code{ref.cl}. Otherwise the input from \code{k.method} chooses k. The default is to
-use the PAC to choose the best k(s). Specifying an integer as a
-user-desired k will override the best k chosen by PAC. Finally, specifying
-"all" will produce consensus results for all k. The "all" method is
-implicitly performed when there is only one k used.}
+given. If \code{ref.cl} is not \code{NULL}, this is the number of distinct classes in
+the reference; otherwise the chosen k is determined by the one giving the
+largest mean PAC across algorithms. Alternatively, specifying an integer
+will override the best chosen k, and specifying "all" will produce
+consensus results for all k values ("all" is implicitly used when there is
+only one k).}
 
 \item{plot}{logical; if \code{TRUE}, \code{graph_all} is called}
 
