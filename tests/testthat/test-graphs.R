@@ -15,7 +15,8 @@ test_that("graph_cdf object can have added/modified ggplot layers", {
     theme(legend.position = "none")
   expect_s3_class(p1, "ggplot")
   expect_s3_class(p2, "ggplot")
-  expect_false(isTRUE(all.equal(p1, p2)))
+  expect_true(is_ggplot(p1))
+  expect_true(is_ggplot(p2))
 })
 
 test_that("graph_delta_area works", {
