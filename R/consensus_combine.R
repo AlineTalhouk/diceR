@@ -30,12 +30,12 @@
 #' y2 <- consensus_combine(CC1, CC2, element = "class")
 #' str(y2)
 consensus_combine <- function(..., element = c("matrix", "class")) {
-  cs <- abind::abind(list(...), along = 3) %>% # Bind ensemble arrays on algs
-    consensus_summary() # Reorganize into matrices and classes
+  E <- abind::abind(list(...), along = 3) # Bind ensemble arrays on algs
+  con.mats <- consensus_matrices(E)
   switch(
     match.arg(element),
-    matrix = purrr::map(cs, "con.mats"),
-    class = purrr::map(cs, "con.cls") %>%
+    matrix = con.mats,
+    class = consensus_classes(con.mats) %>%
       purrr::map(~ do.call(cbind, .)) # Combine classes into list of matrices
   )
 }
@@ -44,12 +44,26 @@ consensus_combine <- function(..., element = c("matrix", "class")) {
 #' matrices and consensus classes for each clustering algorithm.
 #' @noRd
 consensus_summary <- function(E) {
-  con.mats <- E %>%
+  con.mats <- consensus_matrices(E)
+  con.cls <- consensus_classes(con.mats)
+  dplyr::lst(con.mats, con.cls) %>% purrr::transpose() # transpose lists
+}
+
+#' Given an object from [consensus_cluster()], returns a list of consensus
+#' matrices for each clustering algorithm.
+#' @noRd
+consensus_matrices <- function(E) {
+  E %>%
     purrr::array_tree(c(4, 3)) %>%
     purrr::modify_depth(2, consensus_matrix) %>%
     purrr::map(magrittr::set_names, dimnames(E)[[3]]) %>%
     magrittr::set_names(dimnames(E)[[4]])
-  con.cls <- con.mats %>%
+}
+
+#' Given consensus matrices, returns consensus classes for each clustering
+#' algorithm.
+#' @noRd
+consensus_classes <- function(con.mats) {
+  con.mats %>%
     purrr::imap(~ purrr::map(.x, function(z) hc(stats::dist(z), k = .y)))
-  dplyr::lst(con.mats, con.cls) %>% purrr::transpose() # transpose lists
 }
