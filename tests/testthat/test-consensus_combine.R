@@ -10,6 +10,29 @@ CC3 <- consensus_cluster(x, nk = 2:4, reps = 5, algorithms = "hc",
                          progress = FALSE)
 ref.cl <- sample(1:4, 100, replace = TRUE)
 
+consensus_summary_reference <- function(E) {
+  hc_fn <- getFromNamespace("hc", "diceR")
+  con.mats <- E %>%
+    purrr::array_tree(c(4, 3)) %>%
+    purrr::modify_depth(2, consensus_matrix) %>%
+    purrr::map(magrittr::set_names, dimnames(E)[[3]]) %>%
+    magrittr::set_names(dimnames(E)[[4]])
+  con.cls <- con.mats %>%
+    purrr::imap(~ purrr::map(.x, function(z) hc_fn(stats::dist(z), k = .y)))
+  dplyr::lst(con.mats, con.cls) %>% purrr::transpose()
+}
+
+consensus_combine_reference <- function(..., element = c("matrix", "class")) {
+  cs <- abind::abind(list(...), along = 3) %>%
+    consensus_summary_reference()
+  switch(
+    match.arg(element),
+    matrix = purrr::map(cs, "con.mats"),
+    class = purrr::map(cs, "con.cls") %>%
+      purrr::map(~ do.call(cbind, .))
+  )
+}
+
 test_that("combining results has expected lengths", {
   y1 <- consensus_combine(CC1, CC2, element = "matrix")
   y2 <- consensus_combine(CC1, CC2, element = "class")
@@ -52,4 +75,15 @@ test_that("reweighing (potentially) replicates each slice of algorithm", {
                                     trim = TRUE, reweigh = TRUE, n = 2)
   expect_error(CC.trimmed1, NA)
   expect_error(CC.trimmed2, NA)
+})
+
+test_that("consensus_combine lazy class path matches reference behavior", {
+  args <- list(CC1, CC2)
+  ref_mat <- do.call(consensus_combine_reference, c(args, list(element = "matrix")))
+  new_mat <- do.call(consensus_combine, c(args, list(element = "matrix")))
+  expect_equal(new_mat, ref_mat, tolerance = 1e-12)
+
+  ref_cls <- do.call(consensus_combine_reference, c(args, list(element = "class")))
+  new_cls <- do.call(consensus_combine, c(args, list(element = "class")))
+  expect_equal(new_cls, ref_cls, tolerance = 1e-12)
 })
