@@ -40,6 +40,8 @@ min_fnorm <- function(A, B = diag(nrow(A))) {
       matrix(a2, nrow = length(b2), ncol = length(a2), byrow = TRUE) -
       2 * (B %*% t(A))
   }
+  # The vectorized distance formula can dip slightly below zero from round-off.
+  D[D < 0] <- 0
   vec <- clue::solve_LSAP(D)
   list(pmat = A[vec, ], perm = vec, ord = order(vec))
 }
