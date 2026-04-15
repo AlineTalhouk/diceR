@@ -80,26 +80,19 @@ ev_confmat <- function(pred.lab, ref.lab) {
 #' * nn: number of points _not_ belonging to the same cluster both in cl1 and cl2
 #' @noRd
 concordance_counts <- function(cl1, cl2) {
-  n <- length(cl1)
-  yy <- yn <- ny <- nn <- 0
-  for (i in 1:(n - 1)) {
-    for (j in (i + 1):n) {
-      if (cl1[[i]] == cl1[[j]]) {
-        if (cl2[[i]] == cl2[[j]]) {
-          yy <- yy + 1
-        } else {
-          yn <- yn + 1
-        }
-      } else {
-        if (cl2[[i]] == cl2[[j]]) {
-          ny <- ny + 1
-        } else {
-          nn <- nn + 1
-        }
-      }
-    }
+  assertthat::assert_that(length(cl1) == length(cl2))
+  if (anyNA(cl1) || anyNA(cl2)) {
+    stop("Cluster labels must not contain missing values.", call. = FALSE)
   }
-  return(list(yy = yy, yn = yn, ny = ny, nn = nn))
+  n <- length(cl1)
+  tab <- table(cl1, cl2)
+  yy <- sum(choose(tab, 2))
+  same1 <- sum(choose(rowSums(tab), 2))
+  same2 <- sum(choose(colSums(tab), 2))
+  yn <- same1 - yy
+  ny <- same2 - yy
+  nn <- choose(n, 2) - yy - yn - ny
+  list(yy = yy, yn = yn, ny = ny, nn = nn)
 }
 
 #' Hubert index
