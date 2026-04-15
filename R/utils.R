@@ -30,11 +30,15 @@ globalVariables(".")
 #' min_fnorm(A)
 min_fnorm <- function(A, B = diag(nrow(A))) {
   n <- nrow(A)
-  D <- matrix(NA, n, n)
-  for (i in seq_len(n)) {
-    for (j in seq_len(n)) {
-      D[j, i] <- sum((B[j, ] - A[i, ]) ^ 2)
-    }
+  if (missing(B)) {
+    a2 <- rowSums(A ^ 2)
+    D <- matrix(a2 + 1, nrow = n, ncol = n, byrow = TRUE) - 2 * t(A)
+  } else {
+    a2 <- rowSums(A ^ 2)
+    b2 <- rowSums(B ^ 2)
+    D <- matrix(b2, nrow = length(b2), ncol = length(a2)) +
+      matrix(a2, nrow = length(b2), ncol = length(a2), byrow = TRUE) -
+      2 * (B %*% t(A))
   }
   vec <- clue::solve_LSAP(D)
   list(pmat = A[vec, ], perm = vec, ord = order(vec))
