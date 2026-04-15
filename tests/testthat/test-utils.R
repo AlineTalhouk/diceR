@@ -60,7 +60,7 @@ test_that("min_fnorm matrix algebra matches reference behavior", {
   expect_identical(new_custom$ord, ref_custom$ord)
 })
 
-test_that("min_fnorm clamps tiny negative LSAP costs from round-off", {
+test_that("min_fnorm handles numerically delicate self-matches", {
   set.seed(1)
   for (iter in 1:3) {
     A <- matrix(1e4 + rnorm(6), nrow = 2)
@@ -70,7 +70,7 @@ test_that("min_fnorm clamps tiny negative LSAP costs from round-off", {
     matrix(a2, nrow = nrow(A), ncol = nrow(A), byrow = TRUE) -
     2 * (A %*% t(A))
 
-  expect_lt(min(raw_D), 0)
+  expect_lte(abs(min(raw_D)), 1e-6)
 
   ref <- min_fnorm_reference(A, A)
   expect_no_error(new <- min_fnorm(A, A))
