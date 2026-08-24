@@ -1,3 +1,7 @@
+# diceR 3.2.0
+
+* Reinstate `mixedClust` for block clustering now that it is back on CRAN and `blockcluster` has been archived
+
 # diceR 3.1.0
 
 * Remove deprecated helper functions package `clv` currently pending archival

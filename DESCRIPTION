@@ -44,7 +44,6 @@ Imports:
     yardstick
 Suggests: 
     apcluster,
-    blockcluster,
     cluster,
     covr,
     dbscan,
@@ -52,6 +51,7 @@ Suggests:
     kernlab,
     knitr,
     kohonen,
+    mixedClust,
     NMF,
     pander,
     poLCA,
