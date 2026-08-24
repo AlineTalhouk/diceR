@@ -15,8 +15,8 @@ Description: Performs cluster analysis using an ensemble clustering
     internal and external indices, visualizations such as heatmaps, and
     significance testing for the existence of clusters.
 License: MIT + file LICENSE
-URL: https://github.com/AlineTalhouk/diceR/,
-    https://alinetalhouk.github.io/diceR/
+URL: https://alinetalhouk.github.io/diceR/,
+    https://github.com/AlineTalhouk/diceR
 BugReports: https://github.com/AlineTalhouk/diceR/issues
 Depends: 
     R (>= 4.1)
@@ -66,8 +66,8 @@ LinkingTo:
     Rcpp
 VignetteBuilder: 
     knitr
+Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.1.0
