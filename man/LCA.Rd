@@ -24,7 +24,7 @@ a vector of cluster assignments based on LCA
 Combine clustering results using latent class analysis.
 }
 \examples{
-\dontshow{if (rlang::is_installed("poLCA")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("poLCA")) withAutoprint(\{ # examplesIf}
 data(hgsc)
 dat <- hgsc[1:100, 1:50]
 cc <- consensus_cluster(dat, nk = 4, reps = 6, algorithms = "pam", progress =
@@ -33,11 +33,11 @@ table(LCA(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other consensus functions: 
-\code{\link{CSPA}()},
-\code{\link{LCE}()},
-\code{\link{k_modes}()},
-\code{\link{majority_voting}()}
+Other consensus functions:
+\code{\link[=CSPA]{CSPA()}},
+\code{\link[=LCE]{LCE()}},
+\code{\link[=k_modes]{k_modes()}},
+\code{\link[=majority_voting]{majority_voting()}}
 }
 \author{
 Derek Chiu

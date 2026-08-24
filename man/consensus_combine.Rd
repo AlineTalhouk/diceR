@@ -27,7 +27,7 @@ setting \code{element = "class"} returns a matrix of consensus cluster
 assignments, which can be visualized as a consensus matrix heatmap.
 }
 \examples{
-\dontshow{if (rlang::is_installed("apcluster")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("apcluster")) withAutoprint(\{ # examplesIf}
 # Consensus clustering for multiple algorithms
 set.seed(911)
 x <- matrix(rnorm(500), ncol = 10)

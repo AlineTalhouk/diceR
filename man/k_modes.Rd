@@ -42,11 +42,11 @@ clusterings via k-modes algorithm. In International Conference on Advanced
 Data Mining and Applications (pp. 308-315). Springer, Berlin, Heidelberg.
 }
 \seealso{
-Other consensus functions: 
-\code{\link{CSPA}()},
-\code{\link{LCA}()},
-\code{\link{LCE}()},
-\code{\link{majority_voting}()}
+Other consensus functions:
+\code{\link[=CSPA]{CSPA()}},
+\code{\link[=LCA]{LCA()}},
+\code{\link[=LCE]{LCE()}},
+\code{\link[=majority_voting]{majority_voting()}}
 }
 \author{
 Aline Talhouk

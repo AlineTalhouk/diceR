@@ -24,6 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Derek Chiu \email{dchiu@bccrc.ca}
   \item Aline Talhouk \email{a.talhouk@ubc.ca}
 }
 

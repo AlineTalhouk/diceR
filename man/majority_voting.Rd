@@ -34,11 +34,11 @@ FALSE)
 table(majority_voting(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
 }
 \seealso{
-Other consensus functions: 
-\code{\link{CSPA}()},
-\code{\link{LCA}()},
-\code{\link{LCE}()},
-\code{\link{k_modes}()}
+Other consensus functions:
+\code{\link[=CSPA]{CSPA()}},
+\code{\link[=LCA]{LCA()}},
+\code{\link[=LCE]{LCE()}},
+\code{\link[=k_modes]{k_modes()}}
 }
 \author{
 Aline Talhouk

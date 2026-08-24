@@ -36,7 +36,7 @@ clusters. In addition, the default type of covariance estimation is also
 different.
 }
 \examples{
-\dontshow{if (rlang::is_installed("sigclust")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("sigclust")) withAutoprint(\{ # examplesIf}
 data(hgsc)
 dat <- hgsc[1:100, 1:50]
 nk <- 4

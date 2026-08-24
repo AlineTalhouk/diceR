@@ -35,7 +35,7 @@ for details. Thus, any remaining missing values are imputed using majority
 voting.
 }
 \examples{
-\dontshow{if (rlang::is_installed("kernlab")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("kernlab")) withAutoprint(\{ # examplesIf}
 data(hgsc)
 dat <- hgsc[1:100, 1:50]
 E <- consensus_cluster(dat, nk = 3:4, reps = 10, algorithms = c("hc", "km",
@@ -46,8 +46,8 @@ sum(is.na(E_imputed))
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other imputation functions: 
-\code{\link{impute_knn}()}
+Other imputation functions:
+\code{\link[=impute_knn]{impute_knn()}}
 }
 \author{
 Aline Talhouk

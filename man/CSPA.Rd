@@ -31,11 +31,11 @@ reuse framework for combining multiple partitions. Journal of machine
 learning research, 3(Dec), 583-617.
 }
 \seealso{
-Other consensus functions: 
-\code{\link{LCA}()},
-\code{\link{LCE}()},
-\code{\link{k_modes}()},
-\code{\link{majority_voting}()}
+Other consensus functions:
+\code{\link[=LCA]{LCA()}},
+\code{\link[=LCE]{LCE()}},
+\code{\link[=k_modes]{k_modes()}},
+\code{\link[=majority_voting]{majority_voting()}}
 }
 \author{
 Derek Chiu
