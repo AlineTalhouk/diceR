@@ -1,0 +1,71 @@
+# K-modes
+
+Combine clustering results using K-modes.
+
+## Usage
+
+``` r
+k_modes(E, is.relabelled = TRUE, seed = 1)
+```
+
+## Arguments
+
+- E:
+
+  a matrix of clusterings with number of rows equal to the number of
+  cases to be clustered, number of columns equal to the clustering
+  obtained by different resampling of the data, and the third dimension
+  are the different algorithms. Matrix may already be two-dimensional.
+
+- is.relabelled:
+
+  logical; if `FALSE` the data will be relabelled using the first
+  clustering as the reference.
+
+- seed:
+
+  random seed for reproducibility
+
+## Value
+
+a vector of cluster assignments based on k-modes
+
+## Details
+
+Combine clustering results generated using different algorithms and
+different data perturbations by k-modes. This method is the categorical
+data analog of k-means clustering. Complete cases are needed: i.e. no
+`NA`s. If the matrix contains `NA`s those are imputed by majority voting
+(after class relabeling).
+
+## References
+
+Luo, H., Kong, F., & Li, Y. (2006, August). Combining multiple
+clusterings via k-modes algorithm. In International Conference on
+Advanced Data Mining and Applications (pp. 308-315). Springer, Berlin,
+Heidelberg.
+
+## See also
+
+Other consensus functions:
+[`CSPA()`](https://alinetalhouk.github.io/diceR/reference/CSPA.md),
+[`LCA()`](https://alinetalhouk.github.io/diceR/reference/LCA.md),
+[`LCE()`](https://alinetalhouk.github.io/diceR/reference/LCE.md),
+[`majority_voting()`](https://alinetalhouk.github.io/diceR/reference/majority_voting.md)
+
+## Author
+
+Aline Talhouk
+
+## Examples
+
+``` r
+data(hgsc)
+dat <- hgsc[1:100, 1:50]
+cc <- consensus_cluster(dat, nk = 4, reps = 6, algorithms = "pam", progress =
+FALSE)
+table(k_modes(cc[, , 1, 1, drop = FALSE], is.relabelled = FALSE))
+#> 
+#>  1  2  3  4 
+#> 31 19 40 10 
+```

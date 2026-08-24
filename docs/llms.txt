@@ -1,0 +1,187 @@
+# diceR
+
+## Overview
+
+The goal of `diceR` is to provide a systematic framework for generating
+diverse cluster ensembles in R. There are a lot of nuances in cluster
+analysis to consider. We provide a process and a suite of functions and
+tools to implement a systematic framework for cluster discovery, guiding
+the user through the generation of a diverse clustering solutions from
+data, ensemble formation, algorithm selection and the arrival at a final
+consensus solution. We have additionally developed visual and analytical
+validation tools to help with the assessment of the final result. We
+implemented a wrapper function
+[`dice()`](https://alinetalhouk.github.io/diceR/reference/dice.md) that
+allows the user to easily obtain results and assess them. Thus, the
+package is accessible to both end user with limited statistical
+knowledge. Full access to the package is available for informaticians
+and statisticians and the functions are easily expanded. More details
+can be found in our companion paper published at [BMC
+Bioinformatics](https://doi.org/10.1186/s12859-017-1996-y).
+
+## Installation
+
+You can install `diceR` from CRAN with:
+
+``` r
+
+install.packages("diceR")
+```
+
+Or get the latest development version from GitHub:
+
+``` r
+
+# install.packages("devtools")
+devtools::install_github("AlineTalhouk/diceR")
+```
+
+## Example
+
+The following example shows how to use the main function of the package,
+[`dice()`](https://alinetalhouk.github.io/diceR/reference/dice.md). A
+data matrix `hgsc` contains a subset of gene expression measurements of
+High Grade Serous Carcinoma Ovarian cancer patients from the Cancer
+Genome Atlas publicly available datasets. Samples as rows, features as
+columns. The function below runs the package through the
+[`dice()`](https://alinetalhouk.github.io/diceR/reference/dice.md)
+function. We specify (a range of) `nk` clusters over `reps` subsamples
+of the data containing 80% of the full samples. We also specify the
+clustering `algorithms` to be used and the ensemble functions used to
+aggregated them in `cons.funs`.
+
+``` r
+
+library(diceR)
+data(hgsc)
+obj <- dice(
+  hgsc,
+  nk = 4,
+  reps = 5,
+  algorithms = c("hc", "diana"),
+  cons.funs = c("kmodes", "majority"),
+  progress = FALSE,
+  verbose = FALSE
+)
+```
+
+The first few cluster assignments are shown below:
+
+``` r
+
+knitr::kable(head(obj$clusters))
+```
+
+|                     | kmodes | majority |
+|:--------------------|-------:|---------:|
+| TCGA.04.1331_PRO.C5 |      2 |        2 |
+| TCGA.04.1332_MES.C1 |      2 |        2 |
+| TCGA.04.1336_DIF.C4 |      4 |        2 |
+| TCGA.04.1337_MES.C1 |      2 |        2 |
+| TCGA.04.1338_MES.C1 |      2 |        2 |
+| TCGA.04.1341_PRO.C5 |      2 |        2 |
+
+You can also compare the base `algorithms` with the `cons.funs` using
+internal evaluation indices:
+
+``` r
+
+knitr::kable(obj$indices$ii$`4`)
+```
+
+|  | Algorithms | calinski_harabasz | dunn | pbm | tau | gamma | c_index | davies_bouldin | mcclain_rao | sd_dis | ray_turi | g_plus | silhouette | s_dbw | Compactness | Connectivity |
+|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| HC_Euclidean | HC_Euclidean | 3.104106 | 0.2608547 | 59.73711 | 0 | 0.4285714 | 0.2844073 | 1.839182 | 0.8009149 | 0.1306062 | 1.4765665 | 0 | NaN | NaN | 24.83225 | 41.62183 |
+| DIANA_Euclidean | DIANA_Euclidean | 53.647400 | 0.3348103 | 33.87817 | 0 | -1.8750000 | 0.1589442 | 2.824201 | 0.8051915 | 0.2119281 | 3.2978986 | 0 | 0.0692233 | NaN | 21.93396 | 241.66310 |
+| kmodes | kmodes | 55.138600 | 0.3396909 | 50.51722 | 0 | -0.6822430 | 0.1453599 | 2.006752 | 0.7972999 | 0.1170829 | 1.1408258 | 0 | 0.1253664 | NaN | 21.91494 | 201.42540 |
+| majority | majority | 19.373248 | 0.3544371 | 85.05173 | 0 | -1.1651376 | 0.2102487 | 1.622799 | 0.8019453 | 0.1108674 | 0.9200511 | 0 | 0.1884934 | NaN | 23.85408 | 64.04921 |
+
+## Pipeline
+
+This figure is a visual schematic of the pipeline that
+[`dice()`](https://alinetalhouk.github.io/diceR/reference/dice.md)
+implements.
+
+![Ensemble Clustering pipeline.](reference/figures/pipeline.png)
+
+Ensemble Clustering pipeline.
+
+Please visit the
+[overview](https://alinetalhouk.github.io/diceR/articles/overview.html "diceR overview")
+page for more detail.
+
+# Package index
+
+## Functions
+
+- [`consensus_cluster()`](https://alinetalhouk.github.io/diceR/reference/consensus_cluster.md)
+  : Consensus clustering
+- [`consensus_combine()`](https://alinetalhouk.github.io/diceR/reference/consensus_combine.md)
+  : Combine algorithms
+- [`consensus_evaluate()`](https://alinetalhouk.github.io/diceR/reference/consensus_evaluate.md)
+  : Evaluate, trim, and reweigh algorithms
+- [`consensus_matrix()`](https://alinetalhouk.github.io/diceR/reference/consensus_matrix.md)
+  : Consensus matrix
+- [`graph_cdf()`](https://alinetalhouk.github.io/diceR/reference/graphs.md)
+  [`graph_delta_area()`](https://alinetalhouk.github.io/diceR/reference/graphs.md)
+  [`graph_heatmap()`](https://alinetalhouk.github.io/diceR/reference/graphs.md)
+  [`graph_tracking()`](https://alinetalhouk.github.io/diceR/reference/graphs.md)
+  [`graph_all()`](https://alinetalhouk.github.io/diceR/reference/graphs.md)
+  : Graphical Displays
+- [`ev_nmi()`](https://alinetalhouk.github.io/diceR/reference/external_validity.md)
+  [`ev_confmat()`](https://alinetalhouk.github.io/diceR/reference/external_validity.md)
+  : External validity indices
+- [`impute_knn()`](https://alinetalhouk.github.io/diceR/reference/impute_knn.md)
+  : K-Nearest Neighbours imputation
+- [`impute_missing()`](https://alinetalhouk.github.io/diceR/reference/impute_missing.md)
+  : Impute missing values
+- [`pcn_simulate()`](https://alinetalhouk.github.io/diceR/reference/pcn.md)
+  [`pcn_select()`](https://alinetalhouk.github.io/diceR/reference/pcn.md)
+  : Simulate and select null distributions on empirical gene-gene
+  correlations
+- [`dice()`](https://alinetalhouk.github.io/diceR/reference/dice.md) :
+  Diverse Clustering Ensemble
+- [`CSPA()`](https://alinetalhouk.github.io/diceR/reference/CSPA.md) :
+  Cluster-based Similarity Partitioning Algorithm (CSPA)
+- [`k_modes()`](https://alinetalhouk.github.io/diceR/reference/k_modes.md)
+  : K-modes
+- [`majority_voting()`](https://alinetalhouk.github.io/diceR/reference/majority_voting.md)
+  : Majority voting
+- [`LCE()`](https://alinetalhouk.github.io/diceR/reference/LCE.md) :
+  Linkage Clustering Ensemble
+- [`LCA()`](https://alinetalhouk.github.io/diceR/reference/LCA.md) :
+  Latent Class Analysis
+- [`PAC()`](https://alinetalhouk.github.io/diceR/reference/PAC.md) :
+  Proportion of Ambiguous Clustering
+- [`cts()`](https://alinetalhouk.github.io/diceR/reference/similarity.md)
+  [`srs()`](https://alinetalhouk.github.io/diceR/reference/similarity.md)
+  [`asrs()`](https://alinetalhouk.github.io/diceR/reference/similarity.md)
+  : Similarity Matrices
+- [`compactness()`](https://alinetalhouk.github.io/diceR/reference/compactness.md)
+  : Compactness Measure
+- [`prepare_data()`](https://alinetalhouk.github.io/diceR/reference/prepare_data.md)
+  : Prepare data for consensus clustering
+- [`relabel_class()`](https://alinetalhouk.github.io/diceR/reference/relabel_class.md)
+  : Relabel classes to a standard
+- [`min_fnorm()`](https://alinetalhouk.github.io/diceR/reference/min_fnorm.md)
+  : Minimize Frobenius norm for between two matrices
+- [`sigclust()`](https://alinetalhouk.github.io/diceR/reference/sigclust.md)
+  : Significant Testing of Clustering Results
+
+## Data
+
+- [`hgsc`](https://alinetalhouk.github.io/diceR/reference/hgsc.md) :
+  Gene expression data for High Grade Serous Carcinoma from TCGA
+
+## Package Documentation
+
+- [`diceR`](https://alinetalhouk.github.io/diceR/reference/diceR-package.md)
+  [`diceR-package`](https://alinetalhouk.github.io/diceR/reference/diceR-package.md)
+  : diceR: Diverse Cluster Ensemble in R
+
+# Articles
+
+### All vignettes
+
+- [Cluster Analysis using
+  \`diceR\`](https://alinetalhouk.github.io/diceR/articles/overview.md):
