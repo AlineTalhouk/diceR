@@ -1,6 +1,6 @@
 ## Test environments
-* local R installation, R 4.4.2
-* ubuntu 24.04.2 (on GitHub Actions), R 4.4.2, devel
+* local R installation, R 4.6.1
+* ubuntu 24.04.4 (on GitHub Actions), R 4.6.1, devel
 * win-builder (devel)
 
 ## R CMD check results
