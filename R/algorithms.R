@@ -114,7 +114,7 @@ block <- function(x, k) {
     stop("Package \"mixedClust\" is needed. Please install it.",
          call. = FALSE)
   } else {
-    tryCatch(
+    cl <- tryCatch(
       sink_output(
         mixedClust::mixedCoclust(
           x = x,
@@ -128,8 +128,12 @@ block <- function(x, k) {
         )@zr[, 1]
       ),
       error = function(e) return(NA)
-    ) %>%
-      purrr::when(length(.) > 0 ~ ., ~ NA)
+    )
+    if (length(cl) > 0) {
+      cl
+    } else {
+      NA
+    }
   }
 }
 
